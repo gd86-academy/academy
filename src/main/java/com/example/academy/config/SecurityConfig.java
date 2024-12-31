@@ -20,9 +20,8 @@ public class SecurityConfig {
 	// 권한 부여 메서드.
 	@Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-
         http.authorizeHttpRequests((auth) -> auth
-            .requestMatchers("/login").permitAll()
+            .requestMatchers("/login", "/loginProc", "/join", "joinProc").permitAll()
             .requestMatchers("/all/**").hasAnyRole("management", "humanresources", "Administration") // 모든사원
             .requestMatchers("/management/**").hasRole("management") // 운영팀
             .requestMatchers("/humanresources/**").hasRole("humanresources") // 인사팀

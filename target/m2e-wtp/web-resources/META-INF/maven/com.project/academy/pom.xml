@@ -73,25 +73,6 @@
 			<version>3.0.3</version>
 			<scope>test</scope>
 		</dependency>
-		
-		<!-- 내장형 톰켓 JSP 라이브러리 -->
-		<!-- https://mvnrepository.com/artifact/org.apache.tomcat.embed/tomcat-embed-jasper -->
-		<dependency>
-		    <groupId>org.apache.tomcat.embed</groupId>
-		    <artifactId>tomcat-embed-jasper</artifactId>
-		</dependency>
-		
-		<!-- Tomcat10이상 JSTL 사용 -->
-		<!-- https://mvnrepository.com/artifact/jakarta.servlet.jsp.jstl/jakarta.servlet.jsp.jstl-api -->
-		<dependency>
-		    <groupId>jakarta.servlet.jsp.jstl</groupId>
-		    <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.glassfish.web/jakarta.servlet.jsp.jstl -->
-		<dependency>
-		    <groupId>org.glassfish.web</groupId>
-		    <artifactId>jakarta.servlet.jsp.jstl</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-mail</artifactId>
