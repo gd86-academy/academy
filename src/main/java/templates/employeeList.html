@@ -17,6 +17,7 @@
 		<link rel="stylesheet" th:href="@{/css/highlight.min.css}" />
 		<link rel="stylesheet" th:href="@{/css/flatpickr.min.css}" />
 		<link rel="stylesheet" th:href="@{/css/nouislider.min.css}" />
+		<link rel="stylesheet" type="text/css" th:href="@{/css/nice-select2.css}" />
 		<link rel="stylesheet" th:href="@{/css/templete.css}" />
 		
 		<!-- Scripts -->
@@ -34,6 +35,9 @@
 		<script defer th:src="@{/js/tippy-bundle.umd.min.js}"></script>
 		<script defer th:src="@{/js/sweetalert.min.js}"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+		<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+		<script defer th:src="@{/js/address.js}"></script>
+		<script th:src="@{/js/nice-select2.js}"></script>
     </head>
 
     <body
@@ -163,48 +167,66 @@
 									                   사원 등록
 									               </h3>
 									               <div class="p-5">
-									                   <form id="employeeAddForm" enctype="multipart/form-data">
+									                   <form id="employeeAddForm" method="post" th:action="@{/addEmployee}"  enctype="multipart/form-data">
+									                   <!-- 이름 -->
+									                       <div>
+									                           <label for="employeePhone">이름</label>
+									                           <input
+									                               id="employeeName"
+									                               name="employeeName"
+									                               type="text"
+									                               placeholder="이름"
+									                               class="form-input"
+									                           />
+									                       </div>
+									                       <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeName-error error-label" style="display: none;">이름을 입력해주세요.</span></div>
 									                   		<!-- 전화번호 -->
 									                       <div>
 									                           <label for="employeePhone">전화번호</label>
 									                           <input
 									                               id="employeePhone"
-									                               type="text"
+									                               name="employeePhone"
+									                               type="number"
 									                               placeholder="전화번호"
 									                               class="form-input"
 									                           />
 									                       </div>
-									                       <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeePhone-error" style="display: none;">전화번호를 입력해주세요.</span></div>
+									                       <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeePhone-error error-label" style="display: none;">전화번호를 입력해주세요.</span></div>
 									                       <!-- 이메일 -->
 									                       <div>
 									                           <label for="employeeMail">이메일</label>
 									                           <input
 									                               id="employeeMail"
+									                               name="employeeMail"
 									                               type="email"
 									                               placeholder="이메일"
 									                               class="form-input"
 									                           />
 									                       </div>
-									                       <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeMail-error" style="display: none;">이메일을 입력해주세요.</span></div>
+									                       <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeMail-error error-label" style="display: none;">이메일을 입력해주세요.</span></div>
 									                       <!-- 생년월일 -->
-									                       <div x-data="form">
+									                       <div>
 									                       	   <label for="employeeBirth">생년월일</label>
-														       <input id="employeeBirth" class="form-input" placeholder="생년월일"/>
+														       <input name="employeeBirth" id="employeeBirth" class="form-input" placeholder="생년월일"/>
 														   </div>
-														   <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeBirth-error" style="display: none;">생년월일을 입력해주세요.</span></div>
+														   <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeBirth-error error-label" style="display: none;">생년월일을 입력해주세요.</span></div>
 														   <!-- 주소 -->
 														   <div class="mb-3">
 									                           <label for="employeeAddress">주소</label>
 													           <div class="flex">
-													               <button type="button" class="btn btn-primary ltr:rounded-r-none rtl:rounded-l-none" style="width: 150px;">우편번호 찾기</button>
-													               <input id="employeePostalCode" type="text" placeholder="우편번호" class="form-input ltr:rounded-l-none rtl:rounded-r-none flex-grow" readonly/>
+													               <button onclick="sample2_execDaumPostcode()" type="button" class="btn btn-primary ltr:rounded-r-none rtl:rounded-l-none" style="width: 150px;">우편번호 찾기</button>
+													               <input name="postCode" id="employeePostalCode" type="text" placeholder="우편번호" class="form-input ltr:rounded-l-none rtl:rounded-r-none flex-grow" readonly/>
 													           </div>
 													       </div>
+													       <div id="layer" style="display:none;position:fixed;overflow:hidden;z-index:1;-webkit-overflow-scrolling:touch;">
+															   <img src="//t1.daumcdn.net/postcode/resource/images/close.png" id="btnCloseLayer" style="cursor:pointer;position:absolute;right:-3px;top:-3px;z-index:1" onclick="closeDaumPostcode()" alt="닫기 버튼">
+														   </div>
 									                       <div class="mb-3">
 									                           <input
 									                               id="employeeAddress"
+									                               name="addressName"
 									                               type="text"
-									                               placeholder="도로명 주소"
+									                               placeholder="도로명(지번) 주소"
 									                               class="form-input"
 									                               readonly
 									                           />
@@ -212,12 +234,34 @@
 									                       <div>
 									                           <input
 									                               id="employeeAddressDetail"
+									                               name="addressDetail"
 									                               type="text"
 									                               placeholder="상세 주소"
 									                               class="form-input"
 									                           />
 									                       </div>
-									                        <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeAddress-error" style="display: none;">주소를 입력해주세요.</span></div>
+									                       <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeAddress-error error-label" style="display: none;">주소를 입력해주세요.</span></div>
+									                       <!-- 입사일 -->
+									                       <div x-data="form">
+									                       	   <label for="employeeDate">입사일</label>
+														       <input name="employeeDate" id="employeeDate" class="form-input" placeholder="입사일"/>
+														   </div>
+														   <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeDate-error error-label" style="display: none;">입사일을 입력해주세요.</span></div>
+														   <!-- 부서 -->
+														   <label>부서</label>
+														   <select id="employeeDepartment" name="employeeDepartment" class="employeeDepartment" placeholder="부서">
+														       <option selected value="운영팀">운영팀</option>
+														       <option value="행정팀">행정팀</option>
+														       <option value="인사팀">인사팀</option>
+														   </select>
+														   <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeDepartment-error" style="display: none;">부서를 선택해주세요.</span></div>
+														   <!-- 직급 -->
+														   <label>직급</label>
+														   <select id ="employeePosition" name="employeePosition" class="employeePosition" placeholder="직급">
+														       <option selected value="팀장">팀장</option>
+														       <option value="사원">사원</option>
+														   </select>
+														   <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeePosition-error" style="display: none;">직급을 선택해주세요.</span></div>
 									                       <!-- 프로필 사진 -->
 									                       <div>
 														       <label for="employeePhoto">프로필 사진</label>
@@ -231,6 +275,7 @@
 														           </button>
 														           <input 
 														               id="employeePhoto" 
+														               name="employeePhoto"
 														               type="file" 
 														               class="hidden" 
 														               onchange="document.getElementById('employeePhotoFileNameDisplay').value = this.files[0] ? this.files[0].name : '';" />
@@ -242,13 +287,14 @@
 														               readonly />
 														       </div>
 														   </div>
-														    <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeePhoto-error" style="display: none;">프로필사진을 첨부해주세요.</span></div>
+														    <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeePhoto-error error-label" style="display: none;">프로필사진을 첨부해주세요.</span></div>
 									                       <!-- 도장 사진 -->
 									                       <div>
 										                       <label for="employeeStamp">도장 사진</label>
 														       <div class="flex">
 														           <button 
 														               type="button" 
+														               name="employeeStamp"
 														               class="btn btn-primary ltr:rounded-r-none rtl:rounded-l-none" 
 														               style="width: 150px;"
 														               onclick="document.getElementById('employeeStamp').click();">
@@ -267,20 +313,20 @@
 														               readonly />
 														       </div>
 													       </div>
-													        <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeStamp-error" style="display: none;">도장사진을 첨부해주세요.</span></div>
+													        <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeStamp-error error-label" style="display: none;">도장사진을 첨부해주세요.</span></div>
 													        <!-- 성별 -->
 													        <div class="mb-5">
 													        <label>성별</label>
 														        <div class="flex justify-start items-center space-x-4">
 																    <div>
 																        <label class="flex items-center cursor-pointer">
-																            <input type="radio" name="custom_radio2" class="form-radio" checked />
+																            <input type="radio" name="employeeGender" class="form-radio" value="남자" checked />
 																            <span class="text-white-dark ml-2">남자</span>
 																        </label>
 																    </div>
 																    <div>
 																        <label class="flex items-center cursor-pointer">
-																            <input type="radio" name="custom_radio2" class="form-radio" />
+																            <input type="radio" name="employeeGender" class="form-radio" value="여자" />
 																            <span class="text-white-dark ml-2">여자</span>
 																        </label>
 																    </div>
@@ -296,7 +342,7 @@
 									                               type="button"
 									                               class="btn btn-primary ltr:ml-4 rtl:mr-4"
 									                           >
-									                               확인
+									                               등록
 									                           </button>
 									                       </div>
 									                   </form>
@@ -336,21 +382,22 @@
 					            </tr>
 					        </thead>
 					        <tbody>
-				                <tr th:each="employee : ${employeeList}">
-				                	<td>이미지</td>
-						            <td th:text="${employee.employeeName}"></td>
-						            <td th:text="${employee.employeeNo}"></td>
-						            <td th:text="${employee.employeePhone}"></td>
-						            <td th:text="${employee.employeeDepartment}"></td>
-						            <td th:text="${employee.employeePosition}"></td>
-						            <td class="text-center">
-									    <button type="button" class="btn btn-outline-dark mx-auto d-block">
-									    	<img class="h-4 w-4" th:src="@{/images/icon/Dialog.png}" alt="image">
-									    	&nbsp;메신저
-									    </button>
-									</td>
-						        </tr>
-					        </tbody>
+				                <tbody>
+							    <tr th:each="employee : ${employeeList}" th:onclick="|location.href='@{/employeeOne(employeeNo=${employee.employeeNo})}'|">
+							        <td>이미지</td>
+							        <td th:text="${employee.employeeName}"></td>
+							        <td th:text="${employee.employeeNo}"></td>
+							        <td th:text="${employee.employeePhone}"></td>
+							        <td th:text="${employee.employeeDepartment}"></td>
+							        <td th:text="${employee.employeePosition}"></td>
+							        <td class="text-center">
+							            <button type="button" class="btn btn-outline-dark mx-auto d-block">
+							                <img class="h-4 w-4" th:src="@{/images/icon/Dialog.png}" alt="image">
+							                &nbsp;메신저
+							            </button>
+							        </td>
+							    </tr>
+							</tbody>
 					    </table>
 					</div>
                 </div>
@@ -361,12 +408,21 @@
         </div>
         <script th:src="@{/js/templete.js}"></script>
         <script>
-     // 유효성 검사 
+     	// 유효성 검사 
 		$('#employeeAddBtn').click(function() {
 	        let isVal = true;
+	     	// 이름 검사
+	        if ($('#employeeName').val().trim() === '') {
+	            $('.employeeName-error').show();
+	            $('#employeeName').addClass("errorInput");
+	            isVal = false;
+	        } else {
+	            $('.employeeName-error').hide();
+	            $('#employeeName').removeClass("errorInput");
+	        }
 	        
 	     	// 전화번호 검사
-	        if ($('#employeePhone').val().length < 4) {
+	        if ($('#employeePhone').val().trim() === '') {
 	            $('.employeePhone-error').show();
 	            $('#employeePhone').addClass("errorInput");
 	            isVal = false;
@@ -403,8 +459,20 @@
 	            $('.employeeAddress-error').show();
 	            isVal = false;
 	        } else {
-	            $('.employeeAddress-error').hide();
+	        	$('.employeeAddress-error').hide();
+	            $('#employeeAddressDetail').removeClass("errorInput");
+	            $('#employeePostalCode').removeClass("errorInput");
 	            $('#employeeAddress').removeClass("errorInput");
+	        }
+	     	
+	     	// 입사일 검사
+	        if ($('#employeeDate').val().trim() === '') {
+	            $('#employeeDate').addClass("errorInput");
+	            $('.employeeDate-error').show();
+	            isVal = false;
+	        } else {
+	            $('.employeeDate-error').hide();
+	            $('#employeeDate').removeClass("errorInput");
 	        }
 	     
 	     	// 프로필사진 검사
@@ -426,14 +494,51 @@
 	            $('.employeeStamp-error').hide();
 	            $('#employeeStampFileNameDisplay').removeClass("errorInput");
 	        }
-	
+	     	
+	     	// 부서 검사
+	        if ($('#employeeDepartment').data('els') === '') {
+	            $('#employeeDepartment').addClass("errorInput");
+	            $('.employeeDepartment-error').show();
+	            isVal = false;
+	        } else {
+	            $('.employeeDepartment-error').hide();
+	            $('#employeeDepartment').removeClass("errorInput");
+	        }
+	     
+	     	// 직급 검사
+	        if ($('#employeePosition').data('els') === '') {
+	            $('#employeePosition').addClass("errorInput");
+	            $('.employeePosition-error').show();
+	            isVal = false;
+	        } else {
+	            $('.employeePosition-error').hide();
+	            $('#employeePosition').removeClass("errorInput");
+	        }
+	     	
 	        // 폼 제출
 	        if (isVal) {
 	            console.log("submit 성공");
-	            $('form[name="employeeAddForm"]').submit();
+	            $('#employeeAddForm').submit();
 	        }
 	    });
-        </script>
+     	
+     	// 부서 선택
+	    document.addEventListener("DOMContentLoaded", function(e) {
+	        // default
+	        var els = document.querySelectorAll(".employeeDepartment");
+	        els.forEach(function(select) {
+	            NiceSelect.bind(select);
+	        });
+	    });
+		// 직급 선택
+	    document.addEventListener("DOMContentLoaded", function(e) {
+	        // default
+	        var els = document.querySelectorAll(".employeePosition");
+	        els.forEach(function(select) {
+	            NiceSelect.bind(select);
+	        });
+	    });
+    </script>
            
     </body>
 </html>

@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.example.academy.vo.Employee;
 
 @Mapper
-public interface JinMapper {
+public interface EmployeeMapper {
 	
 	List<Employee> selectEmployeeList();
 }

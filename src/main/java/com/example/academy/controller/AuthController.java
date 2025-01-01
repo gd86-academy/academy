@@ -16,7 +16,12 @@ import com.example.academy.vo.User;
 @Controller
 public class AuthController {
 	@Autowired private AuthService authService;
-
+	
+	@GetMapping("/main")
+	public String main() {
+		return "main";
+	}
+	
 	@GetMapping("/home")
     public String home(Model model) {
 		
@@ -48,4 +53,9 @@ public class AuthController {
         authService.joinProcess(user);
         return "redirect:/login";
     }
+    
+    @GetMapping("/all/management")
+	public String management() {
+		return "management";
+	}
 }

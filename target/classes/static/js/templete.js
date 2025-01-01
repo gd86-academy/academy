@@ -76,16 +76,25 @@ document.addEventListener('alpine:init', () => {
         },
 	}));
 	
-	// 날짜 선택 태그에서 현재날짜 출력
+	// 사원 등록 생년월일
 	Alpine.data("form", () => ({
-        date1: new Date().toISOString().split('T')[0], // 현재 날짜를 기본값으로 설정 (YYYY-MM-DD 형식)
+		date1: new Date().toISOString().split('T')[0],
+        date2: new Date().toISOString().split('T')[0],
         init() {
-            const defaultDate = document.getElementById('employeeBirth').value || this.date1; // 입력 필드 값 또는 기본값 사용
+            // 생년월일
+            const defaultDate1 = document.getElementById('employeeBirth').value || this.date1;
             flatpickr(document.getElementById('employeeBirth'), {
                 dateFormat: 'Y-m-d',
-                //defaultDate: defaultDate, // 기본 날짜 설정
+                //defaultDate: defaultDate1,
             });
-        }
+
+            // 입사일
+            const defaultDate2 = document.getElementById('employeeDate').value || this.date2;
+            flatpickr(document.getElementById('employeeDate'), {
+                dateFormat: 'Y-m-d',
+                //defaultDate: defaultDate2,
+            });
+        },
     }));
 });
 
@@ -106,15 +115,15 @@ openModalButton.addEventListener('click', () => {
 const closeModal = () => {
   modalBackground.classList.remove('block');
   modalBackground.classList.add('hidden');  // 모달 배경 숨기기
+  // 모달 내부의 모든 입력 필드를 초기화
+  const form = document.getElementById('employeeAddForm');
+  form.reset(); // 모든 입력 필드와 라디오 버튼 초기화
+  $('input').removeClass('errorInput');
+  // 모든 에러 라벨 숨기기
+  $('.error-label').hide();
 };
 
 closeModalButton.addEventListener('click', closeModal); // 닫기 버튼 클릭 시
 cancelButton.addEventListener('click', closeModal);     // 취소 버튼 클릭 시
 
-// 배경 클릭 시 모달 닫기
-modalBackground.addEventListener('click', (event) => {
-  if (event.target === modalBackground) {
-    closeModal();
-  }
-});
 
