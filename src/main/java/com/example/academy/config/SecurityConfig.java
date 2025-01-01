@@ -26,6 +26,7 @@ public class SecurityConfig {
             .requestMatchers("/management/**").hasRole("management") // 운영팀
             .requestMatchers("/humanresources/**").hasRole("humanresources") // 인사팀
             .requestMatchers("/Administration/**").hasRole("Administration") // 행정팀
+            .requestMatchers("/static/css/**", "/static/js/**", "/static/images/**", "/static/**", "/templates/fragments/**", "/templates/**").permitAll() // CSS, JS, 이미지 파일 접근 허용
             .anyRequest().permitAll()
             //.anyRequest().authenticated() // 위에 등록되지 않은 경로는 로그인된 사원만 접근가능하도록 설정.
         );
