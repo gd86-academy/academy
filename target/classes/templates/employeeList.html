@@ -34,10 +34,11 @@
 		<script th:src="@{/js/highlight.min.js}"></script>
 		<script defer th:src="@{/js/tippy-bundle.umd.min.js}"></script>
 		<script defer th:src="@{/js/sweetalert.min.js}"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 		<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 		<script defer th:src="@{/js/address.js}"></script>
 		<script th:src="@{/js/nice-select2.js}"></script>
+		<script th:src="@{/js/simple-datatables.js}"></script>
     </head>
 
     <body
@@ -101,13 +102,13 @@
                 <!-- 메인화면 -->
                 <div class="animate__animated p-6" :class="[$store.app.animation]">
                 	<!-- 타이틀 -->
-                	<div class="flex flex-wrap items-center justify-between gap-4 mb-5">
-                       <h2 class="text-2xl">주소록</h2>
+                	<div class="flex flex-wrap items-center justify-between gap-4 ml-3">
+                       <h2 class="text-2xl ml-3">주소록</h2>
                        <div class="flex w-full flex-col gap-4 sm:w-auto sm:flex-row sm:items-center sm:gap-3">
-                           <div class="flex gap-3">
+                           <div class="flex gap-3 mr-3">
                                <div>
   									<!-- 버튼 -->
-									 <button type="button" class="btn btn-primary" id="openModalButton">
+									 <button type="button" class="btn btn-primary mr-3" id="openModalButton">
 									     <svg
 									         width="24"
 									         height="24"
@@ -351,194 +352,23 @@
 									       </div>
 									   </div>
 									 </div>
-                                    <div class="relative">
-                                    <input
-                                        type="text"
-                                        placeholder="사원 검색"
-                                        class="peer form-input py-2 ltr:pr-11 rtl:pl-11"
-                                    />
-                                    <div class="absolute top-1/2 -translate-y-1/2 peer-focus:text-primary ltr:right-[11px] rtl:left-[11px]">
-                                        <svg class="mx-auto" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="11.5" cy="11.5" r="9.5" stroke="currentColor" stroke-width="1.5" opacity="0.5"></circle>
-                                            <path d="M18.5 18.5L22 22" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
-                                        </svg>
-                                    </div>
-                                </div>
+                                    
                             </div>
                         </div>   
 					</div>
-                	
-                	<!-- 사원 테이블 -->
-                    <div class="table-responsive">
-					    <table class="table-hover">
-					        <thead>
-					            <tr>
-					                <th colspan="2">이름</th>
-					                <th>사원번호</th>
-					                <th>전화번호</th>
-					                <th>소속팀</th>
-					                <th>직급</th>
-					                <th class="text-center">메신저</th>
-					            </tr>
-					        </thead>
-					        <tbody>
-				                <tbody>
-							    <tr th:each="employee : ${employeeList}" th:onclick="|location.href='@{/employeeOne(employeeNo=${employee.employeeNo})}'|">
-							        <td>이미지</td>
-							        <td th:text="${employee.employeeName}"></td>
-							        <td th:text="${employee.employeeNo}"></td>
-							        <td th:text="${employee.employeePhone}"></td>
-							        <td th:text="${employee.employeeDepartment}"></td>
-							        <td th:text="${employee.employeePosition}"></td>
-							        <td class="text-center">
-							            <button type="button" class="btn btn-outline-dark mx-auto d-block">
-							                <img class="h-4 w-4" th:src="@{/images/icon/Dialog.png}" alt="image">
-							                &nbsp;메신저
-							            </button>
-							        </td>
-							    </tr>
-							</tbody>
-					    </table>
-					</div>
-                </div>
+					<div class="dvanimation animate__animated p-6" :class="[$store.app.animation]">
+                		<div x-data="multicolumn">
+                			<div class="panel">
+                				<table id="myTable" class="whitespace-nowrap"></table>
+                			</div>
+                		</div>
+                	</div>
                 
                 <!--  풋터 파일 연결 -->
                 <div th:replace="fragments/footer :: footer"></div>
             </div>
         </div>
-        <script th:src="@{/js/templete.js}"></script>
-        <script>
-     	// 유효성 검사 
-		$('#employeeAddBtn').click(function() {
-	        let isVal = true;
-	     	// 이름 검사
-	        if ($('#employeeName').val().trim() === '') {
-	            $('.employeeName-error').show();
-	            $('#employeeName').addClass("errorInput");
-	            isVal = false;
-	        } else {
-	            $('.employeeName-error').hide();
-	            $('#employeeName').removeClass("errorInput");
-	        }
-	        
-	     	// 전화번호 검사
-	        if ($('#employeePhone').val().trim() === '') {
-	            $('.employeePhone-error').show();
-	            $('#employeePhone').addClass("errorInput");
-	            isVal = false;
-	        } else {
-	            $('.employeePhone-error').hide();
-	            $('#employeePhone').removeClass("errorInput");
-	        }
-	
-	        // 이메일 검사
-	        if ($('#employeeMail').val().trim() === '') {
-	            $('#employeeMail').addClass("errorInput");
-	            $('.employeeMail-error').show();
-	            isVal = false;
-	        } else {
-	            $('.employeeMail-error').hide();
-	            $('#employeeMail').removeClass("errorInput");
-	        }
-	        
-	     	// 생년월일 검사
-	        if ($('#employeeBirth').val().trim() === '') {
-	            $('#employeeBirth').addClass("errorInput");
-	            $('.employeeBirth-error').show();
-	            isVal = false;
-	        } else {
-	            $('.employeeBirth-error').hide();
-	            $('#employeeBirth').removeClass("errorInput");
-	        }
-	     
-	     	// 주소 검사
-	        if ($('#employeeAddress').val().trim() === '' || $('#employeeAddressDetail').val().trim() === '' || $('#employeePostalCode').val().trim() === '') {
-	            $('#employeeAddress').addClass("errorInput");
-	            $('#employeeAddressDetail').addClass("errorInput");
-	            $('#employeePostalCode').addClass("errorInput");
-	            $('.employeeAddress-error').show();
-	            isVal = false;
-	        } else {
-	        	$('.employeeAddress-error').hide();
-	            $('#employeeAddressDetail').removeClass("errorInput");
-	            $('#employeePostalCode').removeClass("errorInput");
-	            $('#employeeAddress').removeClass("errorInput");
-	        }
-	     	
-	     	// 입사일 검사
-	        if ($('#employeeDate').val().trim() === '') {
-	            $('#employeeDate').addClass("errorInput");
-	            $('.employeeDate-error').show();
-	            isVal = false;
-	        } else {
-	            $('.employeeDate-error').hide();
-	            $('#employeeDate').removeClass("errorInput");
-	        }
-	     
-	     	// 프로필사진 검사
-	        if ($('#employeePhoto').val().trim() === '') {
-	            $('#employeePhotoFileNameDisplay').addClass("errorInput");
-	            $('.employeePhoto-error').show();
-	            isVal = false;
-	        } else {
-	            $('.employeePhoto-error').hide();
-	            $('#employeePhotoFileNameDisplay').removeClass("errorInput");
-	        }
-	     
-	     	// 도장사진 검사
-	        if ($('#employeeStamp').val().trim() === '') {
-	            $('#employeeStampFileNameDisplay').addClass("errorInput");
-	            $('.employeeStamp-error').show();
-	            isVal = false;
-	        } else {
-	            $('.employeeStamp-error').hide();
-	            $('#employeeStampFileNameDisplay').removeClass("errorInput");
-	        }
-	     	
-	     	// 부서 검사
-	        if ($('#employeeDepartment').data('els') === '') {
-	            $('#employeeDepartment').addClass("errorInput");
-	            $('.employeeDepartment-error').show();
-	            isVal = false;
-	        } else {
-	            $('.employeeDepartment-error').hide();
-	            $('#employeeDepartment').removeClass("errorInput");
-	        }
-	     
-	     	// 직급 검사
-	        if ($('#employeePosition').data('els') === '') {
-	            $('#employeePosition').addClass("errorInput");
-	            $('.employeePosition-error').show();
-	            isVal = false;
-	        } else {
-	            $('.employeePosition-error').hide();
-	            $('#employeePosition').removeClass("errorInput");
-	        }
-	     	
-	        // 폼 제출
-	        if (isVal) {
-	            console.log("submit 성공");
-	            $('#employeeAddForm').submit();
-	        }
-	    });
-     	
-     	// 부서 선택
-	    document.addEventListener("DOMContentLoaded", function(e) {
-	        // default
-	        var els = document.querySelectorAll(".employeeDepartment");
-	        els.forEach(function(select) {
-	            NiceSelect.bind(select);
-	        });
-	    });
-		// 직급 선택
-	    document.addEventListener("DOMContentLoaded", function(e) {
-	        // default
-	        var els = document.querySelectorAll(".employeePosition");
-	        els.forEach(function(select) {
-	            NiceSelect.bind(select);
-	        });
-	    });
-    </script>
-           
+        <script th:src="@{/customjs/employeeList.js}"></script>
+        
     </body>
 </html>

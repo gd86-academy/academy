@@ -2,25 +2,33 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.EmployeeMapper">
 
+	<!-- 사원 인원수 조회 -->
+	<select id="countEmployee">
+		SELECT COUNT(*) FROM employee
+	</select>
+
 	<!-- 사원조회 -->
-	<select id="selectEmployeeList" parameterType="com.example.academy.vo.Employee">
+	<select id="selectEmployeeList">
 		SELECT
-			employee_no employeeNo
-			, employee_pw employeePw
-			, employee_name employeeName
-			, employee_gender employeeGender
-			, employee_birth employeeBirth
-			, address_no addressNo
-			, employee_phone employeePhone
-			, employee_department employeeDepartment
-			, employee_position employeePosition
-			, photo_file_no photoFileNo
-			, stamp_file_no stampFileNo
-			, employee_mail employeeMail
-			, employee_date employeeDate
-			, create_date createDate
-			, update_date updateDate
-		FROM employee
+			e.employee_no employeeNo
+			, e.employee_pw employeePw
+			, e.employee_name employeeName
+			, e.employee_gender employeeGender
+			, e.employee_birth employeeBirth
+			, e.address_no addressNo
+			, e.employee_phone employeePhone
+			, e.employee_department employeeDepartment
+			, e.employee_position employeePosition
+			, e.photo_file_no photoFileNo
+			, e.stamp_file_no stampFileNo
+			, e.employee_mail employeeMail
+			, e.employee_date employeeDate
+			, e.create_date createDate
+			, e.update_date updateDate
+			, f.file_origin fileOrigin
+			, f.file_ext fileExt
+		FROM employee e
+		LEFT OUTER JOIN file f ON f.file_no = e.photo_file_no
 	</select>
 
 </mapper>
