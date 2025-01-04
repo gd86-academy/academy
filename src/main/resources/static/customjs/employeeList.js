@@ -129,7 +129,7 @@ document.addEventListener('alpine:init', () => {
 					            select: 0,
 					            render: (data, cell, row) => {
 									if(data == 'null.null') return `<div class="flex items-center w-max"><img class="w-9 h-9 rounded-full ltr:mr-2 rtl:ml-2 object-cover" src="./images/defaultProfile.png" /></div>`;
-					                else return `<div class="flex items-center w-max"><img class="w-9 h-9 rounded-full ltr:mr-2 rtl:ml-2 object-cover" src="./file/${data}" /></div>`;
+					                else return `<div class="flex items-center w-max"><img class="w-9 h-9 rounded-full ltr:mr-2 rtl:ml-2 object-cover" src="./upload/${data}" /></div>`;
 					            },
 								sortable: false,
 					        },

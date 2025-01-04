@@ -34,7 +34,7 @@ public class EmployeeListDTO {
             this.employeePhone,
             this.employeeDepartment,
             this.employeePosition,
-            this.fileOrigin + "." + this.fileExt
+            this.fileName + "." + this.fileExt
         };
     }
 }

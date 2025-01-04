@@ -25,7 +25,7 @@
 			, e.employee_date employeeDate
 			, e.create_date createDate
 			, e.update_date updateDate
-			, f.file_origin fileOrigin
+			, f.file_name fileName
 			, f.file_ext fileExt
 		FROM employee e
 		LEFT OUTER JOIN file f ON f.file_no = e.photo_file_no

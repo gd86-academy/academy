@@ -2,11 +2,11 @@ package com.example.academy.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 
-import com.example.academy.vo.File;
+import com.example.academy.vo.Files;
 
 @Mapper
-public interface FileMapper {
+public interface FilesMapper {
 	
 	// 진수우 : 파일 저장.
-	Integer insertFile(File file);
+	Integer insertFile(Files files);
 }

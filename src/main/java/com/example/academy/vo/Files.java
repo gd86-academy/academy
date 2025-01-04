@@ -3,7 +3,7 @@ package com.example.academy.vo;
 import lombok.Data;
 
 @Data
-public class File {
+public class Files {
 	
 	private Integer fileNo;
 	private String fileName;
