@@ -32,8 +32,7 @@ public class EmployeeController {
 	// 진수우 : 사원 등록 로직.
 	@PostMapping("/addEmployee")
 	public String addEmployee(Model model, EmployeeAddDTO employAddDTO) {
-		//model.addAttribute("employAddDTO", employAddDTO);
-		employeeService.addEmployee(employAddDTO);
-		return "test";
+		employeeService.addEmployee(employAddDTO); // 데이터베이스에 사원 추가.
+		return "redirect:/employeeList";
 	}
 }

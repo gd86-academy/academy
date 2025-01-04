@@ -44,12 +44,10 @@
 			, employee_department
 			, employee_position
 			, photo_file_no
-			, stamp_file_no
 			, employee_mail
 			, employee_date
 		) VALUES(
 			#{employeeNo}
-			, #{employeeNo}
 			, #{employeePw}
 			, #{employeeName}
 			, #{employeeGender}
@@ -59,7 +57,6 @@
 			, #{employeeDepartment}
 			, #{employeePosition}
 			, #{photoFileNo}
-			, #{stampFileNo}
 			, #{employeeMail}
 			, #{employeeDate}
 		)

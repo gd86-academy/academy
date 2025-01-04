@@ -9,7 +9,8 @@ public class File {
 	private String fileName;
 	private String fileExt;
 	private String fileOrigin;
-	private String fileSize;
+	private Long fileSize;
+	private String fileType;
 	private String fileCategory;
 	private String createDate;
 	private String updateDate;
