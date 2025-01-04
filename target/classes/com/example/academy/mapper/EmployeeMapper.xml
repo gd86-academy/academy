@@ -2,12 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.EmployeeMapper">
 
-	<!-- 사원 인원수 조회 -->
+	<!-- 진수우 : 사원 인원수 조회 -->
 	<select id="countEmployee">
 		SELECT COUNT(*) FROM employee
 	</select>
 
-	<!-- 사원조회 -->
+	<!-- 진수우 : 사원조회 -->
 	<select id="selectEmployeeList">
 		SELECT
 			e.employee_no employeeNo
@@ -30,5 +30,39 @@
 		FROM employee e
 		LEFT OUTER JOIN file f ON f.file_no = e.photo_file_no
 	</select>
+	
+	<!-- 진수우 : 사원추가 -->
+	<insert id="insertEmployee" parameterType="com.example.academy.dto.EmployeeListDTO">
+		INSERT INTO employee(
+			employee_no
+			, employee_pw
+			, employee_name
+			, employee_gender
+			, employee_birth
+			, address_no
+			, employee_phone
+			, employee_department
+			, employee_position
+			, photo_file_no
+			, stamp_file_no
+			, employee_mail
+			, employee_date
+		) VALUES(
+			#{employeeNo}
+			, #{employeeNo}
+			, #{employeePw}
+			, #{employeeName}
+			, #{employeeGender}
+			, #{employeeBirth}
+			, #{addressNo}
+			, #{employeePhone}
+			, #{employeeDepartment}
+			, #{employeePosition}
+			, #{photoFileNo}
+			, #{stampFileNo}
+			, #{employeeMail}
+			, #{employeeDate}
+		)
+	</insert>
 
 </mapper>

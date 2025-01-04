@@ -169,7 +169,7 @@
 									               </h3>
 									               <div class="p-5">
 									                   <form id="employeeAddForm" method="post" th:action="@{/addEmployee}"  enctype="multipart/form-data">
-									                   <!-- 이름 -->
+									                   	   <!-- 이름 -->
 									                       <div>
 									                           <label for="employeePhone">이름</label>
 									                           <input
@@ -283,38 +283,12 @@
 														           <input 
 														               id="employeePhotoFileNameDisplay" 
 														               type="text" 
-														               placeholder="첨부된 파일이 없습니다." 
+														               placeholder="첨부된 파일이 없습니다."
 														               class="form-input ltr:rounded-l-none rtl:rounded-r-none flex-grow" 
 														               readonly />
 														       </div>
 														   </div>
 														    <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeePhoto-error error-label" style="display: none;">프로필사진을 첨부해주세요.</span></div>
-									                       <!-- 도장 사진 -->
-									                       <div>
-										                       <label for="employeeStamp">도장 사진</label>
-														       <div class="flex">
-														           <button 
-														               type="button" 
-														               name="employeeStamp"
-														               class="btn btn-primary ltr:rounded-r-none rtl:rounded-l-none" 
-														               style="width: 150px;"
-														               onclick="document.getElementById('employeeStamp').click();">
-														               파일 선택
-														           </button>
-														           <input 
-														               id="employeeStamp" 
-														               type="file" 
-														               class="hidden" 
-														               onchange="document.getElementById('employeeStampFileNameDisplay').value = this.files[0] ? this.files[0].name : '';" />
-														           <input 
-														               id="employeeStampFileNameDisplay" 
-														               type="text" 
-														               placeholder="첨부된 파일이 없습니다." 
-														               class="form-input ltr:rounded-l-none rtl:rounded-r-none flex-grow" 
-														               readonly />
-														       </div>
-													       </div>
-													        <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeStamp-error error-label" style="display: none;">도장사진을 첨부해주세요.</span></div>
 													        <!-- 성별 -->
 													        <div class="mb-5">
 													        <label>성별</label>

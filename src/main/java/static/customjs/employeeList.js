@@ -315,16 +315,6 @@ $('#employeeAddBtn').click(function() {
         $('.employeePhoto-error').hide();
         $('#employeePhotoFileNameDisplay').removeClass("errorInput");
     }
- 
- 	// 도장사진 검사
-    if ($('#employeeStamp').val().trim() === '') {
-        $('#employeeStampFileNameDisplay').addClass("errorInput");
-        $('.employeeStamp-error').show();
-        isVal = false;
-    } else {
-        $('.employeeStamp-error').hide();
-        $('#employeeStampFileNameDisplay').removeClass("errorInput");
-    }
  	
  	// 부서 검사
     if ($('#employeeDepartment').data('els') === '') {
