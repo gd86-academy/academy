@@ -20,6 +20,7 @@ public class EmployeeAddDTO {
     private String employeeDate;
     private Integer addressNo;
     private Integer photoFileNo;
+    private String employeeRole;
     
     // 주소정보
 	private String addressName;

@@ -56,6 +56,9 @@ public class EmployeeService {
 		employeeAddDTO.setPhotoFileNo(fileNo);
 		employeeAddDTO.setAddressNo(addressNo);
 		employeeAddDTO.setEmployeePw(bCryptPasswordEncoder.encode("1234")); // 사원추가 시 임시비밀번호를 '1234'로 설정.
+		if (employeeAddDTO.getEmployeeDepartment().equals("인사팀")) employeeAddDTO.setEmployeeRole("humanresources"); // 부서마다 홈페이지 접근권한 설정.
+		else if (employeeAddDTO.getEmployeeDepartment().equals("행정팀")) employeeAddDTO.setEmployeeRole("Administration");
+		else if (employeeAddDTO.getEmployeeDepartment().equals("운영팀")) employeeAddDTO.setEmployeeRole("management"); // 추후 공통테이블 코드명으로 변경.
 		result += employeeMapper.insertEmployee(employeeAddDTO);
 		
 		// 서버에 물리적 파일 저장.

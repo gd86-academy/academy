@@ -46,6 +46,7 @@
 			, photo_file_no
 			, employee_mail
 			, employee_date
+			, employee_role
 		) VALUES(
 			#{employeeNo}
 			, #{employeePw}
@@ -59,6 +60,7 @@
 			, #{photoFileNo}
 			, #{employeeMail}
 			, #{employeeDate}
+			, #{employeeRole}
 		)
 	</insert>
 
