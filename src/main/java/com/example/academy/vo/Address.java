@@ -8,4 +8,6 @@ public class Address {
 	private String addressName;
 	private String addressDetail;
 	private Integer postCode;
+	private String createDate;
+    private String updateDate;
 }
