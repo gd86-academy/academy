@@ -7,9 +7,13 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.example.academy.mapper.AuthMapper;
+import com.example.academy.vo.Employee;
 import com.example.academy.vo.User;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
@@ -17,13 +21,12 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String employeeNo) throws UsernameNotFoundException {
 
-        User user = authMapper.findByUsername(username);
+        Employee emploayee = authMapper.findByUsername(employeeNo);
 
-        if (user != null) {
-
-            return new CustomUserDetails(user);
+        if (emploayee != null) {
+            return new CustomUserDetails(emploayee);
         }
 
         return null;

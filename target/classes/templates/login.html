@@ -77,7 +77,7 @@
                                     <h1 class="text-3xl font-extrabold uppercase !leading-snug text-primary md:text-4xl">로그인</h1>
                                     <p class="text-base font-bold leading-normal text-white-dark">Academy에 오신 것을 환영합니다.</p>
                                 </div>
-                                <form class="space-y-5 dark:text-white" action="/academy/loginProc" method="post" name="loginForm">
+                                <form class="space-y-5 dark:text-white" action="/academy/loginProc" method="post" name="loginForm" id="loginForm">
                                     <div>
                                         <label for="username">사원번호</label>
                                         <div class="relative text-white-dark">
@@ -175,34 +175,42 @@
         <script>
      	// 유효성 검사 
 		$('#LoginBtn').click(function() {
-        let isVal = true;
-
-        // 사원번호 검사
-        if ($('#username').val().trim() === '') {
-            $('#username').addClass("errorInput");
-            $('.username-error').show();
-            isVal = false;
-        } else {
-            $('.username-error').hide();
-            $('#username').removeClass("errorInput");
-        }
-
-        // 비밀번호 검사
-        if ($('#Password').val().length < 4) {
-            $('.pw-error').show();
-            $('#Password').addClass("errorInput");
-            isVal = false;
-        } else {
-            $('.pw-error').hide();
-            $('#Password').removeClass("errorInput");
-        }
-
-        // 폼 제출
-        if (isVal) {
-            console.log("submit 성공");
-            $('form[name="loginForm"]').submit();
-        }
-    });
+	        let isVal = true;
+	
+	        // 사원번호 검사
+	        if ($('#username').val().trim() === '') {
+	            $('#username').addClass("errorInput");
+	            $('.username-error').show();
+	            isVal = false;
+	        } else {
+	            $('.username-error').hide();
+	            $('#username').removeClass("errorInput");
+	        }
+	
+	        // 비밀번호 검사
+	        if ($('#Password').val().length < 4) {
+	            $('.pw-error').show();
+	            $('#Password').addClass("errorInput");
+	            isVal = false;
+	        } else {
+	            $('.pw-error').hide();
+	            $('#Password').removeClass("errorInput");
+	        }
+	
+	        // 폼 제출
+	        if (isVal) {
+	            console.log("submit 성공");
+	            $('form[name="loginForm"]').submit();
+	        }
+	    });
+     	
+		// Enter키를 눌렀을 때 로그인.
+		$('#loginForm').on('keydown', function(event) {
+		    if (event.keyCode === 13) { // Enter 키
+		        event.preventDefault(); // 기본 Enter 키 동작 방지
+		        $('#LoginBtn').click(); // 버튼 클릭 이벤트 트리거
+		    }
+		});
         </script>
     </body>
 </html>

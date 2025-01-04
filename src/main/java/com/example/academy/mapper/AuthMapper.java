@@ -2,16 +2,12 @@ package com.example.academy.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.example.academy.vo.Employee;
 import com.example.academy.vo.User;
 
 @Mapper
 public interface AuthMapper {
     
-    Integer insertUser(User user);
-    
-    // Check if a username exists
-    boolean existsByUsername(String username);
-
-    // Find user by username
-    User findByUsername(String username);
+    // 진수우 : 시큐리티 로그인 시 사원 데이터베이스 조회.
+    Employee findByUsername(String username);
 }

@@ -6,14 +6,15 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.example.academy.vo.Employee;
 import com.example.academy.vo.User;
 
 public class CustomUserDetails implements UserDetails {
 
-    private User user;
+    private Employee employee;
 
-    public CustomUserDetails(User user) {
-        this.user = user;
+    public CustomUserDetails(Employee employee) {
+        this.employee = employee;
     }
 
     @Override
@@ -25,24 +26,24 @@ public class CustomUserDetails implements UserDetails {
 
             @Override
             public String getAuthority() {
-            	return "ROLE_" + user.getRole(); // 권한명 앞에 ROLE_ 접두사를 추가해야 필터체인 정상작동.
+            	return "ROLE_" + employee.getEmployeeRole(); // 권한명 앞에 ROLE_ 접두사를 추가해야 필터체인 정상작동.
             }
         });
         return collection;
     }
 
     public String getUserrole() {
-        return user.getRole();
+        return employee.getEmployeeRole();
     }
     
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return employee.getEmployeePw();
     }
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+    	return employee.getEmployeeNo().toString();
     }
 
     @Override

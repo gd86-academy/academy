@@ -1,25 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.AuthMapper">
-	
-	<insert id="insertUser" parameterType="com.example.academy.vo.User">
-		INSERT INTO user(username, password, role) VALUES(#{username}, #{password}, #{role})
-	</insert>
-	
-	<!-- Check if a username exists -->
-    <select id="existsByUsername" resultType="boolean">
-        SELECT COUNT(1) > 0
-        FROM user
-        WHERE username = #{username}
-    </select>
 
-    <!-- Find user by username -->
-    <select id="findByUsername" resultType="com.example.academy.vo.User">
-        SELECT user_id userId
-        , username
-        , password
-        , role
-        FROM user
-        WHERE username = #{username}
+    <!-- 진수우 : 시큐리티 로그인 시 사원 데이터베이스 조회. -->
+    <select id="findByUsername" resultType="com.example.academy.vo.Employee">
+        SELECT employee_no employeeNo
+        , employee_pw employeePw
+        , employee_role employeeRole
+        FROM employee
+        WHERE employee_no = #{employeeNo}
     </select>
+    
 </mapper>

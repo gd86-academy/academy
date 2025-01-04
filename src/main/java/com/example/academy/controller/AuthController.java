@@ -32,6 +32,7 @@ public class AuthController {
 	    if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
 	        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 	        
+	        model.addAttribute("password", userDetails.getPassword());
 	        model.addAttribute("username", userDetails.getUsername());
 	        model.addAttribute("role", userDetails.getUserrole());
 	    }
@@ -41,21 +42,5 @@ public class AuthController {
 	@GetMapping("/login")
     public String loginP() {
         return "login";
-    }
-
-    @GetMapping("/join")
-    public String joinP() {
-        return "join";
-    }
-
-    @PostMapping("/joinProc")
-    public String joinProcess(User user) {
-        authService.joinProcess(user);
-        return "redirect:/login";
-    }
-    
-    @GetMapping("/all/management")
-	public String management() {
-		return "management";
-	}
+    }  
 }
