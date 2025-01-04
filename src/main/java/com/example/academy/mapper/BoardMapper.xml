@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.academy.mapper.BoardMapper">
+
+	<!-- 세영) 공지사항리스트 조회 -->
+	<select id="selectBoardList" resultType="com.example.academy.vo.Board">
+		SELECT
+			board_no boardNo
+			, board_title boardTitle
+			, board_content boardContent
+			, create_employee_no createEmployeeNo
+			, update_employee_no updateEmployeeNo
+			, board_count boardCount
+			, create_date createDate
+			, update_date updateDate
+		FROM board
+	</select>
+
+</mapper>
