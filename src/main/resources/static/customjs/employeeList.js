@@ -316,24 +316,31 @@ $('#employeeAddBtn').click(function() {
         $('#employeePhotoFileNameDisplay').removeClass("errorInput");
     }
  	
+	// 부서 검사
+    const $employeeDepartment = $('#employeeDepartment'); // 선택박스 참조
+    const $niceSelectDepartment = $employeeDepartment.next('.nice-select'); // nice-select 참조
+ 	
  	// 부서 검사
-    if ($('#employeeDepartment').data('els') === '') {
-        $('#employeeDepartment').addClass("errorInput");
+    if ($('#employeeDepartment').val() === null) {
+        $niceSelectDepartment.addClass("errorInput"); // 에러 클래스 추가
         $('.employeeDepartment-error').show();
         isVal = false;
     } else {
-        $('.employeeDepartment-error').hide();
-        $('#employeeDepartment').removeClass("errorInput");
+       $niceSelectDepartment.removeClass("errorInput"); // 에러 클래스 제거
+       $('.employeeDepartment-error').hide();
     }
  
+	const $employeePosition = $('#employeePosition'); // 선택박스 참조
+	const $niceSelectPosition = $employeePosition.next('.nice-select'); // nice-select 참조
+		
  	// 직급 검사
-    if ($('#employeePosition').data('els') === '') {
-        $('#employeePosition').addClass("errorInput");
+    if ($('#employeePosition').val() === null) {
         $('.employeePosition-error').show();
+        $niceSelectPosition.addClass("errorInput"); // 에러 클래스 추가
         isVal = false;
     } else {
         $('.employeePosition-error').hide();
-        $('#employeePosition').removeClass("errorInput");
+        $niceSelectPosition.removeClass("errorInput"); // 에러 클래스 제거
     }
  	
     // 폼 제출

@@ -29,7 +29,14 @@ public class EmployeeService {
 	
 	// 진수우 : 사원상세조회.
 	public EmployeeOneDTO getEmployeeOne(Integer employeeNo) {
-		return employeeMapper.selectEmployeeOne(employeeNo);
+		EmployeeOneDTO result = employeeMapper.selectEmployeeOne(employeeNo);
+		// 공통 테이블의 코드를 이름으로 변경.
+		if (result.getEmployeeDepartment().equals("DP001")) result.setEmployeeDepartment("인사팀");
+		if (result.getEmployeeDepartment().equals("DP002")) result.setEmployeeDepartment("운영팀");
+		if (result.getEmployeeDepartment().equals("DP003")) result.setEmployeeDepartment("행정팀");
+		if (result.getEmployeePosition().equals("PS001")) result.setEmployeePosition("팀장");
+		if (result.getEmployeePosition().equals("PS002")) result.setEmployeePosition("사원");
+		return result;
 	}
 	
 	// 진수우 : 사원 추가.
@@ -80,7 +87,18 @@ public class EmployeeService {
 	
 	// 진수우 : 사원 리스트 출력.
 	public List<EmployeeListDTO> getEmployeeList() {
-		return employeeMapper.selectEmployeeList();
+		List<EmployeeListDTO> result = employeeMapper.selectEmployeeList();
+		// 공통 테이블의 코드를 이름으로 변경.
+		for (EmployeeListDTO employeeListDTO : result) {
+			if (employeeListDTO.getEmployeeDepartment().equals("DP001")) employeeListDTO.setEmployeeDepartment("인사팀");
+			if (employeeListDTO.getEmployeeDepartment().equals("DP002")) employeeListDTO.setEmployeeDepartment("운영팀");
+			if (employeeListDTO.getEmployeeDepartment().equals("DP003")) employeeListDTO.setEmployeeDepartment("행정팀");
+		}
+		for (EmployeeListDTO employeeListDTO : result) {
+			if (employeeListDTO.getEmployeePosition().equals("PS001")) employeeListDTO.setEmployeePosition("팀장");
+			if (employeeListDTO.getEmployeePosition().equals("PS002")) employeeListDTO.setEmployeePosition("사원");
+		}
+		return result;
 	}
 	
 	// 진수우 : 사원 인원수 조회.

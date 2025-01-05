@@ -285,3 +285,155 @@ document.addEventListener('alpine:init', () => {
     }));
 });
 
+// Department 모달 관련 DOM 요소
+const openModalButtonDepartment = document.getElementById('openModalButtonDepartment');
+const closeModalButtonDepartment = document.getElementById('closeModalButtonDepartment');
+const modalBackgroundDepartment = document.getElementById('modalBackgroundDepartment');
+const modalWrapperDepartment = document.getElementById('modalWrapperDepartment');
+const cancelButtonDepartment = document.getElementById('cancelButtonDepartment');
+
+// Department 모달 열기
+openModalButtonDepartment.addEventListener('click', () => {
+  modalBackgroundDepartment.classList.remove('hidden');  // 모달 배경 보이기
+  modalBackgroundDepartment.classList.add('block');     // 모달 배경 보이게 설정
+});
+
+// Department 모달 닫기
+const closeModalDepartment = () => {
+  modalBackgroundDepartment.classList.remove('block');
+  modalBackgroundDepartment.classList.add('hidden');  // 모달 배경 숨기기
+  // 모달 내부의 모든 입력 필드를 초기화
+  const formDepartment = document.getElementById('employeeFormDepartment');
+  formDepartment.reset(); // 모든 입력 필드와 라디오 버튼 초기화
+  $('input').removeClass('errorInput');
+  // 모든 에러 라벨 숨기기
+  $('.error-label').hide();
+};
+
+closeModalButtonDepartment.addEventListener('click', closeModalDepartment); // 닫기 버튼 클릭 시
+cancelButtonDepartment.addEventListener('click', closeModalDepartment);     // 취소 버튼 클릭 시
+
+// Pw 모달 관련 DOM 요소
+const openModalButtonPw = document.getElementById('openModalButtonPw');
+const closeModalButtonPw = document.getElementById('closeModalButtonPw');
+const modalBackgroundPw = document.getElementById('modalBackgroundPw');
+const modalWrapperPw = document.getElementById('modalWrapperPw');
+const cancelButtonPw = document.getElementById('cancelButtonPw');
+
+// Pw 모달 열기
+openModalButtonPw.addEventListener('click', () => {
+  modalBackgroundPw.classList.remove('hidden');  // 모달 배경 보이기
+  modalBackgroundPw.classList.add('block');     // 모달 배경 보이게 설정
+});
+
+// Pw 모달 닫기
+const closeModalPw = () => {
+  modalBackgroundPw.classList.remove('block');
+  modalBackgroundPw.classList.add('hidden');  // 모달 배경 숨기기
+  // 모달 내부의 모든 입력 필드를 초기화
+  const formPw = document.getElementById('employeeFormPw');
+  formPw.reset(); // 모든 입력 필드와 라디오 버튼 초기화
+  $('input').removeClass('errorInput');
+  // 모든 에러 라벨 숨기기
+  $('.error-label').hide();
+};
+
+closeModalButtonPw.addEventListener('click', closeModalPw); // 닫기 버튼 클릭 시
+cancelButtonPw.addEventListener('click', closeModalPw);     // 취소 버튼 클릭 시
+
+// 부서 선택
+document.addEventListener("DOMContentLoaded", function(e) {
+    // default
+    var els = document.querySelectorAll(".employeeDepartment");
+    els.forEach(function(select) {
+        NiceSelect.bind(select);
+    });
+});
+
+// 직급 선택
+document.addEventListener("DOMContentLoaded", function(e) {
+    // default
+    var els = document.querySelectorAll(".employeePosition");
+    els.forEach(function(select) {
+        NiceSelect.bind(select);
+    });
+});
+
+// 부서/직책 모달 유효성 검사 
+$('#employeeBtnDepartment').click(function() {
+    let isVal = true;
+	
+	// 부서 검사
+    const $employeeDepartment = $('#employeeDepartment'); // 선택박스 참조
+    const $niceSelectDepartment = $employeeDepartment.next('.nice-select'); // nice-select 참조
+ 	
+ 	// 부서 검사
+    if ($('#employeeDepartment').val() === null) {
+        $niceSelectDepartment.addClass("errorInput"); // 에러 클래스 추가
+        $('.employeeDepartment-error').show();
+        isVal = false;
+    } else {
+       $niceSelectDepartment.removeClass("errorInput"); // 에러 클래스 제거
+       $('.employeeDepartment-error').hide();
+    }
+ 
+	const $employeePosition = $('#employeePosition'); // 선택박스 참조
+	const $niceSelectPosition = $employeePosition.next('.nice-select'); // nice-select 참조
+		
+ 	// 직급 검사
+    if ($('#employeePosition').val() === null) {
+        $('.employeePosition-error').show();
+        $niceSelectPosition.addClass("errorInput"); // 에러 클래스 추가
+        isVal = false;
+    } else {
+        $('.employeePosition-error').hide();
+        $niceSelectPosition.removeClass("errorInput"); // 에러 클래스 제거
+    }
+ 	
+    // 폼 제출
+    if (isVal) {
+        console.log("submit 성공");
+        $('#employeeFormDepartment').submit();
+    }
+});
+
+// 비밀번호 변경 모달 유효성 검사 
+$('#employeeBtnPw').click(function() {
+    let isVal = true;
+	
+	// 현재 비밀번호 검사
+    if ($('#employeeNowPw').val().trim() === '') {
+        $('#employeeNowPw').addClass("errorInput");
+        $('.employeeNowPw-error').show();
+        isVal = false;
+    } else {
+        $('.employeeNowPw-error').hide();
+        $('#employeeNowPw').removeClass("errorInput");
+    }
+    
+ 	// 새 비밀번호 검사
+    if ($('#employeeChangePw').val().trim() === '') {
+        $('#employeeChangePw').addClass("errorInput");
+        $('.employeeChangePw-error').show();
+        isVal = false;
+    } else {
+        $('.employeeChangePw-error').hide();
+        $('#employeeChangePw').removeClass("errorInput");
+    }
+	
+	// 새 비밀번호확인 검사
+    if ($('#employeeChangePwCheck').val().trim() === '') {
+        $('#employeeChangePwCheck').addClass("errorInput");
+        $('.employeeChangePwCheck-error').show();
+        isVal = false;
+    } else {
+        $('.employeeChangePwCheck-error').hide();
+        $('#employeeChangePwCheck').removeClass("errorInput");
+    }
+ 	
+    // 폼 제출
+    if (isVal) {
+        console.log("submit 성공");
+        $('#employeeFormPw').submit();
+    }
+});

@@ -249,20 +249,23 @@
 														   </div>
 														   <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeDate-error error-label" style="display: none;">입사일을 입력해주세요.</span></div>
 														   <!-- 부서 -->
-														   <label>부서</label>
-														   <select id="employeeDepartment" name="employeeDepartment" class="employeeDepartment" placeholder="부서">
-														       <option selected value="운영팀">운영팀</option>
-														       <option value="행정팀">행정팀</option>
-														       <option value="인사팀">인사팀</option>
-														   </select>
-														   <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeDepartment-error" style="display: none;">부서를 선택해주세요.</span></div>
-														   <!-- 직급 -->
-														   <label>직급</label>
-														   <select id ="employeePosition" name="employeePosition" class="employeePosition" placeholder="직급">
-														       <option selected value="팀장">팀장</option>
-														       <option value="사원">사원</option>
-														   </select>
-														   <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeePosition-error" style="display: none;">직급을 선택해주세요.</span></div>
+													   <label>부서</label>
+													   <select id="employeeDepartment" name="employeeDepartment" class="employeeDepartment">
+													   	   <option value="" disabled selected>부서를 선택하세요.</option>
+													   	   <th:block th:each="commonDepartment : ${commonDepartment}">
+													   	   		<option th:value="${commonDepartment.code}" th:text="${commonDepartment.name}"></option>
+													   	   </th:each>
+													   </select>
+													   <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeDepartment-error" style="display: none;">부서를 선택해주세요.</span></div>
+													   <!-- 직급 -->
+													   <label>직급</label>
+													   <select id="employeePosition" name="employeePosition" class="employeePosition">
+													   	   <option value="" disabled selected>직급을 선택하세요.</option>
+													   	   <th:block th:each="commonPosition : ${commonPosition}">
+													   	   		<option th:value="${commonPosition.code}" th:text="${commonPosition.name}"></option>
+													   	   </th:each>
+													   </select>
+													   <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeePosition-error" style="display: none;">직급을 선택해주세요.</span></div>
 									                       <!-- 프로필 사진 -->
 									                       <div>
 														       <label for="employeePhoto">프로필 사진</label>
