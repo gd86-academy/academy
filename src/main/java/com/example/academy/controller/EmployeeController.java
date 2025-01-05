@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.academy.dto.EmployeeAddDTO;
+import com.example.academy.dto.EmployeeOneDTO;
 import com.example.academy.service.EmployeeService;
 
 import jakarta.servlet.http.HttpSession;
@@ -20,7 +21,9 @@ public class EmployeeController {
 	// 진수우 : 주소록 상세페이지, 마이페이지.
 	@GetMapping("/employeeOne")
 	public String employeeOne(Model model, Integer employeeNo) {
-		model.addAttribute("employeeNo", employeeNo);
+		// 데이터베이스에서 해당 사원 조회.
+		EmployeeOneDTO employee = employeeService.getEmployeeOne(employeeNo);
+		model.addAttribute("employee", employee);
 		return "employeeOne";
 	}
 	

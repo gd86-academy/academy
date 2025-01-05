@@ -1,6 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.EmployeeMapper">
+	
+	<!-- 진수우 : 사원상세조회 -->
+	<select id="selectEmployeeOne">
+		SELECT
+			e.employee_no employeeNo
+			, e.employee_pw employeePw
+			, e.employee_name employeeName
+			, e.employee_gender employeeGender
+			, e.employee_birth employeeBirth
+			, e.address_no addressNo
+			, e.employee_phone employeePhone
+			, e.employee_department employeeDepartment
+			, e.employee_position employeePosition
+			, e.photo_file_no photoFileNo
+			, e.stamp_file_no stampFileNo
+			, e.employee_mail employeeMail
+			, e.employee_date employeeDate
+			, e.create_date createDate
+			, e.update_date updateDate
+			, f.file_name fileName
+			, f.file_ext fileExt
+			, a.address_name addressName
+			, a.address_detail addressDetail
+			, a.post_code postCode
+		FROM employee e
+		LEFT OUTER JOIN file f ON f.file_no = e.photo_file_no
+		LEFT OUTER JOIN address a ON a.address_no = e.address_no
+		WHERE e.employee_no = #{employeeNo}
+	</select>
 
 	<!-- 진수우 : 사원 인원수 조회 -->
 	<select id="countEmployee">

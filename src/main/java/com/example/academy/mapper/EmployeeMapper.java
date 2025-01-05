@@ -6,9 +6,14 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.example.academy.dto.EmployeeAddDTO;
 import com.example.academy.dto.EmployeeListDTO;
+import com.example.academy.dto.EmployeeOneDTO;
 
 @Mapper
 public interface EmployeeMapper {
+	
+	// 진수우 : 사원상세조회.
+	EmployeeOneDTO selectEmployeeOne(Integer employeeNo);
+	
 	// 진수우 : 사원추가.
 	Integer insertEmployee(EmployeeAddDTO employeeAddDTO);
 	

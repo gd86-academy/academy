@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.academy.dto.EmployeeAddDTO;
 import com.example.academy.dto.EmployeeListDTO;
+import com.example.academy.dto.EmployeeOneDTO;
 import com.example.academy.mapper.AddressMapper;
 import com.example.academy.mapper.EmployeeMapper;
 import com.example.academy.mapper.FilesMapper;
@@ -25,6 +26,11 @@ public class EmployeeService {
 	@Autowired EmployeeMapper employeeMapper;
 	@Autowired AddressMapper addressMapper;
 	@Autowired FilesMapper filesMapper;
+	
+	// 진수우 : 사원상세조회.
+	public EmployeeOneDTO getEmployeeOne(Integer employeeNo) {
+		return employeeMapper.selectEmployeeOne(employeeNo);
+	}
 	
 	// 진수우 : 사원 추가.
 	public void addEmployee(EmployeeAddDTO employeeAddDTO) {
