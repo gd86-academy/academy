@@ -24,6 +24,7 @@ public class EmployeeController {
 		// 데이터베이스에서 해당 사원 조회.
 		EmployeeOneDTO employee = employeeService.getEmployeeOne(employeeNo);
 		model.addAttribute("employee", employee);
+		model.addAttribute("employeeNo", employee.getEmployeeNo());
 		return "employeeOne";
 	}
 	

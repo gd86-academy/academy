@@ -4,11 +4,13 @@ import lombok.Data;
 
 @Data
 public class Calendar {
-
 	private Integer calendarNo;
-    private String calendarColor;
-    private Integer reservationNo;
-    private Integer lectureNo;
+	private Integer employeeNo;
+    private String calendarTitle;
+    private String calendarStart;
+    private String calendarEnd;
+    private String calendarClassName;
+    private String calendarDescription;
     private String createDate;
     private String updateDate;
     

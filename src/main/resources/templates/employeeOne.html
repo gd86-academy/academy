@@ -115,11 +115,17 @@
 						 <div class="panel mt-1">
 							 <div class="flex" style="display: flex; justify-content: space-between; align-items: center;">
 							 	<!-- 사원 상세정보 출력 -->
-							 	<div class="p-5" style="flex: 1; text-align: left;">
+							 	<div class="p-5" style="flex: 4.5; text-align: left;">
 							 		<div style="height:50px;"></div> <!-- 여백공간 -->
 								 	<div class="flex" style="align-items: center;">
-								 		<div style="width:200px;"><img class="w-40 h-40 rounded-full overflow-hidden object-cover" src="./upload/dbff9a84620b45dc8282fc627dc7a619.jpg" alt="image" /></div>
-								 		<span style="font-size: 25px; font-weight: bold;" th:text="${employee.employeeName}">
+								 		<div style="width:200px;"><img class="w-40 h-40 rounded-full overflow-hidden object-cover" th:src="@{./upload/{fileName}.{fileExt}(fileName=${employee.fileName}, fileExt=${employee.fileExt})}" ></div>
+								 		<span style="width:100px; font-size: 25px; font-weight: bold;" th:text="${employee.employeeName}"></span>
+								 		<a type="button" style="background-color: #f0f0f0;" class="btn w-10 h-10 p-0 rounded-full" th:href="@{/chat?employeeNo={employeeNo}(employeeNo=${employee.employeeNo})}">
+										    <img style="width: 19px; height: 19px;" src="./images/icon/Chat Round.png" alt="image" />
+										</a>
+								 	</div>
+								 	<div>
+								 		
 								 	</div>
 								 	<div style="height:50px;"></div> <!-- 여백공간 -->
 								 	<div class="ml-3">
@@ -164,29 +170,25 @@
 								 	</div>
 							 	
 							 	<!-- 사원 스케줄 출력 -->
-							 	<div class="w-full" style="flex: 1; text-align: left;">
+							 	<div class="w-full" style="flex: 5.5; text-align: left;">
 							 		<div x-data="calendar" class="p-5">
 				                        <div class="panel" style="border-radius: 30px; box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);">
 				                            <div class="m-5">
 				                                <div class="mb-4 flex flex-col items-center justify-center sm:flex-row sm:justify-between">
 				                                    <div class="mb-4 sm:mb-0">
-				                                        <div class="text-center text-lg font-semibold ltr:sm:text-left rtl:sm:text-right">Calendar</div>
+				                                        <div class="text-center text-lg font-semibold ltr:sm:text-left rtl:sm:text-right">일정</div>
 				                                        <div class="mt-2 flex flex-wrap items-center justify-center sm:justify-start">
 				                                            <div class="flex items-center ltr:mr-4 rtl:ml-4">
 				                                                <div class="h-2.5 w-2.5 rounded-sm bg-primary ltr:mr-2 rtl:ml-2"></div>
-				                                                <div>Work</div>
-				                                            </div>
-				                                            <div class="flex items-center ltr:mr-4 rtl:ml-4">
-				                                                <div class="h-2.5 w-2.5 rounded-sm bg-info ltr:mr-2 rtl:ml-2"></div>
-				                                                <div>Travel</div>
+				                                                <div>회의</div>
 				                                            </div>
 				                                            <div class="flex items-center ltr:mr-4 rtl:ml-4">
 				                                                <div class="h-2.5 w-2.5 rounded-sm bg-success ltr:mr-2 rtl:ml-2"></div>
-				                                                <div>Personal</div>
+				                                                <div>강의</div>
 				                                            </div>
 				                                            <div class="flex items-center">
 				                                                <div class="h-2.5 w-2.5 rounded-sm bg-danger ltr:mr-2 rtl:ml-2"></div>
-				                                                <div>Important</div>
+				                                                <div>휴가</div>
 				                                            </div>
 				                                        </div>
 				                                    </div>
@@ -205,6 +207,9 @@
                 </div>
             </div>
         </div>
-        <script th:src="@{/customjs/employeeOne.js}"></script>
+        <script th:inline="javascript">
+        	var employeeNo = [[${employee.employeeNo}]]
+        </script>
+        <script th:src="@{/customjs/employeeOne.js}"> </script>
     </body>
 </html>
