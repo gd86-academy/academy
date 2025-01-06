@@ -13,6 +13,7 @@ public class ClassroomService {
 	@Autowired ClassroomMapper classroomMapper;
 	
 	public List<ClassroomListDTO> getClassroomList() {
-		return classroomMapper.selectClassroomList();
+		List<ClassroomListDTO> result = classroomMapper.selectClassroomList();
+		return result;
 	}
 }

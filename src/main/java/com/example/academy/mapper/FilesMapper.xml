@@ -2,6 +2,20 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.FilesMapper">
 	
+	<!-- 진수우 : 개인정보수정 기존파일명출력 -->
+	<select id="selectEmployeeModifyFile">
+		SELECT 
+			fp.file_origin photoFileOrigin
+			, fp.file_ext photoFileExt
+			, fs.file_origin stampFileOrigin
+			, fs.file_ext stampFileExt
+		FROM employee e
+		LEFT OUTER JOIN file fp ON e.photo_file_no = fp.file_no
+		LEFT OUTER JOIN file fs ON e.stamp_file_no = fs.file_no
+		WHERE e.employee_no = #{employeeNo}
+	</select>
+	
+	<!-- 진수우 : 사원등록 파일추가 -->
 	<insert id="insertFile" parameterType="com.example.academy.vo.Files" useGeneratedKeys="true" keyProperty="fileNo">
 		INSERT INTO file(
 			file_name

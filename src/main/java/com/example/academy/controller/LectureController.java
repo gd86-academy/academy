@@ -10,6 +10,11 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 public class LectureController {
 	
+	/*
+	// 김혜린 : 강의 상세정보 출력
+	@GetMapping("/lectureOne")
+	public String lect
+	*/
 	
 	// 김혜린 : 강의 리스트 출력
 	@GetMapping("/lectureList")

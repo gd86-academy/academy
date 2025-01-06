@@ -8,6 +8,8 @@ public class ClassroomListDTO {
 	private String classroomName;
 	private Integer classroomManager;
 	private Integer classroomCapacity;
+	private Integer employeeNo;
+	private String employeeName;
 	
 	// 데이터를 배열로 반환
 	public Object[] toArray() {
@@ -15,7 +17,9 @@ public class ClassroomListDTO {
 			this.classroomNo
 			, this.classroomName
 			, this.classroomManager
-			, this.classroomCapacity // test
+			, this.classroomCapacity 
+			, this.employeeNo
+			, this.employeeName
 		};
 	}
 }

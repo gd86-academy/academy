@@ -79,20 +79,12 @@ document.addEventListener('alpine:init', () => {
 	// 사원 등록 생년월일
 	Alpine.data("form", () => ({
 		date1: new Date().toISOString().split('T')[0],
-        date2: new Date().toISOString().split('T')[0],
         init() {
             // 생년월일
             const defaultDate1 = document.getElementById('employeeBirth').value || this.date1;
             flatpickr(document.getElementById('employeeBirth'), {
                 dateFormat: 'Y-m-d',
                 //defaultDate: defaultDate1,
-            });
-
-            // 입사일
-            const defaultDate2 = document.getElementById('employeeDate').value || this.date2;
-            flatpickr(document.getElementById('employeeDate'), {
-                dateFormat: 'Y-m-d',
-                //defaultDate: defaultDate2,
             });
         },
     }));
@@ -285,6 +277,35 @@ document.addEventListener('alpine:init', () => {
     }));
 });
 
+// ModifyEmployee 모달 관련 DOM 요소
+const openModalButtonModifyEmployee = document.getElementById('openModalButtonModifyEmployee');
+const closeModalButtonModifyEmployee = document.getElementById('closeModalButtonModifyEmployee');
+const modalBackgroundModifyEmployee = document.getElementById('modalBackgroundModifyEmployee');
+const modalWrapperModifyEmployee = document.getElementById('modalWrapperModifyEmployee');
+const cancelButtonModifyEmployee = document.getElementById('cancelButtonModifyEmployee');
+
+// ModifyEmployee 모달 열기
+openModalButtonModifyEmployee.addEventListener('click', () => {
+  modalBackgroundModifyEmployee.classList.remove('hidden');  // 모달 배경 보이기
+  modalBackgroundModifyEmployee.classList.add('block');     // 모달 배경 보이게 설정
+});
+
+// ModifyEmployee 모달 닫기
+const closeModalModifyEmployee = () => {
+  modalBackgroundModifyEmployee.classList.remove('block');
+  modalBackgroundModifyEmployee.classList.add('hidden');  // 모달 배경 숨기기
+  // 모달 내부의 모든 입력 필드를 초기화
+  const formModifyEmployee = document.getElementById('employeeFormModifyEmployee');
+  formModifyEmployee.reset(); // 모든 입력 필드와 라디오 버튼 초기화
+  $('input').removeClass('errorInput');
+  // 모든 에러 라벨 숨기기
+  $('.error-label').hide();
+};
+
+closeModalButtonModifyEmployee.addEventListener('click', closeModalModifyEmployee); // 닫기 버튼 클릭 시
+cancelButtonModifyEmployee.addEventListener('click', closeModalModifyEmployee);     // 취소 버튼 클릭 시
+
+
 // Department 모달 관련 DOM 요소
 const openModalButtonDepartment = document.getElementById('openModalButtonDepartment');
 const closeModalButtonDepartment = document.getElementById('closeModalButtonDepartment');
@@ -442,6 +463,70 @@ $('#employeeBtnPw').click(function() {
     if (isVal) {
         console.log("submit 성공");
         $('#employeeFormPw').submit();
+    }
+});
+
+// 개인정보 수정 유효성 검사 
+$('#employeeModifyBtn').click(function() {
+    let isVal = true;
+ 	// 이름 검사
+    if ($('#employeeName').val().trim() === '') {
+        $('.employeeName-error').show();
+        $('#employeeName').addClass("errorInput");
+        isVal = false;
+    } else {
+        $('.employeeName-error').hide();
+        $('#employeeName').removeClass("errorInput");
+    }
+    
+ 	// 전화번호 검사
+    if ($('#employeePhone').val().trim() === '') {
+        $('.employeePhone-error').show();
+        $('#employeePhone').addClass("errorInput");
+        isVal = false;
+    } else {
+        $('.employeePhone-error').hide();
+        $('#employeePhone').removeClass("errorInput");
+    }
+
+    // 이메일 검사
+    if ($('#employeeMail').val().trim() === '') {
+        $('#employeeMail').addClass("errorInput");
+        $('.employeeMail-error').show();
+        isVal = false;
+    } else {
+        $('.employeeMail-error').hide();
+        $('#employeeMail').removeClass("errorInput");
+    }
+    
+ 	// 생년월일 검사
+    if ($('#employeeBirth').val().trim() === '') {
+        $('#employeeBirth').addClass("errorInput");
+        $('.employeeBirth-error').show();
+        isVal = false;
+    } else {
+        $('.employeeBirth-error').hide();
+        $('#employeeBirth').removeClass("errorInput");
+    }
+ 
+ 	// 주소 검사
+    if ($('#employeeAddress').val().trim() === '' || $('#employeeAddressDetail').val().trim() === '' || $('#employeePostalCode').val().trim() === '') {
+        $('#employeeAddress').addClass("errorInput");
+        $('#employeeAddressDetail').addClass("errorInput");
+        $('#employeePostalCode').addClass("errorInput");
+        $('.employeeAddress-error').show();
+        isVal = false;
+    } else {
+    	$('.employeeAddress-error').hide();
+        $('#employeeAddressDetail').removeClass("errorInput");
+        $('#employeePostalCode').removeClass("errorInput");
+        $('#employeeAddress').removeClass("errorInput");
+    }
+ 	
+    // 폼 제출
+    if (isVal) {
+        console.log("submit 성공");
+        $('#employeeModifyForm').submit();
     }
 });
 
