@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.academy.dto.AffiliationModifyDTO;
 import com.example.academy.dto.EmployeeAddDTO;
+import com.example.academy.dto.EmployeeModifyDTO;
 import com.example.academy.dto.EmployeeModifyGetDTO;
 import com.example.academy.dto.EmployeeOneDTO;
 import com.example.academy.service.CommonService;
@@ -28,6 +29,14 @@ public class EmployeeController {
 	@Autowired EmployeeService employeeService;
 	@Autowired CommonService commonService;
 	@Autowired FilesService filesService;
+	
+	// 진수우 : 사원 부서/직책 수정.
+	@PostMapping("/modifyEmployee")
+	public String modifyEmployee(EmployeeModifyDTO employeeModifyDTO) {
+		// 데이터베이스에서 사원/직책 수정.
+		employeeService.modifyEmployee(employeeModifyDTO);
+		return "redirect:/employeeOne?employeeNo=" + employeeModifyDTO.getEmployeeNo();
+	}
 	
 	// 진수우 : 사원 부서/직책 수정.
 	@PostMapping("/modifyAffiliation")

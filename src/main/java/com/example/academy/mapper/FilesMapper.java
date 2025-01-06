@@ -8,6 +8,9 @@ import com.example.academy.vo.Files;
 @Mapper
 public interface FilesMapper {
 	
+	// 진수우 : 사원파일(프로필사진, 도장사진) 수정.
+	Integer updateFile(Files photofile);
+	
 	// 진수우 : 개인정보수정 기존파일명출력.
 	EmployeeModifyGetDTO selectEmployeeModifyFile(Integer employeeNo);
 	

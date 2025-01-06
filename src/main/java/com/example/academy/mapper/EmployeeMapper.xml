@@ -2,10 +2,30 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.EmployeeMapper">
 
+	<!-- 진수우 : 스탬프파일번호 등록 -->
+	<update id="updateStampFileNo">
+		UPDATE employee
+		SET stamp_file_no = #{stampFileNo}
+		WHERE employee_no = #{employeeNo}
+	</update>
+	
+	<!-- 진수우 : 개인정보수정 -->
+	<update id="updateEmployee">
+		UPDATE employee
+		SET 
+			employee_name = #{employeeName}
+			, employee_gender = #{employeeGender}
+			, employee_birth = #{employeeBirth}
+			, employee_phone = #{employeePhone}
+			, employee_mail = #{employeeMail}
+		WHERE employee_no = #{employeeNo}
+	</update>
+
 	<!-- 진수우 : 개인정보수정 사원정보조회 -->
 	<select id="selectEmployeeModify">
 		SELECT 
-			e.employee_name employeeName
+			e.employee_no employeeNo
+			, e.employee_name employeeName
 			, e.employee_gender employeeGender
 			, e.employee_birth employeeBirth
 			, e.address_no addressNo
@@ -13,10 +33,15 @@
 			, e.photo_file_no photoFileNo
 			, e.stamp_file_no stampFileNo
 			, e.employee_mail employeeMail
+			, a.address_no addressNo
 			, a.address_name addressName
 			, a.address_detail addressDetail
 			, a.post_code postCode
+			, fp.file_no photoFileNo
+			, fs.file_no stampFileNo
 		FROM employee e
+		LEFT OUTER JOIN file fp ON fp.file_no = e.photo_file_no
+		LEFT OUTER JOIN file fs ON fs.file_no = e.stamp_file_no
 		LEFT OUTER JOIN address a ON a.address_no = e.address_no
 		WHERE e.employee_no = #{employeeNo}
 	</select>

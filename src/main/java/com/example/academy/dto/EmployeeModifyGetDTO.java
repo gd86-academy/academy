@@ -26,4 +26,6 @@ public class EmployeeModifyGetDTO {
 	private String photoFileExt;
 	private String stampFileOrigin;
 	private String stampFileExt;
+	private String photoFileName;
+	private String stampFileName;
 }

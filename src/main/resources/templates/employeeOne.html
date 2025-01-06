@@ -551,7 +551,11 @@
 	                   개인정보 수정
 	               </h3>
 	               <div class="p-5">
-	                   <form id="employeeModifyForm" method="post" th:action="@{/}" enctype="multipart/form-data">
+	                   <form id="employeeModifyForm" method="post" th:action="@{/modifyEmployee}" enctype="multipart/form-data">
+	                       <input type="hidden" name="employeeNo" th:value="${employeeModify.employeeNo}">
+	                       <input type="hidden" name="addressNo" th:value="${employeeModify.addressNo}">
+	                   	   <input type="hidden" name="photoFileNo" th:value="${employeeModify.photoFileNo}">
+	                   	   <input type="hidden" name="stampFileNo" th:value="${employeeModify.stampFileNo}">
 	                   	   <!-- 이름 -->
 	                       <div>
 	                           <label for="employeeName">이름</label>
@@ -671,7 +675,7 @@
 						           </button>
 						           <input 
 						               id="employeeStamp" 
-						               name="employeeStamp"
+						               name="stampPhoto"
 						               type="file" 
 						               class="hidden" 
 						               onchange="document.getElementById('employeeStampFileNameDisplay').value = this.files[0] ? this.files[0].name : '';" />

@@ -12,22 +12,117 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.academy.dto.AffiliationModifyDTO;
 import com.example.academy.dto.EmployeeAddDTO;
 import com.example.academy.dto.EmployeeListDTO;
+import com.example.academy.dto.EmployeeModifyDTO;
 import com.example.academy.dto.EmployeeModifyGetDTO;
 import com.example.academy.dto.EmployeeOneDTO;
 import com.example.academy.mapper.AddressMapper;
+import com.example.academy.mapper.CommonMapper;
 import com.example.academy.mapper.EmployeeMapper;
 import com.example.academy.mapper.FilesMapper;
 import com.example.academy.util.InputFile;
 import com.example.academy.vo.Address;
 import com.example.academy.vo.Files;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
 @Transactional
+@Slf4j
 public class EmployeeService {
 	@Autowired private BCryptPasswordEncoder bCryptPasswordEncoder;
 	@Autowired EmployeeMapper employeeMapper;
 	@Autowired AddressMapper addressMapper;
 	@Autowired FilesMapper filesMapper;
+	@Autowired CommonMapper commonMapper;
+	
+	// 진수우 : 개인정보수정.
+	public void modifyEmployee(EmployeeModifyDTO employeeModifyDTO) {
+		Integer result = 0;
+		// 데이터베이스에 사원정보 수정.
+		result += employeeMapper.updateEmployee(employeeModifyDTO);
+		// 데이터베이스에 주소정보 수정.
+		result += addressMapper.updateAddress(employeeModifyDTO);
+		// 파일정보가 수정되기 전에 기존 파일정보를 불러옴.
+		EmployeeModifyGetDTO employeeModifyGetDTO = filesMapper.selectEmployeeModifyFile(employeeModifyDTO.getEmployeeNo());
+		// 프로필사진 파일이 입력되었다면,
+		if (employeeModifyDTO.getEmployeePhoto() != null && !employeeModifyDTO.getEmployeePhoto().isEmpty()) {
+			// 데이터베이스에 프로필사진 파일정보 수정.
+			MultipartFile photoMf = employeeModifyDTO.getEmployeePhoto(); // 폼에 입력되었던 프로필사진 파일데이터 가져옴.
+			InputFile photoInputFile = new InputFile();
+			photoInputFile.setOriginFileName(photoMf.getOriginalFilename()); // 파일의 실제이름을 추출해서 inputFile 인스턴스에 set.
+			Files photofile = new Files();
+			photofile.setFileNo(employeeModifyDTO.getPhotoFileNo());
+			photofile.setFileName(photoInputFile.getUUID());
+			photofile.setFileOrigin(photoInputFile.getFileName());
+			photofile.setFileExt(photoInputFile.getFileExt());
+			photofile.setFileSize(photoMf.getSize());
+			photofile.setFileType(photoMf.getContentType());
+			photofile.setFileCategory("FC001");
+			result += filesMapper.updateFile(photofile);
+			// 프로필사진 파일정보 수정이 완료되었다면,
+			if (result == 3) {
+				// 서버에 기존 물리적 파일삭제.
+				String fullname = System.getProperty("user.dir") + "/src/main/resources/static/upload/" + employeeModifyGetDTO.getPhotoFileName() + "." + employeeModifyGetDTO.getPhotoFileExt();
+				File f = new File(fullname);
+				f.delete();
+				
+				// 서버에 새로운 물리적 파일추가.
+				try {
+					photoMf.transferTo(new File(System.getProperty("user.dir") + "/src/main/resources/static/upload/" + photofile.getFileName() + "." + photofile.getFileExt()));
+				} catch (Exception e) {
+					e.printStackTrace();
+					throw new RuntimeException();
+				}
+			}
+		} else {
+			result++;
+		}
+		// 도장사진 파일이 입력되었다면,
+		if (employeeModifyDTO.getStampPhoto() != null && !employeeModifyDTO.getStampPhoto().isEmpty()) {
+			// 데이터베이스에 도장사진 파일정보 수정.
+			MultipartFile stampMf = employeeModifyDTO.getStampPhoto(); // 폼에 입력되었던 도장사진 파일데이터 가져옴.
+			InputFile stampInputFile = new InputFile();
+			stampInputFile.setOriginFileName(stampMf.getOriginalFilename()); // 파일의 실제이름을 추출해서 inputFile 인스턴스에 set.
+			Files stampfile = new Files();
+			stampfile.setFileName(stampInputFile.getUUID());
+			stampfile.setFileOrigin(stampInputFile.getFileName());
+			stampfile.setFileExt(stampInputFile.getFileExt());
+			stampfile.setFileSize(stampMf.getSize());
+			stampfile.setFileType(stampMf.getContentType());
+			stampfile.setFileCategory("FC001");
+			
+			// 등록한 도장 파일이 없다면, 도장파일정보 생성.
+			
+			if (employeeModifyGetDTO.getStampFileName() == null) {
+				result += filesMapper.insertFile(stampfile); // 도장파일정보 삽입.
+				EmployeeModifyDTO employeeModifyDTOFileNo = new EmployeeModifyDTO(); 
+				employeeModifyDTOFileNo.setStampFileNo(stampfile.getFileNo());
+				employeeModifyDTOFileNo.setEmployeeNo(employeeModifyDTO.getEmployeeNo());
+				result += employeeMapper.updateStampFileNo(employeeModifyDTOFileNo);
+			} else { // 등록한 도장 파일이 있다면, 도장파일정보 수정.
+				stampfile.setFileNo(employeeModifyDTO.getStampFileNo());
+				result += filesMapper.updateFile(stampfile);
+				result++;
+			}
+			// 도장사진 파일정보 생성/수정이 완료되었다면,
+			if (result == 5) {
+				// 등록한 도장 파일이 있다면,
+				if (employeeModifyGetDTO.getStampFileName() != null) {
+					// 서버에 기존 물리적 파일삭제.
+					String fullname = System.getProperty("user.dir") + "/src/main/resources/static/upload/" + employeeModifyGetDTO.getStampFileName() + "." + employeeModifyGetDTO.getStampFileExt();
+					File f = new File(fullname);
+					f.delete();
+				}
+				// 서버에 새로운 물리적 파일추가.
+				try {
+					stampMf.transferTo(new File(System.getProperty("user.dir") + "/src/main/resources/static/upload/" + stampfile.getFileName() + "." + stampfile.getFileExt()));
+				} catch (Exception e) {
+					e.printStackTrace();
+					throw new RuntimeException();
+				}
+			}
+		}
+	}
 	
 	// 진수우 : 개인정보수정 사원정보조회
 	public EmployeeModifyGetDTO getEmployeeModify(Integer employeeNo) {
@@ -68,7 +163,7 @@ public class EmployeeService {
 		files.setFileExt(inputFile.getFileExt()); // 파일 확장자.
 		files.setFileSize(mf.getSize()); // 파일 크기.
 		files.setFileType(mf.getContentType()); // 파일 타입.
-		files.setFileCategory("employee"); // 파일 카테고리.
+		files.setFileCategory("FC001"); // 파일 카테고리.
 		result += filesMapper.insertFile(files); // 파일정보 삽입.
 		
 		// 주소정보 데이터베이스에 삽입.

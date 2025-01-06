@@ -18,6 +18,7 @@ public class EmployeeModifyDTO {
     private Integer photoFileNo;
     private Integer stampFileNo;
     
+    
     // 주소정보
 	private String addressName;
 	private String addressDetail;

@@ -19,5 +19,14 @@
 		FROM common
 		WHERE code LIKE 'PS%'
 	</select>
+	
+	<!-- 진수우 : 파일 카테고리 조회 -->
+	<select id="selectFileCategory">
+		SELECT
+			code
+			, name
+		FROM common
+		WHERE code LIKE 'FC%'
+	</select>
 
 </mapper>

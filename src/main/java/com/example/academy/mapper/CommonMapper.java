@@ -15,4 +15,6 @@ public interface CommonMapper {
 	// 진수우 : 직급 카테고리 조회.
 	List<Common> selectPositionCategory();
 	
+	// 진수우 : 파일 카테고리 조회.
+	List<Common> selectFileCategory();
 }
