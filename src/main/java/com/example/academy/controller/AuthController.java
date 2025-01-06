@@ -14,13 +14,17 @@ import com.example.academy.dto.PasswordModifyDTO;
 import com.example.academy.security.CustomUserDetails;
 import com.example.academy.service.AuthService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Controller
+@Slf4j
 public class AuthController {
 	@Autowired AuthService authService;
 	
 	// 진수우 : 사원 비밀번호 변경.
 	@PostMapping("/modifyPassword")
 	public String modifyPw(PasswordModifyDTO passwordModifyDTO) {
+		log.debug("result -------------------------------------------------------------" + passwordModifyDTO);
 		Integer resultPw = authService.modifyPw(passwordModifyDTO);
 		return "redirect:/employeeOne?employeeNo=" + passwordModifyDTO.getEmployeeNo() + "&resultPw=" + resultPw;
 	}
