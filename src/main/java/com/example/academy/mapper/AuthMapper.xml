@@ -11,12 +11,9 @@
 
 	<!-- 진수우 : 비밀번호 수정 시 현재 비밀번호 조회. -->
 	<select id="selectEmployeeNowPw" parameterType="com.example.academy.dto.PasswordModifyDTO">
-		SELECT EXISTS (
-		    SELECT 1
-		    FROM employee
-		    WHERE employee_no = #{employeeNo} 
-		      AND employee_pw = #{employeeNowPw}
-		);
+		SELECT employee_pw
+		FROM employee
+		WHERE employee_no = #{employeeNo}
 	</select>
 
     <!-- 진수우 : 시큐리티 로그인 시 사원 데이터베이스 조회. -->

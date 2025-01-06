@@ -12,7 +12,7 @@ public interface AuthMapper {
 	Integer updateEmployeePw(PasswordModifyDTO passwordModifyDTO);
 	
 	// 진수우 : 비밀번호 수정 시 현재 비밀번호 조회.
-	Integer selectEmployeeNowPw(PasswordModifyDTO passwordModifyDTO);
+	String selectEmployeeNowPw(PasswordModifyDTO passwordModifyDTO);
 	
     // 진수우 : 시큐리티 로그인 시 사원 데이터베이스 조회.
     Employee findByUsername(String username);
