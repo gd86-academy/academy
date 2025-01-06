@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.academy.dto.LectureListDTO;
 import com.example.academy.service.LectureService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 public class LectureRestController {
 	@Autowired LectureService lectureService;
@@ -23,6 +26,7 @@ public class LectureRestController {
 			result.add(list.toArray());	// lecture 객체를 배열로 변환
 		}
 		
+		log.debug("rest 테스트");
 		return result;		
 	}
 	

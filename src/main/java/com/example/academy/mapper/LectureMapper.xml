@@ -6,13 +6,17 @@
 	<select id="selectLectureList" resultType="com.example.academy.dto.LectureListDTO">
 		SELECT 
 			l.lecture_no lectureNo
+			, f.file_name fileName
+			, f.file_ext fileExt
 			, l.lecturer lecturer
 			, e.employee_name employeeName
 			, l.lecture_name lectureName
 			, l.lecture_begin_date lectureBeginDate
 			, l.lecture_end_date lectureEndDate
-		FROM lecture l INNER JOIN employee e
+		FROM lecture l LEFT OUTER JOIN employee e
 		ON l.lecturer = e.employee_no
+		LEFT OUTER JOIN file f
+		ON e.photo_file_no = f.file_no
 	</select>
 
 

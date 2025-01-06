@@ -16,10 +16,18 @@ public class LectureListDTO {
 	private String createDate;
 	private String updateDate;	
 	
+	private Integer fileNo;
+	private String fileName;
+	private String fileExt;
+	private String fileOrigin;
+	private String fileSize;
+	private String fileCategory;
+	
 	// 데이터를 배열로 반환하는 메서드
 	public Object[] toArray() {
 		return new Object[] {
 				this.lectureNo,
+				this.fileName + "." + this.fileExt,
 				this.employeeName,
 				this.lectureName,
 				this.lectureBeginDate,
