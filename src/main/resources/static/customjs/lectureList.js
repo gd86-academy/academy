@@ -92,10 +92,10 @@ document.addEventListener('alpine:init', () => {
 					        headings: ['강의번호', '강사명', '강의명', '개강일', '종강일'],
 					        data: data.map(item => [
 								item[0], // 강의번호
-					            item[1], // 강사명
-					            item[2], // 강의명
-					            item[3], // 개강일
-					            item[4], // 종강일
+								[item[1], item[2]],	// 이미지파일 + 강사명
+					            item[3], // 강의명
+					            item[4], // 개강일
+								item[5], // 종강일
 					        ])
 					    },
 					    searchable: true,
@@ -103,24 +103,30 @@ document.addEventListener('alpine:init', () => {
 					    perPageSelect: [10, 20, 30, 50, 100],
 						
 					    columns: [
-					        {
-					            select: 0,
+							{
+					            select: 1,	// 강사명 열
 					            render: (data, cell, row) => {
-									if(data == 'null.null') return `<div class="flex items-center w-max"><img class="w-9 h-9 rounded-full ltr:mr-2 rtl:ml-2 object-cover" src="./images/defaultProfile.png" /></div>`;
-					                else return `<div class="flex items-center w-max"><img class="w-9 h-9 rounded-full ltr:mr-2 rtl:ml-2 object-cover" src="./upload/${data}" /></div>`;
+									console.log("데이터받은거확인:", data); // 디버깅용 로그
+									const [image, name] = data.split(','); 
+									if(image == 'null.null') {
+										return `
+											<div class="flex items-center w-max">
+												<img class="w-9 h-9 rounded-full ltr:mr-2 rtl:ml-2 object-cover" src="./images/defaultProfile.png" />
+												<span>${name}</span>
+											</div>
+										`;
+									} else {
+										return `
+											<div class="flex items-center w-max">
+												<img class="w-9 h-9 rounded-full ltr:mr-2 rtl:ml-2 object-cover" src="./upload/${image}" />
+												<span>${name}</span>
+											</div>
+										`;
+									}
 					            },
 								sortable: false,
 					        },
-					        {
-					            select: 6,
-					            render: (data, cell, row) => {
-					                return `<a type="button" class="btn btn-outline-dark mx-auto d-block" style="width:100px;" href="/academy/chat?employeeNo=${data}">
-					                    <img class="h-4 w-4" src="./images/icon/Dialog.png" alt="image">
-					                    &nbsp;메신저
-					                </a>`;
-					            },
-								sortable: false,
-					        },
+					        
 					    ],
 					
 	                    firstLast: true,
