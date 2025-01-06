@@ -300,14 +300,21 @@ openModalButtonDepartment.addEventListener('click', () => {
 
 // Department 모달 닫기
 const closeModalDepartment = () => {
-  modalBackgroundDepartment.classList.remove('block');
-  modalBackgroundDepartment.classList.add('hidden');  // 모달 배경 숨기기
-  // 모달 내부의 모든 입력 필드를 초기화
-  const formDepartment = document.getElementById('employeeFormDepartment');
-  formDepartment.reset(); // 모든 입력 필드와 라디오 버튼 초기화
-  $('input').removeClass('errorInput');
-  // 모든 에러 라벨 숨기기
-  $('.error-label').hide();
+	// 부서 검사
+	const $employeeDepartment = $('#employeeDepartment'); // 선택박스 참조
+	const $niceSelectDepartment = $employeeDepartment.next('.nice-select'); // nice-select 참조
+	const $employeePosition = $('#employeePosition'); // 선택박스 참조
+	const $niceSelectPosition = $employeePosition.next('.nice-select'); // nice-select 참조
+	
+  	modalBackgroundDepartment.classList.remove('block');
+  	modalBackgroundDepartment.classList.add('hidden');  // 모달 배경 숨기기
+  	// 모달 내부의 모든 입력 필드를 초기화
+  	const formDepartment = document.getElementById('employeeFormDepartment');
+  	formDepartment.reset(); // 모든 입력 필드와 라디오 버튼 초기화
+  	$niceSelectDepartment.removeClass('errorInput');
+  	$niceSelectPosition.removeClass('errorInput');
+  	// 모든 에러 라벨 숨기기
+  	$('.error-label').hide();
 };
 
 closeModalButtonDepartment.addEventListener('click', closeModalDepartment); // 닫기 버튼 클릭 시

@@ -139,7 +139,8 @@
 								                   부서/직책 수정
 								               </h3>
 								               <div class="p-5">
-								                   <form id="employeeFormDepartment" method="post" th:action="@{/addEmployee}"  enctype="multipart/form-data">
+								                   <form id="employeeFormDepartment" method="post" th:action="@{/modifyAffiliation}">
+								                   	   <input type="hidden" name="employeeNo" th:value="${employee.employeeNo}">
 													   <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeDate-error error-label" style="display: none;">입사일을 입력해주세요.</span></div>
 													   <!-- 부서 -->
 													   <label>부서</label>
@@ -149,7 +150,7 @@
 													   	   		<option th:value="${commonDepartment.code}" th:text="${commonDepartment.name}"></option>
 													   	   </th:each>
 													   </select>
-													   <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeDepartment-error" style="display: none;">부서를 선택해주세요.</span></div>
+													   <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeDepartment-error error-label" style="display: none;">부서를 선택해주세요.</span></div>
 													   <!-- 직급 -->
 													   <label>직급</label>
 													   <select id="employeePosition" name="employeePosition" class="employeePosition">
@@ -158,7 +159,7 @@
 													   	   		<option th:value="${commonPosition.code}" th:text="${commonPosition.name}"></option>
 													   	   </th:each>
 													   </select>
-													   <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeePosition-error" style="display: none;">직급을 선택해주세요.</span></div>
+													   <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeePosition-error error-label" style="display: none;">직급을 선택해주세요.</span></div>
 													   <div style="height:45px;"></div> <!-- 여백공간 -->
 								                       <div class="mt-8 flex items-center justify-end">
 								                           <button type="button" class="btn btn-outline-danger" id="cancelButtonDepartment">

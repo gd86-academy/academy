@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.EmployeeMapper">
+
+	<!-- 진수우 : 사원부서/직책수정 -->
+	<update id="updateAffiliation" parameterType="com.example.academy.dto.AffiliationModifyDTO">
+		UPDATE employee 
+		SET employee_department = #{employeeDepartment}, employee_position = #{employeePosition}
+		WHERE employee_no = #{employeeNo}
+	</update>
 	
 	<!-- 진수우 : 사원상세조회 -->
 	<select id="selectEmployeeOne">

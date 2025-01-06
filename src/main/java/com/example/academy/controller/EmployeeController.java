@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.example.academy.dto.AffiliationModifyDTO;
 import com.example.academy.dto.EmployeeAddDTO;
 import com.example.academy.dto.EmployeeOneDTO;
 import com.example.academy.service.CommonService;
@@ -22,6 +23,14 @@ import lombok.extern.slf4j.Slf4j;
 public class EmployeeController {
 	@Autowired EmployeeService employeeService;
 	@Autowired CommonService commonService;
+	
+	// 진수우 : 사원 부서/직책 수정.
+	@PostMapping("/modifyAffiliation")
+	public String modifyAffiliation(AffiliationModifyDTO affiliationModifyDTO) {
+		// 데이터베이스에서 사원/직책 수정.
+		employeeService.modifyAffiliation(affiliationModifyDTO);
+		return "redirect:/employeeOne?employeeNo=" + affiliationModifyDTO.getEmployeeNo();
+	}
 	
 	// 진수우 : 주소록 상세페이지, 마이페이지.
 	@GetMapping("/employeeOne")

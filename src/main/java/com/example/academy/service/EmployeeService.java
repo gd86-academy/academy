@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.academy.dto.AffiliationModifyDTO;
 import com.example.academy.dto.EmployeeAddDTO;
 import com.example.academy.dto.EmployeeListDTO;
 import com.example.academy.dto.EmployeeOneDTO;
@@ -27,6 +28,11 @@ public class EmployeeService {
 	@Autowired AddressMapper addressMapper;
 	@Autowired FilesMapper filesMapper;
 	
+	// 진수우 : 사원부서/직책수정.
+	public Integer modifyAffiliation(AffiliationModifyDTO affiliationModifyDTO) {
+		return employeeMapper.updateAffiliation(affiliationModifyDTO);
+	}
+		
 	// 진수우 : 사원상세조회.
 	public EmployeeOneDTO getEmployeeOne(Integer employeeNo) {
 		EmployeeOneDTO result = employeeMapper.selectEmployeeOne(employeeNo);
