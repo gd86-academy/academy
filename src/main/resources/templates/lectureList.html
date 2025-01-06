@@ -22,6 +22,7 @@
         <script th:src="@{/js/custom.js}"></script>
         <script th:src="@{/js/templete.js}"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <script th:src="@{/js/simple-datatables.js}"></script>
     </head>
 
     <body
@@ -84,9 +85,25 @@
 
                 <!-- 메인화면 -->
                 <div class="animate__animated p-6" :class="[$store.app.animation]">
-                    <div>
-                        <h1>starter kit</h1>
-                    </div>
+                    <!-- 타이틀 -->
+                	<div class="flex flex-wrap items-center justify-between gap-4 ml-3">
+                		 <h2 class="text-2xl ml-3">강의목록</h2>
+                		 <div class="flex w-full flex-col gap-4 sm:w-auto sm:flex-row sm:items-center sm:gap-3">
+                		 	<div class="flex gap-3 mr-3">
+                		 	
+                		 	</div>
+                		 </div>
+                	</div>
+                	
+                	<!-- 테이블 목록 -->
+                	<div class="dvanimation animate__animated p-6" :class="[$store.app.animation]">
+                		<div x-data="multicolumn">
+                			<div class="panel">
+                				<table id="myTable" class="whitespace-nowrap"></table>
+                			</div>
+                		</div>
+                	</div>
+                	
                 </div>
                 
                 <!--  풋터 파일 연결 -->
