@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.academy.dto.BoardListDTO;
 import com.example.academy.mapper.BoardMapper;
-import com.example.academy.vo.Board;
 
 @Service
 @Transactional
@@ -15,8 +15,13 @@ public class BoardService {
 	@Autowired BoardMapper boardMapper;
 	
 	// 공지사항 리스트 조회
-	public List<Board> getBoardList() {
-		return boardMapper.selectBoardList();
+	public List<BoardListDTO> getBoardList() {
+		List<BoardListDTO> boardList = boardMapper.selectBoardList();
+		for(BoardListDTO board : boardList) {
+			board.setUpdateDate(board.getUpdateDate().substring(0, 10));
+		}
+		
+		return boardList;
 	}
 	
 }
