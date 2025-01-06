@@ -12,7 +12,7 @@ import com.example.academy.service.BoardService;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
-public class boardRestController {
+public class BoardRestController {
 	@Autowired BoardService boardService;
 	
 	@GetMapping("/restapi/boardList")
