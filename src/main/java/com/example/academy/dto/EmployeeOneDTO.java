@@ -2,7 +2,8 @@ package com.example.academy.dto;
 
 import lombok.Data;
 
-@Data  class EmployeeOneDTO {
+@Data 
+public class EmployeeOneDTO {
 	private Integer employeeNo;
     private String employeePw;
     private String employeeName;
