@@ -7,10 +7,15 @@ import org.apache.ibatis.annotations.Mapper;
 import com.example.academy.dto.AffiliationModifyDTO;
 import com.example.academy.dto.EmployeeAddDTO;
 import com.example.academy.dto.EmployeeListDTO;
+import com.example.academy.dto.EmployeeModifyGetDTO;
 import com.example.academy.dto.EmployeeOneDTO;
+import com.example.academy.vo.Employee;
 
 @Mapper
 public interface EmployeeMapper {
+	
+	// 진수우 : 개인정보수정 사원정보조회
+	EmployeeModifyGetDTO selectEmployeeModify(Integer employeeNo);
 	
 	// 진수우 : 사원부서/직책수정.
 	Integer updateAffiliation(AffiliationModifyDTO affiliationModifyDTO);

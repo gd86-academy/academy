@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.academy.dto.AffiliationModifyDTO;
 import com.example.academy.dto.EmployeeAddDTO;
+import com.example.academy.dto.EmployeeModifyGetDTO;
 import com.example.academy.dto.EmployeeOneDTO;
 import com.example.academy.service.CommonService;
 import com.example.academy.service.EmployeeService;
+import com.example.academy.service.FilesService;
 import com.example.academy.vo.Common;
 
 import jakarta.servlet.http.HttpSession;
@@ -25,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 public class EmployeeController {
 	@Autowired EmployeeService employeeService;
 	@Autowired CommonService commonService;
+	@Autowired FilesService filesService;
 	
 	// 진수우 : 사원 부서/직책 수정.
 	@PostMapping("/modifyAffiliation")
@@ -48,6 +51,12 @@ public class EmployeeController {
 		model.addAttribute("commonPosition", commonPosition);
 		// 비밀번호 수정요청 결과값.
 		model.addAttribute("resultPw", resultPw);
+		// 데이터베이스에서 개인정보 수정 페이지 해당 사원 조회.
+		EmployeeModifyGetDTO employeeModify = employeeService.getEmployeeModify(employeeNo);
+		model.addAttribute("employeeModify", employeeModify);
+		EmployeeModifyGetDTO employeeModifyFile = filesService.getEmployeeModifyFile(employeeNo);
+		model.addAttribute("employeeModifyFile", employeeModifyFile);
+		
 		return "employeeOne";
 	}
 	

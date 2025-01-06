@@ -7,4 +7,5 @@ public class AffiliationModifyDTO {
 	private Integer employeeNo;
 	private String employeeDepartment;
 	private String employeePosition;
+	private String employeeRole;
 }

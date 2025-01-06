@@ -14,7 +14,8 @@
 	    <link defer rel="stylesheet" type="text/css" media="screen" th:href="@{/css/animate.css}" />
 	    <link th:href="@{/css/fullcalendar.min.css}" rel="stylesheet" />
 	    <link rel="stylesheet" type="text/css" th:href="@{/css/nice-select2.css}" />
-	     <link th:href="@{/css/templete.css}" rel="stylesheet" />
+	    <link th:href="@{/css/templete.css}" rel="stylesheet" />
+	    <link rel="stylesheet" th:href="@{/css/flatpickr.min.css}" />
 	    <script th:src="@{/js/perfect-scrollbar.min.js}"></script>
 	    <script defer th:src="@{/js/popper.min.js}"></script>
 	    <script th:src="@{/js/alpine-collaspe.min.js}"></script>
@@ -22,10 +23,13 @@
         <script defer th:src="@{/js/alpine-ui.min.js}"></script>
         <script defer th:src="@{/js/alpine-focus.min.js}"></script>
         <script defer th:src="@{/js/alpine.min.js}"></script>
+        <script th:src="@{/js/flatpickr.js}"></script>
         <script th:src="@{/js/custom.js}"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script th:src="@{/js/fullcalendar.min.js}"></script>
         <script th:src="@{/js/nice-select2.js}"></script>
+        <script defer th:src="@{/js/address.js}"></script>
+        <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
         
         <style>
         	.employee-detail-title {
@@ -106,156 +110,10 @@
 							<div class="flex gap-3 mr-3">
 								<!-- 부서/직책 수정 버튼 -->
 								<button type="button" class="btn btn-warning mr-1" style="width:150px;" id="openModalButtonDepartment">부서/직책 수정</button>
-								<!-- 부서/직책 수정 모달 -->
-								  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundDepartment">
-								       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapper">
-								           <div
-								               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
-								               id="modal"
-								           >
-								               <button
-								                   type="button"
-								                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
-								                   id="closeModalButtonDepartment"
-								               >
-								                   <svg
-								                       xmlns="http://www.w3.org/2000/svg"
-								                       width="24px"
-								                       height="24px"
-								                       viewBox="0 0 24 24"
-								                       fill="none"
-								                       stroke="currentColor"
-								                       stroke-width="1.5"
-								                       stroke-linecap="round"
-								                       stroke-linejoin="round"
-								                       class="h-6 w-6"
-								                   >
-								                       <line x1="18" y1="6" x2="6" y2="18"></line>
-								                       <line x1="6" y1="6" x2="18" y2="18"></line>
-								                   </svg>
-								               </button>
-								               <h3
-								                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
-								               >
-								                   부서/직책 수정
-								               </h3>
-								               <div class="p-5">
-								                   <form id="employeeFormDepartment" method="post" th:action="@{/modifyAffiliation}">
-								                   	   <input type="hidden" name="employeeNo" th:value="${employee.employeeNo}">
-													   <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeDate-error error-label" style="display: none;">입사일을 입력해주세요.</span></div>
-													   <!-- 부서 -->
-													   <label>부서</label>
-													   <select id="employeeDepartment" name="employeeDepartment" class="employeeDepartment">
-													   	   <option value="" disabled selected>부서를 선택하세요.</option>
-													   	   <th:block th:each="commonDepartment : ${commonDepartment}">
-													   	   		<option th:value="${commonDepartment.code}" th:text="${commonDepartment.name}"></option>
-													   	   </th:each>
-													   </select>
-													   <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeDepartment-error error-label" style="display: none;">부서를 선택해주세요.</span></div>
-													   <!-- 직급 -->
-													   <label>직급</label>
-													   <select id="employeePosition" name="employeePosition" class="employeePosition">
-													   	   <option value="" disabled selected>직급을 선택하세요.</option>
-													   	   <th:block th:each="commonPosition : ${commonPosition}">
-													   	   		<option th:value="${commonPosition.code}" th:text="${commonPosition.name}"></option>
-													   	   </th:each>
-													   </select>
-													   <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeePosition-error error-label" style="display: none;">직급을 선택해주세요.</span></div>
-													   <div style="height:45px;"></div> <!-- 여백공간 -->
-								                       <div class="mt-8 flex items-center justify-end">
-								                           <button type="button" class="btn btn-outline-danger" id="cancelButtonDepartment">
-								                               취소
-								                           </button>
-								                           <button
-								                           	   id="employeeBtnDepartment"
-								                               type="button"
-								                               class="btn btn-primary ltr:ml-4 rtl:mr-4"
-								                           >
-								                               수정
-								                           </button>
-								                       </div>
-								                   </form>
-								               </div>
-								           </div>
-								       </div>
-								   </div>
 								<!-- 비밀번호 변경 버튼 -->
 								<button type="button" class="btn btn-warning mr-1" style="width:150px;" id="openModalButtonPw">비밀번호 변경</button>
-								<!-- 비밀번호 변경 모달 -->
-								<div class="passwordModal">
-								  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundPw">
-								       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperPw">
-								           <div
-								               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
-								               id="modal"
-								           >
-								               <button
-								                   type="button"
-								                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
-								                   id="closeModalButtonPw"
-								               >
-								                   <svg
-								                       xmlns="http://www.w3.org/2000/svg"
-								                       width="24px"
-								                       height="24px"
-								                       viewBox="0 0 24 24"
-								                       fill="none"
-								                       stroke="currentColor"
-								                       stroke-width="1.5"
-								                       stroke-linecap="round"
-								                       stroke-linejoin="round"
-								                       class="h-6 w-6"
-								                   >
-								                       <line x1="18" y1="6" x2="6" y2="18"></line>
-								                       <line x1="6" y1="6" x2="18" y2="18"></line>
-								                   </svg>
-								               </button>
-								               <h3
-								                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
-								               >
-								                   비밀번호 변경
-								               </h3>
-								               <div class="p-5">
-								                   <form id="employeeFormPw" method="post" th:action="@{/modifyPassword}">
-								                   	   <input type="hidden" name="employeeNo" th:value="${employee.employeeNo}">
-								                   	   <!-- 현재 비밀번호 -->
-													   <div>
-								                       	   <label for="employeeNowPw">기존 비밀번호</label>
-													       <input type="password" name="employeeNowPw" id="employeeNowPw" class="form-input" placeholder="기존 비밀번호를 입력해주세요."/>
-													   </div>
-													   <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeNowPw-error error-label" style="display: none;">현재 비밀번호를 입력해주세요.</span></div>
-													   <!-- 새 비밀번호 -->
-													   <div>
-								                       	   <label for="employeeChangePw">새 비밀번호</label>
-													       <input type="password" name="employeeChangePw" id="employeeChangePw" class="form-input" placeholder="새 비밀번호를 입력해주세요."/>
-													   </div>
-													   <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeChangePw-error error-label" style="display: none;">변경하실 비밀번호를 입력해주세요.</span></div>
-													   <!-- 새 비밀번호확인 -->
-													   <div>
-								                       	   <label for="employeeChangePwCheck">새 비밀번호확인</label>
-													       <input type="password" name="employeeChangePwCheck" id="employeeChangePwCheck" class="form-input" placeholder="새 비밀번호를 한번 더 입력해주세요."/>
-													   </div>
-													   <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeChangePwCheck-error error-label" style="display: none;">변경하실 비밀번호를 입력해주세요.</span></div>
-								                       <div class="mt-8 flex items-center justify-end">
-								                           <button type="button" class="btn btn-outline-danger" id="cancelButtonPw">
-								                               취소
-								                           </button>
-								                           <button
-								                           	   id="employeeBtnPw"
-								                               type="button"
-								                               class="btn btn-primary ltr:ml-4 rtl:mr-4"
-								                           >
-								                               변경
-								                           </button>
-								                       </div>
-								                   </form>
-								               </div>
-								           </div>
-								       </div>
-								   </div>
-								</div>
 								<!-- 개인정보 수정 버튼 -->
-								<button type="button" class="btn btn-dark mr-1" style="width:150px;" id="openModalButton">개인정보 수정</button>
+								<button type="button" class="btn btn-dark mr-1" style="width:150px;" id="openModalButtonModifyEmployee">개인정보 수정</button>
 								<!-- 계정 삭제 버튼 -->
 								<button type="button" class="btn btn-danger mr-1" style="width:150px;" id="openModalButton">계정 삭제</button>
 							</div>
@@ -510,6 +368,358 @@
 		       </div>
 		   </div>
 		</div>
+		
+		<!-- 부서/직책 수정 모달 -->
+		  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundDepartment">
+		       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapper">
+		           <div
+		               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
+		               id="modal"
+		           >
+		               <button
+		                   type="button"
+		                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+		                   id="closeModalButtonDepartment"
+		               >
+		                   <svg
+		                       xmlns="http://www.w3.org/2000/svg"
+		                       width="24px"
+		                       height="24px"
+		                       viewBox="0 0 24 24"
+		                       fill="none"
+		                       stroke="currentColor"
+		                       stroke-width="1.5"
+		                       stroke-linecap="round"
+		                       stroke-linejoin="round"
+		                       class="h-6 w-6"
+		                   >
+		                       <line x1="18" y1="6" x2="6" y2="18"></line>
+		                       <line x1="6" y1="6" x2="18" y2="18"></line>
+		                   </svg>
+		               </button>
+		               <h3
+		                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
+		               >
+		                   부서/직책 수정
+		               </h3>
+		               <div class="p-5">
+		                   <form id="employeeFormDepartment" method="post" th:action="@{/modifyAffiliation}">
+		                   	   <input type="hidden" name="employeeNo" th:value="${employee.employeeNo}">
+							   <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeDate-error error-label" style="display: none;">입사일을 입력해주세요.</span></div>
+							   <!-- 부서 -->
+							   <label>부서</label>
+							   <select id="employeeDepartment" name="employeeDepartment" class="employeeDepartment">
+							   	   <option value="" disabled selected>부서를 선택하세요.</option>
+							   	   <th:block th:each="commonDepartment : ${commonDepartment}">
+							   	   		<option th:value="${commonDepartment.code}" th:text="${commonDepartment.name}"></option>
+							   	   </th:each>
+							   </select>
+							   <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeDepartment-error error-label" style="display: none;">부서를 선택해주세요.</span></div>
+							   <!-- 직급 -->
+							   <label>직급</label>
+							   <select id="employeePosition" name="employeePosition" class="employeePosition">
+							   	   <option value="" disabled selected>직급을 선택하세요.</option>
+							   	   <th:block th:each="commonPosition : ${commonPosition}">
+							   	   		<option th:value="${commonPosition.code}" th:text="${commonPosition.name}"></option>
+							   	   </th:each>
+							   </select>
+							   <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeePosition-error error-label" style="display: none;">직급을 선택해주세요.</span></div>
+							   <div style="height:45px;"></div> <!-- 여백공간 -->
+		                       <div class="mt-8 flex items-center justify-end">
+		                           <button type="button" class="btn btn-outline-danger" id="cancelButtonDepartment">
+		                               취소
+		                           </button>
+		                           <button
+		                           	   id="employeeBtnDepartment"
+		                               type="button"
+		                               class="btn btn-primary ltr:ml-4 rtl:mr-4"
+		                           >
+		                               수정
+		                           </button>
+		                       </div>
+		                   </form>
+		               </div>
+		           </div>
+		       </div>
+		   </div>
+		   
+		<!-- 비밀번호 변경 모달 -->
+		<div class="passwordModal">
+		  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundPw">
+		       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperPw">
+		           <div
+		               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
+		               id="modal"
+		           >
+		               <button
+		                   type="button"
+		                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+		                   id="closeModalButtonPw"
+		               >
+		                   <svg
+		                       xmlns="http://www.w3.org/2000/svg"
+		                       width="24px"
+		                       height="24px"
+		                       viewBox="0 0 24 24"
+		                       fill="none"
+		                       stroke="currentColor"
+		                       stroke-width="1.5"
+		                       stroke-linecap="round"
+		                       stroke-linejoin="round"
+		                       class="h-6 w-6"
+		                   >
+		                       <line x1="18" y1="6" x2="6" y2="18"></line>
+		                       <line x1="6" y1="6" x2="18" y2="18"></line>
+		                   </svg>
+		               </button>
+		               <h3
+		                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
+		               >
+		                   비밀번호 변경
+		               </h3>
+		               <div class="p-5">
+		                   <form id="employeeFormPw" method="post" th:action="@{/modifyPassword}">
+		                   	   <input type="hidden" name="employeeNo" th:value="${employee.employeeNo}">
+		                   	   <!-- 현재 비밀번호 -->
+							   <div>
+		                       	   <label for="employeeNowPw">기존 비밀번호</label>
+							       <input type="password" name="employeeNowPw" id="employeeNowPw" class="form-input" placeholder="기존 비밀번호를 입력해주세요."/>
+							   </div>
+							   <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeNowPw-error error-label" style="display: none;">현재 비밀번호를 입력해주세요.</span></div>
+							   <!-- 새 비밀번호 -->
+							   <div>
+		                       	   <label for="employeeChangePw">새 비밀번호</label>
+							       <input type="password" name="employeeChangePw" id="employeeChangePw" class="form-input" placeholder="새 비밀번호를 입력해주세요."/>
+							   </div>
+							   <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeChangePw-error error-label" style="display: none;">변경하실 비밀번호를 입력해주세요.</span></div>
+							   <!-- 새 비밀번호확인 -->
+							   <div>
+		                       	   <label for="employeeChangePwCheck">새 비밀번호확인</label>
+							       <input type="password" name="employeeChangePwCheck" id="employeeChangePwCheck" class="form-input" placeholder="새 비밀번호를 한번 더 입력해주세요."/>
+							   </div>
+							   <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeChangePwCheck-error error-label" style="display: none;">변경하실 비밀번호를 입력해주세요.</span></div>
+		                       <div class="mt-8 flex items-center justify-end">
+		                           <button type="button" class="btn btn-outline-danger" id="cancelButtonPw">
+		                               취소
+		                           </button>
+		                           <button
+		                           	   id="employeeBtnPw"
+		                               type="button"
+		                               class="btn btn-primary ltr:ml-4 rtl:mr-4"
+		                           >
+		                               변경
+		                           </button>
+		                       </div>
+		                   </form>
+		               </div>
+		           </div>
+		       </div>
+		   </div>
+		</div>
+		
+		<!-- 개인정보수정 모달 -->
+		<div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundModifyEmployee">
+	       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperModifyEmployee">
+	           <div
+	               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
+	               id="modal"
+	           >
+	               <button
+	                   type="button"
+	                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+	                   id="closeModalButtonModifyEmployee"
+	               >
+	                   <svg
+	                       xmlns="http://www.w3.org/2000/svg"
+	                       width="24px"
+	                       height="24px"
+	                       viewBox="0 0 24 24"
+	                       fill="none"
+	                       stroke="currentColor"
+	                       stroke-width="1.5"
+	                       stroke-linecap="round"
+	                       stroke-linejoin="round"
+	                       class="h-6 w-6"
+	                   >
+	                       <line x1="18" y1="6" x2="6" y2="18"></line>
+	                       <line x1="6" y1="6" x2="18" y2="18"></line>
+	                   </svg>
+	               </button>
+	               <h3
+	                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
+	               >
+	                   개인정보 수정
+	               </h3>
+	               <div class="p-5">
+	                   <form id="employeeModifyForm" method="post" th:action="@{/}" enctype="multipart/form-data">
+	                   	   <!-- 이름 -->
+	                       <div>
+	                           <label for="employeeName">이름</label>
+	                           <input
+	                               id="employeeName"
+	                               name="employeeName"
+	                               type="text"
+	                               placeholder="이름"
+	                               class="form-input"
+	                               th:value="${employeeModify.employeeName}"
+	                           />
+	                       </div>
+	                       <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeName-error error-label" style="display: none;">이름을 입력해주세요.</span></div>
+	                   		<!-- 전화번호 -->
+	                       <div>
+	                           <label for="employeePhone">전화번호</label>
+	                           <input
+	                               id="employeePhone"
+	                               name="employeePhone"
+	                               type="number"
+	                               placeholder="전화번호"
+	                               class="form-input"
+	                               th:value="${employeeModify.employeePhone}"
+	                           />
+	                       </div>
+	                       <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeePhone-error error-label" style="display: none;">전화번호를 입력해주세요.</span></div>
+	                       <!-- 이메일 -->
+	                       <div>
+	                           <label for="employeeMail">이메일</label>
+	                           <input
+	                               id="employeeMail"
+	                               name="employeeMail"
+	                               type="email"
+	                               placeholder="이메일"
+	                               class="form-input"
+	                               th:value="${employeeModify.employeeMail}"
+	                           />
+	                       </div>
+	                       <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeMail-error error-label" style="display: none;">이메일을 입력해주세요.</span></div>
+	                       <!-- 생년월일 -->
+	                       <div x-data="form">
+	                       <div>
+	                       	   <label for="employeeBirth">생년월일</label>
+						       <input name="employeeBirth" id="employeeBirth" class="form-input" placeholder="생년월일" th:value="${employeeModify.employeeBirth}"/>
+						   </div>
+						   </div>
+						   <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeBirth-error error-label" style="display: none;">생년월일을 입력해주세요.</span></div>
+						   <!-- 주소 -->
+						   <div class="mb-3">
+	                           <label for="employeeAddress">주소</label>
+					           <div class="flex">
+					               <button onclick="sample2_execDaumPostcode()" type="button" class="btn btn-primary ltr:rounded-r-none rtl:rounded-l-none" style="width: 150px;">우편번호 찾기</button>
+					               <input name="postCode" id="employeePostalCode" type="text" th:value="${employeeModify.postCode}" placeholder="우편번호" class="form-input ltr:rounded-l-none rtl:rounded-r-none flex-grow" readonly/>
+					           </div>
+					       </div>
+					       <div id="layer" style="display:none;position:fixed;overflow:hidden;z-index:1;-webkit-overflow-scrolling:touch;">
+							   <img src="//t1.daumcdn.net/postcode/resource/images/close.png" id="btnCloseLayer" style="cursor:pointer;position:absolute;right:-3px;top:-3px;z-index:1" onclick="closeDaumPostcode()" alt="닫기 버튼">
+						   </div>
+	                       <div class="mb-3">
+	                           <input
+	                               id="employeeAddress"
+	                               name="addressName"
+	                               type="text"
+	                               placeholder="도로명(지번) 주소"
+	                               class="form-input"
+	                               th:value="${employeeModify.addressName}"
+	                               readonly
+	                           />
+	                       </div>
+	                       <div>
+	                           <input
+	                               id="employeeAddressDetail"
+	                               name="addressDetail"
+	                               type="text"
+	                               placeholder="상세 주소"
+	                               class="form-input"
+	                               th:value="${employeeModify.addressDetail}"
+	                           />
+	                       </div>
+	                       <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeAddress-error error-label" style="display: none;">주소를 입력해주세요.</span></div>
+	                       <!-- 프로필 사진 -->
+	                       <div>
+						       <label for="employeePhoto">프로필 사진</label>
+						       <div class="flex">
+						           <button 
+						               type="button" 
+						               class="btn btn-primary ltr:rounded-r-none rtl:rounded-l-none" 
+						               style="width: 150px;"
+						               onclick="document.getElementById('employeePhoto').click();">
+						               파일 선택
+						           </button>
+						           <input 
+						               id="employeePhoto" 
+						               name="employeePhoto"
+						               type="file" 
+						               class="hidden" 
+						               onchange="document.getElementById('employeePhotoFileNameDisplay').value = this.files[0] ? this.files[0].name : '';" />
+						           <input 
+								    id="employeePhotoFileNameDisplay" 
+								    type="text" 
+								    th:value="${employeeModifyFile != null and employeeModifyFile.photoFileOrigin != null ? employeeModifyFile.photoFileOrigin + '.' + employeeModifyFile.photoFileExt : '첨부된 파일이 없습니다.'}" 
+								    class="form-input ltr:rounded-l-none rtl:rounded-r-none flex-grow" 
+								    readonly />
+						       </div>
+						   </div>
+						   <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeePhoto-error error-label" style="display: none;">프로필 사진을 첨부해주세요.</span></div>
+						   <!-- 도장 사진 -->
+	                       <div>
+						       <label for="employeeStamp">도장 사진</label>
+						       <div class="flex">
+						           <button 
+						               type="button" 
+						               class="btn btn-primary ltr:rounded-r-none rtl:rounded-l-none" 
+						               style="width: 150px;"
+						               onclick="document.getElementById('employeeStamp').click();">
+						               파일 선택
+						           </button>
+						           <input 
+						               id="employeeStamp" 
+						               name="employeeStamp"
+						               type="file" 
+						               class="hidden" 
+						               onchange="document.getElementById('employeeStampFileNameDisplay').value = this.files[0] ? this.files[0].name : '';" />
+						           <input 
+								    id="employeeStampFileNameDisplay" 
+								    type="text" 
+								    th:value="${employeeModifyFile != null and employeeModifyFile.stampFileOrigin != null ? employeeModifyFile.stampFileOrigin + '.' + employeeModifyFile.stampFileExt : '첨부된 파일이 없습니다.'}" 
+								    class="form-input ltr:rounded-l-none rtl:rounded-r-none flex-grow" 
+								    readonly />
+						       </div>
+						   </div>
+						    <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeStamp-error error-label" style="display: none;">도장 사진을 첨부해주세요.</span></div>
+					        <!-- 성별 -->
+					        <div class="mb-5">
+					        <label>성별</label>
+						        <div class="flex justify-start items-center space-x-4">
+								    <div>
+								        <label class="flex items-center cursor-pointer">
+								            <input type="radio" name="employeeGender" class="form-radio" value="남자" checked />
+								            <span class="text-white-dark ml-2">남자</span>
+								        </label>
+								    </div>
+								    <div>
+								        <label class="flex items-center cursor-pointer">
+								            <input type="radio" name="employeeGender" class="form-radio" value="여자" />
+								            <span class="text-white-dark ml-2">여자</span>
+								        </label>
+								    </div>
+								</div>
+						    </div>
+						     
+	                       <div class="mt-8 flex items-center justify-end">
+	                           <button type="button" class="btn btn-outline-danger" id="cancelButtonModifyEmployee">
+	                               취소
+	                           </button>
+	                           <button
+	                           	   id="employeeModifyBtn"
+	                               type="button"
+	                               class="btn btn-primary ltr:ml-4 rtl:mr-4"
+	                           >
+	                               수정
+	                           </button>
+	                       </div>
+	                   </form>
+	               </div>
+	           </div>
+	       </div>
+	   </div>
 		
         <script th:inline="javascript">
         	var resultPw = [[${resultPw}]]

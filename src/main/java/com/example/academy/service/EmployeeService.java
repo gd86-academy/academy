@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.example.academy.dto.AffiliationModifyDTO;
 import com.example.academy.dto.EmployeeAddDTO;
 import com.example.academy.dto.EmployeeListDTO;
+import com.example.academy.dto.EmployeeModifyGetDTO;
 import com.example.academy.dto.EmployeeOneDTO;
 import com.example.academy.mapper.AddressMapper;
 import com.example.academy.mapper.EmployeeMapper;
@@ -28,8 +29,16 @@ public class EmployeeService {
 	@Autowired AddressMapper addressMapper;
 	@Autowired FilesMapper filesMapper;
 	
+	// 진수우 : 개인정보수정 사원정보조회
+	public EmployeeModifyGetDTO getEmployeeModify(Integer employeeNo) {
+		return employeeMapper.selectEmployeeModify(employeeNo);
+	}
+	
 	// 진수우 : 사원부서/직책수정.
 	public Integer modifyAffiliation(AffiliationModifyDTO affiliationModifyDTO) {
+		if (affiliationModifyDTO.getEmployeeDepartment().equals("DP001")) affiliationModifyDTO.setEmployeeRole("humanresources"); // 부서마다 홈페이지 접근권한 설정.
+		else if (affiliationModifyDTO.getEmployeeDepartment().equals("DP003")) affiliationModifyDTO.setEmployeeRole("Administration");
+		else if (affiliationModifyDTO.getEmployeeDepartment().equals("DP002")) affiliationModifyDTO.setEmployeeRole("management");
 		return employeeMapper.updateAffiliation(affiliationModifyDTO);
 	}
 		
@@ -75,9 +84,9 @@ public class EmployeeService {
 		employeeAddDTO.setPhotoFileNo(fileNo);
 		employeeAddDTO.setAddressNo(addressNo);
 		employeeAddDTO.setEmployeePw(bCryptPasswordEncoder.encode("1234")); // 사원추가 시 임시비밀번호를 '1234'로 설정.
-		if (employeeAddDTO.getEmployeeDepartment().equals("인사팀")) employeeAddDTO.setEmployeeRole("humanresources"); // 부서마다 홈페이지 접근권한 설정.
-		else if (employeeAddDTO.getEmployeeDepartment().equals("행정팀")) employeeAddDTO.setEmployeeRole("Administration");
-		else if (employeeAddDTO.getEmployeeDepartment().equals("운영팀")) employeeAddDTO.setEmployeeRole("management"); // 추후 공통테이블 코드명으로 변경.
+		if (employeeAddDTO.getEmployeeDepartment().equals("DP001")) employeeAddDTO.setEmployeeRole("humanresources"); // 부서마다 홈페이지 접근권한 설정.
+		else if (employeeAddDTO.getEmployeeDepartment().equals("DP003")) employeeAddDTO.setEmployeeRole("Administration");
+		else if (employeeAddDTO.getEmployeeDepartment().equals("DP002")) employeeAddDTO.setEmployeeRole("management");
 		result += employeeMapper.insertEmployee(employeeAddDTO);
 		
 		// 서버에 물리적 파일 저장.
