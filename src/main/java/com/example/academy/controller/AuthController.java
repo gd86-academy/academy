@@ -12,17 +12,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.academy.dto.PasswordModifyDTO;
 import com.example.academy.security.CustomUserDetails;
+import com.example.academy.service.AuthService;
 
 @Controller
 public class AuthController {
-	//@Autowired AuthService authService;
+	@Autowired AuthService authService;
 	
 	// 진수우 : 사원 비밀번호 변경.
-//	@PostMapping("/modifyPassword")
-//	public String modifyPw(PasswordModifyDTO passwordModifyDTO) {
-//		Integer resultPw = authService.modifyPw(passwordModifyDTO);
-//		return "redirect:/employeeOne?employeeNo=" + passwordModifyDTO.getEmployeeNo() + "&resultPw=" + resultPw;
-//	}
+	@PostMapping("/modifyPassword")
+	public String modifyPw(PasswordModifyDTO passwordModifyDTO) {
+		Integer resultPw = authService.modifyPw(passwordModifyDTO);
+		return "redirect:/employeeOne?employeeNo=" + passwordModifyDTO.getEmployeeNo() + "&resultPw=" + resultPw;
+	}
 	
 	// 진수우 : 메인페이지 호출.
 	@GetMapping("/main")

@@ -3,17 +3,16 @@
 <mapper namespace="com.example.academy.mapper.BoardMapper">
 
 	<!-- 세영) 공지사항리스트 조회 -->
-	<select id="selectBoardList" resultType="com.example.academy.vo.Board">
+	<select id="selectBoardList" resultType="com.example.academy.dto.BoardListDTO">
 		SELECT
-			board_no boardNo
-			, board_title boardTitle
-			, board_content boardContent
-			, create_employee_no createEmployeeNo
-			, update_employee_no updateEmployeeNo
-			, board_count boardCount
-			, create_date createDate
-			, update_date updateDate
-		FROM board
+			b.board_no boardNo
+			, b.board_title boardTitle
+			, e.employee_name employeeName
+			, b.board_count boardCount
+			, b.create_date createDate
+			, b.update_date updateDate
+		FROM board b
+		INNER JOIN employee e ON e.employee_no = b.update_employee_no
 	</select>
 
 </mapper>
