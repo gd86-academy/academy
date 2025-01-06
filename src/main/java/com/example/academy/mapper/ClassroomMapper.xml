@@ -2,15 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.ClassroomMapper">
 	<!-- 박시현 : 강의실리스트 조회 -->
-	<select id="selectClassroomList">
+	<select id="selectClassroomList" resultType="com.example.academy.dto.ClassroomListDTO">
 		SELECT 
-			c.classroom_no
-			, c.classroom_name
-			, c.classroom_manager
-			, c.classroom_capacity
-			, c.create_date
-			, c.update_date
-		FROM classroom c
-		LEFT OUTER JOIN employee e ON e.employee_no = c.classroom_manager
+			c.classroom_no classroomNo
+			, c.classroom_name classroomName
+			, c.classroom_manager classroomManager
+			, c.classroom_capacity classroomCapacity
+			, e.employee_no employeeNo
+			, e.employee_name employeeName
+		FROM classroom c INNER JOIN employee e 
+		ON c.classroom_manager = e.employee_no 
 	</select>
 </mapper>
