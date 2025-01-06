@@ -13,6 +13,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class BoardController {
 	@Autowired BoardService boardService;
 	
+	// 공지사항 추가
+	@GetMapping("/addBoard")
+	public String addBoard() {
+		return "addBoard";
+	}
+	
 	// 상세공지사항 조회
 	@GetMapping("/boardOne")
 	public String boardOne() {
