@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.academy.dto.AffiliationModifyDTO;
 import com.example.academy.dto.EmployeeAddDTO;
@@ -34,7 +35,7 @@ public class EmployeeController {
 	
 	// 진수우 : 주소록 상세페이지, 마이페이지.
 	@GetMapping("/employeeOne")
-	public String employeeOne(Model model, Integer employeeNo) {
+	public String employeeOne(Model model, Integer employeeNo, @RequestParam(value = "resultPw", required = false) Integer resultPw) {
 		// 데이터베이스에서 해당 사원 조회.
 		EmployeeOneDTO employee = employeeService.getEmployeeOne(employeeNo);
 		model.addAttribute("employee", employee);
@@ -44,6 +45,8 @@ public class EmployeeController {
 		// 데이터베이스에서 직급 카테고리 조회.
 		List<Common> commonPosition = commonService.getPositionCategory();
 		model.addAttribute("commonPosition", commonPosition);
+		// 비밀번호 수정요청 결과값.
+		model.addAttribute("resultPw", resultPw);
 		return "employeeOne";
 	}
 	

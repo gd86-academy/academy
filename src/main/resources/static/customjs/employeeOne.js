@@ -444,3 +444,69 @@ $('#employeeBtnPw').click(function() {
         $('#employeeFormPw').submit();
     }
 });
+
+// 비밀번호가 성공적으로 변경되었을 때
+if (resultPw === 1) {
+	// PwError2 모달 관련 DOM 요소
+	const modalBackgroundPwError1 = document.getElementById('modalBackgroundPwError1');
+	//const modalWrapperPwError2 = document.getElementById('modalWrapperPwError1');
+	const employeeBtnPwError1 = document.getElementById('employeeBtnPwError1');
+	const closeModalButtonPwError1 = document.getElementById('closeModalButtonPwError1');
+
+	// PwError2 모달 열기
+	  modalBackgroundPwError1.classList.remove('hidden');  // 모달 배경 보이기
+	  modalBackgroundPwError1.classList.add('block');     // 모달 배경 보이게 설정
+
+	// PwError2 모달 닫기
+	const closeModalPwError1 = () => {
+	  modalBackgroundPwError1.classList.remove('block');
+	  modalBackgroundPwError1.classList.add('hidden');  // 모달 배경 숨기기
+	};
+
+	employeeBtnPwError1.addEventListener('click', closeModalPwError1); // 닫기 버튼 클릭 시
+	closeModalButtonPwError1.addEventListener('click', closeModalPwError1);     // 취소 버튼 클릭 시
+}
+
+// 비밀번호 변경 시 새 비밀번호와 새 비밀번호 확인에 입력한 값이 일치하지 않을때
+if (resultPw === 2) {
+	// PwError2 모달 관련 DOM 요소
+	const modalBackgroundPwError2 = document.getElementById('modalBackgroundPwError2');
+	//const modalWrapperPwError2 = document.getElementById('modalWrapperPwError2');
+	const employeeBtnPwError2 = document.getElementById('employeeBtnPwError2');
+	const closeModalButtonPwError2 = document.getElementById('closeModalButtonPwError2');
+
+	// PwError2 모달 열기
+	  modalBackgroundPwError2.classList.remove('hidden');  // 모달 배경 보이기
+	  modalBackgroundPwError2.classList.add('block');     // 모달 배경 보이게 설정
+
+	// PwError2 모달 닫기
+	const closeModalPwError2 = () => {
+	  modalBackgroundPwError2.classList.remove('block');
+	  modalBackgroundPwError2.classList.add('hidden');  // 모달 배경 숨기기
+	};
+
+	employeeBtnPwError2.addEventListener('click', closeModalPwError2); // 닫기 버튼 클릭 시
+	closeModalButtonPwError2.addEventListener('click', closeModalPwError2);     // 취소 버튼 클릭 시
+}
+
+// 기존 비밀번호에 입력한 값이 일치하지 않을때
+if (resultPw === 3) {
+	// PwError2 모달 관련 DOM 요소
+	const modalBackgroundPwError3 = document.getElementById('modalBackgroundPwError3');
+	//const modalWrapperPwError3 = document.getElementById('modalWrapperPwError3');
+	const employeeBtnPwError3 = document.getElementById('employeeBtnPwError3');
+	const closeModalButtonPwError3 = document.getElementById('closeModalButtonPwError3');
+
+	// PwError2 모달 열기
+	  modalBackgroundPwError3.classList.remove('hidden');  // 모달 배경 보이기
+	  modalBackgroundPwError3.classList.add('block');     // 모달 배경 보이게 설정
+
+	// PwError2 모달 닫기
+	const closeModalPwError3 = () => {
+	  modalBackgroundPwError3.classList.remove('block');
+	  modalBackgroundPwError3.classList.add('hidden');  // 모달 배경 숨기기
+	};
+
+	employeeBtnPwError3.addEventListener('click', closeModalPwError3); // 닫기 버튼 클릭 시
+	closeModalButtonPwError3.addEventListener('click', closeModalPwError3);     // 취소 버튼 클릭 시
+}

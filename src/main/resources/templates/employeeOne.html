@@ -26,6 +26,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script th:src="@{/js/fullcalendar.min.js}"></script>
         <script th:src="@{/js/nice-select2.js}"></script>
+        
         <style>
         	.employee-detail-title {
 	        	font-size: 17px;
@@ -181,6 +182,7 @@
 								<!-- 비밀번호 변경 버튼 -->
 								<button type="button" class="btn btn-warning mr-1" style="width:150px;" id="openModalButtonPw">비밀번호 변경</button>
 								<!-- 비밀번호 변경 모달 -->
+								<div class="passwordModal">
 								  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundPw">
 								       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperPw">
 								           <div
@@ -214,7 +216,8 @@
 								                   비밀번호 변경
 								               </h3>
 								               <div class="p-5">
-								                   <form id="employeeFormPw" method="post" th:action="@{/addEmployee}">
+								                   <form id="employeeFormPw" method="post" th:action="@{/modifyPassword}">
+								                   	   <input type="hidden" name="employeeNo" th:value="${employee.employeeNo}">
 								                   	   <!-- 현재 비밀번호 -->
 													   <div>
 								                       	   <label for="employeeNowPw">기존 비밀번호</label>
@@ -242,7 +245,7 @@
 								                               type="button"
 								                               class="btn btn-primary ltr:ml-4 rtl:mr-4"
 								                           >
-								                               수정
+								                               변경
 								                           </button>
 								                       </div>
 								                   </form>
@@ -250,6 +253,7 @@
 								           </div>
 								       </div>
 								   </div>
+								</div>
 								<!-- 개인정보 수정 버튼 -->
 								<button type="button" class="btn btn-dark mr-1" style="width:150px;" id="openModalButton">개인정보 수정</button>
 								<!-- 계정 삭제 버튼 -->
@@ -353,6 +357,163 @@
                 </div>
             </div>
         </div>
+        
+        <!-- 비밀번호가 성공적으로 변경되었을 때 모달 -->
+        <div class="passwordErrorModal2">
+		  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundPwError1">
+		       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperPwError1">
+		           <div
+		               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
+		               id="modal"
+		           >
+		               <button
+		                   type="button"
+		                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+		                   id="closeModalButtonPwError1"
+		               >
+		                   <svg
+		                       xmlns="http://www.w3.org/2000/svg"
+		                       width="24px"
+		                       height="24px"
+		                       viewBox="0 0 24 24"
+		                       fill="none"
+		                       stroke="currentColor"
+		                       stroke-width="1.5"
+		                       stroke-linecap="round"
+		                       stroke-linejoin="round"
+		                       class="h-6 w-6"
+		                   >
+		                       <line x1="18" y1="6" x2="6" y2="18"></line>
+		                       <line x1="6" y1="6" x2="18" y2="18"></line>
+		                   </svg>
+		               </button>
+		               <h3
+		                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
+		               >
+		                   안내
+		               </h3>
+		               <div class="p-5">
+		                   비밀번호가 성공적으로 변경되었습니다.
+		                   <div class="mt-8 flex items-center justify-end">
+	                          <button
+	                          	  id="employeeBtnPwError1"
+	                              type="button"
+	                              class="btn btn-primary ltr:ml-4 rtl:mr-4"
+	                          >
+	                              확인
+	                          </button>
+	                      </div>
+		               </div>
+		           </div>
+		       </div>
+		   </div>
+		</div>
+        
+        <!-- 새 비밀번호와 새 비밀번호를 잘못입력했을 때 경고 모달 -->
+        <div class="passwordErrorModal2">
+		  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundPwError2">
+		       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperPwError2">
+		           <div
+		               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
+		               id="modal"
+		           >
+		               <button
+		                   type="button"
+		                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+		                   id="closeModalButtonPwError2"
+		               >
+		                   <svg
+		                       xmlns="http://www.w3.org/2000/svg"
+		                       width="24px"
+		                       height="24px"
+		                       viewBox="0 0 24 24"
+		                       fill="none"
+		                       stroke="currentColor"
+		                       stroke-width="1.5"
+		                       stroke-linecap="round"
+		                       stroke-linejoin="round"
+		                       class="h-6 w-6"
+		                   >
+		                       <line x1="18" y1="6" x2="6" y2="18"></line>
+		                       <line x1="6" y1="6" x2="18" y2="18"></line>
+		                   </svg>
+		               </button>
+		               <h3
+		                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
+		               >
+		                   안내
+		               </h3>
+		               <div class="p-5">
+		                   새 비밀번호와 새 비밀번호 확인에 입력한 값이 일치하지 않습니다.
+		                   <div class="mt-8 flex items-center justify-end">
+	                          <button
+	                          	  id="employeeBtnPwError2"
+	                              type="button"
+	                              class="btn btn-primary ltr:ml-4 rtl:mr-4"
+	                          >
+	                              확인
+	                          </button>
+	                      </div>
+		               </div>
+		           </div>
+		       </div>
+		   </div>
+		</div>
+		
+		<!-- 기존 비밀번호 잘못입력했을 때 경고 모달 -->
+        <div class="passwordErrorModal3">
+		  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundPwError3">
+		       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperPwError3">
+		           <div
+		               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
+		               id="modal"
+		           >
+		               <button
+		                   type="button"
+		                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+		                   id="closeModalButtonPwError3"
+		               >
+		                   <svg
+		                       xmlns="http://www.w3.org/2000/svg"
+		                       width="24px"
+		                       height="24px"
+		                       viewBox="0 0 24 24"
+		                       fill="none"
+		                       stroke="currentColor"
+		                       stroke-width="1.5"
+		                       stroke-linecap="round"
+		                       stroke-linejoin="round"
+		                       class="h-6 w-6"
+		                   >
+		                       <line x1="18" y1="6" x2="6" y2="18"></line>
+		                       <line x1="6" y1="6" x2="18" y2="18"></line>
+		                   </svg>
+		               </button>
+		               <h3
+		                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
+		               >
+		                   안내
+		               </h3>
+		               <div class="p-5">
+		                   기존 비밀번호를 잘못입력하셨습니다.
+		                   <div class="mt-8 flex items-center justify-end">
+	                          <button
+	                          	  id="employeeBtnPwError3"
+	                              type="button"
+	                              class="btn btn-primary ltr:ml-4 rtl:mr-4"
+	                          >
+	                              확인
+	                          </button>
+	                      </div>
+		               </div>
+		           </div>
+		       </div>
+		   </div>
+		</div>
+		
+        <script th:inline="javascript">
+        	var resultPw = [[${resultPw}]]
+        </script>
         <script th:inline="javascript">
         	var employeeNo = [[${employee.employeeNo}]]
         </script>
