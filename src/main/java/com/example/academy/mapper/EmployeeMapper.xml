@@ -30,6 +30,8 @@
 			, e.employee_birth employeeBirth
 			, e.address_no addressNo
 			, e.employee_phone employeePhone
+			, e.employee_department employeeDepartment
+			, e.employee_position employeePosition
 			, e.photo_file_no photoFileNo
 			, e.stamp_file_no stampFileNo
 			, e.employee_mail employeeMail
