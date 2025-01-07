@@ -21,7 +21,14 @@ document.addEventListener('alpine:init', () => {
             document.documentElement.scrollTop = 0;
         },
     }));
-
+	
+	// 버튼 클릭 시 addBoard.html로 이동하는 함수
+    Alpine.data('navigate', () => ({
+       redirectToAddBoard() {
+            window.location.href = 'addBoard.html';  // 'addBoard.html'로 이동
+        }
+    }));
+	
     // theme customization
     Alpine.data('customizer', () => ({
         showCustomizer: false,

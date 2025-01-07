@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.academy.mapper.BoardFileMapper">
+
+	<insert id="insertBoardFile" parameterType="com.example.academy.vo.BoardFile">
+		INSERT into boardFile (
+			board_no
+			, file_no
+			)
+		VALUES (
+			#{boardNo}
+			, #{fileNo}
+			)
+	</insert>
+</mapper>

@@ -3,7 +3,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	    <title>공지사항 작성</title>
+	    <title>상세 공지사항</title>
 	    <meta name="viewport" content="width=device-width, initial-scale=1" />
 	    <link rel="icon" type="image/x-icon" th:href="@{/favicon.png}" />
 	    <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -12,8 +12,6 @@
 	    <link rel="stylesheet" type="text/css" media="screen" th:href="@{/css/perfect-scrollbar.min.css}" />
 	    <link rel="stylesheet" type="text/css" media="screen" th:href="@{/css/style.css}" />
 	    <link defer rel="stylesheet" type="text/css" media="screen" th:href="@{/css/animate.css}" />
-        <!-- Quill CSS -->
-        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 	    <script th:src="@{/js/perfect-scrollbar.min.js}"></script>
 	    <script defer th:src="@{/js/popper.min.js}"></script>
 	    <script th:src="@{/js/alpine-collaspe.min.js}"></script>
@@ -24,8 +22,7 @@
         <script th:src="@{/js/custom.js}"></script>
         <script th:src="@{/js/templete.js}"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-        <!-- Quill JS -->
-		<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+        <script th:src="@{/js/simple-datatables.js}"></script>
     </head>
 
     <body
@@ -88,124 +85,32 @@
 
                 <!-- 메인화면 -->
                 <div class="animate__animated p-6" :class="[$store.app.animation]">
-                    <div class="flex flex-wrap items-center justify-between gap-4 ml-3">
-                        <h2 class="text-2xl ml-3">공지사항 작성</h2>
-                        <div class="flex w-full flex-col gap-4 sm:w-auto sm:flex-row sm:items-center sm:gap-3">
-                           <div class="flex gap-3 mr-3">
-                           </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="dvanimation animate__animated p-6" :class="[$store.app.animation]">
-            		<div x-data="multicolumn">
-            			<div class="panel">
-            				<form id="formAddBoard" method="post" th:action="@{/addBoard}" enctype="multipart/form-data">
-								<!-- 제목 입력창 -->
-								<div>
-									<label for="boardName">게시글</label>
-								</div>	
-								
-								<div>
-									<input type="text" id="boardTitle" name="boardTitle" placeholder="제목" class="form-input">
-								</div>
-	
-								<br>
-	
-								<!-- 내용 입력창 -->
-								<!-- Quill 에디터가 들어갈 부분 -->
-							    <div id="editor">
-							    	<h1>내용을 입력하세요.</h1>
-							    </div>
-							
-							    <!-- Quill 에디터의 내용이 담길 hidden input -->
-							    <input type="hidden" id="boardContent" name="boardContent">
-							    <input type="hidden" id="createEmployeeNo" name="createEmployeeNo" th:value="${employeeNo}">
-								<input type="hidden" id="updateEmployeeNo" name="updateEmployeeNo" th:value="${employeeNo}">
-								
-								<br>
-								
-								<!-- 프로필 사진 -->
-							  	<div>
-							       <label for="boardFile">첨부파일</label>
-							  	</div>
-		                        <div>
-							       <div class="flex">
-							           <button 
-							               type="button" 
-							               class="btn btn-primary ltr:rounded-r-none rtl:rounded-l-none" 
-							               style="width: 150px;"
-							               onclick="document.getElementById('boardFile').click();">
-							               파일 선택
-							           </button>
-							           <input 
-							               id="boardFile" 
-							               name="employeePhoto"
-							               type="file" 
-							               class="hidden" 
-							               onchange="document.getElementById('boardFileNameDisplay').value = this.files[0] ? this.files[0].name : '';" />
-							           <input 
-							               id="boardFileNameDisplay" 
-							               type="text" 
-							               placeholder="첨부된 파일이 없습니다."
-							               class="form-input ltr:rounded-l-none rtl:rounded-r-none flex-grow" 
-							               readonly />
-							       </div>
-							     </div>
-							     <div class="mt-1 mb-3" style="height: 10px;"><span class="msg boardFile-error error-label" style="display: none;">프로필사진을 첨부해주세요.</span></div>
-							     
-							     <!-- 버튼 -->
-								<div class="flex w-full flex-col gap-4 sm:w-auto sm:flex-row sm:items-center sm:gap-3">
-								    <div class="flex gap-3 mr-3 ml-auto">
-								        <button type="submit" class="btn btn-primary" id="formAddButton">
-								        <svg
-                                             xmlns="http://www.w3.org/2000/svg"
-                                             width="24px"
-                                             height="24px"
-                                             viewBox="0 0 24 24"
-                                             fill="none"
-                                             stroke="currentColor"
-                                             stroke-width="1.5"
-                                             stroke-linecap="round"
-                                             stroke-linejoin="round"
-                                             class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2"
-                                         >
-                                             <line x1="12" y1="5" x2="12" y2="19"></line>
-                                             <line x1="5" y1="12" x2="19" y2="12"></line>
-                                         </svg>
-								          등록
-								        </button>
-							        </div>
-							      </div>
-        						</form>
-							    </div>
+                	<!-- 타이틀 -->
+                	<div class="flex flex-wrap items-center justify-between gap-4 ml-3">
+                    	<h2 class="text-2xl ml-3">상세 공지사항</h2>
+                    	<div class="flex w-full flex-col gap-4 sm:w-auto sm:flex-row sm:items-center sm:gap-3 mr-3">
+							<div class="flex gap-3 mr-3">
+								<!-- 부서/직책 수정 버튼 -->
+								<button type="button" class="btn btn-warning mr-1" style="width:150px;" id="openModalButtonDepartment">게시글 수정</button>
+								<!-- 비밀번호 변경 버튼 -->
+								<button type="button" class="btn btn-warning mr-1" style="width:150px;" id="openModalButtonPw">게시글 삭제</button>
 							</div>
-            			 </div>
-            		 </div>
-            	 </div>
+						</div>
+                    	<div>
+                        	<h1>Board Title : <span th:text="${boardOne.boardTitle}"></span></h1>
+					    	<p>Board Content : <span th:text="${boardOne.boardContent}"></span></p>
+					    	<p>Created by Employee No : <span th:text="${boardOne.createEmployeeNo}"></span></p>
+							<p>Board Count : <span th:text="${boardOne.boardCount}"></span></p>
+							<p>Created by day : <span th:text="${boardOne.createDate}"></span></p>							
+						</div>
+					</div>
+                </div>
                 
                 <!--  풋터 파일 연결 -->
                 <div th:replace="fragments/footer :: footer"></div>
             </div>
         </div>
- 
- 	<script>
-	 	new Quill('#editor', {
-	        theme: 'snow',
-	    });
-	    var quill = new Quill('#editor1', {
-	        theme: 'snow',
-	    });
-	    var toolbar = quill.container.previousSibling;
-	    toolbar.querySelector('.ql-picker').setAttribute('title', 'Font Size');
-	    toolbar.querySelector('button.ql-bold').setAttribute('title', 'Bold');
-	    toolbar.querySelector('button.ql-italic').setAttribute('title', 'Italic');
-	    toolbar.querySelector('button.ql-link').setAttribute('title', 'Link');
-	    toolbar.querySelector('button.ql-underline').setAttribute('title', 'Underline');
-	    toolbar.querySelector('button.ql-clean').setAttribute('title', 'Clear Formatting');
-	    toolbar.querySelector('[value=ordered]').setAttribute('title', 'Ordered List');
-	    toolbar.querySelector('[value=bullet]').setAttribute('title', 'Bullet List');
-	</script>
- 
+        
+        <script th:src="@{/customjs/BoardList.js}"></script>
     </body>
 </html>

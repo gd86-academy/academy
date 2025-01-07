@@ -6,7 +6,6 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.example.academy.dto.BoardDTO;
 import com.example.academy.dto.BoardListDTO;
-import com.example.academy.vo.Board;
 
 @Mapper
 public interface BoardMapper {
@@ -21,10 +20,10 @@ public interface BoardMapper {
 	Integer deleteBoard(Integer boardNo);
 	
 	// 공지사항 추가
-	Integer insertBoard(Board board); 
+	Integer insertBoard(BoardDTO boardDTO); 
 	
 	// 상세 공지사항 조회
-	BoardListDTO selectBoardOne(Integer boardNo);
+	BoardDTO selectBoardOne(Integer boardNo);
 	
 	// 공지사항 리스트 조회
 	List<BoardListDTO> selectBoardList();
