@@ -19,6 +19,7 @@ import com.example.academy.mapper.AddressMapper;
 import com.example.academy.mapper.CommonMapper;
 import com.example.academy.mapper.EmployeeMapper;
 import com.example.academy.mapper.FilesMapper;
+import com.example.academy.mapper.MemoMapper;
 import com.example.academy.util.InputFile;
 import com.example.academy.vo.Address;
 import com.example.academy.vo.Files;
@@ -34,10 +35,39 @@ public class EmployeeService {
 	@Autowired AddressMapper addressMapper;
 	@Autowired FilesMapper filesMapper;
 	@Autowired CommonMapper commonMapper;
+	@Autowired MemoMapper memoMapper;
+	
+	// 진수우 : 사원삭제.
+	public void removeEmployee(Integer employeeNo) {
+		// 데이터베이스에서 사원메모 삭제.
+		memoMapper.deleteMemo(employeeNo);
+		
+		// 파일정보가 수정되기 전에 기존 파일정보를 불러옴.
+		EmployeeModifyGetDTO employeeModifyGetDTO = filesMapper.selectEmployeeModifyFile(employeeNo);
+		
+		// 데이터베이스에서 사원 프로필사진파일 삭제.
+		filesMapper.deletePhotoFile(employeeNo);
+		
+		// 사원 프로필사진 물리적 파일 삭제.
+		String photoFullname = System.getProperty("user.dir") + "/src/main/resources/static/upload/" + employeeModifyGetDTO.getPhotoFileName() + "." + employeeModifyGetDTO.getPhotoFileExt();
+		File photoFile = new File(photoFullname);
+		photoFile.delete();
+		
+		// 데이터베이스에서 사원 도장사진파일 삭제.
+		filesMapper.deleteStampFile(employeeNo);
+		
+		// 사원 도장사진 물리적 파일 삭제.
+		String stampFullname = System.getProperty("user.dir") + "/src/main/resources/static/upload/" + employeeModifyGetDTO.getStampFileName() + "." + employeeModifyGetDTO.getStampFileExt();
+		File stampFile = new File(stampFullname);
+		stampFile.delete();
+		
+		// 데이터베이스에서 불필요한 사원정보 수정.
+		employeeMapper.deleteEmployee(employeeNo);
+	}
 	
 	// 진수우 : 개인정보수정.
 	public void modifyEmployee(EmployeeModifyDTO employeeModifyDTO) {
-		Integer result = 0;
+		int result = 0;
 		// 데이터베이스에 사원정보 수정.
 		result += employeeMapper.updateEmployee(employeeModifyDTO);
 		// 데이터베이스에 주소정보 수정.
@@ -151,7 +181,7 @@ public class EmployeeService {
 	
 	// 진수우 : 사원 추가.
 	public void addEmployee(EmployeeAddDTO employeeAddDTO) {
-		Integer result = 0;
+		int result = 0;
 		
 		// 파일정보 데이터베이스에 삽입.
 		MultipartFile mf = employeeAddDTO.getEmployeePhoto(); // 폼에 입력되었던 파일데이터 가져옴.

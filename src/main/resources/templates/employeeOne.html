@@ -115,7 +115,7 @@
 								<!-- 개인정보 수정 버튼 -->
 								<button type="button" class="btn btn-dark mr-1" style="width:150px;" id="openModalButtonModifyEmployee">개인정보 수정</button>
 								<!-- 계정 삭제 버튼 -->
-								<button type="button" class="btn btn-danger mr-1" style="width:150px;" id="openModalButton">계정 삭제</button>
+								<button type="button" class="btn btn-danger mr-1" style="width:150px;" id="openModalButtonEmployeeDelete">계정 삭제</button>
 							</div>
 						</div>
 					</div>
@@ -127,7 +127,7 @@
 							 		<div style="height:50px;"></div> <!-- 여백공간 -->
 								 	<div class="flex" style="align-items: center;">
 								 		<div style="width:200px;"><img class="w-40 h-40 rounded-full overflow-hidden object-cover" th:src="@{./upload/{fileName}.{fileExt}(fileName=${employee.fileName}, fileExt=${employee.fileExt})}" ></div>
-								 		<span style="width:100px; font-size: 25px; font-weight: bold;" th:text="${employee.employeeName}"></span>
+								 		<span style="width:120px; font-size: 25px; font-weight: bold;" th:text="${employee.employeeName}"></span>
 								 		<a type="button" style="background-color: #f0f0f0;" class="btn w-10 h-10 p-0 rounded-full" th:href="@{/chat?employeeNo={employeeNo}(employeeNo=${employee.employeeNo})}">
 										    <img style="width: 19px; height: 19px;" src="./images/icon/Chat Round.png" alt="image" />
 										</a>
@@ -362,6 +362,64 @@
 	                          >
 	                              확인
 	                          </button>
+	                      </div>
+		               </div>
+		           </div>
+		       </div>
+		   </div>
+		</div>
+		
+		<!--  사원삭제 확인 모달 -->
+        <div class="EmployeeDelete">
+		  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundEmployeeDelete">
+		       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperEmployeeDelete">
+		           <div
+		               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
+		               id="modal"
+		           >
+		               <button
+		                   type="button"
+		                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+		                   id="closeModalButtonEmployeeDelete"
+		               >
+		                   <svg
+		                       xmlns="http://www.w3.org/2000/svg"
+		                       width="24px"
+		                       height="24px"
+		                       viewBox="0 0 24 24"
+		                       fill="none"
+		                       stroke="currentColor"
+		                       stroke-width="1.5"
+		                       stroke-linecap="round"
+		                       stroke-linejoin="round"
+		                       class="h-6 w-6"
+		                   >
+		                       <line x1="18" y1="6" x2="6" y2="18"></line>
+		                       <line x1="6" y1="6" x2="18" y2="18"></line>
+		                   </svg>
+		               </button>
+		               <h3
+		                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
+		               >
+		                   안내
+		               </h3>
+		               <div class="p-5">
+		                   <span th:text="${employee.getEmployeeName}"></span> 사원을 삭제합니다.
+		                   <div class="mt-8 flex items-center justify-end">
+	                          <button
+	                          	  id="cancelButtonEmployeeDelete"
+	                              type="button"
+	                              class="btn btn-outline-danger ltr:ml-4 rtl:mr-4"
+	                          >
+	                              취소
+	                          </button>
+	                          <a
+	                              type="button"
+	                              class="btn btn-primary ltr:ml-4 rtl:mr-4"
+	                              th:href="@{/deleteEmployee(employeeNo=${employee.employeeNo})}"
+	                          >
+	                              확인
+	                          </a>
 	                      </div>
 		               </div>
 		           </div>

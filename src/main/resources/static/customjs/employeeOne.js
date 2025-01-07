@@ -595,3 +595,32 @@ if (resultPw === 3) {
 	employeeBtnPwError3.addEventListener('click', closeModalPwError3); // 닫기 버튼 클릭 시
 	closeModalButtonPwError3.addEventListener('click', closeModalPwError3);     // 취소 버튼 클릭 시
 }
+
+
+// 사원삭제 모달 관련 DOM 요소
+const openModalButtonEmployeeDelete = document.getElementById('openModalButtonEmployeeDelete');
+const closeModalButtonEmployeeDelete = document.getElementById('closeModalButtonEmployeeDelete');
+const modalBackgroundEmployeeDelete = document.getElementById('modalBackgroundEmployeeDelete');
+const modalWrapperEmployeeDelete = document.getElementById('modalWrapperEmployeeDelete');
+const cancelButtonEmployeeDelete = document.getElementById('cancelButtonEmployeeDelete');
+
+// 사원삭제 모달 열기
+openModalButtonEmployeeDelete.addEventListener('click', () => {
+  modalBackgroundEmployeeDelete.classList.remove('hidden');  // 모달 배경 보이기
+  modalBackgroundEmployeeDelete.classList.add('block');     // 모달 배경 보이게 설정
+});
+
+// 사원삭제 모달 닫기
+const closeModalEmployeeDelete = () => {
+  modalBackgroundEmployeeDelete.classList.remove('block');
+  modalBackgroundEmployeeDelete.classList.add('hidden');  // 모달 배경 숨기기
+  // 모달 내부의 모든 입력 필드를 초기화
+  const formEmployeeDelete = document.getElementById('employeeFormEmployeeDelete');
+  formEmployeeDelete.reset(); // 모든 입력 필드와 라디오 버튼 초기화
+  $('input').removeClass('errorInput');
+  // 모든 에러 라벨 숨기기
+  $('.error-label').hide();
+};
+
+closeModalButtonEmployeeDelete.addEventListener('click', closeModalEmployeeDelete); // 닫기 버튼 클릭 시
+cancelButtonEmployeeDelete.addEventListener('click', closeModalEmployeeDelete);     // 취소 버튼 클릭 시

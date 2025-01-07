@@ -24,7 +24,6 @@ public class AuthController {
 	// 진수우 : 사원 비밀번호 변경.
 	@PostMapping("/modifyPassword")
 	public String modifyPw(PasswordModifyDTO passwordModifyDTO) {
-		log.debug("result -------------------------------------------------------------" + passwordModifyDTO);
 		Integer resultPw = authService.modifyPw(passwordModifyDTO);
 		return "redirect:/employeeOne?employeeNo=" + passwordModifyDTO.getEmployeeNo() + "&resultPw=" + resultPw;
 	}

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.academy.mapper.MemoMapper">
+	
+	<!-- 진수우 : 사원메모 삭제 -->
+	<delete id="deleteMemo">
+		DELETE
+		FROM memo
+		WHERE writer = #{employeeNo}
+	</delete>
+	
+</mapper>
