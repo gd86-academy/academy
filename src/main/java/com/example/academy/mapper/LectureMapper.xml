@@ -2,7 +2,53 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.LectureMapper">
 
-	<!-- 강의리스트 출력 -->
+	<!-- 김혜린 : 강의 상세정보 출력 -->
+	<select id="selectLectureOne" parameterType="Integer" resultType="com.example.academy.dto.LectureOneDTO">
+		SELECT 
+			l.lecture_no lectureNo
+			, l.lecturer lecturer
+			, e.employee_name employeeName
+			, l.lecture_name lectureName
+			, l.lecture_content lectureContent
+			, l.lecture_begin_date lectureBeginDate
+			, l.lecture_end_date lectureEndDate
+			, c.classroom_no classroomNo
+			, c.classroom_name classroomName
+			, t1.weekdayCode weekdayCode
+			, t1.beginTimeCode beginTimeCode
+			, t1.endTimeCode endTimeCode
+			, t1.weekday weekday
+			, t1.beginTime beginTime
+			, t1.endTime endTime
+		FROM lecture l LEFT OUTER JOIN employee e
+		ON l.lecturer = e.employee_no
+		LEFT OUTER JOIN classroom c
+		ON l.classroom_no = c.classroom_no
+		LEFT OUTER JOIN (
+							SELECT 
+								llw.lecture_no lectureNo
+								, llw.lecture_weekday_no lectureWeekdayNo
+								, lw.weekday_code	weekdayCode
+								, lw.begin_time_code beginTimeCode
+								, lw.end_time_code endTimeCode
+								, cm1.name weekday
+								, cm2.name beginTime
+								, cm3.name endTime
+							FROM lecture l LEFT OUTER JOIN lecture_lecture_weekday llw
+							ON l.lecture_no = llw.lecture_no
+							LEFT OUTER JOIN lecture_weekday lw
+							ON llw.lecture_weekday_no = lw.lecture_weekday_no
+							LEFT OUTER JOIN common cm1
+							ON lw.weekday_code = cm1.code
+							LEFT OUTER  JOIN common cm2
+							ON lw.begin_time_code = cm2.code
+							LEFT OUTER JOIN common cm3
+							ON lw.end_time_code = cm3.code) t1
+		ON l.lecture_no = t1.lectureNo
+		WHERE l.lecture_no = #{lectureNo}
+	</select>
+	
+	<!-- 김혜린 : 강의리스트 출력 -->
 	<select id="selectLectureList" resultType="com.example.academy.dto.LectureListDTO">
 		SELECT 
 			l.lecture_no lectureNo
