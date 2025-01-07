@@ -33,6 +33,16 @@ public class CustomUserDetails implements UserDetails {
         return collection;
     }
     
+    // 부서 정보
+    public String getUserDepartment() {
+        return employee.getEmployeeDepartment();
+    }
+    
+    // 직책 정보
+    public String getUserPosition() {
+        return employee.getEmployeePosition();
+    }
+    
     // 프로필사진 이름 정보
     public String getUserPhotoFileName() {
         return employee.getPhotoFileName();
