@@ -97,7 +97,7 @@ document.addEventListener('alpine:init', () => {
 					            item[2], // 담당자 이름
 								item[3], // 수용 인원
 								`<button type="button" class="btn btn-dark" onclick="openEditModal(${item[0]})">수정</button>`, // 수정 버튼
-								`<button type="button" class="btn btn-danger" onclick="deleteRow(${item[0]})">삭제</button>`  // 삭제 버튼
+								`<button type="button" class="btn btn-danger" onclick="openDeleteModal(${item[0]})">삭제</button>`  // 삭제 버튼
 					        ])
 					    },
 					    searchable: true,
@@ -179,5 +179,78 @@ const closeModal = () => {
 closeModalButton.addEventListener('click', closeModal); // 닫기 버튼 클릭 시
 cancelButton.addEventListener('click', closeModal);     // 취소 버튼 클릭 시
 
+
+$('#meetingRoomAddBtn').click(function() {
+
+    // 회의실 이름 검사
+    let isVal = true;
+    if ($('#meetingroomName').val().trim() === '') {
+        $('#meetingroomName').addClass("errorInput");
+        $('.meetingroomName-error').show();
+        isVal = false;
+    } else {
+        $('#meetingroomName').removeClass("errorInput");
+        $('.meetingroomName-error').hide();
+    }
+
+    // 회의실 담당자 검사
+    if ($('#meetingroomManager').val().trim() === '') {
+        $('#meetingroomManager').addClass("errorInput");
+        $('.meetingroomManager-error').show();
+        isVal = false;
+    } else {
+        $('#meetingroomManager').removeClass("errorInput");
+        $('.meetingroomManager-error').hide();
+    }
+
+    // 회의실 수용인원 검사
+    if ($('#meetingroomCapacity').val().trim() === '') {
+        $('#meetingroomCapacity').addClass("errorInput");
+        $('.meetingroomCapacity-error').show();
+        isVal = false;
+    } else {
+        $('#meetingroomCapacity').removeClass("errorInput");
+        $('.meetingroomCapacity-error').hide();
+    }
+	if (isVal) {
+	        console.log("유효성 검사 통과, 폼 제출");
+	        $('#meetingroomAddForm').submit(); 
+	    }
+
+}); // 닫는 괄호 추가
+
+
+// 모달 관련 DOM 요소
+const modalDeleteBackground = document.getElementById('modalDeleteBackground');
+const deleteMeetingroomLabel = document.getElementById('deleteMeetingroomLabel');
+const confirmDeleteButton = document.getElementById('confirmDeleteButton');
+const closeDeleteModalButton = document.getElementById('closeDeleteModalButton');
+const cancelDeleteButton = document.getElementById('cancelDeleteButton');
+
+// 모달 열기 함수 (회의실 번호를 받아서 데이터 세팅)
+const openDeleteModal = (meetingroomNo) => {
+    // 회의실 번호 표시
+    deleteMeetingroomLabel.innerText = meetingroomNo;
+
+    // 삭제 확인 버튼 클릭 이벤트 설정
+    confirmDeleteButton.onclick = () => {
+        // 서버로 요청 전송
+        window.location.href = `/deleteMeetingRoom?meetingroomNo=${meetingroomNo}`;
+    };
+
+    // 모달 보이기
+    modalDeleteBackground.classList.remove('hidden');
+    modalDeleteBackground.classList.add('block');
+};
+
+// 모달 닫기 함수
+const closeDeleteModal = () => {
+    modalDeleteBackground.classList.remove('block');
+    modalDeleteBackground.classList.add('hidden');
+};
+
+// 버튼 이벤트 리스너 설정
+closeDeleteModalButton.addEventListener('click', closeDeleteModal);
+cancelDeleteButton.addEventListener('click', closeDeleteModal);
 
 
