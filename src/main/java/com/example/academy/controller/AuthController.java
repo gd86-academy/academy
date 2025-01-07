@@ -30,7 +30,19 @@ public class AuthController {
 	
 	// 진수우 : 메인페이지 호출.
 	@GetMapping("/main")
-	public String main() {
+	public String main(Model model) {
+		// 스프링시큐리티에서 계정정보 가져오기.
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		// 로그인 상태일 때만 model에 정보담기.
+	    if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+	        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+	        model.addAttribute("userNo", userDetails.getUsername());
+	        model.addAttribute("username", userDetails.getUserRealName());
+	        model.addAttribute("usermail", userDetails.getUserMail());
+	        model.addAttribute("userPhotoFileName", userDetails.getUserPhotoFileName());
+	        model.addAttribute("userPhotoFileExt", userDetails.getUserPhotoFileExt());
+	    }
 		return "main";
 	}
 	

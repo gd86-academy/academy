@@ -2,6 +2,7 @@ package com.example.academy.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.example.academy.dto.AuthDTO;
 import com.example.academy.dto.PasswordModifyDTO;
 import com.example.academy.vo.Employee;
 
@@ -15,5 +16,5 @@ public interface AuthMapper {
 	String selectEmployeeNowPw(PasswordModifyDTO passwordModifyDTO);
 	
     // 진수우 : 시큐리티 로그인 시 사원 데이터베이스 조회.
-    Employee findByUsername(String username);
+    AuthDTO findByUsername(String username);
 }

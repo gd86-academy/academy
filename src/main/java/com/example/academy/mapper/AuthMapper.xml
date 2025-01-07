@@ -17,11 +17,16 @@
 	</select>
 
     <!-- 진수우 : 시큐리티 로그인 시 사원 데이터베이스 조회. -->
-    <select id="findByUsername" resultType="com.example.academy.vo.Employee">
-        SELECT employee_no employeeNo
-        , employee_pw employeePw
-        , employee_role employeeRole
-        FROM employee
+    <select id="findByUsername" resultType="com.example.academy.dto.AuthDTO">
+        SELECT e.employee_no employeeNo
+        , e.employee_pw employeePw
+        , e.employee_role employeeRole
+        , e.employee_mail employeeMail
+        , e.employee_name employeeName
+        , f.file_name photoFileName
+        , f.file_ext photoFileExt
+        FROM employee e
+        LEFT OUTER JOIN file f ON f.file_no = e.photo_file_no
         WHERE employee_no = #{employeeNo}
     </select>
     
