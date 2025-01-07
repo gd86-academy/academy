@@ -59,7 +59,7 @@ public class AuthController {
 	        
 	        model.addAttribute("password", userDetails.getPassword());
 	        model.addAttribute("username", userDetails.getUsername());
-	        model.addAttribute("role", userDetails.getUserrole());
+	        model.addAttribute("role", userDetails.getUserRole());
 	    }
         return "home";
     }
