@@ -182,7 +182,7 @@ document.addEventListener('alpine:init', () => {
 					    const rowElement = e.target.closest('tr'); // 클릭된 행의 인덱스.
 					    if (rowElement) {
 							const tdElements = rowElement.querySelectorAll('td');
-							const employeeNo = tdElements[2].textContent; // 두번째 열 데이터 추출.
+							const employeeNo = tdElements[1].textContent; // 두번째 열 데이터 추출.
 							window.location.href = `/academy/employeeOne?employeeNo=${employeeNo}`;
 					    }
 					});

@@ -105,8 +105,8 @@ public class EmployeeController {
 	    if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
 	        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 	        model.addAttribute("userNo", userDetails.getUsername());
-	        model.addAttribute("username", userDetails.getUserRealName());
-	        model.addAttribute("usermail", userDetails.getUserMail());
+	        model.addAttribute("userName", userDetails.getUserRealName());
+	        model.addAttribute("userMail", userDetails.getUserMail());
 	        model.addAttribute("userRole", userDetails.getUserRole());
 	        model.addAttribute("userPhotoFileName", userDetails.getUserPhotoFileName());
 	        model.addAttribute("userPhotoFileExt", userDetails.getUserPhotoFileExt());
