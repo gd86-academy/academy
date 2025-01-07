@@ -6,7 +6,6 @@ import lombok.Data;
 public class LectureWeekday {
 	
 	private Integer lectureWeekdayNo;
-	private Integer lectureNo;
 	private String weekdayCode;
 	private String beginTimeCode;
 	private String endTimeCode;

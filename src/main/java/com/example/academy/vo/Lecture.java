@@ -11,7 +11,6 @@ public class Lecture {
 	private Integer lecturer;			// FK
 	private String lectureBeginDate;
 	private String lectureEndDate;
-	private Integer lectureWeekdayNo;	// FK
 	private Integer classroomNo;		// FK
 	private String createDate;
 	private String updateDate;

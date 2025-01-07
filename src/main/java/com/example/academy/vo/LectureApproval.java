@@ -15,8 +15,7 @@ public class LectureApproval {
     private String lectureBeginDate;         
     private String lectureEndDate;        
     private String lectureApprovalStatus;  	// FK        
-    private Integer lectureApprovalStep;         
-    private Integer lectureWeekdayNo;       // FK  
+    private Integer lectureApprovalStep;           
     private String createDate;        
     private String updateDate;   
 
