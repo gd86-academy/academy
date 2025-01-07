@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -21,21 +22,25 @@ public class SecurityConfig {
 	@Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http.authorizeHttpRequests((auth) -> auth
+        	.requestMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**", "/upload/**", "/customjs").permitAll() // CSS, JS, 이미지 파일 접근 허용
             .requestMatchers("/login", "/loginProc", "/join", "/joinProc").permitAll()
             .requestMatchers("/all/**").hasAnyRole("management", "humanresources", "Administration") // 모든사원
             .requestMatchers("/management/**").hasRole("management") // 운영팀
             .requestMatchers("/humanresources/**").hasRole("humanresources") // 인사팀
             .requestMatchers("/Administration/**").hasRole("Administration") // 행정팀
-            .requestMatchers("/static/file/**", "/static/css/**", "/static/js/**", "/static/images/**", "/static/**", "/templates/fragments/**", "/templates/**").permitAll() // CSS, JS, 이미지 파일 접근 허용
-            .anyRequest().permitAll()
-            //.anyRequest().authenticated() // 위에 등록되지 않은 경로는 로그인된 사원만 접근가능하도록 설정.
+            
+            //.anyRequest().permitAll()
+            .anyRequest().authenticated() // 위에 등록되지 않은 경로는 로그인된 사원만 접근가능하도록 설정.
         );
         
+        
         http
+        	
     		.formLogin((auth) -> auth.loginPage("/login")
     				.loginProcessingUrl("/loginProc")
     				.defaultSuccessUrl("/main", true)  // 로그인 성공 후 이동할 URL 설정
     				.permitAll()
+    				
         				
         )
 		.logout((logout) -> logout
@@ -46,8 +51,7 @@ public class SecurityConfig {
 		        .permitAll()
 		);
 
-        http.csrf((auth) -> auth.disable()); // 사이트 위변조 설정해제. (개발환경에서는 편의성을 위해 사용하지 않음)
-        
+        http.csrf((auth) -> auth.disable()); // 사이트 위변조 설정해제. (개발환경에서는 편의성을 위해 사용하지 않음)        
         return http.build();
     }
 }
