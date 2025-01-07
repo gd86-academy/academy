@@ -6,13 +6,17 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.example.academy.dto.LectureListDTO;
 import com.example.academy.dto.LectureOneDTO;
-import com.example.academy.vo.Lecture;
+import com.example.academy.dto.LectureOneTimeListDTO;
 
 @Mapper
 public interface LectureMapper {
 	
-	// 김혜린 : 강의 상세정보 출력
+	// 김혜린 : 강의 상세정페이지
 	LectureOneDTO selectLectureOne(Integer lectureNo);
+	
+	// 김혜린 : 강의 상세정페이지 - 강의 시간 리스트 출력
+	List<LectureOneTimeListDTO> selectLectureOneTimeList(Integer lectureNo);
+	
 	
 	// 김혜린 : 강의리스트 출력
 	List<LectureListDTO> selectLectureList();
