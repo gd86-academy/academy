@@ -8,6 +8,15 @@ import com.example.academy.vo.Files;
 @Mapper
 public interface FilesMapper {
 	
+	// 진수우 : 프로필사진파일 삭제.
+	Integer deletePhotoFile(Integer employeeNo);
+	
+	// 진수우 : 도장사진파일 삭제.
+	Integer deleteStampFile(Integer employeeNo);
+	
+	// 진수우 : 사원파일(프로필사진, 도장사진) 삭제.
+	Integer deleteFile(Integer fileNo);
+	
 	// 진수우 : 사원파일(프로필사진, 도장사진) 수정.
 	Integer updateFile(Files photofile);
 	

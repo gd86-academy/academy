@@ -12,6 +12,8 @@ public class EmployeeModifyGetDTO {
     private String employeePhone;
     private String employeeMail;
     private String employeeDate;
+    private String employeeDepartment;
+    private String employeePosition;
     private Integer addressNo;
     private Integer photoFileNo;
     private Integer stampFileNo;

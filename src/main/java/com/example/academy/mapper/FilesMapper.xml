@@ -2,6 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.FilesMapper">
 
+	<!-- 진수우 : 프로필사진파일 삭제 -->
+	<delete id="deletePhotoFile">
+		DELETE f
+		FROM file f
+		JOIN employee e ON f.file_no = e.photo_file_no
+		WHERE e.employee_no = #{employeeNo}
+	</delete>
+	
+	<!-- 진수우 : 도장사진파일 삭제 -->
+	<delete id="deleteStampFile">
+		DELETE f
+		FROM file f
+		JOIN employee e ON f.file_no = e.stamp_file_no
+		WHERE e.employee_no = #{employeeNo}
+	</delete>
+
 	<!-- 진수우 : 사원파일(프로필사진, 도장사진) 수정 -->
 	<update id="updateFile">
 		UPDATE file

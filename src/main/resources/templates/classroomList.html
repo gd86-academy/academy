@@ -106,8 +106,8 @@
                        <div class="flex w-full flex-col gap-4 sm:w-auto sm:flex-row sm:items-center sm:gap-3">
                            <div class="flex gap-3 mr-3">
                                <div>
-  									<!-- 버튼 -->
-									 <button type="button" class="btn btn-primary mr-3" id="openModalButton">
+  									<!-- 강의실 등록 버튼 -->
+									 <button type="button" class="btn btn-primary mr-3" id="openModalButtonAddClassroom">
 									     <svg
 									         width="24"
 									         height="24"
@@ -143,7 +143,7 @@
 									               <button
 									                   type="button"
 									                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
-									                   id="closeModalButton"
+									                   id="closeModalButtonAddClassroom"
 									               >
 									                   <svg
 									                       xmlns="http://www.w3.org/2000/svg"
@@ -170,28 +170,27 @@
 									                   <form id="classroomAddForm" method="post" th:action="@{/addClassroom}"  enctype="multipart/form-data">
 									                   	   <!-- 강의실명 -->
 									                       <div>
-									                           <label for="employeePhone">강의실명</label>
+									                           <label for="classroomName">강의실명</label>
 									                           <input
 									                               id="classroomName"
-									                               name="className"
+									                               name="classroomName"
 									                               type="text"
 									                               placeholder="강의실명"
 									                               class="form-input"
 									                           />
 									                       </div>
-									                       <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeName-error error-label" style="display: none;">이름을 입력해주세요.</span></div>
+									                       <div class="mt-1 mb-3" style="height: 10px;"><span class="msg classroomName-error error-label" style="display: none;">강의실명을 입력해주세요.</span></div>
 									                   		<!-- 담당자 -->
 									                       <div>
-									                           <label for="employeePhone">담당자</label>
-									                           <input
-									                               id="classroomManager"
-									                               name="classroomManager"
-									                               type="text"
-									                               placeholder="담당자"
-									                               class="form-input"
-									                           />
+									                           <label for="classroomManager">담당자</label>
+									                           <select id="classroomManager" class="form-select" name="classroomManager">
+									                           		<option value="" >선택해주세요</option>
+									                           		<th:block th:each="classroom : ${classroom}">
+															   	   		<option th:value="${classroom.employeeNo}" th:text="${classroom.employeeName}"></option>
+															   	   	</th:each>
+									                           </select>
 									                       </div>
-									                       <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeePhone-error error-label" style="display: none;">전화번호를 입력해주세요.</span></div>
+									                       <div class="mt-1 mb-3" style="height: 10px;"><span class="msg classroomManager-error error-label" style="display: none;">담당자를 입력해주세요.</span></div>
 									                       <!-- 수용인원 -->
 									                       <div>
 									                           <label for="classroomCapacity">수용인원</label>
@@ -203,13 +202,13 @@
 									                               class="form-input"
 									                           />
 									                       </div>
-														     
+														   <div class="mt-1 mb-3" style="height: 10px;"><span class="msg classroomCapacity-error error-label" style="display: none;">수용인원을 입력해주세요.</span></div>  
 									                       <div class="mt-8 flex items-center justify-end">
 									                           <button type="button" class="btn btn-outline-danger" id="cancelButton">
 									                               취소
 									                           </button>
 									                           <button
-									                           	   id="employeeAddBtn"
+									                           	   id="classroomAddBtn"
 									                               type="button"
 									                               class="btn btn-primary ltr:ml-4 rtl:mr-4"
 									                           >
@@ -221,10 +220,10 @@
 									           </div>
 									       </div>
 									   </div>
-									 </div>
-                                    
-                            </div>
-                        </div>   
+									</div>
+                               </div>    
+                           </div>
+                       </div>   
 					</div>
 					<div class="dvanimation animate__animated p-6" :class="[$store.app.animation]">
                 		<div x-data="multicolumn">

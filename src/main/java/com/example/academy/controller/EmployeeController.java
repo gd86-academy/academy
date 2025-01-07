@@ -30,6 +30,14 @@ public class EmployeeController {
 	@Autowired CommonService commonService;
 	@Autowired FilesService filesService;
 	
+	// 진수우 : 사원 삭제.
+	@GetMapping("/deleteEmployee")
+	public String deleteEmployee(Integer employeeNo) {
+		// 데이터베이스에서 사원삭제.
+		employeeService.removeEmployee(employeeNo);
+		return "redirect:/employeeList";
+	}
+	
 	// 진수우 : 사원 부서/직책 수정.
 	@PostMapping("/modifyEmployee")
 	public String modifyEmployee(EmployeeModifyDTO employeeModifyDTO) {

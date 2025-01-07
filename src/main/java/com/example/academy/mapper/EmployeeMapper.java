@@ -15,6 +15,9 @@ import com.example.academy.vo.Employee;
 @Mapper
 public interface EmployeeMapper {
 	
+	// 진수우 : 사원삭제.
+	Integer deleteEmployee(Integer employeeNo);
+	
 	// 진수우 : 스탬프 파일번호 등록.
 	Integer updateStampFileNo(EmployeeModifyDTO employeeModifyDTO);
 	

@@ -2,6 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.EmployeeMapper">
 
+	<!-- 진수우 : 사원 삭제 -->
+	<update id="deleteEmployee">
+		UPDATE employee
+		SET 
+			employee_pw = null
+			, employee_department = null
+			, employee_position = null
+			, employee_role = null
+			, photo_file_no = null
+			, stamp_file_no = null
+			, employee_exitdate = NOW()
+			, use_yn = 0
+		WHERE employee_no = #{employeeNo}
+	</update>
+
 	<!-- 진수우 : 스탬프파일번호 등록 -->
 	<update id="updateStampFileNo">
 		UPDATE employee
@@ -30,6 +45,8 @@
 			, e.employee_birth employeeBirth
 			, e.address_no addressNo
 			, e.employee_phone employeePhone
+			, e.employee_department employeeDepartment
+			, e.employee_position employeePosition
 			, e.photo_file_no photoFileNo
 			, e.stamp_file_no stampFileNo
 			, e.employee_mail employeeMail
@@ -109,6 +126,7 @@
 			, f.file_ext fileExt
 		FROM employee e
 		LEFT OUTER JOIN file f ON f.file_no = e.photo_file_no
+		WHERE e.use_yn = 1
 	</select>
 	
 	<!-- 진수우 : 사원추가 -->
