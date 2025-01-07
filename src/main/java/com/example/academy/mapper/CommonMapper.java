@@ -9,6 +9,9 @@ import com.example.academy.vo.Common;
 @Mapper
 public interface CommonMapper {
 	
+	// 김혜린 : 요일 조회
+	List<Common> selectWeekday();
+	
 	// 진수우 : 부서 카테고리 조회.
 	List<Common> selectDepartmentCategory();
 	

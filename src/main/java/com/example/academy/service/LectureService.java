@@ -16,7 +16,8 @@ import com.example.academy.mapper.LectureMapper;
 public class LectureService {
 	@Autowired LectureMapper lectureMapper;
 	
-	// 김혜린 : 강의 상세페이지
+	
+	// 김혜린 : 강의 상세페이지 / 강의수정 기존정보불러오기
 	public LectureOneDTO getLectureOne(Integer lectureNo) {
 		LectureOneDTO lectureOne = lectureMapper.selectLectureOne(lectureNo);
 		
