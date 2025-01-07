@@ -11,9 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 public class ClassroomController {
 	
 	// 강의실 목록 조회
-	@GetMapping("/classroomList")
-	public String classroomList(Model model) {
-		return "classroomList";
-	}
+		@GetMapping("/classroomList")
+		public String classroomList(Model model) {
+			return "classroomList";
+		}
 
 }

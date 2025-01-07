@@ -3,7 +3,7 @@ package com.example.academy.vo;
 import lombok.Data;
 
 @Data
-public class Meetingroom {
+public class MeetingRoom {
 	
 	private Integer meetingroomNo;
 	private String meetingroomName;
