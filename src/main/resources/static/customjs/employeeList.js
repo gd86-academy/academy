@@ -109,10 +109,9 @@ document.addEventListener('alpine:init', () => {
 	            success: (data) => {
 					this.datatable = new simpleDatatables.DataTable('#myTable', {
 					    data: {
-					        headings: ['', '이름', '사원번호', '전화번호', '소속팀', '직급', ''],
+					        headings: ['이름', '사원번호', '전화번호', '소속팀', '직급', ''],
 					        data: data.map(item => [
-								item[5], // 이미지파일명
-					            item[0], // 이름
+								[item[0], item[5]],	// 이미지파일 + 사원명
 					            item[1], // 사원번호
 					            item[2], // 전화번호
 					            item[3], // 소속팀
@@ -128,16 +127,30 @@ document.addEventListener('alpine:init', () => {
 					        {
 					            select: 0,
 					            render: (data, cell, row) => {
-									if(data == 'null.null') return `<div class="flex items-center w-max"><img class="w-9 h-9 rounded-full ltr:mr-2 rtl:ml-2 object-cover" src="./images/defaultProfile.png" /></div>`;
-					                else return `<div class="flex items-center w-max"><img class="w-9 h-9 rounded-full ltr:mr-2 rtl:ml-2 object-cover" src="./upload/${data}" /></div>`;
+									const [name, image] = data.split(','); 
+									if(image == 'null.null') {
+										return `
+											<div class="flex items-center w-max">
+												<img class="w-9 h-9 rounded-full ltr:mr-2 rtl:ml-2 object-cover" src="./images/defaultProfile.png" />
+												<span>${name}</span>
+											</div>
+										`;
+									} else {
+										return `
+											<div class="flex items-center w-max">
+												<img class="w-9 h-9 rounded-full ltr:mr-2 rtl:ml-2 object-cover" src="./upload/${image}" />
+												&nbsp;&nbsp;&nbsp;<span>${name}</span>
+											</div>
+										`;
+									}
 					            },
-								sortable: false,
+								sortable: true,
 					        },
-					        {
-					            select: 6,
+							{
+					            select: 5,
 					            render: (data, cell, row) => {
 					                return `<a type="button" class="btn btn-outline-dark mx-auto d-block" style="width:100px;" href="/academy/chat?employeeNo=${data}">
-					                    <img class="h-4 w-4" src="./images/icon/Dialog.png" alt="image">
+					                    <img class="h-4 w-4" src="/academy/images/icon/Dialog.png" alt="image">
 					                    &nbsp;메신저
 					                </a>`;
 					            },
@@ -200,10 +213,13 @@ const modalWrapper = document.getElementById('modalWrapper');
 const cancelButton = document.getElementById('cancelButton');
 
 // 모달 열기
-openModalButton.addEventListener('click', () => {
-  modalBackground.classList.remove('hidden');  // 모달 배경 보이기
-  modalBackground.classList.add('block');     // 모달 배경 보이게 설정
-});
+if (openModalButton) {
+		openModalButton.addEventListener('click', () => {
+	  	modalBackground.classList.remove('hidden');  // 모달 배경 보이기
+	  	modalBackground.classList.add('block');     // 모달 배경 보이게 설정
+	});
+}
+
 
 // 모달 닫기
 const closeModal = () => {
@@ -217,8 +233,8 @@ const closeModal = () => {
   $('.error-label').hide();
 };
 
-closeModalButton.addEventListener('click', closeModal); // 닫기 버튼 클릭 시
-cancelButton.addEventListener('click', closeModal);     // 취소 버튼 클릭 시
+if (closeModalButton) closeModalButton.addEventListener('click', closeModal); // 닫기 버튼 클릭 시
+if (cancelButton) cancelButton.addEventListener('click', closeModal);     // 취소 버튼 클릭 시
 
 // 부서 선택
 document.addEventListener("DOMContentLoaded", function(e) {

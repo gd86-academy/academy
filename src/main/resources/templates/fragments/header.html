@@ -6,7 +6,7 @@
 	            <!-- 로고 영역 -->
 	            <div class="horizontal-logo flex items-center justify-between ltr:mr-2 rtl:ml-2 lg:hidden">
 	                <a href="/academy/main" class="main-logo flex shrink-0 items-center">
-	                    <img class="inline w-8 ltr:-ml-1 rtl:-mr-1" th:src="@{images/logo.svg}" alt="image" />
+	                    <img class="inline w-8 ltr:-ml-1 rtl:-mr-1" th:src="@{/images/logo.svg}" alt="image" />
 	                    <span
 	                        class="hidden align-middle text-2xl font-semibold transition-all duration-300 ltr:ml-1.5 rtl:mr-1.5 dark:text-white-light md:inline"
 	                        >Academy</span
@@ -136,8 +136,8 @@
 	                    
 	                        <span
 	                            ><img class="h-9 w-9 rounded-full object-cover saturate-50 group-hover:saturate-100"
-	 th:src="@{'upload/' + ${userPhotoFileName} + '.' + ${userPhotoFileExt}}"
-	 alt="image"></span>
+								 th:src="@{'/upload/' + ${userPhotoFileName} + '.' + ${userPhotoFileExt}}"
+								 alt="image"></span>
 	                    </a>
 	                    <ul
 	                        x-cloak
@@ -150,16 +150,16 @@
 	                        <li>
 	                            <div class="flex items-center px-4 py-4">
 	                                <div class="flex-none">
-	                                    <img class="h-10 w-10 rounded-md object-cover" th:src="@{'upload/' + ${userPhotoFileName} + '.' + ${userPhotoFileExt}}" alt="image" />
+	                                    <img class="h-10 w-10 rounded-md object-cover" th:src="@{'/upload/' + ${userPhotoFileName} + '.' + ${userPhotoFileExt}}" alt="image" />
 	                                </div>
 	                                <div class="truncate ltr:pl-4 rtl:pr-4">
 	                                    <h4 class="text-base">
-	                                        <span th:text="${username}"></span>
+	                                        <span th:text="${userName}"></span>
 	                                    </h4>
 	                                    <span
 	                                        class="text-black/60 hover:text-primary dark:text-dark-light/60 dark:hover:text-white"
 	                                        href="javascript:;"
-	                                        ><span th:text="${usermail}"></span></span
+	                                        ><span th:text="${userMail}"></span></span
 	                                    >
 	                                </div>
 	                            </div>

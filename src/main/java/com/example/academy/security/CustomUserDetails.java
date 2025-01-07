@@ -63,7 +63,7 @@ public class CustomUserDetails implements UserDetails {
     }
     
     // 권한 정보
-    public String getUserrole() {
+    public String getUserRole() {
         return employee.getEmployeeRole();
     }
     

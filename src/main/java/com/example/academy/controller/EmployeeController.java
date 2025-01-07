@@ -67,9 +67,10 @@ public class EmployeeController {
 		// 로그인 상태일 때만 model에 정보담기.
 	    if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
 	        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-	        model.addAttribute("userNo", userDetails.getUsername());
-	        model.addAttribute("username", userDetails.getUserRealName());
-	        model.addAttribute("usermail", userDetails.getUserMail());
+	        model.addAttribute("userNo", Integer.parseInt(userDetails.getUsername()));
+	        model.addAttribute("userName", userDetails.getUserRealName());
+	        model.addAttribute("userMail", userDetails.getUserMail());
+	        model.addAttribute("userRole", userDetails.getUserRole());
 	        model.addAttribute("userPhotoFileName", userDetails.getUserPhotoFileName());
 	        model.addAttribute("userPhotoFileExt", userDetails.getUserPhotoFileExt());
 	    }
@@ -106,6 +107,7 @@ public class EmployeeController {
 	        model.addAttribute("userNo", userDetails.getUsername());
 	        model.addAttribute("username", userDetails.getUserRealName());
 	        model.addAttribute("usermail", userDetails.getUserMail());
+	        model.addAttribute("userRole", userDetails.getUserRole());
 	        model.addAttribute("userPhotoFileName", userDetails.getUserPhotoFileName());
 	        model.addAttribute("userPhotoFileExt", userDetails.getUserPhotoFileExt());
 	    }
