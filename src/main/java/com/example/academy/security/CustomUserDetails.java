@@ -6,14 +6,15 @@ import java.util.Collection;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.example.academy.dto.AuthDTO;
 import com.example.academy.vo.Employee;
 import com.example.academy.vo.User;
 
 public class CustomUserDetails implements UserDetails {
 
-    private Employee employee;
+    private AuthDTO employee;
 
-    public CustomUserDetails(Employee employee) {
+    public CustomUserDetails(AuthDTO employee) {
         this.employee = employee;
     }
 
@@ -31,21 +32,53 @@ public class CustomUserDetails implements UserDetails {
         });
         return collection;
     }
-
-    public String getUserrole() {
+    
+    // 부서 정보
+    public String getUserDepartment() {
+        return employee.getEmployeeDepartment();
+    }
+    
+    // 직책 정보
+    public String getUserPosition() {
+        return employee.getEmployeePosition();
+    }
+    
+    // 프로필사진 이름 정보
+    public String getUserPhotoFileName() {
+        return employee.getPhotoFileName();
+    }
+    
+    // 프로필사진 확장자 정보
+    public String getUserPhotoFileExt() {
+        return employee.getPhotoFileExt();
+    }
+    // 이메일 정보
+    public String getUserMail() {
+        return employee.getEmployeeMail();
+    }
+    
+    // 이름 정보
+    public String getUserRealName() {
+        return employee.getEmployeeName();
+    }
+    
+    // 권한 정보
+    public String getUserRole() {
         return employee.getEmployeeRole();
     }
     
+    // 비밀번호 정보
     @Override
     public String getPassword() {
         return employee.getEmployeePw();
     }
 
+    // 사원번호 정보
     @Override
     public String getUsername() {
     	return employee.getEmployeeNo().toString();
     }
-
+    
     @Override
     public boolean isAccountNonExpired() {
         return true;

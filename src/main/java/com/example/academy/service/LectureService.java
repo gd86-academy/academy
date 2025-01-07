@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.academy.dto.LectureListDTO;
 import com.example.academy.dto.LectureOneDTO;
+import com.example.academy.dto.LectureOneTimeListDTO;
 import com.example.academy.mapper.LectureMapper;
 
 @Service
@@ -22,8 +23,15 @@ public class LectureService {
 		return lectureOne;		
 	}
 	
+	// 김혜린 : 강의 상세페이지 - 강의 시간 리스트 출력
+	public List<LectureOneTimeListDTO> getLectureOneTimeList(Integer lectureNo) {
+		List<LectureOneTimeListDTO> lectureOneTimeList = lectureMapper.selectLectureOneTimeList(lectureNo);
+		
+		return lectureOneTimeList;
+	}
+	
 	// 김혜린 : 강의 리스트 출력
-	public List<LectureListDTO> getLectureList(){
+	public List<LectureListDTO> getLectureList() {
 		List<LectureListDTO> lectureList = lectureMapper.selectLectureList();
 		
 		return lectureList;

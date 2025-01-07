@@ -285,10 +285,13 @@ const modalWrapperModifyEmployee = document.getElementById('modalWrapperModifyEm
 const cancelButtonModifyEmployee = document.getElementById('cancelButtonModifyEmployee');
 
 // ModifyEmployee 모달 열기
-openModalButtonModifyEmployee.addEventListener('click', () => {
-  modalBackgroundModifyEmployee.classList.remove('hidden');  // 모달 배경 보이기
-  modalBackgroundModifyEmployee.classList.add('block');     // 모달 배경 보이게 설정
-});
+if (openModalButtonModifyEmployee) {
+		openModalButtonModifyEmployee.addEventListener('click', () => {
+		modalBackgroundModifyEmployee.classList.remove('hidden');  // 모달 배경 보이기
+		modalBackgroundModifyEmployee.classList.add('block');     // 모달 배경 보이게 설정
+	});
+}
+
 
 // ModifyEmployee 모달 닫기
 const closeModalModifyEmployee = () => {
@@ -302,8 +305,8 @@ const closeModalModifyEmployee = () => {
   $('.error-label').hide();
 };
 
-closeModalButtonModifyEmployee.addEventListener('click', closeModalModifyEmployee); // 닫기 버튼 클릭 시
-cancelButtonModifyEmployee.addEventListener('click', closeModalModifyEmployee);     // 취소 버튼 클릭 시
+if (closeModalButtonModifyEmployee) closeModalButtonModifyEmployee.addEventListener('click', closeModalModifyEmployee); // 닫기 버튼 클릭 시
+if (cancelButtonModifyEmployee) cancelButtonModifyEmployee.addEventListener('click', closeModalModifyEmployee);     // 취소 버튼 클릭 시
 
 
 // Department 모달 관련 DOM 요소
@@ -314,10 +317,12 @@ const modalWrapperDepartment = document.getElementById('modalWrapperDepartment')
 const cancelButtonDepartment = document.getElementById('cancelButtonDepartment');
 
 // Department 모달 열기
-openModalButtonDepartment.addEventListener('click', () => {
-  modalBackgroundDepartment.classList.remove('hidden');  // 모달 배경 보이기
-  modalBackgroundDepartment.classList.add('block');     // 모달 배경 보이게 설정
-});
+if (openModalButtonDepartment) {
+		openModalButtonDepartment.addEventListener('click', () => {	
+  		modalBackgroundDepartment.classList.remove('hidden');  // 모달 배경 보이기
+  		modalBackgroundDepartment.classList.add('block');     // 모달 배경 보이게 설정
+	});
+}
 
 // Department 모달 닫기
 const closeModalDepartment = () => {
@@ -338,8 +343,8 @@ const closeModalDepartment = () => {
   	$('.error-label').hide();
 };
 
-closeModalButtonDepartment.addEventListener('click', closeModalDepartment); // 닫기 버튼 클릭 시
-cancelButtonDepartment.addEventListener('click', closeModalDepartment);     // 취소 버튼 클릭 시
+if (closeModalButtonDepartment) closeModalButtonDepartment.addEventListener('click', closeModalDepartment); // 닫기 버튼 클릭 시
+if (cancelButtonDepartment) cancelButtonDepartment.addEventListener('click', closeModalDepartment);     // 취소 버튼 클릭 시
 
 // Pw 모달 관련 DOM 요소
 const openModalButtonPw = document.getElementById('openModalButtonPw');
@@ -349,10 +354,12 @@ const modalWrapperPw = document.getElementById('modalWrapperPw');
 const cancelButtonPw = document.getElementById('cancelButtonPw');
 
 // Pw 모달 열기
-openModalButtonPw.addEventListener('click', () => {
-  modalBackgroundPw.classList.remove('hidden');  // 모달 배경 보이기
-  modalBackgroundPw.classList.add('block');     // 모달 배경 보이게 설정
-});
+if (openModalButtonPw) {
+		openModalButtonPw.addEventListener('click', () => {
+ 		 modalBackgroundPw.classList.remove('hidden');  // 모달 배경 보이기
+ 		 modalBackgroundPw.classList.add('block');     // 모달 배경 보이게 설정
+	});
+}
 
 // Pw 모달 닫기
 const closeModalPw = () => {
@@ -366,8 +373,8 @@ const closeModalPw = () => {
   $('.error-label').hide();
 };
 
-closeModalButtonPw.addEventListener('click', closeModalPw); // 닫기 버튼 클릭 시
-cancelButtonPw.addEventListener('click', closeModalPw);     // 취소 버튼 클릭 시
+if (closeModalButtonPw) closeModalButtonPw.addEventListener('click', closeModalPw); // 닫기 버튼 클릭 시
+if (cancelButtonPw) cancelButtonPw.addEventListener('click', closeModalPw);     // 취소 버튼 클릭 시
 
 // 부서 선택
 document.addEventListener("DOMContentLoaded", function(e) {
@@ -605,10 +612,13 @@ const modalWrapperEmployeeDelete = document.getElementById('modalWrapperEmployee
 const cancelButtonEmployeeDelete = document.getElementById('cancelButtonEmployeeDelete');
 
 // 사원삭제 모달 열기
-openModalButtonEmployeeDelete.addEventListener('click', () => {
-  modalBackgroundEmployeeDelete.classList.remove('hidden');  // 모달 배경 보이기
-  modalBackgroundEmployeeDelete.classList.add('block');     // 모달 배경 보이게 설정
-});
+if (openModalButtonEmployeeDelete) {
+		openModalButtonEmployeeDelete.addEventListener('click', () => {
+	 	modalBackgroundEmployeeDelete.classList.remove('hidden');  // 모달 배경 보이기
+	  	modalBackgroundEmployeeDelete.classList.add('block');     // 모달 배경 보이게 설정
+	});
+	
+}
 
 // 사원삭제 모달 닫기
 const closeModalEmployeeDelete = () => {
@@ -622,5 +632,5 @@ const closeModalEmployeeDelete = () => {
   $('.error-label').hide();
 };
 
-closeModalButtonEmployeeDelete.addEventListener('click', closeModalEmployeeDelete); // 닫기 버튼 클릭 시
-cancelButtonEmployeeDelete.addEventListener('click', closeModalEmployeeDelete);     // 취소 버튼 클릭 시
+if (closeModalButtonEmployeeDelete) closeModalButtonEmployeeDelete.addEventListener('click', closeModalEmployeeDelete); // 닫기 버튼 클릭 시
+if (cancelButtonEmployeeDelete) cancelButtonEmployeeDelete.addEventListener('click', closeModalEmployeeDelete);     // 취소 버튼 클릭 시

@@ -18,14 +18,6 @@ public class LectureOneDTO {
 	private Integer classroomNo;		// 강의실번호 
 	private String classroomName;		// 강의실이름 	
 	
-	private String weekdayCode;		// 요일코드
-	private String beginTimeCode;	// 시작시간코드
-	private String endTimeCode;		// 종료시간코드
-		
-	private String weekday;		// 요일
-	private String beginTime;	// 시작시간
-	private String endTime;		// 종료시간
-	
 	private String createDate;
 	private String updateDate;	
 	

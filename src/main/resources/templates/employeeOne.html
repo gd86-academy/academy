@@ -109,13 +109,21 @@
                        <div class="flex w-full flex-col gap-4 sm:w-auto sm:flex-row sm:items-center sm:gap-3 mr-3">
 							<div class="flex gap-3 mr-3">
 								<!-- 부서/직책 수정 버튼 -->
-								<button type="button" class="btn btn-warning mr-1" style="width:150px;" id="openModalButtonDepartment">부서/직책 수정</button>
+								<div th:if="${userRole == 'humanresources'}">
+									<button type="button" class="btn btn-warning mr-1" style="width:150px;" id="openModalButtonDepartment">부서/직책 수정</button>
+								</div>
 								<!-- 비밀번호 변경 버튼 -->
-								<button type="button" class="btn btn-warning mr-1" style="width:150px;" id="openModalButtonPw">비밀번호 변경</button>
+								<div th:if="${userNo == employee.employeeNo}">
+									<button type="button" class="btn btn-warning mr-1" style="width:150px;" id="openModalButtonPw">비밀번호 변경</button>
+								</div>
 								<!-- 개인정보 수정 버튼 -->
-								<button type="button" class="btn btn-dark mr-1" style="width:150px;" id="openModalButtonModifyEmployee">개인정보 수정</button>
+								<div th:if="${userNo == employee.employeeNo}">
+									<button type="button" class="btn btn-dark mr-1" style="width:150px;" id="openModalButtonModifyEmployee">개인정보 수정</button>
+								</div>
 								<!-- 계정 삭제 버튼 -->
-								<button type="button" class="btn btn-danger mr-1" style="width:150px;" id="openModalButtonEmployeeDelete">계정 삭제</button>
+								<div th:if="${userRole == 'humanresources'}">
+									<button type="button" class="btn btn-danger mr-1" style="width:150px;" id="openModalButtonEmployeeDelete">계정 삭제</button>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -126,10 +134,10 @@
 							 	<div class="p-5" style="flex: 4.5; text-align: left;">
 							 		<div style="height:50px;"></div> <!-- 여백공간 -->
 								 	<div class="flex" style="align-items: center;">
-								 		<div style="width:200px;"><img class="w-40 h-40 rounded-full overflow-hidden object-cover" th:src="@{./upload/{fileName}.{fileExt}(fileName=${employee.fileName}, fileExt=${employee.fileExt})}" ></div>
+								 		<div style="width:200px;"><img class="w-40 h-40 rounded-full overflow-hidden object-cover" th:src="@{/upload/{fileName}.{fileExt}(fileName=${employee.fileName}, fileExt=${employee.fileExt})}" ></div>
 								 		<span style="width:120px; font-size: 25px; font-weight: bold;" th:text="${employee.employeeName}"></span>
 								 		<a type="button" style="background-color: #f0f0f0;" class="btn w-10 h-10 p-0 rounded-full" th:href="@{/chat?employeeNo={employeeNo}(employeeNo=${employee.employeeNo})}">
-										    <img style="width: 19px; height: 19px;" src="./images/icon/Chat Round.png" alt="image" />
+										    <img style="width: 19px; height: 19px;" th:src="@{/images/icon/Chat Round.png}" alt="image" />
 										</a>
 								 	</div>
 								 	<div>

@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import com.example.academy.dto.AuthDTO;
 import com.example.academy.mapper.AuthMapper;
 import com.example.academy.vo.Employee;
 import com.example.academy.vo.User;
@@ -23,7 +24,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String employeeNo) throws UsernameNotFoundException {
 
-        Employee emploayee = authMapper.findByUsername(employeeNo);
+    	AuthDTO emploayee = authMapper.findByUsername(employeeNo);
 
         if (emploayee != null) {
             return new CustomUserDetails(emploayee);

@@ -6,7 +6,7 @@
 	            <!-- 로고 영역 -->
 	            <div class="horizontal-logo flex items-center justify-between ltr:mr-2 rtl:ml-2 lg:hidden">
 	                <a href="/academy/main" class="main-logo flex shrink-0 items-center">
-	                    <img class="inline w-8 ltr:-ml-1 rtl:-mr-1" th:src="@{images/logo.svg}" alt="image" />
+	                    <img class="inline w-8 ltr:-ml-1 rtl:-mr-1" th:src="@{/images/logo.svg}" alt="image" />
 	                    <span
 	                        class="hidden align-middle text-2xl font-semibold transition-all duration-300 ltr:ml-1.5 rtl:mr-1.5 dark:text-white-light md:inline"
 	                        >Academy</span
@@ -136,8 +136,8 @@
 	                    
 	                        <span
 	                            ><img class="h-9 w-9 rounded-full object-cover saturate-50 group-hover:saturate-100"
-	 th:src="@{/images/profile-16.jpeg}"
-	 alt="image"></span>
+								 th:src="@{'/upload/' + ${userPhotoFileName} + '.' + ${userPhotoFileExt}}"
+								 alt="image"></span>
 	                    </a>
 	                    <ul
 	                        x-cloak
@@ -150,23 +150,23 @@
 	                        <li>
 	                            <div class="flex items-center px-4 py-4">
 	                                <div class="flex-none">
-	                                    <img class="h-10 w-10 rounded-md object-cover" th:src="@{images/user-profile.jpeg}" alt="image" />
+	                                    <img class="h-10 w-10 rounded-md object-cover" th:src="@{'/upload/' + ${userPhotoFileName} + '.' + ${userPhotoFileExt}}" alt="image" />
 	                                </div>
 	                                <div class="truncate ltr:pl-4 rtl:pr-4">
 	                                    <h4 class="text-base">
-	                                        John Doe
+	                                        <span th:text="${userName}"></span>
 	                                    </h4>
-	                                    <a
+	                                    <span
 	                                        class="text-black/60 hover:text-primary dark:text-dark-light/60 dark:hover:text-white"
 	                                        href="javascript:;"
-	                                        >johndoe@gmail.com</a
+	                                        ><span th:text="${userMail}"></span></span
 	                                    >
 	                                </div>
 	                            </div>
 	                        </li>
 	                        <!-- 마이페이지 버튼 -->
 	                        <li>
-	                            <a href="users-profile.html" class="dark:hover:text-white" @click="toggle">
+	                            <a th:href="@{/employeeOne(employeeNo=${userNo})}" class="dark:hover:text-white" @click="toggle">
 	                                <svg
 	                                    class="h-4.5 w-4.5 shrink-0 ltr:mr-2 rtl:ml-2"
 	                                    width="18"
@@ -188,7 +188,7 @@
 	                        </li>
 	                        <!-- 로그아웃 버튼 -->
 	                        <li class="border-t border-white-light dark:border-white-light/10">
-	                            <a href="auth-boxed-signin.html" class="!py-3 text-danger" @click="toggle">
+	                            <a th:href="@{/logout}" class="!py-3 text-danger" @click="toggle">
 	                                <svg
 	                                    class="h-4.5 w-4.5 shrink-0 rotate-90 ltr:mr-2 rtl:ml-2"
 	                                    width="18"

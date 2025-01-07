@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.academy.mapper.MeetingRoomMapper">
+
+	<select id = "getMeetingRoomList" parameterType="com.example.academy.dto.MeetingRoomListDTO" resultType="com.example.academy.dto.MeetingRoomListDTO">
+	
+		SELECT 
+			meetingroom_no meetingroomNo,
+			meetingroom_name meetingroomName,
+			meetingroom_manager meetingroomManager,
+			meetingroom_capacity meetingroomCapacity
+		FROM meetingroom;
+	</select>
+	
+	
+
+
+</mapper>
+
+

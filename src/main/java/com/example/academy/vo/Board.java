@@ -6,7 +6,7 @@ import lombok.Data;
 public class Board {
 	
 	private Integer boardNo;
-	private String boardTitie;
+	private String boardTitle;
 	private String boardContent;
 	private Integer createEmployeeNo;
 	private Integer updateEmployeeNo;
