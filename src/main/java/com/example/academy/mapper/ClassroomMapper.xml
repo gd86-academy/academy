@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.ClassroomMapper">
+	<!-- 박시현 : 강의실 수정 -->
+	<update id="updateClassroom">
+		UPDATE classroom 
+			SET
+			classroom_no = #{classroomName}
+			, classroom_manager = #{classroomManager}
+		 	, classroom_capacity = #{classroomCapacity}
+		WHERE classroom_no = #{classroomNo}
+	</update>
+
 	<!-- 박시현 : 강의실 등록 -->
 	<insert id="insertClassroom" parameterType="com.example.academy.dto.ClassroomListDTO">
 		INSERT INTO 

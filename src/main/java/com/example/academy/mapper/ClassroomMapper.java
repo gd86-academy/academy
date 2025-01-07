@@ -8,6 +8,9 @@ import com.example.academy.dto.ClassroomListDTO;
 
 @Mapper
 public interface ClassroomMapper {
+	// 박시현 : 강의실 수정
+	Integer updateClassroom(ClassroomListDTO classroomListDTO);
+	
 	// 박시현 : 강의실 등록 
 	Integer insertClassroom(ClassroomListDTO classroomListDTO);
 	

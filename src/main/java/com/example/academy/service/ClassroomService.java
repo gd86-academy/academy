@@ -12,6 +12,11 @@ import com.example.academy.mapper.ClassroomMapper;
 public class ClassroomService {
 	@Autowired ClassroomMapper classroomMapper;
 	
+	// 박시현 : 강의실 수정
+	public Integer modifyClassroom(ClassroomListDTO classroomListDTO) {
+		return classroomMapper.updateClassroom(classroomListDTO);
+	}
+	
 	// 박시현 : 강의실 등록
 	public Integer addClassroom(ClassroomListDTO classroomListDTO) {
 		return classroomMapper.insertClassroom(classroomListDTO);
