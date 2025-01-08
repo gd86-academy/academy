@@ -23,14 +23,11 @@ import lombok.extern.slf4j.Slf4j;
 public class LectureService {
 	@Autowired LectureMapper lectureMapper;
 	@Autowired LectureWeekdayMapper lectureWeekdayMapper;
-	@Autowired LectureLectureWeekdayMapper lectureLectureWeekdayMapper;
 	
-	// 김혜린 : 강의 삭제
+	// 김혜린 : 강의 삭제(사용여부 비활성화)
 	public void removeLecture(Integer lectureNo) {
-		// 1) 강의-강의시간 데이터 삭제
-		lectureLectureWeekdayMapper.deleteLectureLectureWeekday(lectureNo);
-		// 2) 강의 삭제
-		lectureMapper.deleteLecture(lectureNo);
+		// 강의 삭제 (사용여부 비활성화)
+		lectureMapper.updateUseLecture(lectureNo);
 	}	
 	
 	// 김혜린 : 강의 수정

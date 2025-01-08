@@ -29,7 +29,7 @@ public class LectureController {
 	@Autowired LectureService lectureService;
 	@Autowired CommonService commonService;
 	
-	// 김혜린 : 강의 삭제
+	// 김혜린 : 강의 삭제(사용여부 비활성화)
 	@GetMapping("/removeLecture")
 	public String removeLecture(Integer lectureNo) {
 		lectureService.removeLecture(lectureNo);
