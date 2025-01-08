@@ -18,9 +18,17 @@ public class MeetingRoomService {
 	@Autowired
 	public MeetingRoomMapper meetingRoomMapper;
 	
-	//하상우) 회의실 수정
-	public Integer modifyMeetingRoom(MeetingRoomListDTO modifymeetingroom) {
-		return meetingRoomMapper.modifyMeetingRoom(modifymeetingroom);
+	
+
+	
+	public Integer modifyMeetingRoom(MeetingRoomAddDTO modifymeetingroom) {
+	    return meetingRoomMapper.modifyMeetingRoom(modifymeetingroom);
+	}
+
+	
+	// 하상우) 회의실 번호 조회
+	public MeetingRoomAddDTO getMeetingRoomNo(Integer meetingroomNo) {
+		return meetingRoomMapper.getMeetingRoomNo(meetingroomNo);
 	}
 	
 	

@@ -3,16 +3,30 @@
 <mapper namespace="com.example.academy.mapper.MeetingRoomMapper">
 	
 	
+	<!-- 하상우) 회의실 번호 조회 -->
+	<select id="getMeetingRoomNo" parameterType="Integer" resultType="com.example.academy.dto.MeetingRoomAddDTO">
 	
-	<!-- 하상우) 회의실 수정 -->
-	<update id="modifyMeetingRoom" parameterType="com.example.academy.vo.MeetingRoom">
+		SELECT 
+			meetingroom_no meetingroomNo,
+			meetingroom_name meetingroomName,
+			meetingroom_manager meetingroomManager,
+			meetingroom_capacity meetingroomCapacity
+		FROM meetingroom
+		WHERE meetingroom_no = #{meetingroomNo};
 	
-		UPDATE meetingroom SET 
-					meetingroom_name = #{meetingroomNo},
-		    		meetingroom_manager =  #{meetingroomManager},
-					meetingroom_capacity = #{meetingroomCapacity});
 	
-	</update>
+	</select>
+	
+	
+	<update id="modifyMeetingRoom" parameterType="com.example.academy.dto.MeetingRoomAddDTO">
+    UPDATE meetingroom
+    SET 
+        meetingroom_name = #{meetingroomName},
+        meetingroom_manager = #{meetingroomManager},
+        meetingroom_capacity = #{meetingroomCapacity}
+    WHERE meetingroom_no = #{meetingroomNo}
+</update>
+
 	
 	<!-- 하상우) 회의실 삭제 -->
 	

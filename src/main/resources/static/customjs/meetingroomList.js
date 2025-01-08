@@ -91,14 +91,14 @@ document.addEventListener('alpine:init', () => {
 					this.datatable = new simpleDatatables.DataTable('#meetingroomTable', {
 					    data: {
 					        headings: ['회의실번호', '회의실명', '담당자', '수용인원수', '수정', '삭제'],
-					        data: data.map(item => [
-								item[0], // 회의실 번호
-					            item[1], // 회의실명
-					            item[2], // 담당자 이름
-								item[3], // 수용 인원
-								`<button type="button" class="btn btn-dark" onclick="openEditModal(${item[0]})">수정</button>`, // 수정 버튼
-								`<button type="button" class="btn btn-danger" onclick="openDeleteModal(${item[0]})">삭제</button>`  // 삭제 버튼
-					        ])
+							data: data.map(item => [
+							    item[0], // 회의실 번호
+							    item[1], // 회의실명
+							    item[2], // 담당자 이름
+							    item[3], // 수용 인원
+							    `<button type="button" class="btn btn-dark" onclick="openModifyModal(${item[0]})">수정</button>`, // 수정 버튼
+							    `<button type="button" class="btn btn-danger" onclick="openDeleteModal(${item[0]})">삭제</button>`  // 삭제 버튼
+							])
 					    },
 					    searchable: true,
 					    perPage: 10,
@@ -220,7 +220,7 @@ $('#meetingRoomAddBtn').click(function() {
 }); // 닫는 괄호 추가
 
 
-// 모달 관련 DOM 요소
+// 회의실 삭제 모달 관련 DOM 요소
 const modalDeleteBackground = document.getElementById('modalDeleteBackground');
 const deleteMeetingroomLabel = document.getElementById('deleteMeetingroomLabel');
 const confirmDeleteButton = document.getElementById('confirmDeleteButton');
@@ -254,3 +254,113 @@ closeDeleteModalButton.addEventListener('click', closeDeleteModal);
 cancelDeleteButton.addEventListener('click', closeDeleteModal);
 
 
+
+// 회의실 수정 모달 관련 DOM 요소
+const openModifyModalButton = document.getElementById('openModifyModalButton');
+const closeModifyModalButton = document.getElementById('closeModifyModalButton');
+const modalModifyBackground = document.getElementById('modalModifyBackground');
+const modalModifyWrapper = document.getElementById('modalModifyWrapper');
+const cancelModifyButton = document.getElementById('cancelModifyButton');
+const submitModifyButton = document.getElementById('meetingroomModifyButton');
+
+// 모달 열기
+const openModifyModal = (meetingRoomNo) => {
+  $.ajax({
+    url: `http://localhost/academy/modifyMeetingRoom?meetingroomNo=${meetingRoomNo}`,
+    type: 'GET',
+    dataType: 'json',
+    success: (data) => {
+      document.getElementById('meetingroomNo').value = data.meetingroomNo;
+      document.getElementById('meetingroomName').value = data.meetingroomName;
+      document.getElementById('meetingroomManager').value = data.meetingroomManager;
+      document.getElementById('meetingroomCapacity').value = data.meetingroomCapacity;
+
+      modalModifyBackground.classList.remove('hidden');
+      modalModifyBackground.classList.add('block');
+    },
+    error: (xhr, status, error) => {
+      console.error('Error fetching meeting room details:', error);
+      alert('회의실 정보를 가져오는 데 실패했습니다.');
+    },
+  });
+};
+
+// 모달 닫기
+const closeModifyModal = () => {
+  modalModifyBackground.classList.remove('block');
+  modalModifyBackground.classList.add('hidden');
+  document.getElementById('meetingroomModifyForm').reset();
+  $('input').removeClass('errorInput');
+  $('.error-label').hide();
+};
+
+closeModifyModalButton.addEventListener('click', closeModifyModal);
+cancelModifyButton.addEventListener('click', closeModifyModal);
+
+// 수정 버튼 클릭 이벤트
+submitModifyButton.addEventListener('click', function(e) {
+  e.preventDefault();
+  
+  if (validateForm()) {
+    const formData = new FormData(document.getElementById('meetingroomModifyForm'));
+    
+    $.ajax({
+      url: 'http://localhost/academy/modifyMeetingRoom',
+      type: 'POST',
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function(response) {
+        alert('회의실이 성공적으로 수정되었습니다.');
+        closeModifyModal();
+        // 테이블 새로고침
+        if (window.multicolumn && window.multicolumn.datatable) {
+          window.multicolumn.init();
+        } else {
+          location.reload();
+        }
+      },
+      error: function(xhr, status, error) {
+        alert('회의실 수정에 실패했습니다.');
+        console.error(error);
+      }
+    });
+  }
+});
+
+// 폼 유효성 검사 함수
+function validateForm() {
+  let isValid = true;
+  
+  // 회의실 이름 검사
+  if ($('#meetingroomName').val().trim() === '') {
+    $('#meetingroomName').addClass("errorInput");
+    $('.meetingroomName-error').show();
+    isValid = false;
+  } else {
+    $('#meetingroomName').removeClass("errorInput");
+    $('.meetingroomName-error').hide();
+  }
+
+  // 회의실 담당자 검사
+  if ($('#meetingroomManager').val().trim() === '') {
+    $('#meetingroomManager').addClass("errorInput");
+    $('.meetingroomManager-error').show();
+    isValid = false;
+  } else {
+    $('#meetingroomManager').removeClass("errorInput");
+    $('.meetingroomManager-error').hide();
+  }
+
+  // 회의실 수용인원 검사
+  if ($('#meetingroomCapacity').val().trim() === '') {
+    $('#meetingroomCapacity').addClass("errorInput");
+    $('.meetingroomCapacity-error').show();
+    isValid = false;
+  } else {
+    $('#meetingroomCapacity').removeClass("errorInput");
+    $('.meetingroomCapacity-error').hide();
+  }
+
+  return isValid;
+}

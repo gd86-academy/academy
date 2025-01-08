@@ -12,9 +12,11 @@ import com.example.academy.dto.MeetingRoomListDTO;
 public interface MeetingRoomMapper {
 	
 	
+	// 하상우) 회의실 수정
+	MeetingRoomAddDTO getMeetingRoomNo(Integer meetingroomNo); 
 	
 	// 하상우) 회의실 수정
-	Integer modifyMeetingRoom(MeetingRoomListDTO modifymeetingroom);
+	Integer modifyMeetingRoom(MeetingRoomAddDTO modifymeetingroom);
 	// 하상우) 회의실 삭제
 	Integer deleteMeetingRoom(Integer meetingroomNo);
 	
