@@ -119,11 +119,11 @@ $('#lectureModifyBtn').click(function() {
  	// 강의내용 검사
     if ($('#lectureContent').val().trim() === '') {
         $('.lectureContent-error').show();
-        $('#lectureContent').addClass("errorInput");
+        $('#lectureContent').addClass("textarea-error");
         isVal = false;
     } else {
         $('.lectureContent-error').hide();
-        $('#lectureContent').removeClass("errorInput");
+        $('#lectureContent').removeClass("textarea-error");
     }
  	
     // 폼 제출
