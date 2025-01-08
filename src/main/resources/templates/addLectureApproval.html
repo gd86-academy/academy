@@ -17,6 +17,8 @@
 			th:href="@{/css/style.css}" />
 		<link defer rel="stylesheet" type="text/css" media="screen"
 			th:href="@{/css/animate.css}" />
+		<link rel="stylesheet" th:href="@{/css/flatpickr.min.css}" />
+		<link rel="stylesheet" type="text/css" th:href="@{/css/nice-select2.css}" />
 		<script th:src="@{/js/perfect-scrollbar.min.js}"></script>
 		<script defer th:src="@{/js/popper.min.js}"></script>
 		<script th:src="@{/js/alpine-collaspe.min.js}"></script>
@@ -25,10 +27,12 @@
 		<script defer th:src="@{/js/alpine-focus.min.js}"></script>
 		<script defer th:src="@{/js/alpine.min.js}"></script>
 		<script th:src="@{/js/custom.js}"></script>
-		<script th:src="@{/js/templete.js}"></script>
+		<script th:src="@{/js/flatpickr.js}"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 		<script src="https://uicdn.toast.com/tui-tree/latest/tui-tree.js"></script>
+		<script th:src="@{/js/nice-select2.js}"></script>
 		<link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui-tree/latest/tui-tree.css"/>
+		
 			
 		<style>
 	       	.lecutre-title-align {
@@ -148,26 +152,40 @@
 						        		<td style="border: 1px solid #ffffff;"><div class="lecutre-title">강의날짜</div></td>
 										<td style="border: 1px solid #ffffff;" colspan="4">
 											<div class="flex justify-between">
-												<input name="employeeBirth" id="employeeBirth" class="form-input mr-3" placeholder="시작날짜"/>
+												<div x-data="form1" class="w-full mr-3">
+							                       	<input name="lectureBeginDate" id="beginDate" class="form-input" placeholder="시작날짜"/>
+											   	</div>
 												<div class="align-items-center">~</div>
-												<input name="employeeBirth" id="employeeBirth" class="form-input ml-3" placeholder="종료날짜"/>
+												<div x-data="form2" class="w-full ml-3">
+							                       	<input name="lectureEndDate" id="endDate" class="form-input" placeholder="종료날짜"/>
+											   	</div>
 											</div>
 										</td>
 						        	</tr>
-						            <tr th:each="t : ${timeList}">
+						            <tr>
 						            	<td style="border: 1px solid #ffffff;" class="lecutre-title">강의시간</td>
+						            	<!-- 요일 선택 -->
 						            	<td style="border: 1px solid #ffffff;">
-											<input id="weekday" name="weekday" type="text"
-												 class="form-input lecutre-text-align" th:value="${t.weekday}" readonly/>
+											<select id="weekday" class="form-select" name="timeList">
+												<option value="" disabled selected>요일</option>
+											    <option th:each="cwk : ${commonWeekday}" th:value="${cwk.code}" th:text="${cwk.name}"></option>
+											</select>
 										</td>
+										<!-- 시작시간 선택 -->
 										<td style="border: 1px solid #ffffff;">
-											<input id="beginTime" name="beginTime" type="text"
-												 class="form-input lecutre-text-align" th:value="${t.beginTime}" readonly/>										
-										</td>
-										<td style="border: 1px solid #ffffff;" class="lecutre-title-align">~</td>
-										<td style="border: 1px solid #ffffff;">
-											<input id="endTime" name="endTime" type="text"
-												 class="form-input lecutre-text-align" th:value="${t.endTime}" readonly/>										
+										<div class="flex justify-between">
+											<select id="beginTime" class="form-select mr-3 " name="timeList">
+												<option value="" disabled selected>시작시간</option>
+											    <option th:each="ct : ${commonTime}" th:value="${ct.code}" th:text="${ct.name}"></option>
+											</select>										
+										<div>~</div>
+										<!-- 종료시간 선택 -->
+											<select id="endTime" class="form-select ml-3 " name="timeList">
+												<option value="" disabled selected>종료시간</option>
+											    <option th:each="ct : ${commonTime}" th:value="${ct.code}" th:text="${ct.name}"></option>
+											</select>
+											
+										</div>					
 										</td>										
 						            </tr>
 						        </tbody>
@@ -180,25 +198,23 @@
 						        <tbody>
 						            <tr class="border-dark-dark-light ">
 						                <td class="bg-[#f4f4f4] lecutre-title-align">강의명</td>
-						                <td class="lecutre-text-align" th:text="${lecture.lectureName}"></td>
+						                <td><input type="text" class="form-input" placeholder="강의명"></td>
 						                <td class="bg-[#f4f4f4] lecutre-title-align">강의실</td>
-						                <td class="lecutre-text-align" th:text="${lecture.classroomName}"></td>					                
+						                <td><input type="text" class="form-input" placeholder="강의실"></td>					                
 						            </tr>
 						        </tbody>
 						    </table>
 						</div>
 						
 						<div class="lecutre-title" style="margin-top: 30px;">강의내용</div>
-						<textarea name="message" rows="15" cols="205" class="custom-textarea"
-							th:text="${lecture.lectureContent}" readonly>
-						</textarea>
+						<textarea name="message" rows="15" cols="205" class="custom-textarea w-full"></textarea>
 						
 						<!-- 버튼 --> 
 						<div class="mt-8 flex items-center justify-end">
                            <button id="openModalButtonAddPeople" type="button" class="btn btn-dark" style="width:130px;">
                                결재선 추가
                            </button>
-                           <a id="updateBtn" class="btn btn-primary ltr:ml-4 rtl:mr-4" href="#" th:href="@{/modifyLecture(lectureNo=${lecture.lectureNo})}" style="width:130px;">
+                           <a id="updateBtn" class="btn btn-primary ltr:ml-4 rtl:mr-4" href="#" th:href="@{/}" style="width:130px;">
                            		등록
                            </a>
                        </div>
@@ -250,18 +266,29 @@
 		               <h3
 		                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
 		               >
-		                   안내
+		                   결재선 추가
 		               </h3>
+		               <div class="p-5">
 		               <!-- 모달내용 -->
 		               <div class="p-5">
 		                    <div id="tree" class="tui-tree-wrap"></div>
 		               </div>
+		               <div class="mt-8 flex items-center justify-end">
+			               <a
+	                           type="button"
+	                           class="btn btn-primary ltr:ml-4 rtl:mr-4"
+	                           th:href="@{/}">	                          
+	                           추가
+	                       </a>
+	                   </div>
+	                   </div>
 		           </div>
 		       </div>
 		   </div>
+		   <script th:src="@{/customjs/addLectureApproval.js}"> </script>
 		</div>
 		
-		<script th:src="@{/customjs/addAttendanceApproval.js}"> </script>
+		
 	</body>
 
 </html>

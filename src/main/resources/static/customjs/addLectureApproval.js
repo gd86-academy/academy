@@ -77,25 +77,29 @@ document.addEventListener('alpine:init', () => {
 	}));
 	
 	// 사원 등록 생년월일
-	Alpine.data("form", () => ({
-		date1: new Date().toISOString().split('T')[0],
-        date2: new Date().toISOString().split('T')[0],
-        init() {
-            // 생년월일
-            const defaultDate1 = document.getElementById('employeeBirth').value || this.date1;
-            flatpickr(document.getElementById('employeeBirth'), {
-                dateFormat: 'Y-m-d',
-                //defaultDate: defaultDate1,
-            });
-
-            // 입사일
-            const defaultDate2 = document.getElementById('employeeDate').value || this.date2;
-            flatpickr(document.getElementById('employeeDate'), {
-                dateFormat: 'Y-m-d',
-                //defaultDate: defaultDate2,
-            });
-        },
-    }));
+	// 개강일 캘린더
+		Alpine.data("form1", () => ({
+	        init() {
+	            const defaultDate1 = document.getElementById('beginDate').value;
+				// Flatpickr 초기화
+	            flatpickr(document.getElementById('beginDate'), {
+	                dateFormat: 'Y-m-d',	// 날짜 형식 설정 (예: 2025-01-08)
+	                //defaultDate: defaultDate1, // 기본값 설정 
+	            });
+	        },
+	    }));
+		
+		// 종강일 캘린더
+		Alpine.data("form2", () => ({
+	        init() {
+	            const defaultDate1 = document.getElementById('endDate').value;
+				// Flatpickr 초기화
+	            flatpickr(document.getElementById('endDate'), {
+	                dateFormat: 'Y-m-d',	// 날짜 형식 설정 (예: 2025-01-08)
+	                //defaultDate: defaultDate1, // 기본값 설정 
+	            });
+	        },
+	    }));
 });
 
 // 모달 관련 DOM 요소
@@ -114,20 +118,41 @@ openModalButtonAddPeople.addEventListener('click', () => {
 const closeModalAddPeople = () => {
   modalBackgroundAddPeople.classList.remove('block');
   modalBackgroundAddPeople.classList.add('hidden');  // 모달 배경 숨기기
-  // 모달 내부의 모든 입력 필드를 초기화
-  const form = document.getElementById('employeeAddForm');
-  form.reset(); // 모든 입력 필드와 라디오 버튼 초기화
-  $('input').removeClass('errorInput');
-  // 모든 에러 라벨 숨기기
-  $('.error-label').hide();
 };
 
 closeModalButtonAddPeople.addEventListener('click', closeModalAddPeople); // 닫기 버튼 클릭 시
 
+// 부서 선택
+document.addEventListener("DOMContentLoaded", function(e) {
+    // default
+    var els = document.querySelectorAll(".begintime");
+    els.forEach(function(select) {
+        NiceSelect.bind(select);
+    });
+});
+
+// 직급 선택
+document.addEventListener("DOMContentLoaded", function(e) {
+    // default
+    var els = document.querySelectorAll(".endTime");
+    els.forEach(function(select) {
+        NiceSelect.bind(select);
+    });
+});
+
+// 직급 선택
+document.addEventListener("DOMContentLoaded", function(e) {
+    // default
+    var els = document.querySelectorAll(".weekday");
+    els.forEach(function(select) {
+        NiceSelect.bind(select);
+    });
+});
 
 
 
-        var util = {
+
+var util = {
             addEventListener: function(element, eventName, handler) {
                 if (element.addEventListener) {
                     element.addEventListener(eventName, handler, false);
@@ -169,58 +194,32 @@ closeModalButtonAddPeople.addEventListener('click', closeModalAddPeople); // 닫
 
         var tree = new tui.Tree('#tree', {
             data: data,
-            nodeDefaultState: 'opened',
-            template: {
-                internalNode:
-                    '<div class="tui-tree-content-wrapper" style="padding-left: {{indent}}px">' +
-                        '<button type="button" class="tui-tree-toggle-btn tui-js-tree-toggle-btn">' +
-                            '<span class="tui-ico-tree"></span>' +
-                            '{{stateLabel}}' +
-                        '</button>' +
-                        '<span class="tui-tree-text tui-js-tree-text">' +
-                            '<label class="tui-checkbox">' +
-                        	   '<span class="tui-ico-check"><input type="checkbox" class="tui-tree-checkbox"></span>' +
-                        	'</label>' +
-                            '<span class="tui-tree-ico tui-ico-folder"></span>' +
-                            '{{text}}' +
-                        '</span>' +
-                    '</div>' +
-                    '<ul class="tui-tree-subtree tui-js-tree-subtree">{{children}}</ul>',
-                leafNode:
-                    '<div class="tui-tree-content-wrapper" style="padding-left: {{indent}}px">' +
-                        '<span class="tui-tree-text tui-js-tree-text">' +
-                            '<label class="tui-checkbox">' +
-                               '<span class="tui-ico-check"><input type="checkbox" class="tui-tree-checkbox"></span>' +
-                            '</label>' +
-                            '<span class="tui-tree-ico tui-ico-file"></span>' +
-                            '{{text}}' +
-                        '</span>' +
-                    '</div>'
-            }
-        }).enableFeature('Checkbox', {
-            checkboxClassName: 'tui-tree-checkbox',
+            nodeDefaultState: 'opened'
+        }).enableFeature('Selectable', {
+            selectedClassName: 'tui-tree-selected',
         });
 
-        var checkBtn = document.getElementById('checkBtn');
-        var uncheckBtn = document.getElementById('uncheckBtn');
-        var checkedValue = document.getElementById('checkedValue');
+        var selectedBtn = document.getElementById('selectedBtn');
+        var deselectedBtn = document.getElementById('deselectedBtn');
         var rootNodeId = tree.getRootNodeId();
         var firstChildId = tree.getChildIds(rootNodeId)[0];
+        var selectedValue = document.getElementById('selectedValue');
 
-        tree.on('check', function(eventData) {
+        tree.on('select', function(eventData) {
             var nodeData = tree.getNodeData(eventData.nodeId);
-            checkedValue.value = 'checked : ' + nodeData.text;
+            selectedValue.value = 'selected : ' + nodeData.text;
         });
 
-        tree.on('uncheck', function(eventData) {
+        tree.on('deselect', function(eventData) {
             var nodeData = tree.getNodeData(eventData.nodeId);
-            checkedValue.value = 'unchecked : ' + nodeData.text;
+            selectedValue.value = 'deselected : ' + nodeData.text;
         });
 
-        util.addEventListener(checkBtn, 'click', function() {
-            tree.check(firstChildId);
+        util.addEventListener(selectedBtn, 'click', function() {
+            tree.select(firstChildId);
         });
 
-        util.addEventListener(uncheckBtn, 'click', function() {
-            tree.uncheck(firstChildId);
+        util.addEventListener(deselectedBtn, 'click', function() {
+            tree.deselect();
         });
+
