@@ -235,7 +235,7 @@ const openDeleteModal = (meetingroomNo) => {
     // 삭제 확인 버튼 클릭 이벤트 설정
     confirmDeleteButton.onclick = () => {
         // 서버로 요청 전송
-        window.location.href = `/deleteMeetingRoom?meetingroomNo=${meetingroomNo}`;
+        window.location.href = `/academy/deleteMeetingRoom?meetingroomNo=${meetingroomNo}`;
     };
 
     // 모달 보이기
