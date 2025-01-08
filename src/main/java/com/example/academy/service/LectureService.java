@@ -11,6 +11,7 @@ import com.example.academy.dto.LectureListDTO;
 import com.example.academy.dto.LectureModifyDTO;
 import com.example.academy.dto.LectureOneDTO;
 import com.example.academy.dto.LectureOneTimeListDTO;
+import com.example.academy.mapper.LectureLectureWeekdayMapper;
 import com.example.academy.mapper.LectureMapper;
 import com.example.academy.mapper.LectureWeekdayMapper;
 
@@ -22,8 +23,15 @@ import lombok.extern.slf4j.Slf4j;
 public class LectureService {
 	@Autowired LectureMapper lectureMapper;
 	@Autowired LectureWeekdayMapper lectureWeekdayMapper;
+	@Autowired LectureLectureWeekdayMapper lectureLectureWeekdayMapper;
 	
 	// 김혜린 : 강의 삭제
+	public void removeLecture(Integer lectureNo) {
+		// 1) 강의-강의시간 데이터 삭제
+		lectureLectureWeekdayMapper.deleteLectureLectureWeekday(lectureNo);
+		// 2) 강의 삭제
+		lectureMapper.deleteLecture(lectureNo);
+	}	
 	
 	// 김혜린 : 강의 수정
 	public void modifyLecture(LectureModifyDTO lectureModifyDTO, List<String> list) {

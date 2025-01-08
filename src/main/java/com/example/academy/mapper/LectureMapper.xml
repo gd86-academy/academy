@@ -2,6 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.LectureMapper">
 	
+	<!-- 김혜린 : 강의 삭제 -->
+	<delete id="deleteLecture">
+		DELETE FROM lecture
+		WHERE lecture_no = #{lectureNo}
+	</delete>
+	
 	<!-- 김혜린 : 강의 수정(강의날짜(개강/종강일), 강의명, 강의내용) -->
 	<update id="updateLecture" parameterType="com.example.academy.dto.LectureModifyDTO">
 		UPDATE lecture 

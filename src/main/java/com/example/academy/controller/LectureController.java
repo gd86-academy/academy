@@ -26,9 +26,9 @@ public class LectureController {
 	@Autowired CommonService commonService;
 	
 	// 김혜린 : 강의 삭제
-	@GetMapping("removeLecture")
+	@GetMapping("/removeLecture")
 	public String removeLecture(Integer lectureNo) {
-		//
+		lectureService.removeLecture(lectureNo);
 		
 		return "redirect:/lectureList";
 	}

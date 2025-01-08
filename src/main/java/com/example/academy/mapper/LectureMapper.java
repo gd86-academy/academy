@@ -11,6 +11,8 @@ import com.example.academy.dto.LectureOneTimeListDTO;
 
 @Mapper
 public interface LectureMapper {
+	// 김혜린 : 강의 삭제
+	Integer deleteLecture(Integer lectureNo);
 	
 	// 김혜린 : 강의 수정(강의날짜(개강/종강일), 강의명, 강의내용)
 	Integer updateLecture(LectureModifyDTO lectureModifyDTO);
