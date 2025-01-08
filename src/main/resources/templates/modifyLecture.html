@@ -52,7 +52,6 @@
 		        border: 1px solid #ccc;
 		        border-radius: 10px;
 		        font-size: 14px;
-		        color: black;
 		        width: 100%; /* 화면 크기에 맞게 크기 조정 */    			
 		    }
 	    </style>	
@@ -179,9 +178,10 @@
 							        <tbody>
 							            <tr th:each="t : ${timeList}">
 							            	<td class="lecutre-title">강의시간</td>
+							            	<input type="hidden" name="timeList" th:value="${t.lectureWeekdayNo}"><!-- 강의시간번호 -->
 							            	<!-- 요일선택 -->
 							            	<td>
-												<select id="weekday" class="form-select " name="weekday">
+												<select id="weekday" class="form-select " name="timeList">
 												    <option th:each="cwk : ${commonWeekday}" th:value="${cwk.code}"
 												    		th:selected="${t.weekdayCode == cwk.code}"
 												    		th:text="${cwk.name}">
@@ -190,7 +190,7 @@
 											</td>
 											<!-- 시작시간 선택 -->
 							            	<td>
-												<select id="beginTime" class="form-select " name="beginTime">
+												<select id="beginTime" class="form-select " name="timeList">
 												    <option th:each="ct : ${commonTime}" th:value="${ct.code}"
 												    		th:selected="${t.beginTimeCode == ct.code}"
 												    		th:text="${ct.name}">
@@ -200,7 +200,7 @@
 											<td class="lecutre-title-align">~</td>
 											<!-- 종료시간 선택 -->
 							            	<td>
-												<select id="endTime" class="form-select " name="endTime">
+												<select id="endTime" class="form-select " name="timeList">
 												    <option th:each="ct : ${commonTime}" th:value="${ct.code}"
 												    		th:selected="${t.endTimeCode == ct.code}"
 												    		th:text="${ct.name}">
@@ -242,9 +242,12 @@
 							
 							<!-- 취소/수정 버튼 -->					 
 							<div class="mt-8 flex items-center justify-end">
-	                           <button id="delBtn" type="button" class="btn btn-outline-danger">
-	                               취소
-	                           </button>
+	                           <a
+	                              type="button"
+	                              class="btn btn-outline-danger"
+	                              th:href="@{/lectureOne(lectureNo=${lecture.lectureNo})}">	                          
+	                              취소
+	                          </a>
 	                           <button id="lectureModifyBtn" type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4">
 	                               수정
 	                           </button>
@@ -264,7 +267,7 @@
 		</div>
 		
 		
-		<<script th:src="@{/customjs/modifyLecture.js}"> </script>
+		<script th:src="@{/customjs/modifyLecture.js}"> </script>
 	</body>
 
 </html>

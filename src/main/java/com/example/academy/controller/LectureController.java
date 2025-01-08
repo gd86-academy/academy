@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.academy.dto.LectureModifyDTO;
 import com.example.academy.dto.LectureOneDTO;
@@ -22,6 +24,14 @@ import lombok.extern.slf4j.Slf4j;
 public class LectureController {
 	@Autowired LectureService lectureService;
 	@Autowired CommonService commonService;
+	
+	// 김혜린 : 강의 삭제
+	@GetMapping("removeLecture")
+	public String removeLecture(Integer lectureNo) {
+		//
+		
+		return "redirect:/lectureList";
+	}
 	
 	// 김혜린 : 강의 수정페이지
 	@GetMapping("/modifyLecture")
@@ -50,10 +60,11 @@ public class LectureController {
 	}
 	// 김혜린 : 강의 수정페이지
 	@PostMapping("/modifyLecture")
-	public String modifyLecture(LectureModifyDTO lectureModifyDTO) {
-		// 1) 강의 수정 (강의날짜(개강/종강일), 강의명, 강의내용)
-		lectureService.modifyLecture(lectureModifyDTO);
-		// 2) 강의 수정(강의시간)
+	public String modifyLecture(LectureModifyDTO lectureModifyDTO, @RequestParam(value="timeList", required = false) List<String> list) {
+		log.debug("----------lectureModifyDTO : " + lectureModifyDTO);	//디버깅
+		log.debug("----------list : " + list);	//디버깅
+		//	강의 수정 
+		lectureService.modifyLecture(lectureModifyDTO, list);
 		
 		return "redirect:/lectureOne?lectureNo=" + lectureModifyDTO.getLectureNo();
 	}

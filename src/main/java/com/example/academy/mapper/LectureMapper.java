@@ -21,7 +21,6 @@ public interface LectureMapper {
 	// 김혜린 : 강의 상세페이지 / 강의수정 기존정보불러오기 - 강의 시간 리스트 출력
 	List<LectureOneTimeListDTO> selectLectureOneTimeList(Integer lectureNo);
 	
-	
 	// 김혜린 : 강의리스트 출력
 	List<LectureListDTO> selectLectureList();
 

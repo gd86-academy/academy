@@ -14,6 +14,6 @@ public class LectureModifyDTO {
 	private String lectureBeginDate;	// 개강일
 	private String lectureEndDate;		// 종강일
 	
-	private List<LectureOneTimeListDTO> lectureTime;
+	//private List<LectureOneTimeListDTO> lectureTime;
 
 }
