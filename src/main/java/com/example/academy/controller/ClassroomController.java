@@ -22,6 +22,13 @@ public class ClassroomController {
 	@Autowired EmployeeService employeeService;
 	
 
+	// 박시현 : 강의실 수정
+	@PostMapping("/modifyClassroom")
+	public String modifyClassroom(Model model, ClassroomListDTO classroomListDTO) {
+		classroomService.modifyClassroom(classroomListDTO);
+		return "redirect:/classroomList";
+	}
+	
 	// 박시현 : 강의실 등록
 	@PostMapping("/addClassroom")
 	public String addClassroom(Model model, ClassroomListDTO classroomListDTO) {
@@ -31,10 +38,12 @@ public class ClassroomController {
 	
 	// 박시현 : 강의실 목록 조회
 	@GetMapping("/classroomList")
-	public String classroomList(Model model) {
+	public String classroomList(Model model, EmployeeListDTO EmployeeListDTO) {
 		// 강의실 리스트 조회 - addClassroom 모달창에서 담당자를 조회하기 위해
 		List<EmployeeListDTO> classroom = employeeService.getEmployeeList();
 		model.addAttribute("classroom",classroom);
+		List<ClassroomListDTO> modifyClassroom = classroomService.getClassroomList();
+		model.addAttribute("modifyClassroom",modifyClassroom);
 		return "classroomList";
 	}
 

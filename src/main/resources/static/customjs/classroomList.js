@@ -95,8 +95,8 @@ document.addEventListener('alpine:init', () => {
 								item[0], // 강의실 번호
 					            item[1], // 강의실명
 					            item[5], // 담당자 이름
-								`<button type="button" class="btn btn-dark" onclick="openModalButtonModifyClassroom(${item[0]})">수정</button>`, // 수정 버튼
-								`<button type="button" class="btn btn-danger" onclick="openModalButtonDeleteClassroom(${item[0]})">삭제</button>`  // 삭제 버튼
+								`<button type="button" class="btn btn-dark" id="openModalButtonModifyClassroom" >수정</button>`, // 수정 버튼
+								`<button type="button" class="btn btn-danger" id="openModalButtonDeleteClassroom" >삭제</button>`  // 삭제 버튼
 					        ])
 					    },
 					    searchable: true,
@@ -149,39 +149,38 @@ document.addEventListener('alpine:init', () => {
 	        return '';
 	    },
 	}));
+	
 });
+
+
 
 // 강의실 등록 모달 관련 DOM 요소
-const openModalButtonAddClassroom = document.getElementById('openModalButtonAddClassroom');
-const closeModalButtonAddClassroom = document.getElementById('closeModalButtonAddClassroom');
-const openModalButtonModifyClassroom = document.getElementById('openModalButtonModifyClassroom');
-const closeModalButtonModifyClassroom = document.getElementById('closeModalButtonModifyClassroom');
-const openModalButtonDeleteClassroom = document.getElementById('openModalButtonDeleteClassroom');
-const closeModalButtonDeleteClassroom = document.getElementById('closeModalButtonDeleteClassroom');
-const modalBackground = document.getElementById('modalBackground');
-const modalWrapper = document.getElementById('modalWrapper');
-const cancelButton = document.getElementById('cancelButton');
+const openModalButtonAddClassroom = document.getElementById('openModalButtonAddClassroom'); // 등록 모달 열기 버튼
+const closeModalButtonAddClassroom = document.getElementById('closeModalButtonAddClassroom'); // 등록 모달 닫기 버튼
+const cancelButtonAddClassroom = document.getElementById('cancelButtonAddClassroom'); // 등록 모달 취소 버튼
+const modalBackgroundAddClassroom = document.getElementById('modalBackgroundAddClassroom');
+const modalWrapperAddClassroom = document.getElementById('modalWrapperAddClassroom');
 
-// 모달 열기
+// 강의실 등록 모달 열기
 openModalButtonAddClassroom.addEventListener('click', () => {
-  modalBackground.classList.remove('hidden');  // 모달 배경 보이기
-  modalBackground.classList.add('block');     // 모달 배경 보이게 설정
+  modalBackgroundAddClassroom.classList.remove('hidden');  // 모달 배경 보이기
+  modalBackgroundAddClassroom.classList.add('block');     // 모달 배경 보이게 설정
 });
 
-// 모달 닫기
-const closeModal = () => {
-  modalBackground.classList.remove('block');
-  modalBackground.classList.add('hidden');  // 모달 배경 숨기기
+// 강의실 등록 모달 닫기
+const closeModalAddClassroom = () => {
+  modalBackgroundAddClassroom.classList.remove('block');
+  modalBackgroundAddClassroom.classList.add('hidden');  // 모달 배경 숨기기
   // 모달 내부의 모든 입력 필드를 초기화
-  const form = document.getElementById('classroomAddForm');
-  form.reset(); // 모든 입력 필드와 라디오 버튼 초기화
+  const addForm = document.getElementById('classroomAddForm');
+  addForm.reset(); // 모든 입력 필드와 라디오 버튼 초기화
   $('input').removeClass('errorInput');
   // 모든 에러 라벨 숨기기
   $('.error-label').hide();
 };
 
-closeModalButtonAddClassroom.addEventListener('click', closeModal); // 닫기 버튼 클릭 시
-cancelButton.addEventListener('click', closeModal);     // 취소 버튼 클릭 시
+closeModalButtonAddClassroom.addEventListener('click', closeModalAddClassroom); // 닫기 버튼 클릭 시
+cancelButtonAddClassroom.addEventListener('click', closeModalAddClassroom); // 취소 버튼 클릭 시
 
 // 강의실 등록 유효성검사
 $('#classroomAddBtn').click(function(){
@@ -213,6 +212,37 @@ $('#classroomAddBtn').click(function(){
 	if (isVal) {
         console.log("submit 성공");
         $('#classroomAddForm').submit();
+    }
+});
+
+// 강의실 수정 모달 관련 DOM 요소 -- 수정버튼 클릭시 해당 강의실뿐만 아니라 다른 강의실 정보까지 뜸.
+const openModalButtonModifyClassroom = document.getElementById('openModalButtonModifyClassroom'); // 수정 모달 열기 버튼
+const closeModalButtonModifyClassroom = document.getElementById('closeModalButtonModifyClassroom'); // 수정 모달 닫기 버튼
+const cancelButtonModifyClassroom = document.getElementById('cancelButtonModifyClassroom'); // 수정 모달 취소 버튼
+const modalBackgroundModifyClassroom = document.getElementById('modalBackgroundModifyClassroom');
+const modalWrapperModifyClassroom = document.getElementById('modalWrapperModifyClassroom');
+
+// 강의실 수정 모달 열기
+document.addEventListener('click', (event) => {
+  // 수정 버튼 클릭 시
+  if (event.target && event.target.id === 'openModalButtonModifyClassroom') {
+    modalBackgroundModifyClassroom.classList.remove('hidden');  // 모달 배경 보이기
+    modalBackgroundModifyClassroom.classList.add('block');     // 모달 배경 보이게 설정
+  }
+});
+
+// 강의실 수정 모달 닫기
+document.addEventListener('click', (event) => {
+	if (event.target && (event.target.id === 'closeModalButtonModifyClassroom'
+		|| event.target.id === 'cancelButtonModifyClassroom')) {
+		modalBackgroundModifyClassroom.classList.remove('block');
+		modalBackgroundModifyClassroom.classList.add('hidden');  // 모달 배경 숨기기
+		// 모달 내부의 모든 입력 필드를 초기화
+		const modifyForm = document.getElementById('classroomModifyForm');
+		modifyForm.reset(); // 모든 입력 필드와 라디오 버튼 초기화
+		$('input').removeClass('errorInput');
+		// 모든 에러 라벨 숨기기
+		$('.error-label').hide(); 
     }
 });
 
