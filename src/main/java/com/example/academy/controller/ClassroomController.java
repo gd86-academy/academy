@@ -13,7 +13,6 @@ import com.example.academy.dto.ClassroomListDTO;
 import com.example.academy.dto.EmployeeListDTO;
 import com.example.academy.service.ClassroomService;
 import com.example.academy.service.EmployeeService;
-import com.example.academy.vo.Classroom;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,12 +33,28 @@ public class ClassroomController {
 	}
 
 	// 박시현 : 강의실 수정
-	@PostMapping("/modifyClassroom")
-	public String modifyClassroom(Model model, ClassroomListDTO classroomListDTO) {
-		classroomService.modifyClassroom(classroomListDTO);
+	/*
+	@GetMapping("/modifyClassroom")
+	public String modifyClassroom(Model model
+									, @RequestParam Integer classroomNo
+									, @RequestParam String classroomName
+									, @RequestParam Integer classroomManager
+									, @RequestParam Integer classroomCapacity) {
+		
+	    ClassroomListDTO classroomListDTO = new ClassroomListDTO();
+	    classroomListDTO.setClassroomNo(classroomNo);
+	    classroomListDTO.setClassroomName(classroomName);
+	    classroomListDTO.setClassroomManager(classroomManager);
+	    classroomListDTO.setClassroomCapacity(classroomCapacity);
+	    
+		int row = classroomService.modifyClassroom(classroomListDTO);
+	    if (row == 0) {
+	        // 수정 실패 시 처리 로직
+	        return "classroomList";
+	    }
 		return "redirect:/classroomList";
 	}
-	
+	*/
 	// 박시현 : 강의실 등록
 	@PostMapping("/addClassroom")
 	public String addClassroom(Model model, ClassroomListDTO classroomListDTO) {
@@ -55,8 +70,8 @@ public class ClassroomController {
 		model.addAttribute("classroom",classroom);
 		List<ClassroomListDTO> modifyClassroom = classroomService.getClassroomList();
 		model.addAttribute("modifyClassroom",modifyClassroom);
+		log.debug("classroom : " + classroom);
 		return "classroomList";
 	}
-
 
 }
