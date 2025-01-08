@@ -22,7 +22,7 @@ public class ClassroomController {
 	@Autowired EmployeeService employeeService;
 	
 
-	// 박시현 : 강의실 등록
+	// 박시현 : 강의실 수정
 	@PostMapping("/modifyClassroom")
 	public String modifyClassroom(Model model, ClassroomListDTO classroomListDTO) {
 		classroomService.modifyClassroom(classroomListDTO);

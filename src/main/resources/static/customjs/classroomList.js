@@ -215,7 +215,7 @@ $('#classroomAddBtn').click(function(){
     }
 });
 
-// 강의실 수정 모달 관련 DOM 요소
+// 강의실 수정 모달 관련 DOM 요소 -- 수정버튼 클릭시 해당 강의실뿐만 아니라 다른 강의실 정보까지 뜸.
 const openModalButtonModifyClassroom = document.getElementById('openModalButtonModifyClassroom'); // 수정 모달 열기 버튼
 const closeModalButtonModifyClassroom = document.getElementById('closeModalButtonModifyClassroom'); // 수정 모달 닫기 버튼
 const cancelButtonModifyClassroom = document.getElementById('cancelButtonModifyClassroom'); // 수정 모달 취소 버튼
