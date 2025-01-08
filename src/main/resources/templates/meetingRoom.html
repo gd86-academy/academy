@@ -98,146 +98,169 @@
                 <!-- 헤더 파일 연결 -->
                  <div th:replace="fragments/header :: header"></div>
 
-                <!-- 메인화면 -->
-                <div class="animate__animated p-6" :class="[$store.app.animation]">
-                	<!-- 타이틀 -->
-                	<div class="flex flex-wrap items-center justify-between gap-4 ml-3">
-                       <h2 class="text-2xl ml-3">회의실목록</h2>
-                       <div class="flex w-full flex-col gap-4 sm:w-auto sm:flex-row sm:items-center sm:gap-3">
-                           <div class="flex gap-3 mr-3">
-                               <div>
-  									<!-- 버튼 -->
-									 <button type="button" class="btn btn-primary mr-3" id="openModalButton">
-									     <svg
-									         width="24"
-									         height="24"
-									         viewBox="0 0 24 24"
-									         fill="none"
-									         xmlns="http://www.w3.org/2000/svg"
-									         class="h-5 w-5 ltr:mr-2 rtl:ml-2"
-									     >
-									         <circle cx="10" cy="6" r="4" stroke="currentColor" stroke-width="1.5" />
-									         <path
-									             opacity="0.5"
-									             d="M18 17.5C18 19.9853 18 22 10 22C2 22 2 19.9853 2 17.5C2 15.0147 5.58172 13 10 13C14.4183 13 18 15.0147 18 17.5Z"
-									             stroke="currentColor"
-									             stroke-width="1.5"
-									         />
-									         <path
-									             d="M21 10H19M19 10H17M19 10L19 8M19 10L19 12"
-									             stroke="currentColor"
-									             stroke-width="1.5"
-									             stroke-linecap="round"
-									         />
+			<!-- 메인화면 -->
+			<div class="animate__animated p-6" :class="[$store.app.animation]">
+				<!-- 타이틀 -->
+				<div class="flex flex-wrap items-center justify-between gap-4 ml-3">
+					<h2 class="text-2xl ml-3">회의실목록</h2>
+					<div
+						class="flex w-full flex-col gap-4 sm:w-auto sm:flex-row sm:items-center sm:gap-3">
+						<div class="flex gap-3 mr-3">
+							<div>
+								<!-- 버튼 -->
+								<button type="button" class="btn btn-primary mr-3"
+									id="openModalButton">
+									<svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+										xmlns="http://www.w3.org/2000/svg"
+										class="h-5 w-5 ltr:mr-2 rtl:ml-2">
+									         <circle cx="10" cy="6" r="4" stroke="currentColor"
+											stroke-width="1.5" />
+									         <path opacity="0.5"
+											d="M18 17.5C18 19.9853 18 22 10 22C2 22 2 19.9853 2 17.5C2 15.0147 5.58172 13 10 13C14.4183 13 18 15.0147 18 17.5Z"
+											stroke="currentColor" stroke-width="1.5" />
+									         <path d="M21 10H19M19 10H17M19 10L19 8M19 10L19 12"
+											stroke="currentColor" stroke-width="1.5"
+											stroke-linecap="round" />
 									     </svg>
-									     회의실 등록
-									 </button>
+									회의실 등록
+								</button>
 
-									  <!-- 모달 -->
-									  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackground">
-									       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapper">
-									           <div
-									               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
-									               id="modal"
-									           >
-									               <button
-									                   type="button"
-									                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
-									                   id="closeModalButton"
-									               >
-									                   <svg
-									                       xmlns="http://www.w3.org/2000/svg"
-									                       width="24px"
-									                       height="24px"
-									                       viewBox="0 0 24 24"
-									                       fill="none"
-									                       stroke="currentColor"
-									                       stroke-width="1.5"
-									                       stroke-linecap="round"
-									                       stroke-linejoin="round"
-									                       class="h-6 w-6"
-									                   >
+								<!--회의실 등록 모달 -->
+								<div
+									class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60"
+									id="modalBackground">
+									<div class="flex min-h-screen items-center justify-center px-4"
+										id="modalWrapper">
+										<div
+											class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
+											id="modal">
+											<button type="button"
+												class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+												id="closeModalButton">
+												<svg xmlns="http://www.w3.org/2000/svg" width="24px"
+													height="24px" viewBox="0 0 24 24" fill="none"
+													stroke="currentColor" stroke-width="1.5"
+													stroke-linecap="round" stroke-linejoin="round"
+													class="h-6 w-6">
 									                       <line x1="18" y1="6" x2="6" y2="18"></line>
 									                       <line x1="6" y1="6" x2="18" y2="18"></line>
 									                   </svg>
-									               </button>
-									               <h3
-									                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
-									               >
-									                   회의실 등록
-									               </h3>
-									               <div class="p-5">
-									                   <form id="meetingroomAddForm" method="post" th:action="@{/addMeetingroom}"  enctype="multipart/form-data">
-									                   	   <!-- 회의실명 -->
-									                       <div>
-									                           <label for="employeePhone">회의실명</label>
-									                           <input
-									                               id="meetingroomName"
-									                               name="meetingroomName"
-									                               type="text"
-									                               placeholder="회의실명"
-									                               class="form-input"
-									                           />
-									                       </div>
-									                       <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeeName-error error-label" style="display: none;">이름을 입력해주세요.</span></div>
-									                   		<!-- 담당자 -->
-									                       <div>
-									                           <label for="employeePhone">담당자</label>
-									                           <input
-									                               id="meetingroomManager"
-									                               name="meetingroomManager"
-									                               type="text"
-									                               placeholder="담당자"
-									                               class="form-input"
-									                           />
-									                       </div>
-									                       <div class="mt-1 mb-3" style="height: 10px;"><span class="msg employeePhone-error error-label" style="display: none;">전화번호를 입력해주세요.</span></div>
-									                       <!-- 수용인원 -->
-									                       <div>
-									                           <label for="meetingroomCapacity">수용인원</label>
-									                           <input
-									                               id="meetingroomCapacity"
-									                               name="meetingroomCapacity"
-									                               type="number"
-									                               placeholder="수용인원"
-									                               class="form-input"
-									                           />
-									                       </div>
-														     
-									                       <div class="mt-8 flex items-center justify-end">
-									                           <button type="button" class="btn btn-outline-danger" id="cancelButton">
-									                               취소
-									                           </button>
-									                           <button
-									                           	   id="employeeAddBtn"
-									                               type="button"
-									                               class="btn btn-primary ltr:ml-4 rtl:mr-4"
-									                           >
-									                               등록
-									                           </button>
-									                       </div>
-									                   </form>
-									               </div>
-									           </div>
-									       </div>
-									   </div>
-									 </div>
-                                    
-                            </div>
-                        </div>   
+											</button>
+											<h3
+												class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]">
+												회의실 등록</h3>
+											<div class="p-5">
+												<form id="meetingroomAddForm" method="post"
+													th:action="@{/addMeetingRoom}"
+													enctype="multipart/form-data">
+													<!-- 회의실명 -->
+													<div>
+														<label for="employeePhone">회의실명</label> <input
+															id="meetingroomName" name="meetingroomName" type="text"
+															placeholder="회의실명" class="form-input" />
+													</div>
+													<div class="mt-1 mb-3" style="height: 10px;">
+														<span class="msg meetingroomName-error error-label"
+															style="display: none;">회의실이름을 입력해주세요.</span>
+													</div>
+													<!-- 담당자 -->
+													<div>
+														<label for="employeePhone">담당자</label> <input
+															id="meetingroomManager" name="meetingroomManager"
+															type="text" placeholder="담당자" class="form-input" />
+													</div>
+													<div class="mt-1 mb-3" style="height: 10px;">
+														<span class="msg meetingroomManager-error error-label"
+															style="display: none;">담당자를 선택해주세요.</span>
+													</div>
+													<!-- 수용인원 -->
+													<div>
+														<label for="meetingroomCapacity">수용인원</label> <input
+															id="meetingroomCapacity" name="meetingroomCapacity"
+															type="number" placeholder="수용인원" class="form-input" />
+													</div>
+													<div class="mt-1 mb-3" style="height: 10px;">
+														<span class="msg meetingroomCapacity-error error-label"
+															style="display: none;">수용인원을 입력해주세요.</span>
+													</div>
+													<div class="mt-8 flex items-center justify-end">
+														<button type="button" class="btn btn-outline-danger"
+															id="cancelButton">취소</button>
+														<button id="meetingRoomAddBtn" type="button"
+															class="btn btn-primary ltr:ml-4 rtl:mr-4">
+															등록</button>
+													</div>
+												</form>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
 					</div>
-					<div class="dvanimation animate__animated p-6" :class="[$store.app.animation]">
-                		<div x-data="multicolumn">
-                			<div class="panel">
-                				<table id="meetingroomTable" class="whitespace-nowrap"></table>
-                			</div>
-                		</div>
-                	</div>
-                
-                <!--  풋터 파일 연결 -->
-                <div th:replace="fragments/footer :: footer"></div>
-            </div>
-        </div>
+				</div>
+
+				<!-- 회의실 삭제 확인 모달 -->
+				<div class="meetingRoomDelete">
+					<div
+						class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60"
+						id="modalDeleteBackground">
+						<div class="flex min-h-screen items-center justify-center px-4"
+							id="modalDeleteWrapper">
+							<div
+								class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
+								id="modal">
+								<!-- 모달 닫기 버튼 -->
+								<button type="button"
+									class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+									id="closeDeleteModalButton">
+									<svg xmlns="http://www.w3.org/2000/svg" width="24px"
+										height="24px" viewBox="0 0 24 24" fill="none"
+										stroke="currentColor" stroke-width="1.5"
+										stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+								</button>
+								<h3
+									class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]">
+									안내</h3>
+								<div class="p-5">
+									<!-- 회의실 번호 동적 표시 -->
+									<p>
+										<span id="deleteMeetingroomLabel"></span> 번 회의실을 삭제하시겠습니까?
+									</p>
+									<div class="mt-8 flex items-center justify-end">
+										<!-- 취소 버튼 -->
+										<button id="cancelDeleteButton" type="button"
+											class="btn btn-outline-danger ltr:ml-4 rtl:mr-4">취소
+										</button>
+										<!-- 확인 버튼 -->
+										<button id="confirmDeleteButton" type="button"
+											class="btn btn-primary ltr:ml-4 rtl:mr-4">확인</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+
+
+				<div class="dvanimation animate__animated p-6"
+					:class="[$store.app.animation]">
+					<div x-data="multicolumn">
+						<div class="panel">
+							<table id="meetingroomTable" class="whitespace-nowrap"></table>
+						</div>
+					</div>
+				</div>
+
+				<!--  풋터 파일 연결 -->
+				<div th:replace="fragments/footer :: footer"></div>
+			</div>
+		</div>
         <script th:src="@{/customjs/meetingroomList.js}"></script>
         
 	</body>

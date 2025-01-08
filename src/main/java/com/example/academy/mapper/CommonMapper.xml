@@ -2,6 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.CommonMapper">
 	
+	<!-- 김혜린 : 요일 조회 -->
+	<select id="selectWeekday">
+		SELECT 
+			code
+			, name 
+		FROM common
+		WHERE code LIKE 'WK%'		
+	</select>
+	
 	<!-- 진수우 : 부서 카테고리 조회 -->
 	<select id="selectDepartmentCategory">
 		SELECT

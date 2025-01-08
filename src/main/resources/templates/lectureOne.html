@@ -140,7 +140,7 @@
 						            <tr class="border-dark-dark-light">
 						                <td class="lecutre-title">강의날짜</td>
 										<td>
-											<input id="beginDate" name=""beginDate"" type="text"
+											<input id="beginDate" name="beginDate" type="text"
 												 class="form-input lecutre-text-align" th:value="${lecture.lectureBeginDate}" readonly/>
 										</td>
 										<td class="lecutre-title-align" colspan="2">~</td>
@@ -195,7 +195,7 @@
 						
 						<div class="lecutre-title" style="margin-top: 30px;">강의내용</div>
 						<textarea name="message" rows="15" cols="205" class="custom-textarea"
-							th:text="${lecture.lectureContent}" readonly>
+							th:value="${lecture.lectureContent}" readonly>
 						</textarea>
 						
 						<!-- 수정/삭제 버튼 구현 행정팀만 노출 -->					 
@@ -220,9 +220,8 @@
 			<div th:replace="fragments/footer :: footer"></div>
 		</div>
 		
-		<!--  모달하기모달하기모달하기모달하기모달하기모달하기모달하기모달하기모달하기모달하기모달하기모달하기모달하기모달하기모달하기모달하기모달하기 -->
-		<!--  사원삭제 확인 모달 -->
 		
+		<!--  강의삭제 확인 모달 -->
         <div class="LectureDeleteModal">
 		  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundLectureDelete">
 		       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperLectureDelete">

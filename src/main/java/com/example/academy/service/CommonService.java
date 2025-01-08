@@ -14,6 +14,11 @@ import com.example.academy.vo.Common;
 public class CommonService {
 	@Autowired CommonMapper commonMapper;
 
+	// 김혜린 : 요일 조회
+	public List<Common> getWeekday() {
+		return commonMapper.selectWeekday();
+	}
+	
 	// 진수우 : 부서 카테고리 조회.
 	public List<Common> getDepartmentCategory() {
 		return commonMapper.selectDepartmentCategory();
