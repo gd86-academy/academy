@@ -13,6 +13,7 @@ import com.example.academy.service.BoardService;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Slf4j
@@ -20,13 +21,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class BoardController {
 	@Autowired BoardService boardService;
 	
-	// 공지사항 추가 실행
+	// 공지사항 추가
 	@PostMapping("/addBoard")
-	public String addBoard(BoardDTO boardDTO) {
+	public String addBoard(@ModelAttribute BoardDTO boardDTO) {
 		
-		// log.debug("---------------------------------------" + boardDTO);
-		
-		//boardService.addBoard(boardDTO);
+		log.debug("---------------------------------------" + boardDTO);
+	
+		boardService.addBoard(boardDTO);
 		
 		return "redirect:/boardList";	
 	}

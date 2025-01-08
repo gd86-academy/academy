@@ -1,5 +1,7 @@
 package com.example.academy.dto;
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Data;
@@ -23,5 +25,5 @@ public class BoardDTO {
 	private String fileType;
 	private String fileCategory;
 	
-	private MultipartFile boardFile;
+	private List<MultipartFile> boardFiles;
 }
