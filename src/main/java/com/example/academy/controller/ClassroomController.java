@@ -7,11 +7,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.academy.dto.ClassroomListDTO;
 import com.example.academy.dto.EmployeeListDTO;
 import com.example.academy.service.ClassroomService;
 import com.example.academy.service.EmployeeService;
+import com.example.academy.vo.Classroom;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,6 +23,15 @@ public class ClassroomController {
 	@Autowired ClassroomService classroomService;
 	@Autowired EmployeeService employeeService;
 	
+	// 박시현 : 강의실 삭제
+	@GetMapping("/removeClassroom")
+	public String removeClassroom(@RequestParam Integer classroomNo) {
+		int row = classroomService.removeClassroom(classroomNo);
+		if(row == 0) { // 삭제 실패시
+			return "classroomList";
+		}
+		return "redirect:/classroomList";
+	}
 
 	// 박시현 : 강의실 수정
 	@PostMapping("/modifyClassroom")

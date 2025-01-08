@@ -95,8 +95,8 @@ document.addEventListener('alpine:init', () => {
 								item[0], // 강의실 번호
 					            item[1], // 강의실명
 					            item[5], // 담당자 이름
-								`<button type="button" class="btn btn-dark" id="openModalButtonModifyClassroom" >수정</button>`, // 수정 버튼
-								`<button type="button" class="btn btn-danger" id="openModalButtonDeleteClassroom" >삭제</button>`  // 삭제 버튼
+								`<button type="button" class="btn btn-dark" onclick="openEditModal(${item[0]})" >수정</button>`, // 수정 버튼
+								`<button type="button" class="btn btn-danger" onclick="openDeleteModal(${item[0]})">삭제</button>`  // 삭제 버튼
 					        ])
 					    },
 					    searchable: true,
@@ -245,4 +245,42 @@ document.addEventListener('click', (event) => {
 		$('.error-label').hide(); 
     }
 });
+
+// 강의실 삭제 모달
+const openModalButtonDeleteClassroom = document.getElementById('openModalButtonDeleteClassroom'); // 삭제 모달 열기 버튼
+const closeModalButtonDeleteClassroom = document.getElementById('closeModalButtonDeleteClassroom'); // 삭제 모달 닫기 버튼
+const cancelButtonDeleteClassroom = document.getElementById('cancelButtonDeleteClassroom'); // 삭제 모달 취소 버튼
+const modalBackgroundDeleteClassroom = document.getElementById('modalBackgroundDeleteClassroom');
+const modalWrapperDeleteClassroom = document.getElementById('modalWrapperDeleteClassroom');
+const deleteClassroomLabel = document.getElementById('deleteClassroomLabel');
+
+// 삭제 모달 열기 함수 (강의실 번호를 받아서 데이터 세팅)
+const openDeleteModal = (classroomNo) => {
+    // 강의실 번호 표시
+    deleteClassroomLabel.innerText = classroomNo;
+
+    // 삭제 확인 버튼 클릭 이벤트 설정
+    openModalButtonDeleteClassroom.onclick = () => {
+        // 서버로 요청 전송
+        window.location.href = `/academy/removeClassroom?classroomNo=${classroomNo}`;
+    };
+
+    // 모달 보이기
+    modalBackgroundDeleteClassroom.classList.remove('hidden');
+    modalBackgroundDeleteClassroom.classList.add('block');
+};
+
+// 모달 닫기 함수
+const closeDeleteModal = () => {
+    modalBackgroundDeleteClassroom.classList.remove('block');
+    modalBackgroundDeleteClassroom.classList.add('hidden');
+};
+
+// 버튼 이벤트 리스너 설정
+closeModalButtonDeleteClassroom.addEventListener('click', closeDeleteModal);
+cancelButtonDeleteClassroom.addEventListener('click', closeDeleteModal);
+
+
+
+
 
