@@ -2,6 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.LectureMapper">
 	
+	<!-- 김혜린 : 강의 수정(강의날짜(개강/종강일), 강의명, 강의내용) -->
+	<update id="updateLecture" parameterType="com.example.academy.dto.LectureModifyDTO">
+		UPDATE lecture 
+		SET
+			lecture_name = #{lectureName} 
+			, lecture_content = #{lectureContent} 
+			, lecture_begin_date = #{lectureBeginDate} 
+			, lecture_end_date = #{lectureEndDate} 
+		WHERE lecture_no = #{lectureNo}
+	</update>
+	
 	<!-- 김혜린 : 강의 상세페이지 / 강의수정 기존정보불러오기 - 강의 시간 리스트 출력 -->
 	<select id="selectLectureOneTimeList" parameterType="Integer" resultType="com.example.academy.dto.LectureOneTimeListDTO">
 		SELECT 

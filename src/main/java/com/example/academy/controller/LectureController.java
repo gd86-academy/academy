@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 
+import com.example.academy.dto.LectureModifyDTO;
 import com.example.academy.dto.LectureOneDTO;
 import com.example.academy.dto.LectureOneTimeListDTO;
 import com.example.academy.service.CommonService;
@@ -34,14 +36,27 @@ public class LectureController {
 		model.addAttribute("timeList", timeList);
 		log.debug("강의시간정보 리스트 : " + timeList);	//디버깅
 		
-		// 3) 강의 요일 조회(드롭다운메뉴)
+		// 3) 강의 요일 조회(셀렉박스)
 		List<Common> commonWeekday = commonService.getWeekday();
 		model.addAttribute("commonWeekday", commonWeekday);
 		log.debug("----요일 리스트 : " + commonWeekday);	//디버깅
 		
+		// 3) 강의 시간 조회(셀렉박스)
+		List<Common> commonTime = commonService.getTime();
+		model.addAttribute("commonTime", commonTime);
+		log.debug("----시간 리스트 : " + commonTime);	//디버깅
+		
 		return "modifyLecture";
 	}
 	// 김혜린 : 강의 수정페이지
+	@PostMapping("/modifyLecture")
+	public String modifyLecture(LectureModifyDTO lectureModifyDTO) {
+		// 1) 강의 수정 (강의날짜(개강/종강일), 강의명, 강의내용)
+		lectureService.modifyLecture(lectureModifyDTO);
+		// 2) 강의 수정(강의시간)
+		
+		return "redirect:/lectureOne?lectureNo=" + lectureModifyDTO.getLectureNo();
+	}
 	
 	
 	// 김혜린 : 강의 상세페이지

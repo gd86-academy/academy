@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.academy.dto.LectureListDTO;
+import com.example.academy.dto.LectureModifyDTO;
 import com.example.academy.dto.LectureOneDTO;
 import com.example.academy.dto.LectureOneTimeListDTO;
 import com.example.academy.mapper.LectureMapper;
@@ -16,7 +17,16 @@ import com.example.academy.mapper.LectureMapper;
 public class LectureService {
 	@Autowired LectureMapper lectureMapper;
 	
-	
+	// 김혜린 : 강의 수정 (강의날짜(개강/종강일), 강의명, 강의내용)
+	public Integer modifyLecture(LectureModifyDTO lectureModifyDTO) {
+		return lectureMapper.updateLecture(lectureModifyDTO);
+	}
+	/*
+	// 김혜린 : 강의 수정 (강의시간)
+	public Integer modifyLectureTime(LectureModifyGetDTO ) {
+		
+	}
+	*/
 	// 김혜린 : 강의 상세페이지 / 강의수정 기존정보불러오기
 	public LectureOneDTO getLectureOne(Integer lectureNo) {
 		LectureOneDTO lectureOne = lectureMapper.selectLectureOne(lectureNo);

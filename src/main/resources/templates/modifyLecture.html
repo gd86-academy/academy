@@ -17,6 +17,9 @@
 			th:href="@{/css/style.css}" />
 		<link defer rel="stylesheet" type="text/css" media="screen"
 			th:href="@{/css/animate.css}" />
+		<link rel="stylesheet" th:href="@{/css/flatpickr.min.css}" />
+		<link th:href="@{/css/templete.css}" rel="stylesheet" />
+		<script th:src="@{/js/flatpickr.js}"></script>
 		<script th:src="@{/js/perfect-scrollbar.min.js}"></script>
 		<script defer th:src="@{/js/popper.min.js}"></script>
 		<script th:src="@{/js/alpine-collaspe.min.js}"></script>
@@ -49,6 +52,7 @@
 		        border: 1px solid #ccc;
 		        border-radius: 10px;
 		        font-size: 14px;
+		        color: black;
 		        width: 100%; /* 화면 크기에 맞게 크기 조정 */    			
 		    }
 	    </style>	
@@ -120,7 +124,8 @@
 						</div>
 						
 						<!-- 수정폼 -->
-						<form>
+						<form id="lectureModifyForm" method="post" th:action="@{/modifyLecture}">
+							 <input type="hidden" name="lectureNo" th:value="${lecture.lectureNo}">
 							<!-- 테이블1 : 강의번호, 강사명 출력 -->
 							<div class="table-responsive">
 							    <table style="table-layout: fixed; width: 100%;">
@@ -141,15 +146,21 @@
 							        <tbody>
 							            <tr class="border-dark-dark-light">
 							                <td class="lecutre-title">강의날짜</td>
-											<td>
-												<input id="beginDate" name="beginDate" type="text"
-													 class="form-input lecutre-text-align" th:value="${lecture.lectureBeginDate}" readonly/>
-											</td>
-											<td class="lecutre-title-align" colspan="2">~</td>
+							                <!-- 개강일 -->
 							                <td>
-												<input id="endDate" name="endDate" type="text"
-													 class="form-input lecutre-text-align" th:value="${lecture.lectureEndDate}" readonly/>
-											</td>					                
+							                	<div x-data="form1">
+							                       	<input name="lectureBeginDate" id="beginDate" class="form-input" 
+							                       			th:value="${lecture.lectureBeginDate}"/>
+											   	</div>
+							                </td>
+											<td class="lecutre-title-align" colspan="2">~</td>
+							                <!-- 종강일 -->
+							                <td>
+							                	<div x-data="form2">
+							                       	<input name="lectureEndDate" id="endDate" class="form-input" 
+							                       			th:value="${lecture.lectureEndDate}"/>
+											   	</div>
+							                </td>				                
 							            </tr>
 							        </tbody>
 							    </table>
@@ -158,9 +169,17 @@
 							<!-- 테이블3 : 강의시간 출력 -->
 							<div class="table-responsive">
 							    <table style="width: 100%;">
+							    	 <colgroup>	<!-- 열 너비 지정 -->
+								        <col style="width: 15%;"> <!-- 첫 번째 열 -->
+								        <col style="width: 26%;"> <!-- 두 번째 열 -->
+								        <col style="width: 27%;"> <!-- 세 번째 열 -->
+								        <col style="width: 5%;"> <!-- 네 번째 열 -->
+								        <col style="width: 27%;"> <!-- 다섯 번째 열 -->
+								    </colgroup>
 							        <tbody>
 							            <tr th:each="t : ${timeList}">
 							            	<td class="lecutre-title">강의시간</td>
+							            	<!-- 요일선택 -->
 							            	<td>
 												<select id="weekday" class="form-select " name="weekday">
 												    <option th:each="cwk : ${commonWeekday}" th:value="${cwk.code}"
@@ -169,15 +188,25 @@
 												    </option>
 												</select>
 											</td>
-											<td>
-												<input id="beginTime" name="beginTime" type="text"
-													 class="form-input lecutre-text-align" th:value="${t.beginTime}" readonly/>										
+											<!-- 시작시간 선택 -->
+							            	<td>
+												<select id="beginTime" class="form-select " name="beginTime">
+												    <option th:each="ct : ${commonTime}" th:value="${ct.code}"
+												    		th:selected="${t.beginTimeCode == ct.code}"
+												    		th:text="${ct.name}">
+												    </option>
+												</select>
 											</td>
 											<td class="lecutre-title-align">~</td>
-											<td>
-												<input id="endTime" name="endTime" type="text"
-													 class="form-input lecutre-text-align" th:value="${t.endTime}" readonly/>										
-											</td>										
+											<!-- 종료시간 선택 -->
+							            	<td>
+												<select id="endTime" class="form-select " name="endTime">
+												    <option th:each="ct : ${commonTime}" th:value="${ct.code}"
+												    		th:selected="${t.endTimeCode == ct.code}"
+												    		th:text="${ct.name}">
+												    </option>
+												</select>
+											</td>
 							            </tr>
 							        </tbody>
 							    </table>
@@ -200,19 +229,23 @@
 							            </tr>
 							        </tbody>
 							    </table>
+							    <div class="mt-1 mb-3" style="height: 10px;"><span class="msg lectureName-error error-label" style="display: none;">강의명을 입력해주세요.</span></div>
 							</div>
 							
-							<div class="lecutre-title" style="margin-top: 30px;">강의내용</div>
-							<textarea name="message" rows="15" cols="205" class="custom-textarea"
-								th:value="${lecture.lectureContent}">
-							</textarea>
+							<div style="margin-top: 30px;">
+								<label class="lecutre-Content" for="lectureContent">강의내용</label>
+								<textarea id="lectureContent" name="lectureContent" rows="15" cols="205" class="custom-textarea"
+									th:text="${lecture.lectureContent}">
+								</textarea>
+							</div>
+							<div class="mt-1 mb-3" style="height: 10px;"><span class="msg lectureContent-error error-label" style="display: none;">강의내용을 입력해주세요.</span></div>
 							
 							<!-- 취소/수정 버튼 -->					 
 							<div class="mt-8 flex items-center justify-end">
-	                           <button id="delBtn" type="button" class="btn btn-danger">
+	                           <button id="delBtn" type="button" class="btn btn-outline-danger">
 	                               취소
 	                           </button>
-	                           <button id="updateBtn" type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4">
+	                           <button id="lectureModifyBtn" type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4">
 	                               수정
 	                           </button>
 	                       </div>
@@ -231,7 +264,7 @@
 		</div>
 		
 		
-		<script th:src="@{/customjs/lectureOne.js}"> </script>
+		<<script th:src="@{/customjs/modifyLecture.js}"> </script>
 	</body>
 
 </html>
