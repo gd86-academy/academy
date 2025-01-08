@@ -18,10 +18,10 @@ import com.example.academy.service.LectureService;
 
 
 @Controller
-public class ApprovalController {
+public class LectureApprovalController {
 	@Autowired LectureService lectureService;
 	
-	@GetMapping("/addAttendanceApproval")
+	@GetMapping("/addLectureApproval")
 	public String addAttendanceApproval(Model model) {
 		// 스프링시큐리티에서 계정정보 가져오기.
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -44,7 +44,7 @@ public class ApprovalController {
 	List<LectureOneTimeListDTO> timeList = lectureService.getLectureOneTimeList(1);
 	model.addAttribute("timeList", timeList);
 			    
-		return "addAttendanceApproval";
+		return "addLectureApproval";
 	}
 	
 }

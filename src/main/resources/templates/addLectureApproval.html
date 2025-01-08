@@ -27,6 +27,8 @@
 		<script th:src="@{/js/custom.js}"></script>
 		<script th:src="@{/js/templete.js}"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+		<script src="https://uicdn.toast.com/tui-tree/latest/tui-tree.js"></script>
+		<link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui-tree/latest/tui-tree.css"/>
 			
 		<style>
 	       	.lecutre-title-align {
@@ -113,62 +115,57 @@
 	
 				<!-- 메인화면 -->
 				<div class="animate__animated p-6" :class="[$store.app.animation]"> <!-- 메인화면 div 시작 -->
+					<h2 class="text-2xl ml-3 mb-5">결재신청</h2>
+					<!-- 신청양식 선택버튼 -->
+					<div class="flex justify-start ml-3 mb-3">
+						<a type="button" class="btn btn-outline-primary mr-3" th:href="@{/}">근태신청</a>
+						<a type="button" class="btn btn-primary">강의신청</a>
+					</div>
 					<div class="panel">
-						<div class="flex flex-wrap justify-between gap-4 px-4" style="margin-bottom: 30px;">
-							<div class="text-2xl font-semibold uppercase">강의 소개</div>
+						<div class="flex flex-wrap justify-between gap-4 px-4" style="margin-bottom: 20px; margin-top: 20px;">
+							<div class="text-2xl font-semibold uppercase">강의 신청서</div>
 						</div>
-						
-						
+						<div class="p-5">
 						<!-- 테이블1 : 강의번호, 강사명 출력 -->
 						<div class="table-responsive">
-						    <table style="table-layout: fixed; width: 100%;">
+						    <table style="table-layout: fixed; width: 100%; height:65px; border: 1px solid #f0f0f0;">
 						        <tbody>
 						            <tr class="border-dark-dark-light">
-						                <td class="bg-[#f4f4f4] lecutre-title-align">강의 번호</td>
-						                <td class="lecutre-text-align" th:text="${lecture.lectureNo}"></td>
+						                <td class="bg-[#f4f4f4] lecutre-title-align">사원 번호</td>
+						                <td class="lecutre-text-align" th:text="${userNo}"></td>
 						                <td class="bg-[#f4f4f4] lecutre-title-align">강사명</td>
-						                <td class="lecutre-text-align" th:text="${lecture.employeeName}"></td>					                
+						                <td class="lecutre-text-align" th:text="${userName}"></td>					                
 						            </tr>
 						        </tbody>
 						    </table>
 						</div>
-						<hr class="my-6 border-[#e0e6ed] dark:border-[#1b2e4b]" />
-						<!-- 테이블2 : 강의날짜 출력 -->
+						<div style="height: 30px;"></div>
+						<!-- 테이블2 : 강의날짜, 강의시간 출력 -->
 						<div class="table-responsive">
-						    <table style="width: 100%;">
+						    <table style="width: 100%; border: 1px solid #ffffff;">
 						        <tbody>
-						            <tr class="border-dark-dark-light">
-						                <td class="lecutre-title">강의날짜</td>
-										<td>
-											<input id="beginDate" name="beginDate" type="text"
-												 class="form-input lecutre-text-align" th:value="${lecture.lectureBeginDate}" readonly/>
+						        	<tr>
+						        		<td style="border: 1px solid #ffffff;"><div class="lecutre-title">강의날짜</div></td>
+										<td style="border: 1px solid #ffffff;" colspan="4">
+											<div class="flex justify-between">
+												<input name="employeeBirth" id="employeeBirth" class="form-input mr-3" placeholder="시작날짜"/>
+												<div class="align-items-center">~</div>
+												<input name="employeeBirth" id="employeeBirth" class="form-input ml-3" placeholder="종료날짜"/>
+											</div>
 										</td>
-										<td class="lecutre-title-align" colspan="2">~</td>
-						                <td>
-											<input id="endDate" name="endDate" type="text"
-												 class="form-input lecutre-text-align" th:value="${lecture.lectureEndDate}" readonly/>
-										</td>					                
-						            </tr>
-						        </tbody>
-						    </table>
-						</div>
-						
-						<!-- 테이블3 : 강의시간 출력 -->
-						<div class="table-responsive">
-						    <table style="width: 100%;">
-						        <tbody>
+						        	</tr>
 						            <tr th:each="t : ${timeList}">
-						            	<td class="lecutre-title">강의시간</td>
-						            	<td>
+						            	<td style="border: 1px solid #ffffff;" class="lecutre-title">강의시간</td>
+						            	<td style="border: 1px solid #ffffff;">
 											<input id="weekday" name="weekday" type="text"
 												 class="form-input lecutre-text-align" th:value="${t.weekday}" readonly/>
 										</td>
-										<td>
+										<td style="border: 1px solid #ffffff;">
 											<input id="beginTime" name="beginTime" type="text"
 												 class="form-input lecutre-text-align" th:value="${t.beginTime}" readonly/>										
 										</td>
-										<td class="lecutre-title-align">~</td>
-										<td>
+										<td style="border: 1px solid #ffffff;" class="lecutre-title-align">~</td>
+										<td style="border: 1px solid #ffffff;">
 											<input id="endTime" name="endTime" type="text"
 												 class="form-input lecutre-text-align" th:value="${t.endTime}" readonly/>										
 										</td>										
@@ -176,14 +173,12 @@
 						        </tbody>
 						    </table>
 						</div>
-						
-						<hr class="my-6 border-[#e0e6ed] dark:border-[#1b2e4b]" />
-						
-						<!-- 테이블4 : 강의명, 강의실 출력 -->
+						<div style="height: 30px;"></div>
+						<!-- 테이블3 : 강의명, 강의실 출력 -->
 						<div class="table-responsive" style="margin-bottom: 20px;">
-						    <table style="table-layout: fixed; width: 100%;">
+						    <table style="table-layout: fixed; width: 100%; height:65px; border: 1px solid #f0f0f0;">
 						        <tbody>
-						            <tr class="border-dark-dark-light">
+						            <tr class="border-dark-dark-light ">
 						                <td class="bg-[#f4f4f4] lecutre-title-align">강의명</td>
 						                <td class="lecutre-text-align" th:text="${lecture.lectureName}"></td>
 						                <td class="bg-[#f4f4f4] lecutre-title-align">강의실</td>
@@ -195,17 +190,18 @@
 						
 						<div class="lecutre-title" style="margin-top: 30px;">강의내용</div>
 						<textarea name="message" rows="15" cols="205" class="custom-textarea"
-							th:value="${lecture.lectureContent}" readonly>
+							th:text="${lecture.lectureContent}" readonly>
 						</textarea>
 						
-						<!-- 수정/삭제 버튼 구현 행정팀만 노출 -->					 
+						<!-- 버튼 --> 
 						<div class="mt-8 flex items-center justify-end">
-                           <button id="openModalButtonLectureDelete" type="button" class="btn btn-danger">
-                               삭제
+                           <button id="openModalButtonAddPeople" type="button" class="btn btn-dark" style="width:130px;">
+                               결재선 추가
                            </button>
-                           <a id="updateBtn" class="btn btn-primary ltr:ml-4 rtl:mr-4" href="#" th:href="@{/modifyLecture(lectureNo=${lecture.lectureNo})}">
-                           		수정
+                           <a id="updateBtn" class="btn btn-primary ltr:ml-4 rtl:mr-4" href="#" th:href="@{/modifyLecture(lectureNo=${lecture.lectureNo})}" style="width:130px;">
+                           		등록
                            </a>
+                       </div>
                        </div>
                        
 					</div>
@@ -223,8 +219,8 @@
 		
 		<!--  강의삭제 확인 모달 -->
         <div class="LectureDeleteModal">
-		  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundLectureDelete">
-		       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperLectureDelete">
+		  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundAddPeople">
+		       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperAddPeople">
 		           <div
 		               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
 		               id="modal"
@@ -233,7 +229,7 @@
 		               <button
 		                   type="button"
 		                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
-		                   id="closeModalButtonLectureDelete"
+		                   id="closeModalButtonAddPeople"
 		               >
 		                   <svg
 		                       xmlns="http://www.w3.org/2000/svg"
@@ -256,34 +252,16 @@
 		               >
 		                   안내
 		               </h3>
+		               <!-- 모달내용 -->
 		               <div class="p-5">
-		                   "<span th:text="${lecture.lectureName}"></span>" 강의를 삭제하시겠습니까?
-		                   <div class="mt-8 flex items-center justify-end">
-	                          <button
-	                          	  id="cancelButtonLectureDelete"
-	                              type="button"
-	                              class="btn btn-outline-danger ltr:ml-4 rtl:mr-4"
-	                          >
-	                              취소
-	                          </button>
-	                          <a
-	                              type="button"
-	                              class="btn btn-primary ltr:ml-4 rtl:mr-4">
-	                              <!-- 
-	                              th:href="@{/deleteEmployee(employeeNo=${employee.employeeNo})}"
-	                               -->	                              
-	                          
-	                              확인
-	                          </a>
-	                      </div>
+		                    <div id="tree" class="tui-tree-wrap"></div>
 		               </div>
-		               
 		           </div>
 		       </div>
 		   </div>
 		</div>
 		
-		<script th:src="@{/customjs/lectureOne.js}"> </script>
+		<script th:src="@{/customjs/addAttendanceApproval.js}"> </script>
 	</body>
 
 </html>
