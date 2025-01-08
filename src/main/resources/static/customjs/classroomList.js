@@ -222,14 +222,27 @@ const cancelButtonModifyClassroom = document.getElementById('cancelButtonModifyC
 const modalBackgroundModifyClassroom = document.getElementById('modalBackgroundModifyClassroom');
 const modalWrapperModifyClassroom = document.getElementById('modalWrapperModifyClassroom');
 
+// 강의실 수정 모달 열기 (회의실 번호를 받아서 데이터 세팅)
+const openEditModal = (meetingroomNo) => {
+	// 수정 버튼 클릭 이벤트 설정
+	// modalWrapperModifyClassroom.onclick = () => {
+	// 	// 서버로 요청 전송
+	// 	window.location.href = `/academy/modifyClassroom?meetingroomNo=${meetingroomNo}`;
+	// };
+
+	// 모달 보이기
+	modalBackgroundModifyClassroom.classList.remove('hidden');
+	modalBackgroundModifyClassroom.classList.add('block');
+};
+
 // 강의실 수정 모달 열기
-document.addEventListener('click', (event) => {
-  // 수정 버튼 클릭 시
-  if (event.target && event.target.id === 'openModalButtonModifyClassroom') {
-    modalBackgroundModifyClassroom.classList.remove('hidden');  // 모달 배경 보이기
-    modalBackgroundModifyClassroom.classList.add('block');     // 모달 배경 보이게 설정
-  }
-});
+// document.addEventListener('click', (event) => {
+//   // 수정 버튼 클릭 시
+//   if (event.target && event.target.id === 'openModalButtonModifyClassroom') {
+//     modalBackgroundModifyClassroom.classList.remove('hidden');  // 모달 배경 보이기
+//     modalBackgroundModifyClassroom.classList.add('block');     // 모달 배경 보이게 설정
+//   }
+// });
 
 // 강의실 수정 모달 닫기
 document.addEventListener('click', (event) => {
