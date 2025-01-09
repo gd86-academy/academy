@@ -3,14 +3,20 @@ package com.example.academy.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.academy.dto.LectureModifyDTO;
 import com.example.academy.dto.LectureOneDTO;
 import com.example.academy.dto.LectureOneTimeListDTO;
+import com.example.academy.security.CustomUserDetails;
 import com.example.academy.service.CommonService;
 import com.example.academy.service.LectureService;
 import com.example.academy.vo.Common;
@@ -22,6 +28,14 @@ import lombok.extern.slf4j.Slf4j;
 public class LectureController {
 	@Autowired LectureService lectureService;
 	@Autowired CommonService commonService;
+	
+	// 김혜린 : 강의 삭제(사용여부 비활성화)
+	@GetMapping("/removeLecture")
+	public String removeLecture(Integer lectureNo) {
+		lectureService.removeLecture(lectureNo);
+		
+		return "redirect:/lectureList";
+	}
 	
 	// 김혜린 : 강의 수정페이지
 	@GetMapping("/modifyLecture")
@@ -50,10 +64,11 @@ public class LectureController {
 	}
 	// 김혜린 : 강의 수정페이지
 	@PostMapping("/modifyLecture")
-	public String modifyLecture(LectureModifyDTO lectureModifyDTO) {
-		// 1) 강의 수정 (강의날짜(개강/종강일), 강의명, 강의내용)
-		lectureService.modifyLecture(lectureModifyDTO);
-		// 2) 강의 수정(강의시간)
+	public String modifyLecture(LectureModifyDTO lectureModifyDTO, @RequestParam(value="timeList", required = false) List<String> list) {
+		log.debug("----------lectureModifyDTO : " + lectureModifyDTO);	//디버깅
+		log.debug("----------list : " + list);	//디버깅
+		//	강의 수정 
+		lectureService.modifyLecture(lectureModifyDTO, list);
 		
 		return "redirect:/lectureOne?lectureNo=" + lectureModifyDTO.getLectureNo();
 	}
@@ -62,6 +77,21 @@ public class LectureController {
 	// 김혜린 : 강의 상세페이지
 	@GetMapping("/lectureOne")
 	public String lectureOne(Model model, Integer lectureNo) {
+		
+		// 스프링시큐리티에서 계정정보 가져오기.
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		// 로그인 상태일 때만 model에 정보담기.
+	    if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+	        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+	        model.addAttribute("userNo", Integer.parseInt(userDetails.getUsername()));
+	        model.addAttribute("userName", userDetails.getUserRealName());
+	        model.addAttribute("userMail", userDetails.getUserMail());
+	        model.addAttribute("userRole", userDetails.getUserRole());
+	        model.addAttribute("userPhotoFileName", userDetails.getUserPhotoFileName());
+	        model.addAttribute("userPhotoFileExt", userDetails.getUserPhotoFileExt());
+	    }
+		
 		// 강의 상세정보 출력
 		LectureOneDTO lecture = lectureService.getLectureOne(lectureNo);
 		model.addAttribute("lecture", lecture);

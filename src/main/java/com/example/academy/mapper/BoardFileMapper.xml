@@ -3,7 +3,7 @@
 <mapper namespace="com.example.academy.mapper.BoardFileMapper">
 
 	<insert id="insertBoardFile" parameterType="com.example.academy.vo.BoardFile">
-		INSERT into boardFile (
+		INSERT into board_file (
 			board_no
 			, file_no
 			)

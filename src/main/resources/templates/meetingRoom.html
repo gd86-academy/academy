@@ -89,14 +89,16 @@
             </template>
         </div>
 
-        <div class="main-container min-h-screen text-black dark:text-white-dark" :class="[$store.app.navbar]">
-            <!-- 사이드바 파일 연결 -->
-            <div th:replace="fragments/sidebar :: sidebar"></div>
-            <!-- end sidebar section -->
+	<div
+		class="main-container min-h-screen text-black dark:text-white-dark"
+		:class="[$store.app.navbar]">
+		<!-- 사이드바 파일 연결 -->
+		<div th:replace="fragments/sidebar :: sidebar"></div>
+		<!-- end sidebar section -->
 
-            <div class="main-content flex min-h-screen flex-col">
-                <!-- 헤더 파일 연결 -->
-                 <div th:replace="fragments/header :: header"></div>
+		<div class="main-content flex min-h-screen flex-col">
+			<!-- 헤더 파일 연결 -->
+			<div th:replace="fragments/header :: header"></div>
 
 			<!-- 메인화면 -->
 			<div class="animate__animated p-6" :class="[$store.app.animation]">
@@ -187,8 +189,7 @@
 														<button type="button" class="btn btn-outline-danger"
 															id="cancelButton">취소</button>
 														<button id="meetingRoomAddBtn" type="button"
-															class="btn btn-primary ltr:ml-4 rtl:mr-4">
-															등록</button>
+															class="btn btn-primary ltr:ml-4 rtl:mr-4">등록</button>
 													</div>
 												</form>
 											</div>
@@ -201,84 +202,90 @@
 					</div>
 				</div>
 				
-			<!--회의실 수정 모달 -->
-								<div
-									class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60"
-									id="modalModifyBackground">
-									<div class="flex min-h-screen items-center justify-center px-4"
-										id="modalModifyWrapper">
-										<div
-											class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
-											id="modal">
-											<button type="button"
-												class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
-												id="closeModifyModalButton">
-												<svg xmlns="http://www.w3.org/2000/svg" width="24px"
-													height="24px" viewBox="0 0 24 24" fill="none"
-													stroke="currentColor" stroke-width="1.5"
-													stroke-linecap="round" stroke-linejoin="round"
-													class="h-6 w-6">
+				<div class="dvanimation animate__animated p-6"
+					:class="[$store.app.animation]">
+					<div x-data="multicolumn">
+						<div class="panel">
+							<table id="meetingroomTable" class="whitespace-nowrap"></table>
+						</div>
+					</div>
+				</div>
+
+				<!--회의실 수정 모달 -->
+				<div
+					class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60"
+					id="modalModifyBackground">
+					<div class="flex min-h-screen items-center justify-center px-4"
+						id="modalModifyWrapper">
+						<div
+							class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
+							id="modal">
+							<button type="button"
+								class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+								id="closeModifyModalButton">
+								<svg xmlns="http://www.w3.org/2000/svg" width="24px"
+									height="24px" viewBox="0 0 24 24" fill="none"
+									stroke="currentColor" stroke-width="1.5" stroke-linecap="round"
+									stroke-linejoin="round" class="h-6 w-6">
 									                       <line x1="18" y1="6" x2="6" y2="18"></line>
 									                       <line x1="6" y1="6" x2="18" y2="18"></line>
 									                   </svg>
-											</button>
-											<h3
-												class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]">
-												회의실 수정</h3>
-											<div class="p-5">
-												<form id="meetingroomModifyForm" method="post"
-													th:action="@{/modifyMeetingRoom}"
-													enctype="multipart/form-data">
-													<input type="hidden" id="meetingroomNo" name="meetingroomNo">
-													<!-- 회의실명 -->
-													<div>
-														<label for="employeePhone">회의실명</label> <input
-															id="meetingroomName" name="meetingroomName" type="text"
-															placeholder="회의실명" class="form-input" />
-													</div>
-													<div class="mt-1 mb-3" style="height: 10px;">
-														<span class="msg meetingroomName-error error-label"
-															style="display: none;">회의실이름을 입력해주세요.</span>
-													</div>
-													<!-- 담당자 -->
-													<div>
-														<label for="employeePhone">담당자</label> <input
-															id="meetingroomManager" name="meetingroomManager"
-															type="text" placeholder="담당자" class="form-input" />
-													</div>
-													<div class="mt-1 mb-3" style="height: 10px;">
-														<span class="msg meetingroomManager-error error-label"
-															style="display: none;">담당자를 선택해주세요.</span>
-													</div>
-													<!-- 수용인원 -->
-													<div>
-														<label for="meetingroomCapacity">수용인원</label> <input
-															id="meetingroomCapacity" name="meetingroomCapacity"
-															type="number" placeholder="수용인원" class="form-input" />
-													</div>
-													<div class="mt-1 mb-3" style="height: 10px;">
-														<span class="msg meetingroomCapacity-error error-label"
-															style="display: none;">수용인원을 입력해주세요.</span>
-													</div>
-													<div class="mt-8 flex items-center justify-end">
-														<button type="button" class="btn btn-outline-danger"
-															id="cancelModifyButton">취소</button>
-														<button id="meetingroomModifyButton" type="button"
-															class="btn btn-primary ltr:ml-4 rtl:mr-4">
-															수정</button>
-													</div>
-												</form>
-											</div>
-										</div>
+							</button>
+							<h3
+								class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]">
+								회의실 수정</h3>
+							<div class="p-5">
+								<form id="meetingroomModifyForm" method="post"
+									th:action="@{/modifyMeetingRoom}" enctype="multipart/form-data">
+									<input type="hidden" id="meetingroomNo" name="meetingroomNo">
+									<!-- 회의실명 -->
+									<div>
+										<label for="employeePhone">회의실명</label> <input
+											id="meetingroomName" name="meetingroomName" type="text"
+											placeholder="회의실명" class="form-input" />
 									</div>
-								</div>
+									<div class="mt-1 mb-3" style="height: 10px;">
+										<span class="msg meetingroomName-error error-label"
+											style="display: none;">회의실이름을 입력해주세요.</span>
+									</div>
+									<!-- 담당자 -->
+									<div>
+										<label for="employeePhone">담당자</label> <input
+											id="meetingroomManager" name="meetingroomManager" type="text"
+											placeholder="담당자" class="form-input" />
+									</div>
+									<div class="mt-1 mb-3" style="height: 10px;">
+										<span class="msg meetingroomManager-error error-label"
+											style="display: none;">담당자를 선택해주세요.</span>
+									</div>
+									<!-- 수용인원 -->
+									<div>
+										<label for="meetingroomCapacity">수용인원</label> <input
+											id="meetingroomCapacity" name="meetingroomCapacity"
+											type="number" placeholder="수용인원" class="form-input" />
+									</div>
+									<div class="mt-1 mb-3" style="height: 10px;">
+										<span class="msg meetingroomCapacity-error error-label"
+											style="display: none;">수용인원을 입력해주세요.</span>
+									</div>
+									<div class="mt-8 flex items-center justify-end">
+										<button type="button" class="btn btn-outline-danger"
+											id="cancelModifyButton">취소</button>
+										<button id="meetingroomModifyButton" type="button"
+											class="btn btn-primary ltr:ml-4 rtl:mr-4">수정</button>
+									</div>
+								</form>
 							</div>
-
 						</div>
 					</div>
 				</div>
-				
-				<!-- 회의실 삭제 확인 모달 -->
+			</div>
+
+		</div>
+	</div>
+	</div>
+
+	<!-- 회의실 삭제 확인 모달 -->
 				<div class="meetingRoomDelete">
 					<div
 						class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60"
@@ -325,14 +332,7 @@
 
 
 
-				<div class="dvanimation animate__animated p-6"
-					:class="[$store.app.animation]">
-					<div x-data="multicolumn">
-						<div class="panel">
-							<table id="meetingroomTable" class="whitespace-nowrap"></table>
-						</div>
-					</div>
-				</div>
+				
 
 				<!--  풋터 파일 연결 -->
 				<div th:replace="fragments/footer :: footer"></div>

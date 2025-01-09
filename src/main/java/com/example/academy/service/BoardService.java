@@ -52,27 +52,33 @@ public class BoardService {
 		Integer boardNo = boardDTO.getBoardNo();
 		log.debug("boardNo = " + boardNo);
 		
+		List<MultipartFile> files = boardDTO.getBoardFiles(); // 폼에 입력되었던 파일데이터 가져옴.
 		// 파일정보 데이터베이스에 삽입.
-		// if(파일이 있다면)
-		MultipartFile mf = boardDTO.getBoardFile(); // 폼에 입력되었던 파일데이터 가져옴.
-		InputFile inputFile = new InputFile(); // inputFile 인스턴스 생성.
-		inputFile.setOriginFileName(mf.getOriginalFilename()); // 파일의 실제이름을 추출해서 inputFile 인스턴스에 set.
-		Files files = new Files();
-		files.setFileName(inputFile.getUUID()); // 서버에서 관리되는 파일이름.
-		files.setFileOrigin(inputFile.getFileName()); // 실제 파일이름.
-		files.setFileExt(inputFile.getFileExt()); // 파일 확장자.
-		files.setFileSize(mf.getSize()); // 파일 크기.
-		files.setFileType(mf.getContentType()); // 파일 타입.
-		files.setFileCategory("employee"); // 파일 카테고리.
-		Integer fileRow = filesMapper.insertFile(files); // 파일정보 삽입.
-		log.debug("fileRow = " + fileRow);
-		Integer fileNo = files.getFileNo();
-		
-		BoardFile boardFile = new BoardFile();
-		boardFile.setBoardNo(boardNo);
-		boardFile.setFileNo(fileNo);
-		Integer boardFileRow = boardFileMapper.insertBoardFile(boardFile);
-		log.debug("boardFileRow = " + boardFileRow);
+		for(MultipartFile mf : files) {
+			if(!mf.isEmpty()) { // if(파일이 있다면)
+				
+				InputFile inputFile = new InputFile(); // inputFile 인스턴스 생성.
+				inputFile.setOriginFileName(mf.getOriginalFilename()); // 파일의 실제이름을 추출해서 inputFile 인스턴스에 set.
+				
+				Files file = new Files();
+				file.setFileName(inputFile.getUUID()); // 서버에서 관리되는 파일이름.
+				file.setFileOrigin(inputFile.getFileName()); // 실제 파일이름.
+				file.setFileExt(inputFile.getFileExt()); // 파일 확장자.
+				file.setFileSize(mf.getSize()); // 파일 크기.
+				file.setFileType(mf.getContentType()); // 파일 타입.
+				file.setFileCategory("employee"); // 파일 카테고리.
+				Integer fileRow = filesMapper.insertFile(file); // 파일정보 삽입.
+				log.debug("fileRow = " + fileRow);
+				Integer fileNo = file.getFileNo();
+				log.debug("fileNo = " + fileNo);
+				
+				BoardFile boardFile = new BoardFile();
+				boardFile.setBoardNo(boardNo);
+				boardFile.setFileNo(fileNo);
+				Integer boardFileRow = boardFileMapper.insertBoardFile(boardFile);
+				log.debug("boardFileRow = " + boardFileRow);			
+			}
+		}
 		
 	}
 	

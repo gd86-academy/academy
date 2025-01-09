@@ -19,12 +19,17 @@
 	
 	
 	<update id="modifyMeetingRoom" parameterType="com.example.academy.dto.MeetingRoomAddDTO">
-    UPDATE meetingroom
-    SET 
-        meetingroom_name = #{meetingroomName},
-        meetingroom_manager = #{meetingroomManager},
-        meetingroom_capacity = #{meetingroomCapacity}
-    WHERE meetingroom_no = #{meetingroomNo}
+	UPDATE meetingroom
+	SET
+	meetingroom_name = CASE WHEN #{meetingroomName} != '' THEN #{meetingroomName} ELSE
+	meetingroom_name END,
+	meetingroom_manager = CASE WHEN #{meetingroomManager} != '' THEN (SELECT employee_no FROM
+	employee WHERE employee_no = #{meetingroomManager}) ELSE
+	meetingroom_manager END,
+	meetingroom_capacity = CASE WHEN #{meetingroomCapacity} != '' THEN #{meetingroomCapacity}
+	ELSE meetingroom_capacity END
+	WHERE meetingroom_no = #{meetingroomNo}
+
 </update>
 
 	
@@ -40,17 +45,17 @@
 	
 	<!-- 하상우) 회의실 추가 -->
 	<insert id = "addMeetingRoom" parameterType="com.example.academy.dto.MeetingRoomAddDTO">
-	
-		INSERT INTO 
-		meetingroom(
-		 			meetingroom_name,
-		    		meetingroom_manager,
-					meetingroom_capacity
-					)
-					
-		VALUES(#{meetingroomName},
-			   #{meetingroomManager},
-			   #{meetingroomCapacity});
+
+	INSERT INTO meetingroom (
+	meetingroom_name,
+	meetingroom_manager,
+	meetingroom_capacity
+	)
+	VALUES (
+	#{meetingroomName},
+	(SELECT employee_no FROM employee WHERE employee_no = #{meetingroomManager}),
+	#{meetingroomCapacity}
+	);
 	</insert>
 	
 	
@@ -62,7 +67,7 @@
 			meetingroom_name meetingroomName,
 			meetingroom_manager meetingroomManager,
 			meetingroom_capacity meetingroomCapacity
-		FROM meetingroom;
+		FROM meetingroom Join employee on meetingroom.meetingroom_manager = employee.employee_no;
 	</select>
 	
 	

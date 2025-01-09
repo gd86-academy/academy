@@ -2,6 +2,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.LectureMapper">
 	
+	<!-- 김혜린 : 강의 삭제(사용여부 비활성화) -->
+	<update id="updateUseLecture">
+		UPDATE lecture 
+		SET
+			use_yn = 0
+		WHERE lecture_no = #{lectureNo}
+	</update>
+	
 	<!-- 김혜린 : 강의 수정(강의날짜(개강/종강일), 강의명, 강의내용) -->
 	<update id="updateLecture" parameterType="com.example.academy.dto.LectureModifyDTO">
 		UPDATE lecture 
@@ -76,6 +84,7 @@
 		ON l.lecturer = e.employee_no
 		LEFT OUTER JOIN file f
 		ON e.photo_file_no = f.file_no
+		WHERE l.use_yn = 1
 	</select>
 
 

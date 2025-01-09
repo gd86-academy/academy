@@ -5,23 +5,12 @@
 	<delete id="deleteClassroom"  parameterType="com.example.academy.vo.Classroom">
 		DELETE FROM classroom WHERE classroom_no = #{classroomNo}
 	</delete>
-	
-	<!-- 박시현 : 강의실번호 별 상세정보 -->
-	<select id="classroomOne" parameterType="Integer" resultType="com.example.academy.dto.ClassroomListDTO">
-		SELECT 
-			classroom_no classroomNo
-			, classroom_name classroomName
-			, classroom_manager classroomManager
-			, classroom_capacity classroomCapacity
-		FROM classroom 
-		WHERE classroom_no = #{classroomNo}
-	</select>
 
 	<!-- 박시현 : 강의실 수정 -->
-	<update id="updateClassroom" parameterType="com.example.academy.vo.Classroom">
+	<update id="updateClassroom">
 		UPDATE classroom 
 			SET
-			classroom_name = #{classroomName}
+			classroom_no = #{classroomName}
 			, classroom_manager = #{classroomManager}
 		 	, classroom_capacity = #{classroomCapacity}
 		WHERE classroom_no = #{classroomNo}

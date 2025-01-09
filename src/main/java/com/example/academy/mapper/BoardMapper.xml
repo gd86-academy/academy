@@ -29,7 +29,7 @@
 	</delete>
 
 	<!-- 공지사항 추가 -->
-	<insert id="insertBoard" parameterType="com.example.academy.dto.BoardDTO">
+	<insert id="insertBoard" parameterType="com.example.academy.dto.BoardDTO" useGeneratedKeys="true" keyProperty="boardNo">
 		INSERT into board (
 			board_title
 			, board_content
@@ -45,7 +45,7 @@
 	</insert>
 
 	<!-- 상세 공지사항 조회  -->
-	<select id="selectBoardOne" resultType="com.example.academy.dto.BoardDTO" parameterType="Integer">
+	<select id="selectBoardOne" resultType="com.example.academy.vo.Board" parameterType="Integer">
 		SELECT
 			b.board_no boardNo
 			, b.board_title boardTitle

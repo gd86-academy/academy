@@ -167,7 +167,7 @@
 								                   강의실 등록
 								               </h3>
 								               <div class="p-5">
-								                   <form id="classroomAddForm" method="post" th:action="@{/addClassroom}" enctype="multipart/form-data">
+								                   <form id="classroomAddForm" method="post" th:action="@{/addClassroom}">
 								                   	   <!-- 강의실명 -->
 								                       <div>
 								                           <label for="classroomName">강의실명</label>
@@ -183,7 +183,7 @@
 								                   		<!-- 담당자 -->
 								                       <div>
 								                           <label for="classroomManager">담당자</label>
-								                           <select id="classroomManager" class="form-select" name="classroomManager" >
+								                           <select id="classroomManager" class="form-select" name="classroomManager">
 								                           		<option value="" >선택해주세요</option>
 								                           		<th:block th:each="classroom : ${classroom}">
 														   	   		<option th:value="${classroom.employeeNo}" th:text="${classroom.employeeName}"></option>
@@ -208,7 +208,7 @@
 								                               취소
 								                           </button>
 								                           <button
-								                           	   id="classroomModifyButton"
+								                           	   id="classroomAddBtn"
 								                               type="button"
 								                               class="btn btn-primary ltr:ml-4 rtl:mr-4"
 								                           >
@@ -221,19 +221,18 @@
 								       </div>
 								   </div>
 								</div>
-										
-								<!-- 수정 모달 -->
-								<div>
-									<div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalModifyBackground">
-								       <div class="flex min-h-screen items-center justify-center px-4" id="modalModifyWrapper">
+							    <!-- 수정 확인 모달 -->
+						        <div class="">
+								  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackground">
+								       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapper">
 								           <div
 								               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
 								               id="modal"
 								           >
-								               <button	 	
+								               <button
 								                   type="button"
 								                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
-								                    id="closeModifyModalButton"
+								                   id="closeModalButtonModifyClassroom"
 								               >
 								                   <svg
 								                       xmlns="http://www.w3.org/2000/svg"
@@ -246,7 +245,64 @@
 								                       stroke-linecap="round"
 								                       stroke-linejoin="round"
 								                       class="h-6 w-6"
-								                      
+								                   >
+								                       <line x1="18" y1="6" x2="6" y2="18"></line>
+								                       <line x1="6" y1="6" x2="18" y2="18"></line>
+								                   </svg>
+								               </button>
+								               <h3
+								                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
+								               >
+								                   안내
+								               </h3>
+								               <div class="p-5">
+								                   수정하시겠습니까?
+								                   <div class="mt-8 flex items-center justify-end">
+							                          <button
+							                          	  id="cancelButtonModifyClassroom"
+							                              type="button"
+							                              class="btn btn-primary ltr:ml-4 rtl:mr-4"
+							                          >
+							                              취소
+							                          </button>
+							                          <button
+							                          	  id="classroomModigyBtn"
+							                              type="button"
+							                              class="btn btn-primary ltr:ml-4 rtl:mr-4"
+							                          >
+							                              수정
+							                          </button>
+							                      </div>
+								               </div>
+								           </div>
+								       </div>
+								   </div>
+								</div>
+										
+								<!-- 수정 모달 -->
+								<div>
+									<div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundModifyClassroom">
+								       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperModifyClassroom">
+								           <div
+								               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
+								               id="modal"
+								           >
+								               <button
+								                   type="button"
+								                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+								               >
+								                   <svg
+								                       xmlns="http://www.w3.org/2000/svg"
+								                       width="24px"
+								                       height="24px"
+								                       viewBox="0 0 24 24"
+								                       fill="none"
+								                       stroke="currentColor"
+								                       stroke-width="1.5"
+								                       stroke-linecap="round"
+								                       stroke-linejoin="round"
+								                       class="h-6 w-6"
+								                       id="closeModalButtonModifyClassroom"
 								                   >
 								                       <line x1="18" y1="6" x2="6" y2="18"></line>
 								                       <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -258,17 +314,20 @@
 								                   강의실 수정
 								               </h3>
 								               <div class="p-5">
-								                   <form id="classroomModifyForm" method="post" th:action="@{/modifyClassroom}" enctype="multipart/form-data">
-								                   		<input type="hidden" name="classroomNo" id="classroomNo">
+								                   <form id="classroomModifyForm" method="post" th:action="@{/modifyClassroom}">
+								                   		<input type="hidden" name="classroomNo" th:value="${classroomNo}">
 													   <div>
 									                       <label for="classroomName">강의실명</label>
-								                           <input
-								                               id="classroomName"
-								                               name="classroomName"
-								                               type="text"
-								                               placeholder="강의실명"
-								                               class="form-input"
-								                           />
+									                       <th:block th:each="classroom : ${modifyClassroom}">
+									                           <input
+									                               id="classroomName"
+									                               name="classroomName"
+									                               th:value="${classroomName}"
+									                               type="text"
+									                               placeholder="강의실명"
+									                               class="form-input"
+									                           />
+								                           </th:block>
 									                   </div>
 								                       <div class="mt-1 mb-3" style="height: 10px;"><span class="msg classroomName-error error-label" style="display: none;">강의실명을 입력해주세요.</span></div>
 								                   		<!-- 담당자 -->
@@ -277,7 +336,7 @@
 								                           <select id="classroomManager" class="form-select" name="classroomManager">
 								                           		<option value="" >선택해주세요</option>
 								                           		<th:block th:each="classroom : ${classroom}">
-														   	   		<option th:value="${classroom.employeeNo}" th:text="${classroom.employeeName}" id="classroomManager" >
+														   	   		<option th:value="${classroom.employeeNo}" th:text="${classroom.employeeName}" >
 														   	   		</option>
 														   	   	</th:block>
 								                           </select>
@@ -286,25 +345,26 @@
 								                       <!-- 수용인원 -->
 								                       <div>
 								                           <label for="classroomCapacity">수용인원</label>
-								                           <input
-								                               id="classroomCapacity"
-								                               name="classroomCapacity"
-								                               type="number"
-								                               placeholder="수용인원"
-								                               class="form-input"
-								                           />
+								                           <th:block th:each="classroom : ${modifyClassroom}">
+									                           <input
+									                               id="classroomCapacity"
+									                               name="classroomCapacity"
+									                               th:value="${classroom.classroomCapacity}"
+									                               type="number"
+									                               placeholder="수용인원"
+									                               class="form-input"
+									                           />
+								                           </th:block>
 								                       </div>
 													   <div class="mt-1 mb-3" style="height: 10px;"><span class="msg classroomCapacity-error error-label" style="display: none;">수용인원을 입력해주세요.</span></div>  
 								                       <div class="mt-8 flex items-center justify-end">
-								                           <button id="cancelModifyButton" 
-								                           			type="button" 
-								                           			class="btn btn-outline-danger" >
+								                           <button type="button" class="btn btn-outline-danger" id="cancelButtonModifyClassroom">
 								                               취소
 								                           </button>
 								                           <button
 								                           	   id="classroomModifyBtn"
 								                               type="button"
-								                               class="btn btn-primary ltr:ml-4 rtl:mr-4 classroomModifyBtn"
+								                               class="btn btn-primary ltr:ml-4 rtl:mr-4"
 								                           >
 								                               수정
 								                           </button>
@@ -334,9 +394,9 @@
 														height="24px" viewBox="0 0 24 24" fill="none"
 														stroke="currentColor" stroke-width="1.5"
 														stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
-								                        <line x1="18" y1="6" x2="6" y2="18"></line>
-								                        <line x1="6" y1="6" x2="18" y2="18"></line>
-								                    </svg>
+				                        <line x1="18" y1="6" x2="6" y2="18"></line>
+				                        <line x1="6" y1="6" x2="18" y2="18"></line>
+				                    </svg>
 												</button>
 												<h3
 													class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]">
@@ -364,13 +424,13 @@
                            </div>
                        </div>   
 					</div>
-				<div class="dvanimation animate__animated p-6" :class="[$store.app.animation]">
-               		<div x-data="multicolumn">
-               			<div class="panel">
-               				<table id="classroomTable" class="whitespace-nowrap"></table>
-               			</div>
-               		</div>
-               	</div>
+					<div class="dvanimation animate__animated p-6" :class="[$store.app.animation]">
+                		<div x-data="multicolumn">
+                			<div class="panel">
+                				<table id="classroomTable" class="whitespace-nowrap"></table>
+                			</div>
+                		</div>
+                	</div>
                 
                 <!--  풋터 파일 연결 -->
                 <div th:replace="fragments/footer :: footer"></div>

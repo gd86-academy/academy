@@ -79,71 +79,7 @@ document.addEventListener('alpine:init', () => {
 	
 	
 });
-/*
-// 개인정보 수정 유효성 검사 
-$('#employeeModifyBtn').click(function() {
-    let isVal = true;
- 	// 이름 검사
-    if ($('#employeeName').val().trim() === '') {
-        $('.employeeName-error').show();
-        $('#employeeName').addClass("errorInput");
-        isVal = false;
-    } else {
-        $('.employeeName-error').hide();
-        $('#employeeName').removeClass("errorInput");
-    }
-    
- 	// 전화번호 검사
-    if ($('#employeePhone').val().trim() === '') {
-        $('.employeePhone-error').show();
-        $('#employeePhone').addClass("errorInput");
-        isVal = false;
-    } else {
-        $('.employeePhone-error').hide();
-        $('#employeePhone').removeClass("errorInput");
-    }
 
-    // 이메일 검사
-    if ($('#employeeMail').val().trim() === '') {
-        $('#employeeMail').addClass("errorInput");
-        $('.employeeMail-error').show();
-        isVal = false;
-    } else {
-        $('.employeeMail-error').hide();
-        $('#employeeMail').removeClass("errorInput");
-    }
-    
- 	// 생년월일 검사
-    if ($('#employeeBirth').val().trim() === '') {
-        $('#employeeBirth').addClass("errorInput");
-        $('.employeeBirth-error').show();
-        isVal = false;
-    } else {
-        $('.employeeBirth-error').hide();
-        $('#employeeBirth').removeClass("errorInput");
-    }
- 
- 	// 주소 검사
-    if ($('#employeeAddress').val().trim() === '' || $('#employeeAddressDetail').val().trim() === '' || $('#employeePostalCode').val().trim() === '') {
-        $('#employeeAddress').addClass("errorInput");
-        $('#employeeAddressDetail').addClass("errorInput");
-        $('#employeePostalCode').addClass("errorInput");
-        $('.employeeAddress-error').show();
-        isVal = false;
-    } else {
-    	$('.employeeAddress-error').hide();
-        $('#employeeAddressDetail').removeClass("errorInput");
-        $('#employeePostalCode').removeClass("errorInput");
-        $('#employeeAddress').removeClass("errorInput");
-    }
- 	
-    // 폼 제출
-    if (isVal) {
-        console.log("submit 성공");
-        $('#employeeModifyForm').submit();
-    }
-});
-*/
 // 강의삭제 모달 관련 DOM 요소
 const openModalButtonLectureDelete = document.getElementById('openModalButtonLectureDelete');		// 강의상세페이지 [삭제]버튼
 const closeModalButtonLectureDelete = document.getElementById('closeModalButtonLectureDelete');		// 삭제모달 [x]버튼

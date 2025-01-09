@@ -14,14 +14,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.academy.dto.LectureOneDTO;
 import com.example.academy.dto.LectureOneTimeListDTO;
 import com.example.academy.security.CustomUserDetails;
+import com.example.academy.service.CommonService;
 import com.example.academy.service.LectureService;
+import com.example.academy.vo.Common;
 
 
 @Controller
-public class ApprovalController {
+public class LectureApprovalController {
 	@Autowired LectureService lectureService;
+	@Autowired CommonService commonService;
 	
-	@GetMapping("/addAttendanceApproval")
+	@GetMapping("/addLectureApproval")
 	public String addAttendanceApproval(Model model) {
 		// 스프링시큐리티에서 계정정보 가져오기.
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -37,14 +40,19 @@ public class ApprovalController {
 	        model.addAttribute("userPhotoFileExt", userDetails.getUserPhotoFileExt());
 	    }
 	    
-	 // 강의 상세정보 출력
-	LectureOneDTO lecture = lectureService.getLectureOne(1);
-	model.addAttribute("lecture", lecture);
-	// 강의 시간 리스트 출력
-	List<LectureOneTimeListDTO> timeList = lectureService.getLectureOneTimeList(1);
-	model.addAttribute("timeList", timeList);
-			    
-		return "addAttendanceApproval";
+	 // 3) 강의 요일 조회(셀렉박스)
+	 		List<Common> commonWeekday = commonService.getWeekday();
+	 		model.addAttribute("commonWeekday", commonWeekday);
+	 		
+	 		
+	 		// 3) 강의 시간 조회(셀렉박스)
+	 		List<Common> commonTime = commonService.getTime();
+	 		model.addAttribute("commonTime", commonTime);
+	 		
+	    
+	 
+		
+		return "addLectureApproval";
 	}
 	
 }
