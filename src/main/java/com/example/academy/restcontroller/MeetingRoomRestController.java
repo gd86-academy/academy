@@ -34,6 +34,8 @@ public class MeetingRoomRestController {
         return result;
     }
     
+    
+    // 하상우) 회의실 수정 ( meetingroomNo 가져오기)
     @GetMapping("/modifyMeetingRoom")
     public ResponseEntity<MeetingRoomAddDTO> getMeetingRoom(@RequestParam Integer meetingroomNo) {
         MeetingRoomAddDTO meetingRoom = meetingroomservice.getMeetingRoomNo(meetingroomNo);
@@ -44,6 +46,7 @@ public class MeetingRoomRestController {
         }
     }
 
+    // 하상우 ) 회의실 수정
     @PostMapping("/modifyMeetingRoom")
     public ResponseEntity<String> modifyMeetingRoom(@ModelAttribute MeetingRoomAddDTO modifyMeetingRoom) {
         int row = meetingroomservice.modifyMeetingRoom(modifyMeetingRoom);
