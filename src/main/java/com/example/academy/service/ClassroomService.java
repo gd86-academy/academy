@@ -17,6 +17,10 @@ public class ClassroomService {
 		return classroomMapper.deleteClassroom(classroomNo);
 	}
 	
+	public ClassroomListDTO getClassroomOne(Integer classroomNo) {
+		return classroomMapper.classroomOne(classroomNo);
+	}
+	
 	// 박시현 : 강의실 수정
 	public Integer modifyClassroom(ClassroomListDTO classroomListDTO) {
 		return classroomMapper.updateClassroom(classroomListDTO);
