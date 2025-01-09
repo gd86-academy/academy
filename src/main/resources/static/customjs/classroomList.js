@@ -221,6 +221,7 @@ const modalModifyWrapper = document.getElementById('modalModifyWrapper');
 const cancelModifyButton = document.getElementById('cancelModifyButton');
 const submitModifyButton = document.getElementById('classroomModifyButton');
 
+
 // 모달 열기
 const openModifyModal = (classroomNo) => {
   $.ajax({
