@@ -11,9 +11,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.academy.dto.ClassroomListDTO;
 import com.example.academy.dto.LectureOneDTO;
 import com.example.academy.dto.LectureOneTimeListDTO;
 import com.example.academy.security.CustomUserDetails;
+import com.example.academy.service.ClassroomService;
 import com.example.academy.service.CommonService;
 import com.example.academy.service.LectureService;
 import com.example.academy.vo.Common;
@@ -23,6 +25,7 @@ import com.example.academy.vo.Common;
 public class LectureApprovalController {
 	@Autowired LectureService lectureService;
 	@Autowired CommonService commonService;
+	@Autowired ClassroomService classroomService;
 	
 	@GetMapping("/addLectureApproval")
 	public String addAttendanceApproval(Model model) {
@@ -50,10 +53,8 @@ public class LectureApprovalController {
  		model.addAttribute("commonTime", commonTime);
  		
  		// 3) 강의실 조회(셀렉박스)
- 		//List
-	 		
-	    
-	 
+ 		List<ClassroomListDTO> classroomList = classroomService.getClassroomList();
+	 	model.addAttribute("classroomList", classroomList);
 		
 		return "addLectureApproval";
 	}

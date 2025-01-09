@@ -66,7 +66,7 @@
 	<!-- 진수우 : 사원부서/직책수정 -->
 	<update id="updateAffiliation" parameterType="com.example.academy.dto.AffiliationModifyDTO">
 		UPDATE employee 
-		SET employee_department = #{employeeDepartment}, employee_position = #{employeePosition}
+		SET employee_department = #{employeeDepartment}, employee_position = #{employeePosition}, employee_role = #{employeeRole}
 		WHERE employee_no = #{employeeNo}
 	</update>
 	

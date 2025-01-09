@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class EmployeeRestController {
 	@Autowired EmployeeService employeeService;
 	
+	// 진수우 : 사원목록 출력.
 	@GetMapping("/restapi/employeeList")
 	public List<Object[]> employeeList() {
 		List<EmployeeListDTO> employeesList = employeeService.getEmployeeList();

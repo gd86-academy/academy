@@ -56,6 +56,9 @@
 		        font-size: 14px;
 		        width: 100%; /* 화면 크기에 맞게 크기 조정 */    			
 		    }
+		    .table-height tr {
+			    height: 58px; /* 원하는 높이로 설정 */
+			}
 	    </style>	
 	</head>
 	
@@ -121,37 +124,29 @@
 				<div class="animate__animated p-6 white-light" :class="[$store.app.animation]"> <!-- 메인화면 div 시작 -->
 					<h2 class="text-2xl ml-3 mb-5">결재신청</h2>
 					<!-- 신청양식 선택버튼 -->
-					
 					<div class="relative inline-flex" style="margin: 0% 15% 0% 15%;">
 					    <a type="button" class="btn btn-outline-primary ltr:rounded-r-none rtl:rounded-l-none mb-3" th:href="@{/addAttendanceApproval}">근태신청</a>
 					    <a type="button" class="btn btn-primary ltr:rounded-l-none rtl:rounded-r-none mb-3">강의신청</a>
 					</div>
-					<div class="panel" style="margin: 0% 15% 0% 15%; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05); border-radius : 10px;">
-						<div class="flex flex-wrap justify-between gap-4 px-4" style="margin-bottom: 20px; margin-top: 20px;">
+					<div class="panel" style="margin: 0% 15% 0% 15%; padding: 4%; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05); border-radius : 10px;">
+						<form id="addForm" method="post" th:action="@{/}">
+						<div class="flex flex-wrap justify-between gap-4 px-4" style="margin-bottom: 40px; margin-top: 20px;">
 							<div class="text-3xl font-semibold uppercase text-center w-full m-3">강의 신청서</div>
 						</div>
 						<div class="p-5">
-						<!-- 테이블1 : 강의번호, 강사명 출력 -->
+						<!-- 테이블1 : 사원번호, 강사명, 강의날짜, 강의실 입력 -->
 						<div class="table-responsive">
-						    <table style="table-layout: fixed; width: 100%; height:65px; border: 1px solid #f0f0f0;">
+						    <table style="table-layout: fixed; width: 100%; height:65px; border: 1px solid #f0f0f0;" class="table-height">
 						        <tbody>
 						            <tr class="border-dark-dark-light">
 						                <td class="bg-[#f4f4f4] lecutre-title-align">사원 번호</td>
-						                <td class="lecutre-text-align" th:text="${userNo}"></td>
+						                <td class="lecutre-text-align" th:text="${userNo}"><input type="hidden" name="lecture" value="${userNo}"></td>
 						                <td class="bg-[#f4f4f4] lecutre-title-align">강사명</td>
-						                <td class="lecutre-text-align" th:text="${userName}"></td>					                
+						                <td class="lecutre-text-align" th:text="${userName}"><input type="hidden" name="lecture" value="${userNo}"></td>					                
 						            </tr>
-						        </tbody>
-						    </table>
-						</div>
-						<div style="height: 30px;"></div>
-						<!-- 테이블2 : 강의날짜, 강의시간 출력 -->
-						<div class="table-responsive">
-						    <table style="width: 100%; border: 1px solid #ffffff;">
-						        <tbody>
-						        	<tr>
-						        		<td style="border: 1px solid #ffffff;"><div class="lecutre-title">강의날짜</div></td>
-										<td style="border: 1px solid #ffffff;" colspan="4">
+						            <tr>
+						        		<td class="bg-[#f4f4f4] lecutre-title-align">강의날짜</td>
+										<td colspan="2">
 											<div class="flex justify-between">
 												<div x-data="form1" class="w-full mr-3">
 							                       	<input name="lectureBeginDate" id="beginDate" class="form-input" placeholder="시작날짜"/>
@@ -162,71 +157,165 @@
 											   	</div>
 											</div>
 										</td>
+										<td>
+											<select id="classroomList" class="form-select" name="classroomNo">
+												<option value="" disabled selected>강의실</option>
+											    <option th:each="cr : ${classroomList}" th:value="${cr.classroomNo}" th:text="${cr.classroomName}"></option>
+											</select>
+										</td>
 						        	</tr>
+						        </tbody>
+						    </table>
+						</div>
+						<div class="flex justify-end w-full mt-3">
+						    <a type="button" id="BtnEndTime" class="btn btn-outline-dark ltr:rounded-r-none rtl:rounded-l-none mb-3">강의시간 제거</a>
+						    <a type="button" id="btnAddTime" class="btn btn-outline-danger ltr:rounded-l-none rtl:rounded-r-none mb-3">강의시간 추가</a>
+						</div>
+						<!-- 테이블2 : 강의요일, 강의시간 입력 -->
+						<div class="table-responsive" >
+						    <table style="table-layout: fixed; width: 100%; border: 1px solid #f0f0f0;">
+						        <tbody id="timeDiv">
 						            <tr>
-						            	<td style="border: 1px solid #ffffff;" class="lecutre-title">강의시간</td>
+						            	<td class="bg-[#f4f4f4] lecutre-title-align">강의시간</td>
 						            	<!-- 요일 선택 -->
-						            	<td style="border: 1px solid #ffffff;">
-											<select id="weekday" class="form-select" name="timeList">
+						            	<td>
+											<select id="weekdayId0" class="form-select" name="lectureWeekday[0].weekdayCode">
 												<option value="" disabled selected>요일</option>
 											    <option th:each="cwk : ${commonWeekday}" th:value="${cwk.code}" th:text="${cwk.name}"></option>
 											</select>
 										</td>
 										<!-- 시작시간 선택 -->
-										<td style="border: 1px solid #ffffff;">
-										<div class="flex justify-between">
-											<select id="beginTime" class="form-select mr-3 " name="timeList">
-												<option value="" disabled selected>시작시간</option>
-											    <option th:each="ct : ${commonTime}" th:value="${ct.code}" th:text="${ct.name}"></option>
-											</select>										
-										<div>~</div>
-										<!-- 종료시간 선택 -->
-											<select id="endTime" class="form-select ml-3 " name="timeList">
-												<option value="" disabled selected>종료시간</option>
-											    <option th:each="ct : ${commonTime}" th:value="${ct.code}" th:text="${ct.name}"></option>
-											</select>
-											
-										</div>					
-										</td>										
+										<td colspan="2">
+											<div class="flex justify-between">
+												<select id="beginTimeId0" class="form-select mr-3 " name="lectureWeekday[0].beginTimeCode">
+													<option value="" disabled selected>시작시간</option>
+												    <option th:each="ct : ${commonTime}" th:value="${ct.code}" th:text="${ct.name}"></option>
+												</select>										
+											<div>~</div>
+											<!-- 종료시간 선택 -->
+												<select id="endTimeId0" class="form-select ml-3 " name="lectureWeekday[0].endTimeCode">
+													<option value="" disabled selected>종료시간</option>
+												    <option th:each="ct : ${commonTime}" th:value="${ct.code}" th:text="${ct.name}"></option>
+												</select>
+											</div>					
+										</td>
 						            </tr>
 						        </tbody>
-						    </table>
-						</div>
-						<div style="height: 30px;"></div>
-						<!-- 테이블3 : 강의명, 강의실 출력 -->
-						<div class="table-responsive" style="margin-bottom: 20px;">
-						    <table style="table-layout: fixed; width: 100%; height:65px; border: 1px solid #f0f0f0;">
 						        <tbody>
-						            <tr class="border-dark-dark-light ">
-						                <td class="bg-[#f4f4f4] lecutre-title-align">강의명</td>
-						                <td><input type="text" class="form-input" placeholder="강의명"></td>
-						                <td class="bg-[#f4f4f4] lecutre-title-align">강의실</td>
-						                <td><input type="text" class="form-input" placeholder="강의실"></td>					                
+						            <tr>
+						                <td style="border-left: 1px solid #ffffff; border-right: 1px solid #ffffff; border-bottom: 1px solid #ffffff;"></td>
+						                <td style="border-left: 1px solid #ffffff; border-right: 1px solid #ffffff; border-bottom: 1px solid #ffffff;"></td>
+										<td style="border-left: 1px solid #ffffff; border-right: 1px solid #ffffff; border-bottom: 1px solid #ffffff;"></td>
+										<td style="border-left: 1px solid #ffffff; border-right: 1px solid #ffffff; border-bottom: 1px solid #ffffff;"></td>
 						            </tr>
 						        </tbody>
 						    </table>
 						</div>
 						
-						<div class="lecutre-title" style="margin-top: 30px;">강의내용</div>
-						<textarea name="message" rows="15" cols="205" class="custom-textarea w-full"></textarea>
+						<!-- 테이블3 : 강의명, 강의내용 입력 -->
+						<div class="table-responsive" style="table-layout: fixed;">
+						    <table style="table-layout: fixed; width: 100%; height:65px; border: 1px solid #f0f0f0;">
+						        <tbody>
+						            <tr class="border-dark-dark-light ">
+						                <td class="bg-[#f4f4f4] lecutre-title-align">강의명</td>
+						                <td colspan="3"><input id="lectureName" name="lectureName" type="text" class="form-input" placeholder="강의명"></td>					                
+						            </tr>
+						            <tr>
+						            	<td class="bg-[#f4f4f4] lecutre-title-align">강의내용</td>
+						            	<td colspan="3"><textarea id="lectureContent" name="lectureContent" rows="15" cols="205" class="custom-textarea w-full" placeholder="강의내용을 입력해주세요."></textarea></td>
+						            </tr>
+						            <tr>
+						                <td style="border-left: 1px solid #ffffff; border-right: 1px solid #ffffff; border-bottom: 1px solid #ffffff;"></td>
+						                <td style="border-left: 1px solid #ffffff; border-right: 1px solid #ffffff; border-bottom: 1px solid #ffffff;"></td>
+										<td style="border-left: 1px solid #ffffff; border-right: 1px solid #ffffff; border-bottom: 1px solid #ffffff;"></td>
+										<td style="border-left: 1px solid #ffffff; border-right: 1px solid #ffffff; border-bottom: 1px solid #ffffff;"></td>
+						            </tr>
+						        </tbody>
+						    </table>
+						</div>
+						
+						<!-- 테이블4 : 결재제목, 결재내용 입력 -->
+						<div class="table-responsive" style="margin-bottom: 20px; table-layout: fixed;">
+						    <table style="table-layout: fixed; width: 100%; height:65px; border: 1px solid #f0f0f0;">
+						        <tbody>
+						            <tr class="border-dark-dark-light ">
+						                <td class="bg-[#f4f4f4] lecutre-title-align">결재제목</td>
+						                <td colspan="3"><input id="lectureApprovalTitle" name="lectureApprovalTitle" type="text" class="form-input" placeholder="결재제목"></td>					                
+						            </tr>
+						            <tr>
+						            	<td class="bg-[#f4f4f4] lecutre-title-align">결재내용</td>
+						            	<td colspan="3"><textarea id="lectureApprovalContent" name="lectureApprovalContent" rows="15" cols="205" class="custom-textarea w-full" placeholder="결재내용을 입력해주세요."></textarea></td>
+						            </tr>
+						            <tr>
+						                <td style="border-left: 1px solid #ffffff; border-right: 1px solid #ffffff; border-bottom: 1px solid #ffffff;"></td>
+						                <td style="border-left: 1px solid #ffffff; border-right: 1px solid #ffffff; border-bottom: 1px solid #ffffff;"></td>
+										<td style="border-left: 1px solid #ffffff; border-right: 1px solid #ffffff; border-bottom: 1px solid #ffffff;"></td>
+										<td style="border-left: 1px solid #ffffff; border-right: 1px solid #ffffff; border-bottom: 1px solid #ffffff;"></td>
+						            </tr>
+						        </tbody>
+						    </table>
+						</div>
+						
+						<!-- 파일첨부 -->
+						<div>
+                            <div class="flex justify-between space-x-3">
+	                            <div>
+	                            	<label for="boardFile" class="text-lg">첨부파일</label>
+	                            </div>
+	                            <div>
+	                            	<div class="flex justify-end w-full">
+									    <a type="button" id="btnRemoveFile" class="btn btn-outline-dark ltr:rounded-r-none rtl:rounded-l-none mb-3">첨부파일 제거</a>
+									    <a type="button" id="btnAddFile" class="btn btn-outline-danger ltr:rounded-l-none rtl:rounded-r-none mb-3">첨부파일 추가</a>
+									</div>
+	                            </div>
+                               
+                            </div>
+                            <div id="fileDiv">
+						       <div class="flex mt-1">
+						           <button 
+						               type="button" 
+						               class="btn btn-primary ltr:rounded-r-none rtl:rounded-l-none" 
+						               style="width: 150px;"
+						               onclick="document.getElementById('lectureApprovalFile').click();">
+						               파일 선택
+						           </button>
+						           <input 
+						               id="lectureApprovalFile" 
+						               name="lectureApprovalFile"
+						               type="file" 
+						               class="hidden"
+						               multiple
+						               onchange="document.getElementById('lectureApprovalFileNameDisplay').value = this.files[0] ? this.files[0].name : '';" />
+						           <input 
+						               id="lectureApprovalFileNameDisplay" 
+						               type="text" 
+						               placeholder="첨부된 파일이 없습니다."
+						               class="form-input ltr:rounded-l-none rtl:rounded-r-none flex-grow" 
+						               readonly />
+						       </div>
+						   </div>
+	                    </div>
 						
 						<!-- 버튼 --> 
 						<div class="mt-8 flex items-center justify-end">
                            <button id="openModalButtonAddPeople" type="button" class="btn btn-dark" style="width:130px;">
                                결재선 추가
                            </button>
-                           <a id="updateBtn" class="btn btn-primary ltr:ml-4 rtl:mr-4" href="#" th:href="@{/}" style="width:130px;">
+                           <a id="addBtn" type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4" style="width:130px;">
                            		등록
                            </a>
                        </div>
                        </div>
+                       </form>
                        
+                       </div>
+                        <!--  풋터 파일 연결 -->
+						<div style="height:30px;"></div>
+	       				<div th:replace="fragments/footer :: footer"></div>
 					</div>
 					
 				</div> <!-- 메인화면 div 끝 -->
 			</div>
-		</div>
-		
 		
 		<!--  강의삭제 확인 모달 -->
         <div class="LectureDeleteModal">
@@ -279,13 +368,164 @@
 	                   </div>
 		           </div>
 		       </div>
-		       
 		   </div>
-		   
-		   <script th:src="@{/customjs/addLectureApproval.js}"> </script>
-		   <!--  풋터 파일 연결 -->
-                <div th:replace="fragments/footer :: footer"></div>
 		</div>
+		
+		<!-- 5개 강의시간추가시 경고 모달 -->
+        <div class="modal">
+		  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundAddOver">
+		       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperAddOver">
+		           <div
+		               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
+		               id="modal"
+		           >
+		               <button
+		                   type="button"
+		                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+		                   id="closeModalButtonAddOver"
+		               >
+		                   <svg
+		                       xmlns="http://www.w3.org/2000/svg"
+		                       width="24px"
+		                       height="24px"
+		                       viewBox="0 0 24 24"
+		                       fill="none"
+		                       stroke="currentColor"
+		                       stroke-width="1.5"
+		                       stroke-linecap="round"
+		                       stroke-linejoin="round"
+		                       class="h-6 w-6"
+		                   >
+		                       <line x1="18" y1="6" x2="6" y2="18"></line>
+		                       <line x1="6" y1="6" x2="18" y2="18"></line>
+		                   </svg>
+		               </button>
+		               <h3
+		                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
+		               >
+		                   안내
+		               </h3>
+		               <div class="p-5">
+		                   주 6일이상 선택할 수 없습니다.
+		                   <div class="mt-8 flex items-center justify-end">
+	                          <button
+	                          	  id="employeeBtnAddOver"
+	                              type="button"
+	                              class="btn btn-primary ltr:ml-4 rtl:mr-4"
+	                          >
+	                              확인
+	                          </button>
+	                      </div>
+		               </div>
+		           </div>
+		       </div>
+		   </div>
+		</div>
+		
+		<!-- 유효성검사 경고 모달 -->
+        <div class="modal">
+		  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundSubmitError">
+		       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperSubmitError">
+		           <div
+		               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
+		               id="modal"
+		           >
+		               <button
+		                   type="button"
+		                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+		                   id="closeModalButtonSubmitError"
+		               >
+		                   <svg
+		                       xmlns="http://www.w3.org/2000/svg"
+		                       width="24px"
+		                       height="24px"
+		                       viewBox="0 0 24 24"
+		                       fill="none"
+		                       stroke="currentColor"
+		                       stroke-width="1.5"
+		                       stroke-linecap="round"
+		                       stroke-linejoin="round"
+		                       class="h-6 w-6"
+		                   >
+		                       <line x1="18" y1="6" x2="6" y2="18"></line>
+		                       <line x1="6" y1="6" x2="18" y2="18"></line>
+		                   </svg>
+		               </button>
+		               <h3
+		                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
+		               >
+		                   안내
+		               </h3>
+		               <div class="p-5">
+		                   입력되지 않은 항목이 있습니다.
+		                   <div class="mt-8 flex items-center justify-end">
+	                          <button
+	                          	  id="employeeBtnSubmitError"
+	                              type="button"
+	                              class="btn btn-primary ltr:ml-4 rtl:mr-4"
+	                          >
+	                              확인
+	                          </button>
+	                      </div>
+		               </div>
+		           </div>
+		       </div>
+		   </div>
+		</div>
+		
+		<!-- 파일을 첨부하지 않고 첨부파일추가 버튼을 누를 때 경고 모달 -->
+        <div class="modal">
+		  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundAddFileError">
+		       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperAddFileError">
+		           <div
+		               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
+		               id="modal"
+		           >
+		               <button
+		                   type="button"
+		                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+		                   id="closeModalButtonAddFileError"
+		               >
+		                   <svg
+		                       xmlns="http://www.w3.org/2000/svg"
+		                       width="24px"
+		                       height="24px"
+		                       viewBox="0 0 24 24"
+		                       fill="none"
+		                       stroke="currentColor"
+		                       stroke-width="1.5"
+		                       stroke-linecap="round"
+		                       stroke-linejoin="round"
+		                       class="h-6 w-6"
+		                   >
+		                       <line x1="18" y1="6" x2="6" y2="18"></line>
+		                       <line x1="6" y1="6" x2="18" y2="18"></line>
+		                   </svg>
+		               </button>
+		               <h3
+		                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
+		               >
+		                   안내
+		               </h3>
+		               <div class="p-5">
+		                   이전 항목을 입력하고 추가버튼을 눌러주세요.
+		                   <div class="mt-8 flex items-center justify-end">
+	                          <button
+	                          	  id="employeeBtnAddFileError"
+	                              type="button"
+	                              class="btn btn-primary ltr:ml-4 rtl:mr-4"
+	                          >
+	                              확인
+	                          </button>
+	                      </div>
+		               </div>
+		           </div>
+		       </div>
+		   </div>
+		</div>
+		
+	   <script th:src="@{/customjs/addLectureApproval.js}"> </script>
+	   
 	</body>
 
 </html>
