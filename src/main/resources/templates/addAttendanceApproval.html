@@ -120,31 +120,89 @@
 				<!-- 메인화면 -->
 				<div class="animate__animated p-6 white-light" :class="[$store.app.animation]"> <!-- 메인화면 div 시작 -->
 					<h2 class="text-2xl ml-3 mb-5">결재신청</h2>
-					<!-- 신청양식 선택버튼 -->
 					
+					<!-- 신청양식 선택버튼 -->
 					<div class="relative inline-flex" style="margin: 0% 15% 0% 15%;">
-					    <a type="button" class="btn btn-outline-primary ltr:rounded-r-none rtl:rounded-l-none mb-3" th:href="@{/}">근태신청</a>
-					    <a type="button" class="btn btn-primary ltr:rounded-l-none rtl:rounded-r-none mb-3">강의신청</a>
+					    <a type="button" class="btn btn-primary ltr:rounded-r-none rtl:rounded-l-none mb-3">근태신청</a>
+					    <a type="button" class="btn btn-outline-primary ltr:rounded-l-none rtl:rounded-r-none mb-3" th:href="@{/addLectureApproval}">강의신청</a>
 					</div>
+					
 					<div class="panel" style="margin: 0% 15% 0% 15%; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05); border-radius : 10px;">
 						<div class="flex flex-wrap justify-between gap-4 px-4" style="margin-bottom: 20px; margin-top: 20px;">
 							<div class="text-3xl font-semibold uppercase text-center w-full m-3">근태 신청서</div>
 						</div>
 						<div class="p-5">
-						<!-- 테이블1 : 강의번호, 강사명 출력 -->
+						<!-- 테이블1 : 사원번호, 기안자 출력 -->
 						<div class="table-responsive">
 						    <table style="table-layout: fixed; width: 100%; height:65px; border: 1px solid #f0f0f0;">
+							    <colgroup>
+							        <col span="2" style="width: 20%;">	<!-- 1,2번째 그룹화 열 -->
+							        <col style="width: 30%;">			<!-- 3번째 열 -->
+							        <col span="2" style="width: 20%;">	<!-- 4,5번째 그룹화 열 -->
+							        <col style="width: 30%;">			<!-- 6번째 열 -->
+							    </colgroup>
 						        <tbody>
 						            <tr class="border-dark-dark-light">
-						                <td class="bg-[#f4f4f4] lecutre-title-align">사원 번호</td>
+						                <td class="bg-[#f4f4f4] lecutre-title-align" colspan="2">사원 번호</td>
 						                <td class="lecutre-text-align" th:text="${userNo}"></td>
-						                <td class="bg-[#f4f4f4] lecutre-title-align">강사명</td>
+						                <td class="bg-[#f4f4f4] lecutre-title-align" colspan="2">기안자</td>
 						                <td class="lecutre-text-align" th:text="${userName}"></td>					                
 						            </tr>
 						        </tbody>
 						    </table>
 						</div>
 						<div style="height: 30px;"></div>
+						
+						<!-- 테이블2 : 신청종류 선택 -->
+						<div class="table-responsive">
+						    <table style="table-layout: fixed; width: 100%; height:65px; border: 1px solid #f0f0f0;">
+							    <colgroup>
+							        <col style="width: 20%;">	<!-- 1번째 열 -->
+							        <col style="width: 16%;">	<!-- 2번째 열 -->
+							        <col style="width: 16%;">	<!-- 3번째 열 -->
+							        <col style="width: 16%;">	<!-- 4번째 열 -->
+							        <col style="width: 16%;">	<!-- 5번째 열 -->
+							        <col style="width: 16%;">	<!-- 6번째 열 -->
+							    </colgroup>
+						        <tbody>
+						            <tr class="border-dark-dark-light">
+						                <td class="bg-[#f4f4f4] lecutre-title-align">신청종류</td>
+						                <!-- 라디오 버튼 -->
+						                <td class="lecutre-text-align">
+						                	<label class="flex items-center cursor-pointer">
+									            <input type="radio" name="approvalOption" class="form-radio" value="" />
+									            <span class="text-white-dark ml-2">연차</span>
+								        	</label>
+						                </td>
+						                <td class="lecutre-text-align">
+						                	<label class="flex items-center cursor-pointer">
+									            <input type="radio" name="approvalOption" class="form-radio" value="" />
+									            <span class="text-white-dark ml-2">반차</span>
+								        	</label>
+						                </td>
+						                <td class="lecutre-text-align">
+						                	<label class="flex items-center cursor-pointer">
+									            <input type="radio" name="approvalOption" class="form-radio" value="" />
+									            <span class="text-white-dark ml-2">병가</span>
+								        	</label>
+						                </td>
+						                <td class="lecutre-text-align">
+						                	<label class="flex items-center cursor-pointer">
+									            <input type="radio" name="approvalOption" class="form-radio" value="" />
+									            <span class="text-white-dark ml-2">휴가</span>
+								        	</label>
+						                </td>
+						                <td class="lecutre-text-align">
+						                	<label class="flex items-center cursor-pointer">
+									            <input type="radio" name="approvalOption" class="form-radio" value="" />
+									            <span class="text-white-dark ml-2">경조사</span>
+								        	</label>
+						                </td>					                
+						            </tr>
+						        </tbody>
+						    </table>
+						</div>
+						
 						<!-- 테이블2 : 강의날짜, 강의시간 출력 -->
 						<div class="table-responsive">
 						    <table style="width: 100%; border: 1px solid #ffffff;">
