@@ -40,14 +40,17 @@ public class LectureApprovalController {
 	        model.addAttribute("userPhotoFileExt", userDetails.getUserPhotoFileExt());
 	    }
 	    
-	 // 3) 강의 요일 조회(셀렉박스)
-	 		List<Common> commonWeekday = commonService.getWeekday();
-	 		model.addAttribute("commonWeekday", commonWeekday);
-	 		
-	 		
-	 		// 3) 강의 시간 조회(셀렉박스)
-	 		List<Common> commonTime = commonService.getTime();
-	 		model.addAttribute("commonTime", commonTime);
+	    // 1) 강의 요일 조회(셀렉박스)
+ 		List<Common> commonWeekday = commonService.getWeekday();
+ 		model.addAttribute("commonWeekday", commonWeekday);
+ 		
+ 		
+ 		// 2) 강의 시간 조회(셀렉박스)
+ 		List<Common> commonTime = commonService.getTime();
+ 		model.addAttribute("commonTime", commonTime);
+ 		
+ 		// 3) 강의실 조회(셀렉박스)
+ 		//List
 	 		
 	    
 	 

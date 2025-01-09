@@ -113,21 +113,22 @@
 			<div th:replace="fragments/sidebar :: sidebar"></div>
 			<!-- end sidebar section -->
 	
-			<div class="main-content flex min-h-screen flex-col">
+			<div class="main-content flex min-h-screen flex-col ">
 				<!-- 헤더 파일 연결 -->
 				<div th:replace="fragments/header :: header"></div>
 	
 				<!-- 메인화면 -->
-				<div class="animate__animated p-6" :class="[$store.app.animation]"> <!-- 메인화면 div 시작 -->
+				<div class="animate__animated p-6 white-light" :class="[$store.app.animation]"> <!-- 메인화면 div 시작 -->
 					<h2 class="text-2xl ml-3 mb-5">결재신청</h2>
 					<!-- 신청양식 선택버튼 -->
-					<div class="flex justify-start ml-3 mb-3">
-						<a type="button" class="btn btn-outline-primary mr-3" th:href="@{/}">근태신청</a>
-						<a type="button" class="btn btn-primary">강의신청</a>
+					
+					<div class="relative inline-flex" style="margin: 0% 15% 0% 15%;">
+					    <a type="button" class="btn btn-outline-primary ltr:rounded-r-none rtl:rounded-l-none mb-3" th:href="@{/addAttendanceApproval}">근태신청</a>
+					    <a type="button" class="btn btn-primary ltr:rounded-l-none rtl:rounded-r-none mb-3">강의신청</a>
 					</div>
-					<div class="panel">
+					<div class="panel" style="margin: 0% 15% 0% 15%; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05); border-radius : 10px;">
 						<div class="flex flex-wrap justify-between gap-4 px-4" style="margin-bottom: 20px; margin-top: 20px;">
-							<div class="text-2xl font-semibold uppercase">강의 신청서</div>
+							<div class="text-3xl font-semibold uppercase text-center w-full m-3">강의 신청서</div>
 						</div>
 						<div class="p-5">
 						<!-- 테이블1 : 강의번호, 강사명 출력 -->
@@ -223,13 +224,7 @@
 					</div>
 					
 				</div> <!-- 메인화면 div 끝 -->
-				
-				
 			</div>
-	
-	
-			<!--  풋터 파일 연결 -->
-			<div th:replace="fragments/footer :: footer"></div>
 		</div>
 		
 		
@@ -284,11 +279,13 @@
 	                   </div>
 		           </div>
 		       </div>
+		       
 		   </div>
+		   
 		   <script th:src="@{/customjs/addLectureApproval.js}"> </script>
+		   <!--  풋터 파일 연결 -->
+                <div th:replace="fragments/footer :: footer"></div>
 		</div>
-		
-		
 	</body>
 
 </html>
