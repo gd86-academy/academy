@@ -95,7 +95,7 @@ document.addEventListener('alpine:init', () => {
 								item[0], // 강의실 번호
 					            item[1], // 강의실명
 					            item[5], // 담당자 이름
-								`<button type="button" class="btn btn-dark" onclick="openEditModal(${item[0]})" >수정</button>`, // 수정 버튼
+								`<button type="button" class="btn btn-dark" onclick="openModifyModal(${item[0]})" >수정</button>`, // 수정 버튼
 								`<button type="button" class="btn btn-danger" onclick="openDeleteModal(${item[0]})">삭제</button>`  // 삭제 버튼
 					        ])
 					    },
@@ -151,8 +151,6 @@ document.addEventListener('alpine:init', () => {
 	}));
 	
 });
-
-
 
 // 강의실 등록 모달 관련 DOM 요소
 const openModalButtonAddClassroom = document.getElementById('openModalButtonAddClassroom'); // 등록 모달 열기 버튼
@@ -215,49 +213,6 @@ $('#classroomAddBtn').click(function(){
     }
 });
 
-// 강의실 수정 모달 관련 DOM 요소 -- 수정버튼 클릭시 해당 강의실뿐만 아니라 다른 강의실 정보까지 뜸.
-const openModalButtonModifyClassroom = document.getElementById('openModalButtonModifyClassroom'); // 수정 모달 열기 버튼
-const closeModalButtonModifyClassroom = document.getElementById('closeModalButtonModifyClassroom'); // 수정 모달 닫기 버튼
-const cancelButtonModifyClassroom = document.getElementById('cancelButtonModifyClassroom'); // 수정 모달 취소 버튼
-const modalBackgroundModifyClassroom = document.getElementById('modalBackgroundModifyClassroom');
-const modalWrapperModifyClassroom = document.getElementById('modalWrapperModifyClassroom');
-
-// 강의실 수정 모달 열기 (회의실 번호를 받아서 데이터 세팅)
-const openEditModal = (meetingroomNo) => {
-	// 수정 버튼 클릭 이벤트 설정
-	// modalWrapperModifyClassroom.onclick = () => {
-	// 	// 서버로 요청 전송
-	// 	window.location.href = `/academy/modifyClassroom?meetingroomNo=${meetingroomNo}`;
-	// };
-
-	// 모달 보이기
-	modalBackgroundModifyClassroom.classList.remove('hidden');
-	modalBackgroundModifyClassroom.classList.add('block');
-};
-
-// 강의실 수정 모달 열기
-// document.addEventListener('click', (event) => {
-//   // 수정 버튼 클릭 시
-//   if (event.target && event.target.id === 'openModalButtonModifyClassroom') {
-//     modalBackgroundModifyClassroom.classList.remove('hidden');  // 모달 배경 보이기
-//     modalBackgroundModifyClassroom.classList.add('block');     // 모달 배경 보이게 설정
-//   }
-// });
-
-// 강의실 수정 모달 닫기
-document.addEventListener('click', (event) => {
-	if (event.target && (event.target.id === 'closeModalButtonModifyClassroom'
-		|| event.target.id === 'cancelButtonModifyClassroom')) {
-		modalBackgroundModifyClassroom.classList.remove('block');
-		modalBackgroundModifyClassroom.classList.add('hidden');  // 모달 배경 숨기기
-		// 모달 내부의 모든 입력 필드를 초기화
-		const modifyForm = document.getElementById('classroomModifyForm');
-		modifyForm.reset(); // 모든 입력 필드와 라디오 버튼 초기화
-		$('input').removeClass('errorInput');
-		// 모든 에러 라벨 숨기기
-		$('.error-label').hide(); 
-    }
-});
 
 // 강의실 삭제 모달
 const openModalButtonDeleteClassroom = document.getElementById('openModalButtonDeleteClassroom'); // 삭제 모달 열기 버튼
@@ -292,6 +247,121 @@ const closeDeleteModal = () => {
 // 버튼 이벤트 리스너 설정
 closeModalButtonDeleteClassroom.addEventListener('click', closeDeleteModal);
 cancelButtonDeleteClassroom.addEventListener('click', closeDeleteModal);
+
+
+// 강의실 수정 모달 관련 DOM 요소 
+const openModifyModalButton = document.getElementById('openModifyModalButton');
+const closeModifyModalButton = document.getElementById('closeModifyModalButton');
+const modalModifyBackground = document.getElementById('modalModifyBackground');
+const modalModifyWrapper = document.getElementById('modalModifyWrapper');
+const cancelModifyButton = document.getElementById('cancelModifyButton');
+const submitModifyButton = document.getElementById('classroomModifyBtn');
+
+
+// 모달 열기
+const openModifyModal = (classroomNo) => {
+  $.ajax({
+    url: `http://localhost/academy/modifyClassroom?classroomNo=${classroomNo}`,
+    type: 'GET',
+    dataType: 'json',
+    success: (data) => {
+		console.log('Received data:', data);
+		
+		$('#classroomNoModify').val(data.classroomNo);
+      	$('#classroomNameModify').val(data.classroomName);
+      	$('#classroomManagerModify').val(data.classroomManager);
+      	$('#classroomCapacityModify').val(data.classroomCapacity);
+
+     	modalModifyBackground.classList.remove('hidden');
+      	modalModifyBackground.classList.add('block');
+    },
+    error: (xhr, status, error) => {
+      console.error('Error fetching meeting room details:', error);
+      alert('강의실 정보를 가져오는 데 실패했습니다.');
+    },
+  });
+};
+
+// 모달 닫기
+const closeModifyModal = () => {
+  modalModifyBackground.classList.remove('block');
+  modalModifyBackground.classList.add('hidden');
+  document.getElementById('classroomModifyForm').reset();
+  $('input').removeClass('errorInput');
+  $('.error-label').hide();
+};
+
+closeModifyModalButton.addEventListener('click', closeModifyModal);
+cancelModifyButton.addEventListener('click', closeModifyModal);
+
+// 수정 버튼 클릭 이벤트
+submitModifyButton.addEventListener('click', function(e) {
+  e.preventDefault();
+  
+  if (validateForm()) {
+    const formData = new FormData(document.getElementById('classroomModifyForm'));
+    
+    $.ajax({
+      url: 'http://localhost/academy/modifyClassroom',
+      type: 'POST',
+      data: formData,
+      processData: false,
+      contentType: false,
+      success: function(response) {
+        alert('회의실이 성공적으로 수정되었습니다.');
+        closeModifyModal();
+        // 테이블 새로고침
+        if (window.multicolumn && window.multicolumn.datatable) {
+          window.multicolumn.init();
+        } else {
+          location.reload();
+        }
+      },
+      error: function(xhr, status, error) {
+        alert('회의실 수정에 실패했습니다.');
+        console.error(error);
+      }
+    });
+  }
+});
+
+// 강의실 수정 유효성검사
+function validateForm() {
+  let isValid = true;
+  
+  // 이름 검사
+  if ($('#classroomNameModify').val().trim() === '') {
+    $('#classroomNameModify').addClass("errorInput");
+    $('.meetingroomName-error').show();
+    isValid = false;
+  } else {
+    $('#classroomNameModify').removeClass("errorInput");
+    $('.meetingroomName-error').hide();
+  }
+
+  // 담당자 검사
+  if ($('#classroomManagerModify').val().trim() === '') {
+    $('#classroomManagerModify').addClass("errorInput");
+    $('.meetingroomManager-error').show();
+    isValid = false;
+  } else {
+    $('#classroomManagerModify').removeClass("errorInput");
+    $('.meetingroomManager-error').hide();
+  }
+
+  // 수용인원 검사
+  if ($('#classroomCapacityModify').val().trim() === '') {
+    $('#classroomCapacityModify').addClass("errorInput");
+    $('.meetingroomCapacity-error').show();
+    isValid = false;
+  } else {
+    $('#classroomCapacityModify').removeClass("errorInput");
+    $('.meetingroomCapacity-error').hide();
+  }
+
+  return isValid;
+}
+
 
 
 
