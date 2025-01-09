@@ -2,6 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.BoardMapper">
 
+	<!-- 공지사항 useyn 변경 -->
+	<update id="updateBoardYN" parameterType="Integer">
+		UPDATE board
+		SET use_yn = 0
+		WHERE board_no = #{boardNo};	
+	</update>
+
 	<!-- 공지사항 조회수 수정 -->
 	<update id="updateBoardCount" parameterType="Integer">
 		UPDATE board
@@ -11,23 +18,14 @@
 	
 	<!-- 공지사항 수정 -->
 	<update id="updateBoard" parameterType="com.example.academy.dto.BoardDTO">
-		UPDATE board b
-		LEFT OUTER JOIN board_file bf ON b.board_no = bf.board_no
-		LEFT OUTER JOIN file f ON f.file_no = bf.file_no
-		SET 
-		    b.board_title = #{boardTitle},
-		    b.board_content = #{boardContent},
-		    b.update_employee_no = #{updateEmployeeNo},
-		    f.file_name = '#{fileName}',
-		    f.file_ext = '#{fileExt}'
-		WHERE b.board_no = #{boardNo};
+			UPDATE board b
+			SET 
+			    b.board_title = #{boardTitle}
+			    , b.board_content = #{boardContent}
+			    , b.update_employee_no = #{updateEmployeeNo}
+			WHERE b.board_no = #{boardNo}
 	</update>
-
-	<!-- 공지사항 삭제 -->
-	<delete id="deleteBoard" parameterType="Integer">
-		DELETE FROM board WHERE board_no = #{boardNo}
-	</delete>
-
+	
 	<!-- 공지사항 추가 -->
 	<insert id="insertBoard" parameterType="com.example.academy.dto.BoardDTO" useGeneratedKeys="true" keyProperty="boardNo">
 		INSERT into board (
@@ -45,7 +43,7 @@
 	</insert>
 
 	<!-- 상세 공지사항 조회  -->
-	<select id="selectBoardOne" resultType="com.example.academy.vo.Board" parameterType="Integer">
+	<select id="selectBoardOne" resultType="com.example.academy.dto.BoardDTO" parameterType="Integer">
 		SELECT
 			b.board_no boardNo
 			, b.board_title boardTitle
@@ -55,11 +53,12 @@
 			, b.board_count boardCount
 			, b.create_date createDate
 			, b.update_date updateDate
-			, f.file_name
-			, f.file_ext
+			, f.file_name fileName
+			, f.file_ext fileExt
+			, e.employee_name employeeName
 		FROM board b
-		LEFT OUTER JOIN board_file bf on b.board_no = bf.board_no
-		LEFT OUTER JOIN file f ON f.file_no = bf.file_no
+		INNER JOIN employee e ON e.employee_no = b.update_employee_no
+		INNER JOIN file f ON f.file_no = e.photo_file_no
 		WHERE b.board_no = #{boardNo}
 	</select>
 	
@@ -74,6 +73,7 @@
 			, b.update_date updateDate
 		FROM board b
 		LEFT OUTER JOIN employee e ON e.employee_no = b.update_employee_no
+		WHERE b.use_yn = 1
 	</select>
 
 </mapper>

@@ -26,14 +26,34 @@ public class BoardService {
 	@Autowired FilesMapper filesMapper;
 	@Autowired BoardFileMapper boardFileMapper;
 	
-	// 공지사항 수정
-	public void updateBoard(BoardDTO boardDTO) {
-		
+	public void updateBoardYN(Integer boardNo) {
+		boardMapper.updateBoardYN(boardNo);
 	}
 	
-	// 공지사항 삭제
-	public void deleteBoard(Integer boardNo) {
-
+	// 공지사항 수정
+	public void updateBoard(BoardDTO boardDTO) {
+		Integer boardRow = boardMapper.updateBoard(boardDTO);
+		log.debug("boardRow = " + boardRow);
+		
+		List<MultipartFile> files = boardDTO.getBoardFiles(); // 폼에 입력되었던 파일데이터 가져옴.
+		// 파일정보 데이터베이스에 삽입.
+		for(MultipartFile mf : files) {
+			if(!mf.isEmpty()) { // if(파일이 있다면)
+				
+				InputFile inputFile = new InputFile(); // inputFile 인스턴스 생성.
+				inputFile.setOriginFileName(mf.getOriginalFilename()); // 파일의 실제이름을 추출해서 inputFile 인스턴스에 set.
+				
+				Files file = new Files();
+				file.setFileName(inputFile.getUUID()); // 서버에서 관리되는 파일이름.
+				file.setFileOrigin(inputFile.getFileName()); // 실제 파일이름.
+				file.setFileExt(inputFile.getFileExt()); // 파일 확장자.
+				file.setFileSize(mf.getSize()); // 파일 크기.
+				file.setFileType(mf.getContentType()); // 파일 타입.
+				file.setFileCategory("employee"); // 파일 카테고리.
+				Integer fileRow = filesMapper.updateFile(file); // 파일정보 삽입.
+				log.debug("fileRow = " + fileRow);
+			}
+		}
 	}
 	
 	// 상세 공지사항 
@@ -42,7 +62,13 @@ public class BoardService {
 		// boardNo 해당 게시물을 조회 시 조회 수 증가
 		boardMapper.updateBoardCount(boardNo);
 		
-		return boardMapper.selectBoardOne(boardNo);
+		// 게시물 상세 조회
+		BoardDTO boardDTO = boardMapper.selectBoardOne(boardNo);
+		
+		// 날짜를 2025-01-09 형식으로 넘기기
+		boardDTO.setUpdateDate(boardDTO.getUpdateDate().substring(0, 10));
+		
+		return boardDTO;
 	}
 	
 	// 공지사항 추가

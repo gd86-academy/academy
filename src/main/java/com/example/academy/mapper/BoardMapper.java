@@ -10,14 +10,14 @@ import com.example.academy.dto.BoardListDTO;
 @Mapper
 public interface BoardMapper {
 	
+	// 공지사항 yn 수정
+	Integer updateBoardYN(Integer boardNo);
+	
 	// 조회수 수정
 	Integer updateBoardCount(Integer boardNo);
 	
 	// 공지사항 수정
 	Integer updateBoard(BoardDTO boardDTO);
-	
-	// 공지사항 삭제
-	Integer deleteBoard(Integer boardNo);
 	
 	// 공지사항 추가
 	Integer insertBoard(BoardDTO boardDTO); 

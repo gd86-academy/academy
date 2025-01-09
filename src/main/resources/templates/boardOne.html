@@ -42,7 +42,8 @@
                     <animateTransform attributeName="transform" type="rotate" from="0 67 67" to="-360 67 67" dur="2.5s" repeatCount="indefinite" />
                 </path>
                 <path
-                    d="M28.19 40.31c6.627 0 12-5.374 12-12 0-6.628-5.373-12-12-12-6.628 0-12 5.372-12 12 0 6.626 5.372 12 12 12zm30.72-19.825c4.686 4.687 12.284 4.687 16.97 0 4.686-4.686 4.686-12.284 0-16.97-4.686-4.687-12.284-4.687-16.97 0-4.687 4.686-4.687 12.284 0 16.97zm35.74 7.705c0 6.627 5.37 12 12 12 6.626 0 12-5.373 12-12 0-6.628-5.374-12-12-12-6.63 0-12 5.372-12 12zm19.822 30.72c-4.686 4.686-4.686 12.284 0 16.97 4.687 4.686 12.285 4.686 16.97 0 4.687-4.686 4.687-12.284 0-16.97-4.685-4.687-12.283-4.687-16.97 0zm-7.704 35.74c-6.627 0-12 5.37-12 12 0 6.626 5.373 12 12 12s12-5.374 12-12c0-6.63-5.373-12-12-12zm-30.72 19.822c-4.686-4.686-12.284-4.686-16.97 0-4.686 4.687-4.686 12.285 0 16.97 4.686 4.687 12.284 4.687 16.97 0 4.687-4.685 4.687-12.283 0-16.97zm-35.74-7.704c0-6.627-5.372-12-12-12-6.626 0-12 5.373-12 12s5.374 12 12 12c6.628 0 12-5.373 12-12zm-19.823-30.72c4.687-4.686 4.687-12.284 0-16.97-4.686-4.686-12.284-4.686-16.97 0-4.687 4.686-4.687 12.284 0 16.97 4.686 4.687 12.284 4.687 16.97 0z"
+                    d="M28.19 40.31c6.627 0 12-5.
+                    374 12-12 0-6.628-5.373-12-12-12-6.628 0-12 5.372-12 12 0 6.626 5.372 12 12 12zm30.72-19.825c4.686 4.687 12.284 4.687 16.97 0 4.686-4.686 4.686-12.284 0-16.97-4.686-4.687-12.284-4.687-16.97 0-4.687 4.686-4.687 12.284 0 16.97zm35.74 7.705c0 6.627 5.37 12 12 12 6.626 0 12-5.373 12-12 0-6.628-5.374-12-12-12-6.63 0-12 5.372-12 12zm19.822 30.72c-4.686 4.686-4.686 12.284 0 16.97 4.687 4.686 12.285 4.686 16.97 0 4.687-4.686 4.687-12.284 0-16.97-4.685-4.687-12.283-4.687-16.97 0zm-7.704 35.74c-6.627 0-12 5.37-12 12 0 6.626 5.373 12 12 12s12-5.374 12-12c0-6.63-5.373-12-12-12zm-30.72 19.822c-4.686-4.686-12.284-4.686-16.97 0-4.686 4.687-4.686 12.285 0 16.97 4.686 4.687 12.284 4.687 16.97 0 4.687-4.685 4.687-12.283 0-16.97zm-35.74-7.704c0-6.627-5.372-12-12-12-6.626 0-12 5.373-12 12s5.374 12 12 12c6.628 0 12-5.373 12-12zm-19.823-30.72c4.687-4.686 4.687-12.284 0-16.97-4.686-4.686-12.284-4.686-16.97 0-4.687 4.686-4.687 12.284 0 16.97 4.686 4.687 12.284 4.687 16.97 0z"
                 >
                     <animateTransform attributeName="transform" type="rotate" from="0 67 67" to="360 67 67" dur="8s" repeatCount="indefinite" />
                 </path>
@@ -96,16 +97,50 @@
 								<button type="button" class="btn btn-warning mr-1" style="width:150px;" id="openModalButtonPw">게시글 삭제</button>
 							</div>
 						</div>
-                    	<div>
-                        	<h1>Board Title : <span th:text="${boardOne.boardTitle}"></span></h1>
-					    	<p>Board Content : <span th:text="${boardOne.boardContent}"></span></p>
-					    	<p>Created by Employee No : <span th:text="${boardOne.createEmployeeNo}"></span></p>
-							<p>Board Count : <span th:text="${boardOne.boardCount}"></span></p>
-							<p>Created by day : <span th:text="${boardOne.createDate}"></span></p>							
+              		</div>
+              		
+              		<br>
+              		
+              		<div class="panel">
+                    	<!-- 제목 -->
+                    	<div class="p-3 text-2xl">
+                        	<span th:text="${boardOne.boardTitle}"></span>
+					    </div>
+					    
+					    <hr>
+					    
+					    <!-- 작성자 정보 및 조회 -->
+					    <div class="flex gap-3 justify-between">
+					    	<!-- 작성자 정보 -->
+							<div class="flex gap-3 items-center">
+								<img class="h-10 w-10 rounded-md object-cover" th:src="@{'/upload/' + ${boardOne.fileName} + '.' + ${boardOne.fileExt}}" alt="image" />
+						    	<p class="text-xl"><span th:text="${boardOne.employeeName}"></span></p>
+								<p class="light-gray-text"><span th:text="${boardOne.updateDate}"></span></p>
+							</div>
+						
+							<!-- 조회수 및 번호 -->
+							<div class="flex gap-3 ml-auto">
+								<p>번호 <span th:text="${boardOne.boardNo}"></span></p>
+								<p>조회수 <span th:text="${boardOne.boardCount}"></span></p>				
+							</div>
+                		</div>
+                	  
+                	    <!-- 본문 내용 -->          		
+						<div>
+					    	<p><span th:text="${boardOne.boardContent}"></span></p>
+					    </div>
+					
+				    	<hr>		
+				    
+				    	<!-- 첨부 파일 -->
+					    <div>
+							<div th:each="bf : ${boardFileList}">
+								<p>File Name : <span th:text="${bf.fileName}"></span></p>
+								<p>File ext : <span th:text="${bf.fileExt}"></span></p>					
+							</div>
 						</div>
-					</div>
-                </div>
-                
+              		</div>
+              	
                 <!--  풋터 파일 연결 -->
                 <div th:replace="fragments/footer :: footer"></div>
             </div>
