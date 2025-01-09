@@ -20,7 +20,7 @@ public class MeetingRoomService {
 	
 	
 
-	
+	// 하상우) 회의실 수정
 	public Integer modifyMeetingRoom(MeetingRoomAddDTO modifymeetingroom) {
 	    return meetingRoomMapper.modifyMeetingRoom(modifymeetingroom);
 	}

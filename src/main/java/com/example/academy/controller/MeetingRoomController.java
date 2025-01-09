@@ -33,27 +33,6 @@ public class MeetingRoomController {
 
 	
 	
-//	@GetMapping("/modifyMeetingRoom")
-//    public ResponseEntity<MeetingRoomAddDTO> getMeetingRoom(@RequestParam Integer meetingroomNo) {
-//        MeetingRoomAddDTO meetingRoom = meetingroomservice.getMeetingRoomNo(meetingroomNo);
-//        if (meetingRoom != null) {
-//            return ResponseEntity.ok(meetingRoom);
-//        } else {
-//            return ResponseEntity.notFound().build();
-//        }
-//    }
-//
-//    @PostMapping("/modifyMeetingRoom")
-//    public ResponseEntity<String> modifyMeetingRoom(@ModelAttribute MeetingRoomAddDTO modifyMeetingRoom) {
-//        int row = meetingroomservice.modifyMeetingRoom(modifyMeetingRoom);
-//        if (row > 0) {
-//            return ResponseEntity.ok("Success");
-//        } else {
-//            return ResponseEntity.badRequest().body("Failed to modify meeting room");
-//        }
-//    }
-	
-	
 	// 하상우) 회의실 추가
 	 @PostMapping("/addMeetingRoom")
 	    public String addMeetingRoom(MeetingRoomAddDTO meetingroomaddDTO, Model model) {

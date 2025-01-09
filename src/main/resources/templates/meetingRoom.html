@@ -3,7 +3,7 @@
 	<head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	    <title>강의실</title>
+	    <title>회의실</title>
 	    <meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/x-icon" th:href="@{/favicon.png}" />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -201,7 +201,7 @@
 						</div>
 					</div>
 				</div>
-				
+
 				<div class="dvanimation animate__animated p-6"
 					:class="[$store.app.animation]">
 					<div x-data="multicolumn">
@@ -238,36 +238,48 @@
 								<form id="meetingroomModifyForm" method="post"
 									th:action="@{/modifyMeetingRoom}" enctype="multipart/form-data">
 									<input type="hidden" id="meetingroomNo" name="meetingroomNo">
+
+									<!-- 회의실 번호 표시 (수정 불가) -->
+									<div>
+										<label for="displayMeetingroomNo">회의실 번호</label> <span
+											id="displayMeetingroomNo" class="form-input"
+											style="display: inline-block;"></span>
+									</div>
+
 									<!-- 회의실명 -->
 									<div>
-										<label for="employeePhone">회의실명</label> <input
+										<label for="meetingroomName">회의실명</label> <input
 											id="meetingroomName" name="meetingroomName" type="text"
-											placeholder="회의실명" class="form-input" />
+											class="form-input" />
 									</div>
 									<div class="mt-1 mb-3" style="height: 10px;">
 										<span class="msg meetingroomName-error error-label"
 											style="display: none;">회의실이름을 입력해주세요.</span>
 									</div>
+
 									<!-- 담당자 -->
 									<div>
-										<label for="employeePhone">담당자</label> <input
+										<label for="meetingroomManager">담당자</label> <input
 											id="meetingroomManager" name="meetingroomManager" type="text"
-											placeholder="담당자" class="form-input" />
+											class="form-input" />
 									</div>
 									<div class="mt-1 mb-3" style="height: 10px;">
 										<span class="msg meetingroomManager-error error-label"
 											style="display: none;">담당자를 선택해주세요.</span>
 									</div>
+
 									<!-- 수용인원 -->
 									<div>
 										<label for="meetingroomCapacity">수용인원</label> <input
 											id="meetingroomCapacity" name="meetingroomCapacity"
-											type="number" placeholder="수용인원" class="form-input" />
+											type="number" class="form-input" />
 									</div>
 									<div class="mt-1 mb-3" style="height: 10px;">
 										<span class="msg meetingroomCapacity-error error-label"
 											style="display: none;">수용인원을 입력해주세요.</span>
 									</div>
+
+									<!-- 버튼 -->
 									<div class="mt-8 flex items-center justify-end">
 										<button type="button" class="btn btn-outline-danger"
 											id="cancelModifyButton">취소</button>
@@ -275,6 +287,7 @@
 											class="btn btn-primary ltr:ml-4 rtl:mr-4">수정</button>
 									</div>
 								</form>
+
 							</div>
 						</div>
 					</div>

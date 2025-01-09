@@ -270,10 +270,14 @@ const openModifyModal = (meetingRoomNo) => {
     type: 'GET',
     dataType: 'json',
     success: (data) => {
-      document.getElementById('meetingroomNo').value = data.meetingroomNo;
-      document.getElementById('meetingroomName').value = data.meetingroomName;
-      document.getElementById('meetingroomManager').value = data.meetingroomManager;
-      document.getElementById('meetingroomCapacity').value = data.meetingroomCapacity;
+      console.log('Received data:', data);
+      
+      // 기존 데이터를 입력 필드에 채우기
+      $('#meetingroomNo').val(data.meetingroomNo);
+      $('#displayMeetingroomNo').text(data.meetingroomNo);  // 회의실 번호 표시
+      $('#meetingroomName').val(data.meetingroomName);
+      $('#meetingroomManager').val(data.meetingroomManager);
+      $('#meetingroomCapacity').val(data.meetingroomCapacity);
 
       modalModifyBackground.classList.remove('hidden');
       modalModifyBackground.classList.add('block');
@@ -284,6 +288,11 @@ const openModifyModal = (meetingRoomNo) => {
     },
   });
 };
+
+
+
+
+
 
 // 모달 닫기
 const closeModifyModal = () => {

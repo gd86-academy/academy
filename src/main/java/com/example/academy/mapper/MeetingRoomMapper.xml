@@ -53,7 +53,8 @@
 	)
 	VALUES (
 	#{meetingroomName},
-	(SELECT employee_no FROM employee WHERE employee_no = #{meetingroomManager}),
+	(SELECT employee_no
+	FROM employee WHERE employee_no = #{meetingroomManager}),
 	#{meetingroomCapacity}
 	);
 	</insert>
