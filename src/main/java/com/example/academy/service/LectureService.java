@@ -11,7 +11,6 @@ import com.example.academy.dto.LectureListDTO;
 import com.example.academy.dto.LectureModifyDTO;
 import com.example.academy.dto.LectureOneDTO;
 import com.example.academy.dto.LectureOneTimeListDTO;
-import com.example.academy.mapper.LectureLectureWeekdayMapper;
 import com.example.academy.mapper.LectureMapper;
 import com.example.academy.mapper.LectureWeekdayMapper;
 
