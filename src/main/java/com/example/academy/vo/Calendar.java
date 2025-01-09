@@ -6,6 +6,8 @@ import lombok.Data;
 public class Calendar {
 	private Integer calendarNo;
 	private Integer employeeNo;
+	private Integer reservationNo;
+	private Integer lectureNo;
     private String calendarTitle;
     private String calendarStart;
     private String calendarEnd;

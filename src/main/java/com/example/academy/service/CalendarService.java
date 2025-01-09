@@ -14,6 +14,11 @@ import com.example.academy.vo.Calendar;
 public class CalendarService {
 	@Autowired CalendarMapper calendarMapper;
 	
+	// 박시현 : 회의실예약 캘랜더 리스트 출력.
+	public List<Calendar> getReservationCalendar() {
+		return calendarMapper.selectReservationCalendar();
+	}
+	
 	// 진수우 : 캘랜더 리스트 출력.
 	public List<Calendar> getCalendar(Integer imployeeNo) {
 		return calendarMapper.selectCalendar(imployeeNo);
