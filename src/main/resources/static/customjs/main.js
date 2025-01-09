@@ -76,6 +76,61 @@ document.addEventListener('alpine:init', () => {
         },
 	}));
 	
+	// 날씨 API 사용
+	
+	Alpine.data('contacts1', () => ({
+	    init() {
+	        this.fetchWeather();
+	    },
+
+	    fetchWeather() {
+	        // 5일치 예보 데이터를 가져오는 API
+	        $.ajax({
+	            url: 'https://api.openweathermap.org/data/2.5/forecast?q=Seoul&appid=c17fba3e8451a1665c094b90fc0dd175&units=metric',
+	            type: 'GET',
+	            dataType: 'json',
+	            success: (data) => {
+	                // 현재 날씨 데이터 가져오기
+	                const currentTemp = data.list[0].main.temp; // 첫 번째 데이터는 현재 시간 기준
+	                const currentIconCode = data.list[0].weather[0].icon;
+	                const currentIconURL = `https://openweathermap.org/img/wn/${currentIconCode}@2x.png`;
+
+	                // 현재 날씨 출력
+	                $('#currentTemperature').text(`${currentTemp}°C`); // 온도 업데이트
+	                $('#currentIcon').attr('src', currentIconURL); // 아이콘 업데이트
+
+	                // 요일별 온도 출력
+	                const weeklyData = data.list.filter((item, index) => index % 8 === 0); // 매일 한 번씩 데이터 가져오기
+	                let weeklyHTML = '';
+
+	                weeklyData.forEach((day, index) => {
+	                    const dayTemp = day.main.temp;
+	                    const dayName = this.getDayName(new Date(day.dt_txt).getDay()); // 요일 이름
+	                    weeklyHTML += `
+	                        <div class="mt-3 font-semibold text-white">
+	                            ${dayName} ${dayTemp}°C
+	                        </div>`;
+	                });
+
+	                // 요일별 데이터 업데이트
+	                $('#weeklyWeather').html(weeklyHTML);
+	            },
+	            error: (err) => {
+	                console.error('Weather data fetch error:', err);
+	            }
+	        });
+	    },
+
+	    getDayName(dayIndex) {
+	        // 요일 이름 배열
+	        const days = ['일', '월', '화', '수', '목', '금', '토'];
+	        return days[dayIndex];
+	    }
+	}));
+
+
+					
+	
 	Alpine.data('analytics', () => ({
 		init() {
 			// statistics
