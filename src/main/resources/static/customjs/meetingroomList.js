@@ -270,8 +270,7 @@ const openModifyModal = (meetingRoomNo) => {
     type: 'GET',
     dataType: 'json',
     success: (data) => {
-      console.log('Received data:', data);
-      
+        
       // 기존 데이터를 입력 필드에 채우기
       $('#meetingroomNo').val(data.meetingroomNo);
       $('#displayMeetingroomNo').text(data.meetingroomNo);  // 회의실 번호 표시
@@ -279,7 +278,6 @@ const openModifyModal = (meetingRoomNo) => {
       $('#modifyMeetingroomManager').val(data.meetingroomManager);
       $('#modifyMeetingroomCapacity').val(data.meetingroomCapacity);
 	  
-	  console.log(data.meetingroomName);
 
       modalModifyBackground.classList.remove('hidden');
       modalModifyBackground.classList.add('block');
