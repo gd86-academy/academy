@@ -38,7 +38,7 @@ public class ClassroomController {
 	public String modifyClassroom(Model model, ClassroomListDTO classroomListDTO) {
 		classroomService.modifyClassroom(classroomListDTO);
 		return "redirect:/classroomList";
-	}
+	}  test
 	*/
 	// 박시현 : 강의실 등록
 	@PostMapping("/addClassroom")
