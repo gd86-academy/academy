@@ -275,9 +275,11 @@ const openModifyModal = (meetingRoomNo) => {
       // 기존 데이터를 입력 필드에 채우기
       $('#meetingroomNo').val(data.meetingroomNo);
       $('#displayMeetingroomNo').text(data.meetingroomNo);  // 회의실 번호 표시
-      $('#meetingroomName').val(data.meetingroomName);
-      $('#meetingroomManager').val(data.meetingroomManager);
-      $('#meetingroomCapacity').val(data.meetingroomCapacity);
+      $('#modifyMeetingroomName').val(data.meetingroomName);
+      $('#modifyMeetingroomManager').val(data.meetingroomManager);
+      $('#modifyMeetingroomCapacity').val(data.meetingroomCapacity);
+	  
+	  console.log(data.meetingroomName);
 
       modalModifyBackground.classList.remove('hidden');
       modalModifyBackground.classList.add('block');
@@ -288,9 +290,6 @@ const openModifyModal = (meetingRoomNo) => {
     },
   });
 };
-
-
-
 
 
 
@@ -342,32 +341,32 @@ function validateForm() {
   let isValid = true;
   
   // 회의실 이름 검사
-  if ($('#meetingroomName').val().trim() === '') {
-    $('#meetingroomName').addClass("errorInput");
+  if ($('#modifyMeetingroomName').val().trim() === '') {
+    $('#modifyMeetingroomName').addClass("errorInput");
     $('.meetingroomName-error').show();
     isValid = false;
   } else {
-    $('#meetingroomName').removeClass("errorInput");
+    $('#modifyMeetingroomName').removeClass("errorInput");
     $('.meetingroomName-error').hide();
   }
 
   // 회의실 담당자 검사
-  if ($('#meetingroomManager').val().trim() === '') {
-    $('#meetingroomManager').addClass("errorInput");
+  if ($('#modifyMeetingroomManager').val().trim() === '') {
+    $('#modifyMeetingroomManager').addClass("errorInput");
     $('.meetingroomManager-error').show();
     isValid = false;
   } else {
-    $('#meetingroomManager').removeClass("errorInput");
+    $('#modifyMeetingroomManager').removeClass("errorInput");
     $('.meetingroomManager-error').hide();
   }
 
   // 회의실 수용인원 검사
-  if ($('#meetingroomCapacity').val().trim() === '') {
-    $('#meetingroomCapacity').addClass("errorInput");
+  if ($('#modifyMeetingroomCapacity').val().trim() === '') {
+    $('#modifyMeetingroomCapacity').addClass("errorInput");
     $('.meetingroomCapacity-error').show();
     isValid = false;
   } else {
-    $('#meetingroomCapacity').removeClass("errorInput");
+    $('#modifyMeetingroomCapacity').removeClass("errorInput");
     $('.meetingroomCapacity-error').hide();
   }
 
