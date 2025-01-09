@@ -1,7 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.CalendarMapper">
-	
+	<!-- 박시현 : 회의실예약 캘린더 리스트 출력 -->
+	<select id="selectReservationCalendar" parameterType="com.example.academy.vo.Calendar">
+		SELECT 
+			c.calendar_no calendarNo
+			, c.reservation_no reservationNo
+			, c.calendar_title calendarTitle
+			, c.calendar_start calendarStart
+			, c.calendar_end calendarEnd
+			, c.calendar_classname calendarClassName
+			, c.calendar_description calendarDescription
+			, c.create_date createDate
+			, c.update_date updateDate
+			, r.meetingroom_no meetingroomNo
+			, r.begin_time_code beginTimeCode
+			, r.end_time_code endTimeCode
+			, r.reservation_date reservationDate
+			, r.reservation_person reservationPerson
+			, r.reservation_title reservationTitle
+			, r.reservation_content reservationContent
+			, re.employee_no employeeNo
+			, e.employee_name employeeName
+			, m.meetingroom_name meetingroomName
+			FROM calendar c
+			LEFT OUTER JOIN reservation r
+			    ON c.reservation_no = r.reservation_no
+			LEFT OUTER JOIN reservation_employee re
+			    ON r.reservation_no = re.reservation_no
+			LEFT OUTER JOIN employee e
+			    ON re.employee_no = e.employee_no
+			LEFT OUTER JOIN meetingroom m
+			    ON r.meetingroom_no = m.meetingroom_no
+			WHERE c.calendar_no = #{calendarNo}
+	</select>
 	<!-- 진수우 : 캘랜더 리스트 출력 -->
 	<select id="selectCalendar" parameterType="Integer">
 		SELECT 

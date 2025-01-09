@@ -1,7 +1,6 @@
 package com.example.academy.restcontroller;
 
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 import com.example.academy.service.CalendarService;
 import com.example.academy.vo.Calendar;
