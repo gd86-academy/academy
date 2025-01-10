@@ -26,8 +26,8 @@ public class BoardService {
 	@Autowired FilesMapper filesMapper;
 	@Autowired BoardFileMapper boardFileMapper;
 	
-	public void updateBoardYN(Integer boardNo) {
-		boardMapper.updateBoardYN(boardNo);
+	public Integer updateBoardYN(Integer boardNo) {
+		return boardMapper.updateBoardYN(boardNo);
 	}
 	
 	// 공지사항 수정

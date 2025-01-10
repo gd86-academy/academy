@@ -56,6 +56,7 @@
 			, f.file_name fileName
 			, f.file_ext fileExt
 			, e.employee_name employeeName
+			, e.employee_department employeeDepartment
 		FROM board b
 		INNER JOIN employee e ON e.employee_no = b.update_employee_no
 		INNER JOIN file f ON f.file_no = e.photo_file_no

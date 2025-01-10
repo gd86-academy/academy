@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="ko" dir="ltr">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	    <title>공지사항 작성</title>
+	    <meta name="viewport" content="width=device-width, initial-scale=1" />
+	    <link rel="icon" type="image/x-icon" th:href="@{/favicon.png}" />
+	    <link rel="preconnect" href="https://fonts.googleapis.com" />
+	    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+	    <link rel="stylesheet" type="text/css" media="screen" th:href="@{/css/perfect-scrollbar.min.css}" />
+	    <link rel="stylesheet" type="text/css" media="screen" th:href="@{/css/style.css}" />
+	    <link defer rel="stylesheet" type="text/css" media="screen" th:href="@{/css/animate.css}" />
+        <!-- Quill CSS -->
+        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+	    <script th:src="@{/js/perfect-scrollbar.min.js}"></script>
+	    <script defer th:src="@{/js/popper.min.js}"></script>
+	    <script th:src="@{/js/alpine-collaspe.min.js}"></script>
+        <script th:src="@{/js/alpine-persist.min.js}"></script>
+        <script defer th:src="@{/js/alpine-ui.min.js}"></script>
+        <script defer th:src="@{/js/alpine-focus.min.js}"></script>
+        <script defer th:src="@{/js/alpine.min.js}"></script>
+        <script th:src="@{/js/custom.js}"></script>
+        <script th:src="@{/js/templete.js}"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+        <!-- Quill JS -->
+		<script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+		<script th:src="@{/js/quill.js}"></script>
+    </head>
+
+   <body
+	    x-data="main"
+	    class="relative overflow-x-hidden font-nunito text-sm font-normal antialiased"
+	    :class="[ $store.app.sidebar ? 'toggle-sidebar' : '', $store.app.theme === 'dark' || $store.app.isDarkMode ?  'dark' : '', $store.app.menu, $store.app.layout,$store.app.rtlClass]">
+	    
+	    <!-- sidebar menu overlay -->
+	    <div x-cloak class="fixed inset-0 z-50 bg-[black]/60 lg:hidden" :class="{'hidden' : !$store.app.sidebar}" @click="$store.app.toggleSidebar()"></div>
+	
+	    <!-- 화면로딩 UI -->
+	    <div class="screen_loader animate__animated fixed inset-0 z-[60] grid place-content-center bg-[#fafafa] dark:bg-[#060818]">
+	        <svg width="64" height="64" viewBox="0 0 135 135" xmlns="http://www.w3.org/2000/svg" fill="#4361ee">
+	            <path
+	                d="M67.447 58c5.523 0 10-4.477 10-10s-4.477-10-10-10-10 4.477-10 10 4.477 10 10 10zm9.448 9.447c0 5.523 4.477 10 10 10 5.522 0 10-4.477 10-10s-4.478-10-10-10c-5.523 0-10 4.477-10 10zm-9.448 9.448c-5.523 0-10 4.477-10 10 0 5.522 4.477 10 10 10s10-4.478 10-10c0-5.523-4.477-10-10-10zM58 67.447c0-5.523-4.477-10-10-10s-10 4.477-10 10 4.477 10 10 10 10-4.477 10-10z">
+	                <animateTransform attributeName="transform" type="rotate" from="0 67 67" to="-360 67 67" dur="2.5s" repeatCount="indefinite" />
+	            </path>
+	            <path
+	                d="M28.19 40.31c6.627 0 12-5.374 12-12 0-6.628-5.373-12-12-12-6.628 0-12 5.372-12 12 0 6.626 5.372 12 12 12zm30.72-19.825c4.686 4.687 12.284 4.687 16.97 0 4.686-4.686 4.686-12.284 0-16.97-4.686-4.687-12.284-4.687-16.97 0-4.687 4.686-4.687 12.284 0 16.97zm35.74 7.705c0 6.627 5.37 12 12 12 6.626 0 12-5.373 12-12 0-6.628-5.374-12-12-12-6.63 0-12 5.372-12 12zm19.822 30.72c-4.686 4.686-4.686 12.284 0 16.97 4.687 4.686 12.285 4.686 16.97 0 4.687-4.686 4.687-12.284 0-16.97-4.685-4.687-12.283-4.687-16.97 0zm-7.704 35.74c-6.627 0-12 5.37-12 12 0 6.626 5.373 12 12 12s12-5.374 12-12c0-6.63-5.373-12-12-12zm-30.72 19.822c-4.686-4.686-12.284-4.686-16.97 0-4.686 4.687-4.686 12.285 0 16.97 4.686 4.687 12.284 4.687 16.97 0 4.687-4.685 4.687-12.283 0-16.97zm-35.74-7.704c0-6.627-5.372-12-12-12-6.626 0-12 5.373-12 12s5.374 12 12 12c6.628 0 12-5.373 12-12zm-19.823-30.72c4.687-4.686 4.687-12.284 0-16.97-4.686-4.686-12.284-4.686-16.97 0-4.687 4.686-4.687 12.284 0 16.97 4.686 4.687 12.284 4.687 16.97 0z">
+	                <animateTransform attributeName="transform" type="rotate" from="0 67 67" to="360 67 67" dur="8s" repeatCount="indefinite" />
+	            </path>
+	        </svg>
+	    </div>
+	
+	    <!-- 최상단 이동 버튼 -->
+	    <div class="fixed bottom-6 z-50 ltr:right-6 rtl:left-6" x-data="scrollToTop">
+	        <template x-if="showTopButton">
+	            <button
+	                type="button"
+	                class="btn btn-outline-primary animate-pulse rounded-full bg-[#fafafa] p-2 dark:bg-[#060818] dark:hover:bg-primary"
+	                @click="goToTop">
+	                <svg width="24" height="24" class="h-4 w-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+	                    <path
+	                        opacity="0.5"
+	                        fill-rule="evenodd"
+	                        clip-rule="evenodd"
+	                        d="M12 20.75C12.4142 20.75 12.75 20.4142 12.75 20L12.75 10.75L11.25 10.75L11.25 20C11.25 20.4142 11.5858 20.75 12 20.75Z"
+	                        fill="currentColor" />
+	                    <path
+	                        d="M6.00002 10.75C5.69667 10.75 5.4232 10.5673 5.30711 10.287C5.19103 10.0068 5.25519 9.68417 5.46969 9.46967L11.4697 3.46967C11.6103 3.32902 11.8011 3.25 12 3.25C12.1989 3.25 12.3897 3.32902 12.5304 3.46967L18.5304 9.46967C18.7449 9.68417 18.809 10.0068 18.6929 10.287C18.5768 10.5673 18.3034 10.75 18 10.75L6.00002 10.75Z"
+	                        fill="currentColor" />
+	                </svg>
+	            </button>
+	        </template>
+	    </div>
+	
+	    <div class="main-container min-h-screen text-black dark:text-white-dark" :class="[$store.app.navbar]">
+	        <!-- 사이드바 파일 연결 -->
+	        <div th:replace="fragments/sidebar :: sidebar"></div>
+	
+	        <!-- 최상단 이동 버튼 끝 -->
+	        <div class="main-content flex min-h-screen flex-col">
+	            <!-- 헤더 파일 연결 -->
+	            <div th:replace="fragments/header :: header"></div>
+	
+	            <!-- 메인화면 -->
+	            <div class="animate__animated p-6" :class="[$store.app.animation]">
+	                <div class="flex flex-wrap items-center justify-between gap-4 ml-3">
+	                    <h2 class="text-2xl ml-3">공지사항 작성</h2>
+	                    <div class="flex w-full flex-col gap-4 sm:w-auto sm:flex-row sm:items-center sm:gap-3">
+	                        <div class="flex gap-3 mr-3">
+	                        </div>
+	                    </div>
+	                </div>
+	            </div>
+	
+	            <div class="dvanimation animate__animated p-6" :class="[$store.app.animation]">
+	                <div x-data="multicolumn">
+	                    <div class="panel">
+	                        <div>
+	                            <h2>게시글</h2>
+	                        </div>
+	
+	                        <!-- 제목 입력창 -->
+	                        <div>
+	                            <input type="text" id="boardTitle" name="boardTitle" class="form-input" value="${boardOne.boardTitle}">
+	                        </div>
+	
+	                        <br>
+	
+	                        <!-- 내용 입력창 -->
+	                        <!-- Quill 에디터가 들어갈 부분 -->
+	                        <div id="editor" style="height: 400px;">
+	                            <p><span th:text="${boardOne.boardContent}"></span></p>
+	                        </div>
+	
+	                        <!-- Quill 에디터의 내용이 담길 hidden input -->
+	                        <input type="hidden" id="boardContent" name="boardContent">
+	                        <input type="hidden" id="updateEmployeeNo" name="updateEmployeeNo" th:value="${employeeNo}">
+	
+	                        <br>
+	
+	                        <!-- 첨부파일 -->
+	                        <div>
+	                            <div class="flex items-center space-x-3">
+	                            	<label for="boardFile">첨부파일</label>
+	                                <!-- +버튼 -->
+	                                <button
+	                                    type="button"
+	                                    id="btnAddFile"
+	                                    class="btn btn-primary text-center" style="width: 30px; height: 30px;">
+	                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2">
+	                                        <line x1="12" y1="5" x2="12" y2="19"></line>
+	                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+	                                    </svg>
+	                                </button>
+	                                <!-- -버튼 -->
+	                                <button
+	                                    type="button"
+	                                    id="btnRemoveFile"
+	                                    class="btn btn-danger text-center" style="width: 30px; height: 30px;">
+	                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2">
+	                                        <line x1="5" y1="12" x2="19" y2="12"></line>
+	                                    </svg>
+	                                </button>
+	                            </div>
+	                            <div th:each="bf : ${boardFileList}">
+		                            <div id="fileDiv">
+								       <div class="flex mt-1">
+								           <button 
+								               type="button" 
+								               class="btn btn-primary ltr:rounded-r-none rtl:rounded-l-none" 
+								               style="width: 150px;"
+								               onclick="document.getElementById('boardFiles').click();">
+								               파일 선택
+								           </button>
+								           <input 
+								               id="boardFiles" 
+								               name="boardFiles"
+								               type="file" 
+								               class="hidden"
+								               multiple
+								               onchange="document.getElementById('boardFilesNameDisplay').value = this.files[0] ? this.files[0].name : '';" />
+								           <input 
+								               id="boardFilesNameDisplay" 
+								               type="text" 
+								               placeholder="첨부된 파일이 없습니다."
+								               class="form-input ltr:rounded-l-none rtl:rounded-r-none flex-grow"
+								               value="${bf.fileName}" 
+								               readonly />
+								       </div>
+							       </div>
+							   </div>
+	                        </div>
+	                        <div class="flex justify-end mt-3">
+	                        	<button type="submit" id="submitButton" class="btn btn-primary" style="width: 130px;">등록</button>
+	                        </div>
+	                    </div>
+	
+	                    
+	                </div>
+	            </div>
+	        </div>
+	       <!--  풋터 파일 연결 -->
+                <div th:replace="fragments/footer :: footer"></div>
+	    </div>
+ 
+ 	<!-- JavaScript 코드 -->
+	<script>
+	var quill = new Quill('#editor', {
+	    theme: 'snow'
+	});
+
+	// 전송 버튼 클릭 이벤트
+	$('#submitButton').on('click', function() {
+	    // Quill 에디터의 내용을 HTML로 추출
+	    var boardContent = quill.root.innerHTML;
+
+	    // 다른 input 필드의 값들 추출
+	    var boardTitle = $('#boardTitle').val();
+	    var createEmployeeNo = parseInt($('#createEmployeeNo').val(), 10);
+	    var updateEmployeeNo = parseInt($('#updateEmployeeNo').val(), 10);
+	 	// 동적으로 추가된 파일 입력 필드의 파일을 모두 가져오기
+	    var boardFiles = [];
+	    $('#fileDiv input[type="file"]').each(function() {
+	        var fileInput = $(this)[0];
+	        if (fileInput.files.length > 0) {
+	            boardFiles.push(fileInput.files[0]);
+	        }
+	    });
+
+	    // 제목 입력 여부 확인
+	    if (!boardTitle.trim()) {
+	        alert("제목을 입력해주세요.");
+	        return;
+	    }
+
+	    // 내용 입력 여부 확인
+	    if (!boardContent.trim() || boardContent === '<p><br></p>') {
+	        alert("내용을 입력해주세요.");
+	        return;
+	    }
+
+	    // POST 요청을 위해 FormData 객체 생성
+	    var formData = new FormData();
+	    formData.append('boardTitle', boardTitle); // 제목
+	    formData.append('boardContent', boardContent); // Quill 에디터 내용
+	    formData.append('createEmployeeNo', createEmployeeNo); // 작성자
+	    formData.append('updateEmployeeNo', updateEmployeeNo); // 수정자
+		// 파일이 있다면 추가
+	    boardFiles.forEach(function(file) {
+	        formData.append('boardFiles[]', file);  // 여러 파일 처리
+	    });
+
+	    // jQuery AJAX 요청
+	    $.ajax({
+	        url: 'http://localhost/academy/addBoard',
+	        type: 'POST',
+	        data: formData,
+	        processData: false, // FormData 사용 시 false로 설정
+	        contentType: false, // FormData 사용 시 false로 설정
+	        success: function(response) {
+	            console.log('Success:', response);
+	            alert("게시글이 성공적으로 등록되었습니다.");
+	            // 성공 후 페이지 이동
+	           window.location.href = '/academy/boardList'; // 게시판 목록 페이지로 이동
+	        },
+	        error: function(xhr, status, error) {
+	            console.error('Error:', error);
+	            alert("게시글 등록 중 오류가 발생했습니다. 다시 시도해주세요.");
+	        }
+	    });
+	});
+	
+	let result = 0;  // 전역 변수로 result 선언
+
+	// 파일 입력 필드 추가
+	$('#btnAddFile').click(function() {
+	    // 마지막 파일 입력 필드가 비어 있지 않다면
+	    if ($('#fileDiv input[type="file"]').last().val() === '') {
+	        alert('첨부하지 않은 파일이 이미 존재합니다.');
+	    } else {
+	        result++;  // result 증가 (파일 입력 필드마다 고유 값이 생성됨)
+	        
+	        let inputId = 'boardFiles' + result;  // 고유 input ID 생성
+	        let displayId = 'boardFilesNameDisplay' + result;  // 고유 display ID 생성
+	        
+	        let html = `
+	        	<div class="flex mt-1">
+		           <button 
+		               type="button" 
+		               class="btn btn-primary ltr:rounded-r-none rtl:rounded-l-none" 
+		               style="width: 150px;"
+		               onclick="document.getElementById('${inputId}').click();">
+		               파일 선택
+		           </button>
+		           <input 
+		               id="${inputId}" 
+		               name="boardFiles[]"
+		               type="file" 
+		               class="hidden" 
+		               onchange="document.getElementById('${displayId}').value = this.files[0] ? this.files[0].name : '';" />
+		           <input 
+		               id="${displayId}" 
+		               type="text" 
+		               placeholder="첨부된 파일이 없습니다."
+		               class="form-input ltr:rounded-l-none rtl:rounded-r-none flex-grow" 
+		               readonly />
+		       </div>
+	        `;
+	        $('#fileDiv').append(html); // 파일 입력 필드 추가
+	    }
+	});
+
+
+	// 파일 입력 필드 삭제
+	$('#btnRemoveFile').click(function() {
+		// 파일 입력 필드가 하나 이상 존재하는지 확인
+	    if ($('#fileDiv .flex').length === 0) { // .flex 클래스가 있는 요소가 없다면
+	        alert('삭제할 파일 입력 필드가 없습니다.');
+	    } else {
+	    	// 마지막 입력 필드를 삭제
+	        let lastInputId = 'boardFiles' + result; // 마지막으로 추가된 파일 입력 필드의 ID
+	        let lastDisplayId = 'boardFilesNameDisplay' + result; // 마지막으로 추가된 파일 이름 표시 필드의 ID
+	        
+	     	// 파일 입력 필드와 파일 이름 표시 필드 삭제
+	        $('#' + lastInputId).closest('.flex').remove();  // 마지막 .flex 요소 (파일 입력 필드 전체) 삭제
+	        $('#' + lastDisplayId).remove();  // 해당 파일 이름 표시 필드 삭제
+	        
+	        result--;  // result 감소
+	    }
+	});
+	</script>
+ 
+    </body>
+</html>

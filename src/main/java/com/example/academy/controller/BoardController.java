@@ -27,12 +27,13 @@ public class BoardController {
 	@Autowired BoardFileService boardFileService;
 	
 	// 공지사항yn 수정
-	@PostMapping("/modifyBoardYN")
+	@GetMapping("/deleteBoard")
 	public String modifyBoardYN(Integer boardNo) {
 		
-		boardService.updateBoardYN(boardNo);
+		Integer updateRow = boardService.updateBoardYN(boardNo);
+		log.debug("updateRow --------------------> " + updateRow);
 		
-		return "redirect:/boardList";
+		return "boardList";
 	}
 	
 	// 공지사항 수정
@@ -119,11 +120,12 @@ public class BoardController {
 	        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 	        model.addAttribute("userNo", userDetails.getUsername());
 	        model.addAttribute("userName", userDetails.getUserRealName());
-	        model.addAttribute("userMail", userDetails.getUserMail());
 	        model.addAttribute("userPhotoFileName", userDetails.getUserPhotoFileName());
 	        model.addAttribute("userPhotoFileExt", userDetails.getUserPhotoFileExt());
+	        model.addAttribute("userDepartment", userDetails.getUserDepartment());
+	        log.debug("userDepartment ---->"  + userDetails.getUserDepartment());
 	    }
-		
+	    
 		// boardNo에 해당하는 상세 공지사항 정보 조회
 		BoardDTO boardOne = boardService.boardOne(boardNo);
 		log.debug("boardOne ----> " + boardOne);

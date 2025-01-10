@@ -91,13 +91,75 @@
                     	<h2 class="text-2xl ml-3">상세 공지사항</h2>
                     	<div class="flex w-full flex-col gap-4 sm:w-auto sm:flex-row sm:items-center sm:gap-3 mr-3">
 							<div class="flex gap-3 mr-3">
-								<!-- 부서/직책 수정 버튼 -->
-								<button type="button" class="btn btn-warning mr-1" style="width:150px;" id="openModalButtonDepartment">게시글 수정</button>
-								<!-- 비밀번호 변경 버튼 -->
-								<button type="button" class="btn btn-warning mr-1" style="width:150px;" id="openModalButtonPw">게시글 삭제</button>
+								<!-- 공지사항 수정 버튼 -->
+								<div th:if="${userDepartment == boardOne.employeeDepartment}">
+									<a th:href="@{/addBoard/(BoardNo=${boardOne.boardNo})}" class="btn btn-warning mr-1" style="width:150px;">게시글 수정</a>
+								</div>
+								<!-- 공지사항 삭제 버튼 -->
+								<div th:if="${userDepartment == boardOne.employeeDepartment}">
+								    <button type="button" class="btn btn-danger mr-1" style="width:150px;" id="openModalButtonBoardDelete">게시글 삭제</button>
+								</div>
 							</div>
 						</div>
               		</div>
+              		
+              		<!--  게시판삭제 확인 모달 -->
+			        <div class="BoardDelete">
+					  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundBoardDelete">
+					       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperBoardDelete">
+					           <div
+					               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
+					               id="modal"
+					           >
+					               <button
+					                   type="button"
+					                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+					                   id="closeModalButtonBoardDelete"
+					               >
+					                   <svg
+					                       xmlns="http://www.w3.org/2000/svg"
+					                       width="24px"
+					                       height="24px"
+					                       viewBox="0 0 24 24"
+					                       fill="none"
+					                       stroke="currentColor"
+					                       stroke-width="1.5"
+					                       stroke-linecap="round"
+					                       stroke-linejoin="round"
+					                       class="h-6 w-6"
+					                   >
+					                       <line x1="18" y1="6" x2="6" y2="18"></line>
+					                       <line x1="6" y1="6" x2="18" y2="18"></line>
+					                   </svg>
+					               </button>
+					               <h3
+					                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
+					               >
+					                   안내
+					               </h3>
+					               <div class="p-5">
+					                   게시판을 삭제합니다.
+					                   <div class="mt-8 flex items-center justify-end">
+				                          <button
+				                          	  id="cancelButtonBoardDelete"
+				                              type="button"
+				                              class="btn btn-outline-danger ltr:ml-4 rtl:mr-4"
+				                          >
+				                              취소
+				                          </button>
+				                          <a
+				                              type="button"
+				                              class="btn btn-primary ltr:ml-4 rtl:mr-4"
+				                              th:href="@{/deleteBoard(boardNo=${boardOne.boardNo})}"
+				                          >
+				                              확인
+				                          </a>
+				                      </div>
+					               </div>
+					           </div>
+					       </div>
+					   </div>
+					</div>
               		
               		<br>
               		
@@ -112,14 +174,14 @@
 					    <!-- 작성자 정보 및 조회 -->
 					    <div class="flex gap-3 justify-between">
 					    	<!-- 작성자 정보 -->
-							<div class="flex gap-3 items-center">
+							<div class="flex gap-3 items-center" style="height:300px;">
 								<img class="h-10 w-10 rounded-md object-cover" th:src="@{'/upload/' + ${boardOne.fileName} + '.' + ${boardOne.fileExt}}" alt="image" />
 						    	<p class="text-xl"><span th:text="${boardOne.employeeName}"></span></p>
 								<p class="light-gray-text"><span th:text="${boardOne.updateDate}"></span></p>
 							</div>
 						
 							<!-- 조회수 및 번호 -->
-							<div class="flex gap-3 ml-auto">
+							<div class="flex gap-3 ml-auto" style="color:#d3d3d3">
 								<p>번호 <span th:text="${boardOne.boardNo}"></span></p>
 								<p>조회수 <span th:text="${boardOne.boardCount}"></span></p>				
 							</div>
@@ -145,7 +207,40 @@
                 <div th:replace="fragments/footer :: footer"></div>
             </div>
         </div>
+    </div>
         
-        <script th:src="@{/customjs/BoardList.js}"></script>
+    <script>
+ 	// 사원삭제 모달 관련 DOM 요소
+    const openModalButtonBoardDelete = document.getElementById('openModalButtonBoardDelete');
+    const closeModalButtonBoardDelete = document.getElementById('closeModalButtonBoardDelete');
+    const modalBackgroundBoardDelete = document.getElementById('modalBackgroundBoardDelete');
+    const modalWrapperBoardDelete = document.getElementById('modalWrapperBoardDelete');
+    const cancelButtonBoardDelete = document.getElementById('cancelButtonBoardDelete');
+    
+ 	// 사원삭제 모달 열기
+    if (openModalButtonBoardDelete) {
+    		openModalButtonBoardDelete.addEventListener('click', () => {
+    		modalBackgroundBoardDelete.classList.remove('hidden');  // 모달 배경 보이기
+    		modalBackgroundBoardDelete.classList.add('block');     // 모달 배경 보이게 설정
+    	});
+    	
+    }
+
+    // 사원삭제 모달 닫기
+    const closeModalBoardDelete = () => {
+    	modalBackgroundBoardDelete.classList.remove('block');
+    	modalBackgroundBoardDelete.classList.add('hidden');  // 모달 배경 숨기기
+      // 모달 내부의 모든 입력 필드를 초기화
+      const formBoardDelete = document.getElementById('boardFormBoardDelete');
+      formBoardDelete.reset(); // 모든 입력 필드와 라디오 버튼 초기화
+      $('input').removeClass('errorInput');
+      // 모든 에러 라벨 숨기기
+      $('.error-label').hide();
+    };
+
+    if (closeModalButtonBoardDelete) closeModalButtonBoardDelete.addEventListener('click', closeModalBoardDelete); // 닫기 버튼 클릭 시
+    if (cancelButtonBoardDelete) cancelButtonBoardDelete.addEventListener('click', closeModalBoardDelete);     // 취소 버튼 클릭 시
+    </script>
+    
     </body>
 </html>

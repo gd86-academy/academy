@@ -25,6 +25,7 @@ public class BoardDTO {
 	private String fileType;
 	private String fileCategory;
 	private String employeeName;
+	private String employeeDepartment;
 	
 	private List<MultipartFile> boardFiles;
 }
