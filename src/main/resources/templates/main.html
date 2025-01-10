@@ -96,7 +96,9 @@
 						</div>
 						<div style="height: 20px;"></div>
 						<div class="mt-5 flex justify-between">
-							<div class="text-3xl font-bold">18:00:00</div>
+							<div x-data="contacts2" x-init="init" class="text-3xl font-bold">
+								<div id="time" x-text="currentTime"></div>
+							</div>
 							<div style="width: 160px;"></div>
 							<div class="w-full">
 								<a type="button" class="btn btn-outline-info mb-1"
