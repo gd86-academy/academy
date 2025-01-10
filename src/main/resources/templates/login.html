@@ -60,16 +60,16 @@
             </template>
         </div>
 
-        <div class="main-container min-h-screen text-black dark:text-white-dark">
+        <div class="main-container min-h-screen text-black dark:text-white-dark bg-white">
             <div x-data="auth">
                 <div
                     class="relative flex min-h-screen items-center justify-center bg-cover  bg-center bg-no-repeat px-6 py-10 dark:bg-[#060818] sm:px-16"
                 >
                     <div
-					    class="relative w-full max-w-[870px] rounded-md bg-gray-200 p-2 dark:bg-gray-800"
+					    class="relative w-full max-w-[870px] p-2" style="border-radius: 30px;"
 					>
                         <div
-                            class="relative flex flex-col justify-center rounded-md bg-white/60 backdrop-blur-lg dark:bg-black/50 px-6 lg:min-h-[758px] py-20"
+                            class="relative flex flex-col justify-center rounded-md backdrop-blur-lg dark:bg-black/50 px-6 lg:min-h-[758px] py-20" style="border-radius: 30px; background-color: #f5f5f5;"
                         >
                             
                             <div class="mx-auto w-full max-w-[440px]">
@@ -159,7 +159,7 @@
                                         로그인
                                     </button>
                                 </form>
-                                
+                                <div style="height: 20px;"></div>
                                 <div class="mt-5 text-center font-bold dark:text-white">
                                     비밀번호를 잊으셨습니까?
                                     <a href="auth-boxed-signup.html" class="uppercase text-primary underline transition hover:text-black dark:hover:text-white"
