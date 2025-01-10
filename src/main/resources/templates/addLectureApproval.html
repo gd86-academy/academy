@@ -130,10 +130,29 @@
 					</div>
 					<div class="panel" style="margin: 0% 15% 0% 15%; padding: 4%; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05); border-radius : 10px;">
 						<form id="addForm" method="post" th:action="@{/}">
-						<div class="flex flex-wrap justify-between gap-4 px-4" style="margin-bottom: 40px; margin-top: 20px;">
-							<div class="text-3xl font-semibold uppercase text-center w-full m-3">강의 신청서</div>
-						</div>
 						<div class="p-5">
+						<div class="flex items-center justify-between" style="margin-bottom: 20px; margin-top: 20px;">
+							<div class="text-3xl font-bold uppercase m-3" style="white-space: nowrap;">&nbsp;강의 신청서</div>
+							<div style="flex-grow: 1; display: flex; justify-content: flex-end;">
+								<table style="table-layout: fixed; width: 60%; height:65px; border: 1px solid #f0f0f0;">
+							        <tbody>
+							            <tr class="border-dark-dark-light" style="height: 30px;">
+							                <td class="bg-[#f4f4f4] lecutre-title-align" colspan="3" style="padding: 5px 10px;">결재자</td>				                
+							            </tr>
+							            <tr>
+							            	<td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0;">1</td>
+							            	<td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0;">2</td>
+							            	<td class="lecutre-text-align">3</td>
+							            </tr>
+							            <tr>
+							                <td class="lecutre-text-align" th:text="${결재자 ?: '-'}" style="border-right: 1px solid #f0f0f0;"></td>
+							                <td class="lecutre-text-align" th:text="${결재자 ?: '-'}" style="border-right: 1px solid #f0f0f0;"></td>
+							                <td class="lecutre-text-align" th:text="${결재자 ?: '-'}"></td>
+							            </tr>							            
+							        </tbody>
+							    </table>
+							</div>
+						</div>
 						<!-- 테이블1 : 사원번호, 강사명, 강의날짜, 강의실 입력 -->
 						<div class="table-responsive">
 						    <table style="table-layout: fixed; width: 100%; height:65px; border: 1px solid #f0f0f0;" class="table-height">
@@ -141,7 +160,7 @@
 						            <tr class="border-dark-dark-light">
 						                <td class="bg-[#f4f4f4] lecutre-title-align">사원 번호</td>
 						                <td class="lecutre-text-align" th:text="${userNo}"><input type="hidden" name="lecture" value="${userNo}"></td>
-						                <td class="bg-[#f4f4f4] lecutre-title-align">강사명</td>
+						                <td class="bg-[#f4f4f4] lecutre-title-align">기안자</td>
 						                <td class="lecutre-text-align" th:text="${userName}"><input type="hidden" name="lecture" value="${userNo}"></td>					                
 						            </tr>
 						            <tr>
@@ -256,45 +275,24 @@
 						    </table>
 						</div>
 						
-						<!-- 파일첨부 -->
+						<!-- 첨부파일 -->
 						<div>
-                            <div class="flex justify-between space-x-3">
-	                            <div>
-	                            	<label for="boardFile" class="text-lg">첨부파일</label>
-	                            </div>
-	                            <div>
-	                            	<div class="flex justify-end w-full">
-									    <a type="button" id="btnRemoveFile" class="btn btn-outline-dark ltr:rounded-r-none rtl:rounded-l-none mb-3">첨부파일 제거</a>
-									    <a type="button" id="btnAddFile" class="btn btn-outline-danger ltr:rounded-l-none rtl:rounded-r-none mb-3">첨부파일 추가</a>
-									</div>
-	                            </div>
-                               
-                            </div>
-                            <div id="fileDiv">
+							<!-- 타이틀, 파일추가 버튼 -->
+							<div class="flex justify-between space-x-3">
+								<div>
+									<label class="text-lg">첨부파일</label>
+								</div>
+								<div>
+									<a type="button" id="btnAddFile" class="btn btn-outline-primary ">+ 첨부파일 추가</a>
+								</div>
+							</div>
+							<!-- 파일선택 폼 -->
+							<div id="fileDiv">
 						       <div class="flex mt-1">
-						           <button 
-						               type="button" 
-						               class="btn btn-primary ltr:rounded-r-none rtl:rounded-l-none" 
-						               style="width: 150px;"
-						               onclick="document.getElementById('lectureApprovalFile').click();">
-						               파일 선택
-						           </button>
-						           <input 
-						               id="lectureApprovalFile" 
-						               name="lectureApprovalFile"
-						               type="file" 
-						               class="hidden"
-						               multiple
-						               onchange="document.getElementById('lectureApprovalFileNameDisplay').value = this.files[0] ? this.files[0].name : '';" />
-						           <input 
-						               id="lectureApprovalFileNameDisplay" 
-						               type="text" 
-						               placeholder="첨부된 파일이 없습니다."
-						               class="form-input ltr:rounded-l-none rtl:rounded-r-none flex-grow" 
-						               readonly />
+						       		<!-- 첨부파일 추가 버튼 클릭시 폼추가되는 자리 -->
 						       </div>
 						   </div>
-	                    </div>
+						</div>
 						
 						<!-- 버튼 --> 
 						<div class="mt-8 flex items-center justify-end">
@@ -306,72 +304,89 @@
                            </a>
                        </div>
                        </div>
-                       </form>
                        
-                       </div>
-                        <!--  풋터 파일 연결 -->
-						<div style="height:30px;"></div>
-	       				<div th:replace="fragments/footer :: footer"></div>
+                      <!--  결재선 추가 모달 -->
+					  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundAddPeople">
+					       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperAddPeople">
+					           <div
+								    class="panel my-8 overflow-hidden rounded-lg border-0 p-0 md:w-full"
+								    id="modal"
+								    style="width: 700px; max-width: 90%;"
+								>
+					           
+					               <button
+					                   type="button"
+					                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+					                   id="closeModalButtonAddPeople"
+					               >
+					                   <svg
+					                       xmlns="http://www.w3.org/2000/svg"
+					                       width="24px"
+					                       height="24px"
+					                       viewBox="0 0 24 24"
+					                       fill="none"
+					                       stroke="currentColor"
+					                       stroke-width="1.5"
+					                       stroke-linecap="round"
+					                       stroke-linejoin="round"
+					                       class="h-6 w-6"
+					                   >
+					                       <line x1="18" y1="6" x2="6" y2="18"></line>
+					                       <line x1="6" y1="6" x2="18" y2="18"></line>
+					                   </svg>
+					               </button>
+					               <h3
+					                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
+					               >
+					                   결재선 추가
+					               </h3>
+					               <div class="p-5">
+					               <!-- 모달내용 -->
+					               <div>
+						               <div class="flex justify-between p-5 pb-0">
+						               		<div>
+						               			<div style="border-radius: 10px;" id="tree" class="tui-tree-wrap"></div>
+						               		</div>
+						                    
+						                    <div style="margin-left: 30px;" class="w-full">
+						                    	<div class="text-xl font-bold mb-3">추가된 사원</div>
+						                    	<div class="text-danger mb-1">최대 3명까지 선택해주세요.</div>
+						                    	<div class="text-danger mb-3">위에 있는 사원부터 결재 순서가 이루어집니다.</div>
+						                    	<!-- 선택한 사원이 추가되는 영역 -->
+						                    	<div id="inputContainer">
+						                    		<input type="hidden" id="selectedBtn">
+						                    		<input type="hidden" id="deselectedBtn">
+						                    		<input type="hidden" id="selectedValue">
+						                    		<input type="hidden" id="approvalRemoveBtn">
+						                    	</div>
+						                    </div>
+						               </div>
+					               </div>
+					               <div class="flex justify-between mb-1 p-5 pt-0 mt-3">
+					               	   <button id="addEmployeeListButton" style="width:300px;" type="button" class="btn btn-dark">선택한 사원추가</button>
+						               <div class="flex items-center">
+							               <button
+							               	   id="applyModalButtonAddPeople"
+							               	   style="width:130px;"
+					                           type="button"
+					                           class="btn btn-primary">	                          
+					                           확정
+					                       </button>
+					                   </div>
+				                   </div>
+					           </div>
+					       </div>
+					   </div>
+					</div>
+                    </form>
+                    </div>
+                    <!--  풋터 파일 연결 -->
+					<div style="height:30px;"></div>
+       				<div th:replace="fragments/footer :: footer"></div>
 					</div>
 					
 				</div> <!-- 메인화면 div 끝 -->
 			</div>
-		
-		<!--  강의삭제 확인 모달 -->
-        <div class="LectureDeleteModal">
-		  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundAddPeople">
-		       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperAddPeople">
-		           <div
-		               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
-		               id="modal"
-		           >
-		           
-		               <button
-		                   type="button"
-		                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
-		                   id="closeModalButtonAddPeople"
-		               >
-		                   <svg
-		                       xmlns="http://www.w3.org/2000/svg"
-		                       width="24px"
-		                       height="24px"
-		                       viewBox="0 0 24 24"
-		                       fill="none"
-		                       stroke="currentColor"
-		                       stroke-width="1.5"
-		                       stroke-linecap="round"
-		                       stroke-linejoin="round"
-		                       class="h-6 w-6"
-		                   >
-		                       <line x1="18" y1="6" x2="6" y2="18"></line>
-		                       <line x1="6" y1="6" x2="18" y2="18"></line>
-		                   </svg>
-		               </button>
-		               <h3
-		                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
-		               >
-		                   결재선 추가
-		               </h3>
-		               <div class="p-5">
-		               <!-- 모달내용 -->
-		               <div class="flex justify-between p-5">
-		                    <div style="border-radius: 10px;" id="tree" class="tui-tree-wrap"></div>
-		                    <div><input type="text" name="employee" value=""> </div>
-		               </div>
-		               <div class="mt-8 flex items-center justify-end">
-			               <a
-			               	   style="width:130px;"
-	                           type="button"
-	                           class="btn btn-primary ltr:ml-4 rtl:mr-4"
-	                           th:href="@{/}">	                          
-	                           확정
-	                       </a>
-	                   </div>
-	                   </div>
-		           </div>
-		       </div>
-		   </div>
-		</div>
 		
 		<!-- 5개 강의시간추가시 경고 모달 -->
         <div class="modal">
@@ -408,10 +423,61 @@
 		                   안내
 		               </h3>
 		               <div class="p-5">
-		                   주 6일이상 선택할 수 없습니다.
+		                   입력가능한 개수를 초과했습니다.
 		                   <div class="mt-8 flex items-center justify-end">
 	                          <button
 	                          	  id="employeeBtnAddOver"
+	                              type="button"
+	                              class="btn btn-primary ltr:ml-4 rtl:mr-4"
+	                          >
+	                              확인
+	                          </button>
+	                      </div>
+		               </div>
+		           </div>
+		       </div>
+		   </div>
+		</div>
+		
+		<!-- 이미 존재하는 사원추가 시 경고 모달 -->
+        <div class="modal">
+		  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundAddExist">
+		       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperAddExist">
+		           <div
+		               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
+		               id="modal"
+		           >
+		               <button
+		                   type="button"
+		                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+		                   id="closeModalButtonAddExist"
+		               >
+		                   <svg
+		                       xmlns="http://www.w3.org/2000/svg"
+		                       width="24px"
+		                       height="24px"
+		                       viewBox="0 0 24 24"
+		                       fill="none"
+		                       stroke="currentColor"
+		                       stroke-width="1.5"
+		                       stroke-linecap="round"
+		                       stroke-linejoin="round"
+		                       class="h-6 w-6"
+		                   >
+		                       <line x1="18" y1="6" x2="6" y2="18"></line>
+		                       <line x1="6" y1="6" x2="18" y2="18"></line>
+		                   </svg>
+		               </button>
+		               <h3
+		                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
+		               >
+		                   안내
+		               </h3>
+		               <div class="p-5">
+		                   이미 추가된 사원입니다.
+		                   <div class="mt-8 flex items-center justify-end">
+	                          <button
+	                          	  id="employeeBtnAddExist"
 	                              type="button"
 	                              class="btn btn-primary ltr:ml-4 rtl:mr-4"
 	                          >

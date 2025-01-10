@@ -28,4 +28,10 @@ public class CommonRestController {
 		return commonService.getWeekday();
 	}
 	
+	// 진수우 : 시간목록 출력.
+	@GetMapping("/restapi/getDepartment")
+	public List<Common> getDepartment() {
+		return commonService.getDepartmentCategory();
+	}
+	
 }
