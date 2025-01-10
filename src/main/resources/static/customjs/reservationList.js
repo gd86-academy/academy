@@ -75,8 +75,8 @@ document.addEventListener('alpine:init', () => {
             this.addContactModal = true;
         },
 	}));
-	
-	Alpine.data('reservationCalendar', () => ({
+	// 캘린더
+	Alpine.data('calendar', () => ({
         defaultParams: {
             id: null,
             title: '',
@@ -116,7 +116,7 @@ document.addEventListener('alpine:init', () => {
 			        }));
 					
 					
-		            var calendarEl = document.getElementById('reservationCalendar');
+		            var calendarEl = document.getElementById('calendar');
 		            this.calendar = new FullCalendar.Calendar(calendarEl, {
 		                initialView: 'dayGridMonth',
 		                headerToolbar: {
