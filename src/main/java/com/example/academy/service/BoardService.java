@@ -36,11 +36,16 @@ public class BoardService {
 		log.debug("boardRow = " + boardRow);
 		
 		List<MultipartFile> files = boardDTO.getBoardFiles(); // 폼에 입력되었던 파일데이터 가져옴.
+		
+		// 파일이 첨부되지 않은 경우, files가 null일 수 있으므로 null 체크 후, 비어있는 리스트로 처리
+	    if (files == null || files.isEmpty()) {
+	        log.debug("No files to upload");
+	    } else {
+	        // 파일이 첨부된 경우 파일 처리 로직 실행
 		// 파일정보 데이터베이스에 삽입.
-		for(MultipartFile mf : files) {
-			if(!mf.isEmpty()) { // if(파일이 있다면)
+	    	for(MultipartFile mf : files) {
 				
-				InputFile inputFile = new InputFile(); // inputFile 인스턴스 생성.
+	    		InputFile inputFile = new InputFile(); // inputFile 인스턴스 생성.
 				inputFile.setOriginFileName(mf.getOriginalFilename()); // 파일의 실제이름을 추출해서 inputFile 인스턴스에 set.
 				
 				Files file = new Files();
@@ -52,9 +57,11 @@ public class BoardService {
 				file.setFileCategory("employee"); // 파일 카테고리.
 				Integer fileRow = filesMapper.updateFile(file); // 파일정보 삽입.
 				log.debug("fileRow = " + fileRow);
-			}
+			
+	    	}
 		}
 	}
+	
 	
 	// 상세 공지사항 
 	public BoardDTO boardOne(Integer boardNo) {
@@ -64,6 +71,7 @@ public class BoardService {
 		
 		// 게시물 상세 조회
 		BoardDTO boardDTO = boardMapper.selectBoardOne(boardNo);
+		log.debug("boardDTO -----> " + boardDTO);
 		
 		// 날짜를 2025-01-09 형식으로 넘기기
 		boardDTO.setUpdateDate(boardDTO.getUpdateDate().substring(0, 10));
@@ -79,9 +87,14 @@ public class BoardService {
 		log.debug("boardNo = " + boardNo);
 		
 		List<MultipartFile> files = boardDTO.getBoardFiles(); // 폼에 입력되었던 파일데이터 가져옴.
-		// 파일정보 데이터베이스에 삽입.
-		for(MultipartFile mf : files) {
-			if(!mf.isEmpty()) { // if(파일이 있다면)
+		
+		// 파일이 첨부되지 않은 경우, files가 null일 수 있으므로 null 체크 후, 비어있는 리스트로 처리
+	    if (files == null || files.isEmpty()) {
+	        log.debug("No files to upload");
+	    } else {
+	        // 파일이 첨부된 경우 파일 처리 로직 실행
+			// 파일정보 데이터베이스에 삽입.
+			for(MultipartFile mf : files) {					
 				
 				InputFile inputFile = new InputFile(); // inputFile 인스턴스 생성.
 				inputFile.setOriginFileName(mf.getOriginalFilename()); // 파일의 실제이름을 추출해서 inputFile 인스턴스에 set.
@@ -103,9 +116,9 @@ public class BoardService {
 				boardFile.setFileNo(fileNo);
 				Integer boardFileRow = boardFileMapper.insertBoardFile(boardFile);
 				log.debug("boardFileRow = " + boardFileRow);			
+			
 			}
-		}
-		
+	    }
 	}
 	
 	// 공지사항 리스트 조회

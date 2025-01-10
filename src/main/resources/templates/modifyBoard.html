@@ -96,26 +96,27 @@
 	            <div class="dvanimation animate__animated p-6" :class="[$store.app.animation]">
 	                <div x-data="multicolumn">
 	                    <div class="panel">
-	                        <div>
+	                        <div class="p-2">
 	                            <h2>게시글</h2>
 	                        </div>
 	
 	                        <!-- 제목 입력창 -->
 	                        <div>
-	                            <input type="text" id="boardTitle" name="boardTitle" class="form-input" value="${boardOne.boardTitle}">
+	                            <input type="text" id="boardTitle" name="boardTitle" class="form-input" th:value="${boardOne.boardTitle}">
 	                        </div>
 	
 	                        <br>
 	
 	                        <!-- 내용 입력창 -->
 	                        <!-- Quill 에디터가 들어갈 부분 -->
-	                        <div id="editor" style="height: 400px;">
-	                            <p><span th:text="${boardOne.boardContent}"></span></p>
+	                        <div id="editor" style="height: 400px; max-height: 100%; overflow: visible;">
+	                            <p th:utext="${boardOne.boardContent}"></p>
 	                        </div>
 	
 	                        <!-- Quill 에디터의 내용이 담길 hidden input -->
 	                        <input type="hidden" id="boardContent" name="boardContent">
 	                        <input type="hidden" id="updateEmployeeNo" name="updateEmployeeNo" th:value="${employeeNo}">
+	                        <input type="hidden" id="boardNo" name="boardNo" th:value="${boardOne.boardNo}">
 	
 	                        <br>
 	
@@ -165,14 +166,14 @@
 								               type="text" 
 								               placeholder="첨부된 파일이 없습니다."
 								               class="form-input ltr:rounded-l-none rtl:rounded-r-none flex-grow"
-								               value="${bf.fileName}" 
+								               th:value="${bf.fileOrigin + '.' + bf.fileExt}" 
 								               readonly />
 								       </div>
 							       </div>
 							   </div>
 	                        </div>
 	                        <div class="flex justify-end mt-3">
-	                        	<button type="submit" id="submitButton" class="btn btn-primary" style="width: 130px;">등록</button>
+	                        	<button type="button" id="submitButton" class="btn btn-primary" style="width: 130px;">등록</button>
 	                        </div>
 	                    </div>
 	
@@ -197,8 +198,8 @@
 
 	    // 다른 input 필드의 값들 추출
 	    var boardTitle = $('#boardTitle').val();
-	    var createEmployeeNo = parseInt($('#createEmployeeNo').val(), 10);
 	    var updateEmployeeNo = parseInt($('#updateEmployeeNo').val(), 10);
+	    var boardNo = parseInt($('#boardNo').val(), 10);
 	 	// 동적으로 추가된 파일 입력 필드의 파일을 모두 가져오기
 	    var boardFiles = [];
 	    $('#fileDiv input[type="file"]').each(function() {
@@ -224,8 +225,8 @@
 	    var formData = new FormData();
 	    formData.append('boardTitle', boardTitle); // 제목
 	    formData.append('boardContent', boardContent); // Quill 에디터 내용
-	    formData.append('createEmployeeNo', createEmployeeNo); // 작성자
 	    formData.append('updateEmployeeNo', updateEmployeeNo); // 수정자
+	    formData.append('boardNo', boardNo); // 게시판 번호
 		// 파일이 있다면 추가
 	    boardFiles.forEach(function(file) {
 	        formData.append('boardFiles[]', file);  // 여러 파일 처리
@@ -233,7 +234,7 @@
 
 	    // jQuery AJAX 요청
 	    $.ajax({
-	        url: 'http://localhost/academy/addBoard',
+	        url: 'http://localhost/academy/modifyBoard',
 	        type: 'POST',
 	        data: formData,
 	        processData: false, // FormData 사용 시 false로 설정

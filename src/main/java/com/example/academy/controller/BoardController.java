@@ -26,6 +26,11 @@ public class BoardController {
 	@Autowired BoardService boardService;
 	@Autowired BoardFileService boardFileService;
 	
+	@GetMapping("/sample")
+	public String sample() {
+		return "sample";
+	}
+	
 	// 공지사항yn 수정
 	@GetMapping("/deleteBoard")
 	public String modifyBoardYN(Integer boardNo) {
@@ -51,6 +56,8 @@ public class BoardController {
  	@GetMapping("/modifyBoard")
 	public String modifyBoard(Model model, Integer boardNo) {
 		
+ 		log.debug("boardNo -------> " + boardNo);
+ 		
  		// 스프링시큐리티에서 계정정보 가져오기.
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		
@@ -81,7 +88,7 @@ public class BoardController {
 	public String addBoard(@ModelAttribute BoardDTO boardDTO) {
 		
 		log.debug("---------------------------------------" + boardDTO);
-	
+		
 		boardService.addBoard(boardDTO);
 		
 		return "redirect:/boardList";	
