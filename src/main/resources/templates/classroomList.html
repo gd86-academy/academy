@@ -183,7 +183,7 @@
 								                   		<!-- 담당자 -->
 								                       <div>
 								                           <label for="classroomManager">담당자</label>
-								                           <select id="classroomManager" class="form-select" name="classroomManager" >
+								                           <select id="classroomManager" class="nice-select w-100" name="classroomManager" >
 								                           		<option value="" >선택해주세요</option>
 								                           		<th:block th:each="classroom : ${classroom}">
 														   	   		<option th:value="${classroom.employeeNo}" th:text="${classroom.employeeName}"></option>
@@ -274,7 +274,7 @@
 								                   		<!-- 담당자 -->
 								                       <div>
 								                           <label for="classroomManagerModify">담당자</label>
-								                           <select id="classroomManagerModify" class="form-select" name="classroomManager">
+								                           <select id="classroomManagerModify" class="nice-select w-100" name="classroomManager">
 								                           		<option value="" >선택해주세요</option>
 								                           		<th:block th:each="classroom : ${classroom}">
 														   	   		<option th:value="${classroom.employeeNo}" th:text="${classroom.employeeName}" id="classroomManager" >

@@ -1,5 +1,6 @@
 package com.example.academy.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.example.academy.vo.ReservationEmployee;
@@ -7,7 +8,7 @@ import com.example.academy.vo.ReservationEmployee;
 import lombok.Data;
 
 @Data
-public class ReservationListDTO {
+public class AddReservationDTO {
 	private Integer reservationNo;
 	private Integer meetingroomNo; // meetingroom
 	private String beginTimeCode;  // common
@@ -20,9 +21,8 @@ public class ReservationListDTO {
 	private String updateDate;
 	
 	// 예약참여자
-	private List<ReservationEmployee> reservationEmployees;
+	private List<ReservationEmployee> reservationEmployees = new ArrayList<>(); // 리스트 초기화 
 	
 	// 회의실 명
 	private String meetingroomName;
-	
 }
