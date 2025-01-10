@@ -139,7 +139,7 @@
                                     </div>
                                     <div>
                                         <label class="flex cursor-pointer items-center">
-                                            <input type="checkbox" class="form-checkbox bg-white dark:bg-black" />
+                                            <input type="checkbox" id="rememberMe" class="form-checkbox bg-white dark:bg-black" />
                                             <span class="text-white-dark">사원번호 저장</span>
                                         </label>
                                     </div>
@@ -211,6 +211,47 @@
 		        $('#LoginBtn').click(); // 버튼 클릭 이벤트 트리거
 		    }
 		});
+		
+		$(document).ready(function() {
+		    // 로그인 폼 제출 시 동작
+		    $('#loginForm').on('submit', function(e) {
+		        e.preventDefault();  // 기본 폼 제출 방지
+
+		        var username = $('#username').val();
+		        var rememberMe = $('#rememberMe').is(':checked');  // 체크박스 상태 확인
+
+		        // 아이디 기억하기 체크박스가 선택된 경우, 쿠키에 저장
+		        if (rememberMe) {
+		            // 쿠키에 사원번호가 일주일동안 저장.
+		            document.cookie = "username=" + username + "; path=/; max-age=" + (7 * 24 * 60 * 60); // 
+		        } else {
+		            // 체크되지 않으면 쿠키 삭제
+		            document.cookie = "username=; path=/; max-age=0";
+		        }
+
+		        // 로그인 폼 제출
+		        this.submit();
+		    });
+
+		    // 페이지 로드 시 쿠키에서 아이디를 읽어와 자동으로 입력
+		    var username = getCookie('username');
+		    if (username) {
+		        $('#username').val(username);  // 아이디 자동 입력
+		        $('#rememberMe').prop('checked', true);  // 체크박스 체크
+		    }
+		});
+
+		// 쿠키 읽기 함수
+		function getCookie(name) {
+		    var nameEQ = name + "=";
+		    var ca = document.cookie.split(';');
+		    for (var i = 0; i < ca.length; i++) {
+		        var c = ca[i];
+		        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+		        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+		    }
+		    return null;
+		}
         </script>
     </body>
 </html>
