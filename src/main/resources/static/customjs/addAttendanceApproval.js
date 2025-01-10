@@ -121,6 +121,9 @@ document.addEventListener('alpine:init', () => {
 	
 });
 
+
+// 밑에부터 모달관련
+
 // 모달 관련 DOM 요소
 const openModalButtonAddPeople = document.getElementById('openModalButtonAddPeople');
 const closeModalButtonAddPeople = document.getElementById('closeModalButtonAddPeople');
