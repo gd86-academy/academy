@@ -76,13 +76,12 @@ document.addEventListener('alpine:init', () => {
         },
 	}));
 	
-	// 날씨 API 사용
-	
+
 	Alpine.data('contacts1', () => ({
 	    init() {
 	        this.fetchWeather();
 	    },
-
+	    
 	    fetchWeather() {
 	        // 5일치 예보 데이터를 가져오는 API
 	        $.ajax({
@@ -94,22 +93,37 @@ document.addEventListener('alpine:init', () => {
 	                const currentTemp = data.list[0].main.temp; // 첫 번째 데이터는 현재 시간 기준
 	                const currentIconCode = data.list[0].weather[0].icon;
 	                const currentIconURL = `https://openweathermap.org/img/wn/${currentIconCode}@2x.png`;
-
+	                
 	                // 현재 날씨 출력
 	                $('#currentTemperature').text(`${currentTemp}°C`); // 온도 업데이트
 	                $('#currentIcon').attr('src', currentIconURL); // 아이콘 업데이트
-
-	                // 요일별 온도 출력
+	                
+	                // 요일별 온도 출력 (오늘과 지나간 날 제외)
 	                const weeklyData = data.list.filter((item, index) => index % 8 === 0); // 매일 한 번씩 데이터 가져오기
 	                let weeklyHTML = '';
+	                const today = new Date(); // 오늘 날짜
+	                const todayDate = today.getDate(); // 오늘 날짜 (일자 기준)
+	                const todayMonth = today.getMonth(); // 오늘의 월
 
-	                weeklyData.forEach((day, index) => {
-	                    const dayTemp = day.main.temp;
-	                    const dayName = this.getDayName(new Date(day.dt_txt).getDay()); // 요일 이름
-	                    weeklyHTML += `
-	                        <div class="mt-3 font-semibold text-white">
-	                            ${dayName} ${dayTemp}°C
-	                        </div>`;
+	                let displayedDays = 0; // 출력된 날짜 수
+
+	                weeklyData.forEach((day) => {
+	                    const dayDate = new Date(day.dt_txt); // 해당 날짜
+	                    const dayDay = dayDate.getDate(); // 날짜의 일자
+	                    const dayMonth = dayDate.getMonth(); // 날짜의 월
+
+	                    // 오늘과 같은 날짜 또는 지나간 날짜를 제외하고 5일치 출력
+	                    if ((dayMonth === todayMonth && dayDay > todayDate) || dayMonth > todayMonth) {
+	                        if (displayedDays < 5) {
+	                            const dayTemp = day.main.temp;
+	                            const dayName = this.getDayName(dayDate.getDay()); // 요일 이름
+	                            weeklyHTML += `
+	                                <div class="mt-3 font-semibold text-white">
+	                                    ${dayName} ${dayTemp}°C
+	                                </div>`;
+	                            displayedDays++;
+	                        }
+	                    }
 	                });
 
 	                // 요일별 데이터 업데이트
@@ -127,9 +141,37 @@ document.addEventListener('alpine:init', () => {
 	        return days[dayIndex];
 	    }
 	}));
+	
+	// 현재 시간 출력
+	Alpine.data('contacts2', () => ({
+	        currentTime: '', // 현재 시간을 저장할 데이터
 
+	        init() {
+	            // 컴포넌트 초기화 시 실시간 시간 업데이트 시작
+	            this.updateTime();
+	            setInterval(() => this.updateTime(), 1000); // 1초마다 업데이트
+	        },
 
-					
+	        updateTime() {
+	            const now = new Date();
+	            let hours = now.getHours();
+	            let minutes = now.getMinutes();
+	            let seconds = now.getSeconds();
+
+	            if (hours < 10) {
+	                hours = '0' + hours;
+	            }
+	            if (minutes < 10) {
+	                minutes = '0' + minutes;
+	            }
+	            if (seconds < 10) {
+	                seconds = '0' + seconds;
+	            }
+
+	            this.currentTime = `${hours}:${minutes}:${seconds}`; // 시간 데이터 업데이트
+	        }
+	    }));
+		
 	
 	Alpine.data('analytics', () => ({
 		init() {
