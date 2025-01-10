@@ -23,6 +23,8 @@
         , e.employee_role employeeRole
         , e.employee_mail employeeMail
         , e.employee_name employeeName
+        , e.employee_department employeeDepartment
+        , e.employee_position employeePosition
         , f.file_name photoFileName
         , f.file_ext photoFileExt
         FROM employee e

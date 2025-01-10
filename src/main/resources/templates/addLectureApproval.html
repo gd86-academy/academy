@@ -354,15 +354,17 @@
 		               </h3>
 		               <div class="p-5">
 		               <!-- 모달내용 -->
-		               <div class="p-5">
-		                    <div id="tree" class="tui-tree-wrap"></div>
+		               <div class="flex justify-between p-5">
+		                    <div style="border-radius: 10px;" id="tree" class="tui-tree-wrap"></div>
+		                    <div><input type="text" name="employee" value=""> </div>
 		               </div>
 		               <div class="mt-8 flex items-center justify-end">
 			               <a
+			               	   style="width:130px;"
 	                           type="button"
 	                           class="btn btn-primary ltr:ml-4 rtl:mr-4"
 	                           th:href="@{/}">	                          
-	                           추가
+	                           확정
 	                       </a>
 	                   </div>
 	                   </div>
