@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.example.academy.mapper.AttendanceApprovalMapper">
+	
+	<!-- 근태신청서리스트 조회 -->
+	<select id="selectAttendanceAprrovalList" parameterType="Integer" 
+											resultType="com.example.academy.dto.AttendanceApprovalListDTO">
+		SELECT
+			ap.attendance_approval_no attendanceApprovalNo
+			, ap.attendance_approval_title attendanceApprovalTitle
+			, e.employee_name employeeName
+			, name.name NAME
+			, status.name status
+		FROM attendance_approval ap
+		LEFT OUTER JOIN employee e ON e.employee_no = ap.employee_no
+		LEFT OUTER JOIN common name ON name.`code` = ap.attendance_approval_type
+		LEFT OUTER JOIN common status ON status.`code` = ap.attendance_approval_status
+		WHERE ap.use_yn = 1
+		AND ap.employee_no = #{employeeNo}
+	</select>
+</mapper>
