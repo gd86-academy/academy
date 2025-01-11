@@ -121,6 +121,237 @@ document.addEventListener('alpine:init', () => {
 	
 });
 
+let result = 0;  // 전역 변수로 result 선언
+let inputIds = []; // 모든 inputId를 저장
+let displayIds = []; // 모든 displayId를 저장
+let removeButtonIds = []; // 모든 removeButtonId를 저장
+let errMsgs = [] // 모든 errMsg를 저장
+
+// 첨부파일 폼 추가버튼 클릭 시
+$('#btnAddFile').click(function(){
+	// 마지막 파일 입력필드가 비어있다면
+	if ($('#fileDiv input[type="file"]').last().val() === '') {
+		// 모달로 바꾸기
+		 alert('첨부되지 않은 파일이 존재합니다.');
+	} else {	
+		result++; // result 증가( 파일 입력 필드마다 고유 값이 생성됨)
+		
+		let inputId = 'attendanceApprovalFile' + result; // 고유한 inputId 생성
+		let displayId = 'attendanceApprovalFileNameDisplay' + result; // 고유한 displayId 생성
+		let removeButtonId = 'removeFileBtn' + result;	// 고유한 removeButtonId 생성 (휴지통 버튼)
+		let errMsg = 'errMsg' + result;	// 고유한 errMsg 생성
+		
+		inputIds.push(inputId); // 배열에 추가
+		displayIds.push(displayId);	// 배열에 추가
+		removeButtonIds.push(removeButtonId);	// 배열에 추가
+		errMsgs.push(errMsg);
+		
+		let html = `
+			<div id = "fileField${result}">
+				<div class="flex mt-1" >
+					<!-- 커스텀 버튼 -->
+					<button 
+					   type="button" 
+					   class="btn btn-primary ltr:rounded-r-none rtl:rounded-l-none" 
+					   style="width: 150px;"
+					   onclick="document.getElementById('${inputId}').click();">
+					   파일 선택
+					</button>
+					<!-- 숨겨진 파일 입력 -->
+					<input 
+					   id="${inputId}" 
+					   name="attendanceApprovalFile"
+					   type="file" 
+					   class="hidden"
+					   multiple
+					   onchange="document.getElementById('${displayId}').value = this.files[0] ? this.files[0].name : '';" />
+					<!-- 파일 이름 표시 -->
+					<input 
+					   id="${displayId}" 
+					   type="text" 
+					   placeholder="첨부된 파일이 없습니다."
+					   class="form-input ltr:rounded-l-none rtl:rounded-r-none flex-grow" 
+					   readonly />
+					<!-- 휴지통 버튼 -->
+					<button
+						type="button"
+						class = "btn btn-outline-danger ml-2"
+						id = "${removeButtonId}"
+						onclick="removeFileField(${result});"
+						<!--휴지통 아이콘추가-->
+						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<path
+								opacity="0.5"
+								d="M11.5956 22.0001H12.4044C15.1871 22.0001 16.5785 22.0001 17.4831 21.1142C18.3878 20.2283 18.4803 18.7751 18.6654 15.8686L18.9321 11.6807C19.0326 10.1037 19.0828 9.31524 18.6289 8.81558C18.1751 8.31592 17.4087 8.31592 15.876 8.31592H8.12405C6.59127 8.31592 5.82488 8.31592 5.37105 8.81558C4.91722 9.31524 4.96744 10.1037 5.06788 11.6807L5.33459 15.8686C5.5197 18.7751 5.61225 20.2283 6.51689 21.1142C7.42153 22.0001 8.81289 22.0001 11.5956 22.0001Z"
+								fill="currentColor"
+							/>
+							<path
+								d="M3 6.38597C3 5.90152 3.34538 5.50879 3.77143 5.50879L6.43567 5.50832C6.96502 5.49306 7.43202 5.11033 7.61214 4.54412C7.61688 4.52923 7.62232 4.51087 7.64185 4.44424L7.75665 4.05256C7.8269 3.81241 7.8881 3.60318 7.97375 3.41617C8.31209 2.67736 8.93808 2.16432 9.66147 2.03297C9.84457 1.99972 10.0385 1.99986 10.2611 2.00002H13.7391C13.9617 1.99986 14.1556 1.99972 14.3387 2.03297C15.0621 2.16432 15.6881 2.67736 16.0264 3.41617C16.1121 3.60318 16.1733 3.81241 16.2435 4.05256L16.3583 4.44424C16.3778 4.51087 16.3833 4.52923 16.388 4.54412C16.5682 5.11033 17.1278 5.49353 17.6571 5.50879H20.2286C20.6546 5.50879 21 5.90152 21 6.38597C21 6.87043 20.6546 7.26316 20.2286 7.26316H3.77143C3.34538 7.26316 3 6.87043 3 6.38597Z"
+								fill="currentColor"
+							/>
+							<path
+								fill-rule="evenodd"
+								clip-rule="evenodd"
+								d="M9.42543 11.4815C9.83759 11.4381 10.2051 11.7547 10.2463 12.1885L10.7463 17.4517C10.7875 17.8855 10.4868 18.2724 10.0747 18.3158C9.66253 18.3592 9.29499 18.0426 9.25378 17.6088L8.75378 12.3456C8.71256 11.9118 9.01327 11.5249 9.42543 11.4815Z"
+								fill="currentColor"
+							/>
+							<path
+								fill-rule="evenodd"
+								clip-rule="evenodd"
+								d="M14.5747 11.4815C14.9868 11.5249 15.2875 11.9118 15.2463 12.3456L14.7463 17.6088C14.7051 18.0426 14.3376 18.3592 13.9254 18.3158C13.5133 18.2724 13.2126 17.8855 13.2538 17.4517L13.7538 12.1885C13.795 11.7547 14.1625 11.4381 14.5747 11.4815Z"
+								fill="currentColor"
+							/>
+						</svg>
+					</button>
+				</div>
+				<div class="mt-1" >	<!-- 유효성문구 -->
+					<span id = "${errMsg}" class="msg date-error error-label" style="display: none;">파일을 첨부해주세요.</span>
+				</div>
+			</div>
+		`;
+		
+		$('#fileDiv').append(html);	// 파일 입력 필드 추가
+	}
+});
+
+// 휴지통 버튼 클릭시 호출 (파일 입력 폼과 해당 휴지통 버튼을 삭제하는 함수)
+function removeFileField(fileId) {
+	// 해당 파일 입력폼과 휴지통 버튼을 포함하는 div 제거
+	$('#fileField'+fileId).remove();
+	// 삭제된 필드의 ID를 배열에서 제거
+	inputIds = inputIds.filter(inputId => inputId !== 'attendanceApprovalFile' + fileId);
+	displayIds = displayIds.filter(displayId => displayId !== 'attendanceApprovalFileNameDisplay' + fileId);
+	removeButtonIds = removeButtonIds.filter(removeButtonId => removeButtonId !== 'removeFileBtn' + fileId);	
+	errMsgs = errMsgs.filter(errMsg => errMsg !== 'errMsg' + fileId);	
+}
+
+// 유효성 검사 
+$('#addBtn').click(function() {
+    let isVal = true;
+    
+ 	// 신청날짜_시작날짜 검사
+    if ($('#beginDate').val().trim() === '') {
+        $('#beginDate').addClass("errorInput");
+        $('.date-error').show();
+        isVal = false;
+    } else {
+        $('.date-error').hide();
+        $('#beginDate').removeClass("errorInput");
+    }
+	
+	// 신청날짜_종료날짜 검사
+    if ($('#endDate').val().trim() === '') {
+        $('#endDate').addClass("errorInput");
+        $('.date-error').show();
+        isVal = false;
+    } else {
+        $('.date-error').hide();
+        $('#endDate').removeClass("errorInput");
+    }
+	
+	// 결재제목 검사
+	if ($('#attendanceApprovalTitle').val().trim() === '') {
+	    $('#attendanceApprovalTitle').addClass("errorInput");
+	    $('.attendanceApprovalTitle-error').show();
+	    isVal = false;
+	} else {
+	    $('.attendanceApprovalTitle-error').hide();
+	    $('#attendanceApprovalTitle').removeClass("errorInput");
+	}
+	
+	// 결재내용 검사
+	if ($('#attendanceApprovalContent').val().trim() === '') {
+        $('#attendanceApprovalContent').addClass("textarea-error");
+        $('.attendanceApprovalContent-error').show();
+        isVal = false;
+    } else {
+        $('.attendanceApprovalContent-error').hide();
+        $('#attendanceApprovalContent').removeClass("textarea-error");
+    }
+	
+	// 첨부파일 검사	
+	inputIds.forEach((inputId, index) => {
+		let fileInput = $('#' + inputId)
+		let displayInput = $('#' + displayIds[index]);
+		let errMsg = $('#' + errMsgs[index]);
+		
+		if(fileInput.val().trim() === ''){
+			displayInput.addClass("errorInput");
+			errMsg.show();
+			isVal = false;
+		} else{
+			displayInput.removeClass("errorInput");
+			errMsg.hide();
+		}		
+	});
+	
+ 	/*
+	$('#timeDiv tr').each(function(index) {
+        // 각 select 요소에 대한 검사
+		console.log($('#timeDiv tr').length);
+        const weekday = $(this).find(`#weekdayId${index}`);
+        const beginTime = $(this).find(`#beginTimeId${index}`);
+        const endTime = $(this).find(`#endTimeId${index}`);
+
+        // 요일 검사
+        if (weekday.val() === '' || weekday.val() === null) {
+            weekday.addClass('errorInput');
+            $(this).find('.weekday-error').show();
+            isVal = false;
+        } else {
+            weekday.removeClass('errorInput');
+            $(this).find('.weekday-error').hide();
+        }
+		console.log("요일" + weekday.val());
+        // 시작시간 검사
+        if (beginTime.val() === '' || beginTime.val() === null) {
+            beginTime.addClass('errorInput');
+            $(this).find('.beginTime-error').show();
+            isVal = false;
+        } else {
+            beginTime.removeClass('errorInput');
+            $(this).find('.beginTime-error').hide();
+        }
+		console.log("시작시간" + beginTime.val());
+        // 종료시간 검사
+        if (endTime.val() === '' || endTime.val() === null) {
+            endTime.addClass('errorInput');
+            $(this).find('.endTime-error').show();
+            isVal = false;
+        } else {
+            endTime.removeClass('errorInput');
+            $(this).find('.endTime-error').hide();
+        }
+		console.log("종료시간" + endTime.val());
+    });
+	
+	// #inputContainer에 input 요소가 하나도 없으면 추가된 항목이 없다고 판단
+    if ($('#inputContainer input:not([type="hidden"])').length === 0) {
+        isVal = false;
+		console.log('결재선이 비어있습니다.');
+    }
+	
+	
+	$('#inputContainer input:not([type="hidden"])').each(function() {
+		console.log($('#inputContainer input:not([type="hidden"])').length);
+        var value = $(this).val();
+        // readonly 속성이 없고 값이 비어있는 input을 유효하지 않다고 판단
+        if (!$(this).prop('readonly') && value.trim() === '') {
+            isVal = false;
+            $(this).css('border', '1px solid red'); // 값이 비어있는 input에 빨간색 테두리 추가
+        } else {
+            $(this).css('border', ''); // 값이 있는 input은 테두리 제거
+        }
+    });
+ 	*/
+    // 폼 제출
+    if (isVal) {
+        console.log("submit 성공");
+        $('#addForm').submit();
+    } 
+});
+
+
 
 // 밑에부터 모달관련
 
@@ -143,34 +374,6 @@ const closeModalAddPeople = () => {
 };
 
 closeModalButtonAddPeople.addEventListener('click', closeModalAddPeople); // 닫기 버튼 클릭 시
-
-// 부서 선택
-document.addEventListener("DOMContentLoaded", function(e) {
-    // default
-    var els = document.querySelectorAll(".begintime");
-    els.forEach(function(select) {
-        NiceSelect.bind(select);
-    });
-});
-
-// 직급 선택
-document.addEventListener("DOMContentLoaded", function(e) {
-    // default
-    var els = document.querySelectorAll(".endTime");
-    els.forEach(function(select) {
-        NiceSelect.bind(select);
-    });
-});
-
-// 직급 선택
-document.addEventListener("DOMContentLoaded", function(e) {
-    // default
-    var els = document.querySelectorAll(".weekday");
-    els.forEach(function(select) {
-        NiceSelect.bind(select);
-    });
-});
-
 
 
 
