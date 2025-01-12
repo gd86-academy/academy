@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.ApplicationMapper">
 	<select id="selectApplicationList" parameterType="Integer"
-									resultType="com.example.academy.dto.applicationListDTO" >
+									resultType="com.example.academy.dto.ApplicationListDTO" >
 		SELECT
 			la.lecture_approval_no lectureApprovalNo
 			, la.lecture_approval_title lectureApprovalTitle

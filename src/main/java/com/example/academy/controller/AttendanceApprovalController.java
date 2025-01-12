@@ -14,7 +14,7 @@ import com.example.academy.security.CustomUserDetails;
 public class AttendanceApprovalController {
 	
 	// 근태신청서리스트 조회
-	@GetMapping
+	@GetMapping("/attendanceApprovalList")
 	public String attendanceApprovalList(Model model) {
 		// 스프링시큐리티에서 계정정보 가져오기.
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
