@@ -134,7 +134,7 @@
 						<div class="flex items-center justify-between" style="margin-bottom: 20px; margin-top: 20px;">
 							<div class="text-3xl font-bold uppercase m-3" style="white-space: nowrap;">&nbsp;강의 신청서</div>
 							<div style="flex-grow: 1; display: flex; justify-content: flex-end;">
-								<table style="table-layout: fixed; width: 60%; height:65px; border: 1px solid #f0f0f0;">
+								<table id="peoples" style="table-layout: fixed; width: 60%; height:65px; border: 1px solid #f0f0f0;">
 							        <tbody>
 							            <tr class="border-dark-dark-light" style="height: 30px;">
 							                <td class="bg-[#f4f4f4] lecutre-title-align" colspan="3" style="padding: 5px 10px;">결재자</td>				                
@@ -144,10 +144,22 @@
 							            	<td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0;">2</td>
 							            	<td class="lecutre-text-align">3</td>
 							            </tr>
-							            <tr>
-							                <td class="lecutre-text-align" th:text="${결재자 ?: '-'}" style="border-right: 1px solid #f0f0f0;"></td>
-							                <td class="lecutre-text-align" th:text="${결재자 ?: '-'}" style="border-right: 1px solid #f0f0f0;"></td>
-							                <td class="lecutre-text-align" th:text="${결재자 ?: '-'}"></td>
+							            <tr style="height: 50px;">
+							                <td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0;">
+							                	<div class="flex">
+							                		<div id="people1"></div>
+							                	</div>
+							                </td>
+							                <td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0;">
+							                	<div class="flex">
+							                		<div id="people2"></div>
+							                	</div>
+							                </td>
+							                <td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0;">
+							                	<div class="flex">
+							                		<div id="people3"></div>
+							                	</div>
+							                </td>
 							            </tr>							            
 							        </tbody>
 							    </table>

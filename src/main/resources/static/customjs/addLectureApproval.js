@@ -122,7 +122,67 @@ const closeModalAddPeople = () => {
 };
 
 if (closeModalButtonAddPeople) closeModalButtonAddPeople.addEventListener('click', closeModalAddPeople); // 닫기 버튼 클릭 시
-if (applyModalButtonAddPeople) applyModalButtonAddPeople.addEventListener('click', closeModalAddPeople);
+if (applyModalButtonAddPeople) applyModalButtonAddPeople.addEventListener('click', () => {
+	// 해당 id를 가진 요소를 찾음
+	var element = document.getElementById('inputContainer');
+	if (element) {
+        // 요소 내의 모든 input 태그들을 찾음
+        var inputs = element.querySelectorAll('input:not([type="hidden"])');
+        
+        if (inputs.length > 0) {
+            // 각 input 태그의 value 값을 출력
+            inputs.forEach(function(input, index) {
+                console.log(`Input ${index + 1}:`, input.value);
+				console.log(inputs.length);
+				let html = `
+		            <div class="flex w-full mb-1">
+		                <input class="text-center w-full" value="${input.value}"></input>
+		            </div>
+		        `;
+				
+				
+				if (inputs.length == 1) { // 값이 1개라면
+					$('#people1 .flex').remove();
+					$('#people1').append(html);  // HTML 추가
+					$('#people2 .flex').remove();
+					$('#people3 .flex').remove();
+				} else if (inputs.length == 2) { // 값이 2개라면 
+					if (index == 0) {
+						$('#people1 .flex').remove();
+						$('#people1').append(html);  // HTML 추가
+					}
+					if (index == 1) {
+						$('#people2 .flex').remove();
+						$('#people2').append(html);  // HTML 추가
+					}
+					if (index == 1) $('#people3 .flex').remove();
+				} else if (inputs.length == 3) {
+					if (index == 0) {
+						$('#people1 .flex').remove();
+						$('#people1').append(html);  // HTML 추가
+					}
+					if (index == 1) {
+						$('#people2 .flex').remove();
+						$('#people2').append(html);  // HTML 추가
+					}
+					if (index == 2) {
+						$('#people3 .flex').remove();
+						$('#people3').append(html);  // HTML 추가
+					}
+				}
+				
+            });
+        } else {
+            console.log('input 태그가 존재하지 않습니다.');
+			$('#people1 .flex').remove();
+			$('#people2 .flex').remove();
+			$('#people3 .flex').remove();
+        }
+    } else {
+        console.log(`id "${elementId}"를 가진 요소를 찾을 수 없습니다.`);
+    }
+	closeModalAddPeople();
+});
 
 // 시작시간 선택
 document.addEventListener("DOMContentLoaded", function(e) {
