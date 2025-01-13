@@ -17,6 +17,7 @@ public class ClassroomService {
 		return classroomMapper.deleteClassroom(classroomNo);
 	}
 	
+	// 박시현 : 강의실번호 별 상세정보
 	public ClassroomListDTO getClassroomOne(Integer classroomNo) {
 		return classroomMapper.classroomOne(classroomNo);
 	}

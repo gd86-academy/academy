@@ -11,11 +11,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.academy.dto.AddReservationDTO;
 import com.example.academy.dto.MeetingRoomListDTO;
-import com.example.academy.dto.ReservationEmployeeDTO;
-import com.example.academy.dto.ReservationListDTO;
 import com.example.academy.security.CustomUserDetails;
 import com.example.academy.service.CalendarService;
 import com.example.academy.service.CommonService;
@@ -32,6 +31,17 @@ public class ReservationController {
 	@Autowired CommonService commonService;
 	@Autowired MeetingRoomService meetingroomService;
 	
+	// 박시현 : 예약 취소
+	@GetMapping("/removeReservation")
+	public String removeReservation(@RequestParam Integer reservationNo) {
+		Integer row = reservationService.removeReservation(reservationNo);
+		if(row == 0) {
+			return "/reservationList";
+		}
+		return "redirect:/reservationList";
+	}
+	
+	// 박시현 : 예약 신청
 	@PostMapping("/addReservation")
 	public String addReservation(@ModelAttribute AddReservationDTO addReservationDTO) {
 		// 예약 신청
@@ -43,6 +53,7 @@ public class ReservationController {
 		return "redirect:/reservationList";
 	}
 	
+	// 박시현 : 예약 신청
 	@GetMapping("/addReservation")
 	public String addReservation(Model model) {
 		// 스프링시큐리티에서 계정정보 가져오기.
@@ -66,11 +77,9 @@ public class ReservationController {
 	    return "addReservation"; 
 	}
 	
+	// 박시현 : 예약 리스트
 	@GetMapping("/reservationList")
 	public String reservationList(Model model) {
-		List<ReservationListDTO> reservationList = reservationService.getReservationList();
-		model.addAttribute("reservationList",reservationList);
-		log.debug("reservationList : " + reservationList);
 		return "reservationList";
 	}
 }

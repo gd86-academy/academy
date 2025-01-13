@@ -11,6 +11,15 @@ import com.example.academy.vo.Employee;
 
 @Mapper
 public interface ReservationMapper {
+	// 박시현 : 예약 취소
+	Integer deleteReservation(Integer reservationNo);
+	
+	// 박시현 : 예약번호 별 상세정보
+	ReservationListDTO selectReservationOne(Integer reservationNo);
+	
+	// 박시현 : 예약 수정
+	Integer updateReservation(ReservationListDTO reservationListDTO);
+	
 	// 박시현 : 예약시 참여자 추가
 	Integer insertReservationByEmployee(ReservationEmployeeDTO reservationEmployeeDTO);
 	

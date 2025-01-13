@@ -21,6 +21,21 @@ import lombok.extern.slf4j.Slf4j;
 public class ReservationService {
 	@Autowired ReservationMapper reservationMapper;
 	
+	// 박시현 : 예약 취소
+	public Integer removeReservation(Integer reservationNo) {
+		return reservationMapper.deleteReservation(reservationNo);
+	}
+	
+	// 박시현 : 예약 수정
+	public Integer modifyReservation(ReservationListDTO reservationListDTO) {
+		return reservationMapper.updateReservation(reservationListDTO);
+	}
+	
+	// 박시현 : 예약번호별 상세정보
+	public ReservationListDTO getReservationOne(Integer reservationNo) {
+		return reservationMapper.selectReservationOne(reservationNo);
+	}
+	
 	// 박시현 : 예약 신청 - 사원 검색
 	public List<Employee> getReservationByEmployee(String searchEmployee) {
 		return reservationMapper.selectReservationByEmployee(searchEmployee);
