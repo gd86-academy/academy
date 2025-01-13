@@ -9,9 +9,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.academy.dto.ClassroomListDTO;
+import com.example.academy.dto.LectureApprovalDTO;
 import com.example.academy.dto.LectureOneDTO;
 import com.example.academy.dto.LectureOneTimeListDTO;
 import com.example.academy.security.CustomUserDetails;
@@ -19,14 +21,26 @@ import com.example.academy.service.ClassroomService;
 import com.example.academy.service.CommonService;
 import com.example.academy.service.LectureService;
 import com.example.academy.vo.Common;
+import com.example.academy.vo.Lecture;
 
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
+@Slf4j
 public class LectureApprovalController {
 	@Autowired LectureService lectureService;
 	@Autowired CommonService commonService;
 	@Autowired ClassroomService classroomService;
 	
+	// 진수우 : 강의결재 신청서 제출.
+	@PostMapping("/addLectureApproval")
+	public String addLectureApproval(Model model, LectureApprovalDTO lectureApprovalDTO) {
+		log.debug("result : " + lectureApprovalDTO);
+		model.addAttribute("lectureApprovalDTO", lectureApprovalDTO);
+		return "test";
+	}
+	
+	// 진수우 : 강의결재 신청서 작성페이지 호출.
 	@GetMapping("/addLectureApproval")
 	public String addAttendanceApproval(Model model) {
 		// 스프링시큐리티에서 계정정보 가져오기.

@@ -129,7 +129,7 @@
 					    <a type="button" class="btn btn-primary ltr:rounded-l-none rtl:rounded-r-none mb-3">강의신청</a>
 					</div>
 					<div class="panel" style="margin: 0% 15% 0% 15%; padding: 4%; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05); border-radius : 10px;">
-						<form id="addForm" method="post" th:action="@{/}">
+						<form id="addForm" method="post" th:action="@{/addLectureApproval}" enctype="multipart/form-data">
 						<div class="p-5">
 						<div class="flex items-center justify-between" style="margin-bottom: 20px; margin-top: 20px;">
 							<div class="text-3xl font-bold uppercase m-3" style="white-space: nowrap;">&nbsp;강의 신청서</div>
@@ -173,7 +173,7 @@
 						                <td class="bg-[#f4f4f4] lecutre-title-align">사원 번호</td>
 						                <td class="lecutre-text-align" th:text="${userNo}"><input type="hidden" name="lecture" value="${userNo}"></td>
 						                <td class="bg-[#f4f4f4] lecutre-title-align">기안자</td>
-						                <td class="lecutre-text-align" th:text="${userName}"><input type="hidden" name="lecture" value="${userNo}"></td>					                
+						                <td class="lecutre-text-align" th:text="${userName}"><input type="hidden" value="${userNo}"></td>					                
 						            </tr>
 						            <tr>
 						        		<td class="bg-[#f4f4f4] lecutre-title-align">강의날짜</td>
