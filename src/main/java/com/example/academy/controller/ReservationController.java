@@ -3,7 +3,6 @@ package com.example.academy.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,22 +11,17 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.academy.dto.AddReservationDTO;
 import com.example.academy.dto.MeetingRoomListDTO;
+import com.example.academy.dto.ReservationEmployeeDTO;
 import com.example.academy.dto.ReservationListDTO;
 import com.example.academy.security.CustomUserDetails;
 import com.example.academy.service.CalendarService;
 import com.example.academy.service.CommonService;
-import com.example.academy.service.EmployeeService;
 import com.example.academy.service.MeetingRoomService;
 import com.example.academy.service.ReservationService;
-import com.example.academy.vo.Calendar;
 import com.example.academy.vo.Common;
-import com.example.academy.vo.Employee;
-import com.example.academy.vo.ReservationEmployee;
-
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -39,7 +33,7 @@ public class ReservationController {
 	@Autowired MeetingRoomService meetingroomService;
 	
 	@PostMapping("/addReservation")
-	public String addReservation(@ModelAttribute AddReservationDTO addReservationDTO, ReservationEmployee reservationEmployee) {
+	public String addReservation(@ModelAttribute AddReservationDTO addReservationDTO) {
 		// 예약 신청
 		int row = reservationService.insertReservation(addReservationDTO);
 		// 예약 참여자 테이블에 데이터 추가

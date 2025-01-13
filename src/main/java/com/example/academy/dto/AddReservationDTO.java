@@ -21,7 +21,7 @@ public class AddReservationDTO {
 	private String updateDate;
 	
 	// 예약참여자
-	private List<ReservationEmployee> reservationEmployees = new ArrayList<>(); // 리스트 초기화 
+	private List<ReservationEmployeeDTO> reservationEmployees = new ArrayList<>(); // 리스트 초기화 
 	
 	// 회의실 명
 	private String meetingroomName;

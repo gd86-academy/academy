@@ -7,14 +7,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.academy.dto.AddReservationDTO;
+import com.example.academy.dto.ReservationEmployeeDTO;
 import com.example.academy.dto.ReservationListDTO;
 import com.example.academy.mapper.ReservationMapper;
 import com.example.academy.vo.Employee;
-import com.example.academy.vo.ReservationEmployee;
+
+import lombok.extern.slf4j.Slf4j;
 
 
 @Service
 @Transactional
+@Slf4j
 public class ReservationService {
 	@Autowired ReservationMapper reservationMapper;
 	
@@ -25,20 +28,28 @@ public class ReservationService {
 	
 	// 박시현 : 예약 신청
 	public Integer insertReservation(AddReservationDTO addReservationDTO) {
-	    // 예약 신청 데이터 추가
-	    int reservationRow = reservationMapper.insertReservation(addReservationDTO);
+	    // 예약 정보 추가 (reservation 테이블에 데이터 추가)
+	    Integer row = reservationMapper.insertReservation(addReservationDTO);
 	    
-	    // 여러 명의 예약자 데이터 추가
-	    int employeeRow = 0;
-	    for (ReservationEmployee employee : addReservationDTO.getReservationEmployees()) {
-	        employeeRow += reservationMapper.insertReservationByEmployee(employee);
-	    }
-	    
-	    // 모든 작업이 성공적으로 완료되었는지 확인
-	    if (reservationRow > 0 && employeeRow == addReservationDTO.getReservationEmployees().size()) {
-	        return 1;  // 성공적으로 추가됨
+	    // 참여자 데이터 추가
+	    if (row > 0) {
+	        Integer reservationNo = addReservationDTO.getReservationNo(); // 새로 생성된 예약 번호
+	        
+	        // 예약 참여자들 추가 (reservation_employee 테이블에 데이터 추가)
+	        int employeeRow = 0;
+	        for (ReservationEmployeeDTO employee : addReservationDTO.getReservationEmployees()) {
+	            employee.setReservationNo(reservationNo);  // 각 참여자에 예약 번호 설정
+	            employeeRow += reservationMapper.insertReservationByEmployee(employee);  // 참여자 데이터 추가
+	        }
+	        
+	        // 4. 모든 작업이 성공적으로 완료되었는지 확인
+	        if (employeeRow == addReservationDTO.getReservationEmployees().size()) {
+	            return 1;  // 성공
+	        } else {
+	            return 0;  // 실패 
+	        }
 	    } else {
-	        return 0;  // 실패
+	        return 0;  // 예약 신청 데이터 추가 실패
 	    }
 	}
 	
@@ -46,9 +57,9 @@ public class ReservationService {
 	public List<ReservationListDTO> getReservationList() {
 		List<ReservationListDTO> reservationList = reservationMapper.selectReservationList();
         
-        // 예약 참여자 추가
+        // 회의 참여자 추가
         for (ReservationListDTO reservation : reservationList) {
-            List<ReservationEmployee> employees = reservationMapper.getReservationEmployees(reservation.getReservationNo());
+            List<ReservationEmployeeDTO> employees = reservationMapper.getReservationEmployees(reservation.getReservationNo());
             reservation.setReservationEmployees(employees);
         }
         

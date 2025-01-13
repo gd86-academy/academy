@@ -100,87 +100,110 @@ document.addEventListener('alpine:init', () => {
         now: new Date(),
         events: [],
 		init() {
-	        // AJAX 요청
-	        $.ajax({
-	            url: `http://localhost/academy/restapi/reservationList`,
-	            type: 'GET',
-	            dataType: 'json',
-	            success: (data) => {
-	                this.events = data.map(event => ({
-	                    id: event.reservationNo,
-	                    title: event.reservationTitle,
-	                    start: event.reservationDate, // 서버에서 전달받은 날짜 형식으로 처리
-	                    end: event.endTimeCode,
-	                    extendedProps: {
-	                        meetingroomName: event.meetingroomName || '회의실 없음',
-	                        employees: event.reservationEmployees.map(emp => emp.employeeName).join(', ') || '참여자 없음',
-	                        description: event.reservationContent || '상세 내용 없음',
-	                    }
-	                }));
+		    // AJAX 요청
+		    $.ajax({
+		        url: `http://localhost/academy/restapi/reservationList`,
+		        type: 'GET',
+		        dataType: 'json',
+		        success: (data) => {
+		            this.events = data.map(event => ({
+		                id: event.reservationNo,
+		                title: event.reservationTitle,
+		                start: event.reservationDate, // 서버에서 전달받은 날짜 형식으로 처리
+		                extendedProps: {
+							reservationPerson: event.reservationPerson, // 예약자
+		                    meetingroomName: event.meetingroomName || '회의실 없음', // 회의실 명
+							beginTimeCode : event.beginTimeCode,
+							endTimeCode : event.endTimeCode,
+		                    employees: event.reservationEmployees.map(emp => emp.employeeName).join(', ') || '참여자 없음', // 회의 참여자
+		                    description: event.reservationContent || '상세 내용 없음',
+		                }
+		            }));
 
-	                var calendarEl = document.getElementById('calendar');
-	                this.calendar = new FullCalendar.Calendar(calendarEl, {
-	                    initialView: 'dayGridMonth',
-	                    headerToolbar: {
-	                        left: 'prev,next today',
-	                        center: 'title',
-	                        right: 'dayGridMonth,timeGridWeek,timeGridDay',
-	                    },
-	                    editable: true,
-	                    dayMaxEvents: true,
-	                    selectable: true,
-	                    droppable: true,
-	                    eventClick: (event) => {
-	                        this.editEvent(event);
-	                    },
-	                    select: (event) => {
-	                        this.editDate(event);
-	                    },
-	                    events: this.events,
-	                    // 툴팁 설정
-	                    eventMouseEnter: function(info) {
-	                        const event = info.event;
+		            var calendarEl = document.getElementById('calendar');
+		            this.calendar = new FullCalendar.Calendar(calendarEl, {
+		                initialView: 'dayGridMonth',
+		                headerToolbar: {
+		                    left: 'prev,next today',
+		                    center: 'title',
+		                    right: 'dayGridMonth,timeGridWeek,timeGridDay',
+		                },
+		                editable: true,
+		                dayMaxEvents: true,
+		                selectable: true,
+		                droppable: true,
+		                eventClick: (event) => {
+		                    this.editEvent(event);
+		                },
+		                select: (event) => {
+		                    this.editDate(event);
+		                },
+		                events: this.events,
+		                // 툴팁 설정
+						eventMouseEnter: function (info) {
+						    const event = info.event;
 
-	                        // 툴팁의 내용을 설정합니다
-	                        const tooltipContent = `
-	                            <strong>회의실:</strong> ${event.extendedProps.meetingroomName}<br>
-	                            <strong>참여자:</strong> ${event.extendedProps.employees}<br>
-	                            <strong>시작 시간:</strong> ${event.start.toLocaleString()}<br>
-	                            <strong>종료 시간:</strong> ${event.end.toLocaleString()}<br>
-	                            <strong>상세 내용:</strong> ${event.extendedProps.description}
-	                        `;
-	                        
-	                        // 툴팁을 활성화합니다
-	                        const tooltip = document.createElement('div');
-	                        tooltip.className = 'tooltip bs-tooltip-top';
-	                        tooltip.setAttribute('role', 'tooltip');
-	                        tooltip.innerHTML = `<div class="arrow"></div><div class="tooltip-inner">${tooltipContent}</div>`;
-	                        document.body.appendChild(tooltip);
+						    // 툴팁 html
+						    const tooltipContent = `
+						        <div>
+						            <strong>예약자:</strong> ${event.extendedProps.reservationPerson || '예약자 없음'}<br>
+						            <strong>시간:</strong> ${event.extendedProps.beginTimeCode} ~ ${event.extendedProps.endTimeCode }<br>
+						            <strong>회의실:</strong> ${event.extendedProps.meetingroomName || '회의실 없음'}<br>
+						            <strong>참여자:</strong> ${event.extendedProps.employees || '참여자 없음'}<br>
+						            <strong>상세 내용:</strong> ${event.extendedProps.description || '상세 내용 없음'}
+						        </div>
+						    `;
 
-	                        // 툴팁 위치를 계산합니다
-	                        const rect = info.el.getBoundingClientRect();
-	                        tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight - 5}px`;
-	                        tooltip.style.left = `${rect.left + window.scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2)}px`;
-	                    },
-	                    eventMouseLeave: function(info) {
-	                        // 마우스를 벗어나면 툴팁을 제거합니다
-	                        const tooltips = document.querySelectorAll('.tooltip');
-	                        tooltips.forEach(tooltip => tooltip.remove());
-	                    },
-	                });
-	                this.calendar.render();
+						    // 툴팁 요소 생성
+						    const tooltip = document.createElement('div');
+						    tooltip.className = 'custom-tooltip';
+						    tooltip.innerHTML = tooltipContent;
 
-	                this.$watch('$store.app.sidebar', () => {
-	                    setTimeout(() => {
-	                        this.calendar.render();
-	                    }, 300);
-	                });
-	            },
-	            error: (xhr, status, error) => {
-	                console.error('Error:', error);
-	            }
-	        });
-	    },
+						    // 툴팁 스타일
+						    tooltip.style.position = 'absolute';
+						    tooltip.style.zIndex = 1000;
+						    tooltip.style.backgroundColor = '#f9f9f9';
+						    tooltip.style.border = '1px solid #ccc';
+						    tooltip.style.padding = '10px';
+						    tooltip.style.borderRadius = '4px';
+						    tooltip.style.boxShadow = '0px 4px 6px rgba(0,0,0,0.1)';
+						    tooltip.style.color = '#333';
+						    tooltip.style.whiteSpace = 'nowrap';
+
+						    // 툴팁 위치
+						    const rect = info.el.getBoundingClientRect();
+						    tooltip.style.top = `${rect.top + window.scrollY - 10}px`;
+						    tooltip.style.left = `${rect.left + window.scrollX + rect.width}px`;
+
+						    // 툴팁 추가
+						    document.body.appendChild(tooltip);
+
+						    // 이벤트에 툴팁 참조 저장
+						    info.el._tooltip = tooltip;
+						},
+
+						eventMouseLeave: function (info) {
+						    // 툴팁 제거
+						    if (info.el._tooltip) {
+						        document.body.removeChild(info.el._tooltip);
+						        delete info.el._tooltip;
+						    }
+						},
+		            });
+
+		            this.calendar.render();
+
+		            this.$watch('$store.app.sidebar', () => {
+		                setTimeout(() => {
+		                    this.calendar.render();
+		                }, 300);
+		            });
+		        },
+		        error: (xhr, status, error) => {
+		            console.error('Error:', error);
+		        }
+		    });
+		},
 		
 
         getMonth(dt, add = 0) {

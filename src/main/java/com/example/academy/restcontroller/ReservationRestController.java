@@ -35,6 +35,7 @@ public class ReservationRestController {
 	        Map<String, Object> event = new HashMap<>();
 	        
 	        event.put("reservationNo", reservationList.getReservationNo());
+	        event.put("reservationPerson", reservationList.getReservationPerson());
 	        event.put("reservationTitle", reservationList.getReservationTitle());
 	        event.put("reservationDate", reservationList.getReservationDate());
 	        event.put("beginTimeCode", reservationList.getBeginTimeCode());

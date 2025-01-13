@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.ReservationMapper">
 	<!-- 박시현 : 회의 참여자 추가 -->
-	<insert id="insertReservationByEmployee" parameterType="com.example.academy.vo.ReservationEmployee">
+	<insert id="insertReservationByEmployee" parameterType="com.example.academy.dto.ReservationEmployeeDTO">
 	    INSERT INTO reservation_employee (
 	        reservation_no,
 	        employee_no
@@ -10,8 +10,6 @@
 	        #{reservationNo},
 	        #{employeeNo}
 	    )
-	    ON DUPLICATE KEY UPDATE
-        reservation_no = reservation_no
 	</insert>
 
 	<!-- 박시현 : 예약신청시 참여인원에 필요한 사원검색 -->
@@ -24,30 +22,30 @@
 	</select>
 
 	<!-- 박시현 : 회의실 예약 신청 -->
-	<insert id="insertReservation" parameterType="com.example.academy.dto.AddReservationDTO">
-		INSERT INTO reservation(
-			meetingroom_no
-			, begin_time_code
-			, end_time_code
-			, reservation_date
-			, reservation_person
-			, reservation_title
-			, reservation_content
-		) VALUES(
-			#{meetingroomNo}
-			, #{beginTimeCode}
-			, #{endTimeCode}
-			, #{reservationDate}
-			, #{reservationPerson}
-			, #{reservationTitle}
-			, #{reservationContent}
-		)
+	<insert id="insertReservation" parameterType="com.example.academy.dto.AddReservationDTO" useGeneratedKeys="true" keyProperty="reservationNo">
+	    INSERT INTO reservation (
+	        meetingroom_no,
+	        begin_time_code,
+	        end_time_code,
+	        reservation_date,
+	        reservation_person,
+	        reservation_title,
+	        reservation_content
+	    ) VALUES (
+	        #{meetingroomNo},
+	        #{beginTimeCode},
+	        #{endTimeCode},
+	        #{reservationDate},
+	        #{reservationPerson},
+	        #{reservationTitle},
+	        #{reservationContent}
+	    )
 	</insert>
 	
 	<!-- 박시현) 회의 참여자 조회 -->
-	<select id="getReservationEmployees" resultType="com.example.academy.vo.ReservationEmployee">
+	<select id="getReservationEmployees" resultType="com.example.academy.dto.ReservationEmployeeDTO">
 	    SELECT
-	    	re.reservation_no reservationNO
+	    	re.reservation_no reservationNo
 	        , re.employee_no employeeNo
 	        , e.employee_name employeeName
 	    FROM reservation_employee re

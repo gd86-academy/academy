@@ -26,7 +26,7 @@ public class ReservationListDTO {
 	private String updateDate;
 	
 	// 예약참여자
-	private List<ReservationEmployee> reservationEmployees;
+	private List<ReservationEmployeeDTO> reservationEmployees;
 	
 	// 회의실 명
 	private String meetingroomName;
