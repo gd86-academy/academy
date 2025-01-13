@@ -86,14 +86,14 @@
                 <!-- 메인화면 -->
                 <div class="animate__animated p-6" :class="[$store.app.animation]">
                     <!-- 타이틀 -->
-                	<div class="flex flex-wrap items-center justify-between gap-4 ml-3">
-                		 <h2 class="text-2xl ml-3">나의 신청 목록</h2>
-                		 <div class="flex w-full flex-col gap-4 sm:w-auto sm:flex-row sm:items-center sm:gap-3">
-                		 	<div class="flex gap-3 mr-3">
-                		 	
-                		 	</div>
-                		 </div>
-                	</div>
+                	<div class="flex justify-between ml-3">
+						<h2 class="text-2xl ml-3">나의 신청 목록</h2>
+						<!-- 신청양식 선택버튼 -->
+						<div th:if="${userRole == 'management'}" class="relative inline-flex" >
+							<button id="attendanceApprovalBtn" type="button" class="btn btn-primary ltr:rounded-r-none rtl:rounded-l-none mb-3">근태신청서</button>
+							<button id="lectureApprovalBtn" type="button" class="btn btn-outline-primary ltr:rounded-l-none rtl:rounded-r-none mb-3">강의신청서</button>
+						</div>
+					</div>
                 	<!-- userNo 자바스크립트에서 사용하기 위해서 -->
                 	<input id="employeeNo" type="hidden" th:value="${userNo}"/>
          
