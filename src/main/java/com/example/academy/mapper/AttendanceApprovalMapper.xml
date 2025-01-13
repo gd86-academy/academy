@@ -11,7 +11,7 @@
 			, aa.attendance_approval_type attendanceApprovalTypeCode
 			, c1.`name` attendanceApprovalType
 			, aa.employee_no employeeNo
-			, e.employee_name
+			, e.employee_name employeeName
 			, aa.attendance_approval_status attendanceApprovalStatusCode
 			, c2.`name` attendanceApprovalStatus
 		FROM attendance_approval aa LEFT OUTER JOIN employee e
