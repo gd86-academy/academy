@@ -76,10 +76,7 @@ public class ReservationController {
 	public String reservationList(Model model) {
 		List<ReservationListDTO> reservationList = reservationService.getReservationList();
 		model.addAttribute("reservationList",reservationList);
-		List<Calendar> calendar = calendarService.getReservationCalendar();
-		model.addAttribute("calendar",calendar);
 		log.debug("reservationList : " + reservationList);
-		log.debug("calendar : " + calendar);
 		return "reservationList";
 	}
 }

@@ -99,57 +99,88 @@ document.addEventListener('alpine:init', () => {
         calendar: null,
         now: new Date(),
         events: [],
-        init() {
-			// AJAX 요청
+		init() {
+	        // AJAX 요청
 	        $.ajax({
 	            url: `http://localhost/academy/restapi/reservationList`,
 	            type: 'GET',
 	            dataType: 'json',
 	            success: (data) => {
-					this.events = data.map(event => ({
-			            id: event.calendarNo, // 이벤트 ID
-			            title: event.calendarTitle, // 이벤트 제목
-			            start: event.calendarStart, // 시작 날짜 (서버에서 'startDate' 형식으로 반환된다고 가정)
-			            end: event.calendarEnd, // 종료 날짜 (서버에서 'endDate' 형식으로 반환된다고 가정)
-			            className: event.calendarClassName || 'default-class', // className (없으면 기본값 'default-class')
-			            description: event.calendarDescription || 'No description available' // 설명 (없으면 기본값)
-			        }));
-					
-					
-		            var calendarEl = document.getElementById('calendar');
-		            this.calendar = new FullCalendar.Calendar(calendarEl, {
-		                initialView: 'dayGridMonth',
-		                headerToolbar: {
-		                    left: 'prev,next today',
-		                    center: 'title',
-		                    right: 'dayGridMonth,timeGridWeek,timeGridDay',
-		                },
-		                editable: true,
-		                dayMaxEvents: true,
-		                selectable: true,
-		                droppable: true,
-		                eventClick: (event) => {
-		                    this.editEvent(event);
-		                },
-		                select: (event) => {
-		                    this.editDate(event);
-		                },
-		                events: this.events,
-		            });
-		            this.calendar.render();
-		
-		            this.$watch('$store.app.sidebar', () => {
-		                setTimeout(() => {
-		                    this.calendar.render();
-		                }, 300);
-		            });
-				},
-				
-				error: (xhr, status, error) => {
-		                console.error('Error:', error);
-		            }
-		        });
-        },
+	                this.events = data.map(event => ({
+	                    id: event.reservationNo,
+	                    title: event.reservationTitle,
+	                    start: event.reservationDate, // 서버에서 전달받은 날짜 형식으로 처리
+	                    end: event.endTimeCode,
+	                    extendedProps: {
+	                        meetingroomName: event.meetingroomName || '회의실 없음',
+	                        employees: event.reservationEmployees.map(emp => emp.employeeName).join(', ') || '참여자 없음',
+	                        description: event.reservationContent || '상세 내용 없음',
+	                    }
+	                }));
+
+	                var calendarEl = document.getElementById('calendar');
+	                this.calendar = new FullCalendar.Calendar(calendarEl, {
+	                    initialView: 'dayGridMonth',
+	                    headerToolbar: {
+	                        left: 'prev,next today',
+	                        center: 'title',
+	                        right: 'dayGridMonth,timeGridWeek,timeGridDay',
+	                    },
+	                    editable: true,
+	                    dayMaxEvents: true,
+	                    selectable: true,
+	                    droppable: true,
+	                    eventClick: (event) => {
+	                        this.editEvent(event);
+	                    },
+	                    select: (event) => {
+	                        this.editDate(event);
+	                    },
+	                    events: this.events,
+	                    // 툴팁 설정
+	                    eventMouseEnter: function(info) {
+	                        const event = info.event;
+
+	                        // 툴팁의 내용을 설정합니다
+	                        const tooltipContent = `
+	                            <strong>회의실:</strong> ${event.extendedProps.meetingroomName}<br>
+	                            <strong>참여자:</strong> ${event.extendedProps.employees}<br>
+	                            <strong>시작 시간:</strong> ${event.start.toLocaleString()}<br>
+	                            <strong>종료 시간:</strong> ${event.end.toLocaleString()}<br>
+	                            <strong>상세 내용:</strong> ${event.extendedProps.description}
+	                        `;
+	                        
+	                        // 툴팁을 활성화합니다
+	                        const tooltip = document.createElement('div');
+	                        tooltip.className = 'tooltip bs-tooltip-top';
+	                        tooltip.setAttribute('role', 'tooltip');
+	                        tooltip.innerHTML = `<div class="arrow"></div><div class="tooltip-inner">${tooltipContent}</div>`;
+	                        document.body.appendChild(tooltip);
+
+	                        // 툴팁 위치를 계산합니다
+	                        const rect = info.el.getBoundingClientRect();
+	                        tooltip.style.top = `${rect.top + window.scrollY - tooltip.offsetHeight - 5}px`;
+	                        tooltip.style.left = `${rect.left + window.scrollX + (rect.width / 2) - (tooltip.offsetWidth / 2)}px`;
+	                    },
+	                    eventMouseLeave: function(info) {
+	                        // 마우스를 벗어나면 툴팁을 제거합니다
+	                        const tooltips = document.querySelectorAll('.tooltip');
+	                        tooltips.forEach(tooltip => tooltip.remove());
+	                    },
+	                });
+	                this.calendar.render();
+
+	                this.$watch('$store.app.sidebar', () => {
+	                    setTimeout(() => {
+	                        this.calendar.render();
+	                    }, 300);
+	                });
+	            },
+	            error: (xhr, status, error) => {
+	                console.error('Error:', error);
+	            }
+	        });
+	    },
 		
 
         getMonth(dt, add = 0) {

@@ -20,6 +20,8 @@ public interface ReservationMapper {
 	// 박시현 : 회의실 예약 신청 
 	Integer insertReservation(AddReservationDTO addReservationListDTO);
 	
+	List<ReservationEmployee> getReservationEmployees(Integer reservationNo);
+	
 	// 박시현 : 회의실예약 목록 조회
 	List<ReservationListDTO> selectReservationList();
 }
