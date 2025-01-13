@@ -390,7 +390,7 @@ if (applyModalButtonAddPeople) applyModalButtonAddPeople.addEventListener('click
 				console.log(inputs.length);
 				let html = `
 		            <div class="flex w-full mb-1">
-		                <input class="text-center w-full" value="${input.value}"></input>
+		                <input name="approvers" class="text-center w-full" value="${input.value}"></input>
 		            </div>
 		        `;
 				

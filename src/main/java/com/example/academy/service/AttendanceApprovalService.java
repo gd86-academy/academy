@@ -15,7 +15,7 @@ public class AttendanceApprovalService {
 	@Autowired AttendanceApprovalMapper attendanceApprovalMapper;
 	
 	// 근태신청서리스트 조회
-	public List<AttendanceApprovalListDTO> getAttendanceApprovalLis(Integer employeeNo) {
+	public List<AttendanceApprovalListDTO> getAttendanceApprovalList(Integer employeeNo) {
 		return attendanceApprovalMapper.selectAttendanceAprrovalList(employeeNo);
 	}
 }

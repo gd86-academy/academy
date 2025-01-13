@@ -5,17 +5,10 @@ import lombok.Data;
 @Data
 public class LectureApprovalListDTO {
 
-	private Integer lectureApprovalNo;		// PK
-    private Integer lecturer;          		// FK
-    private String lectureApprovalTitle;            
-    private String lectureApprovalContent;            
-    private String lectureName;   
-    private String lectureContent;
-    private Integer classroomNo;     		// FK
-    private String lectureBeginDate;         
-    private String lectureEndDate;        
-    private String lectureApprovalStatus;  	// FK        
-    private Integer lectureApprovalStep;           
+	private Integer lectureApprovalNo;		// PK 신청번호
+	private String lectureApprovalTitle;    // 신청제목   
+    private Integer lecturer;          		// FK	신청자
+    private String lectureApprovalStatus;  	// FK   결재상태       
     private String createDate;        
     private String updateDate;
 	
@@ -23,16 +16,9 @@ public class LectureApprovalListDTO {
     public Object[] toArray() {
     	return new Object[] {
     			this.lectureApprovalNo
-    			, this.lecturer
     			, this.lectureApprovalTitle
-    			, this.lectureApprovalContent
-    			, this.lectureName
-    			, this.lectureContent
-    			, this.classroomNo
-    			, this.lectureBeginDate
-    			, this.lectureEndDate
+    			, this.lecturer
     			, this.lectureApprovalStatus
-    			, this.lectureApprovalStep
     			, this.createDate
     			, this.updateDate
     	};

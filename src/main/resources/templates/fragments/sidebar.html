@@ -222,13 +222,13 @@
                                 </button>
                                 <ul x-cloak x-show="approvalDropdown === 'approval'" x-collapse class="sub-menu text-gray-500">
                                     <li>
-                                        <a th:href="@{/addLectureApproval}">결재신청</a>
+                                        <a th:href="@{/addAttendanceApproval}">결재신청</a>
                                     </li>
                                     <li>
-                                        <a href="elements-avatar.html">나의 신청 목록</a>
+                                        <a th:href="@{/applicationList}">나의 신청 목록</a>
                                     </li>
                                     <li>
-                                        <a href="elements-badges.html">결재 대기 목록</a>
+                                        <a th:href="@{/}">결재 대기 목록</a>
                                     </li>
                                 </ul>
                             </li>

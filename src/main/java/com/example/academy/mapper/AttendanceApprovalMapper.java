@@ -9,6 +9,6 @@ import com.example.academy.dto.AttendanceApprovalListDTO;
 @Mapper
 public interface AttendanceApprovalMapper {
 	
-	// 근태신청서리스트 조회
+	// 김혜린 : 근태신청서 리스트 조회
 	List<AttendanceApprovalListDTO> selectAttendanceAprrovalList(Integer employeeNo);
 }
