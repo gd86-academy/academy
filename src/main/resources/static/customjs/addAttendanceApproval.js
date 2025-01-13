@@ -355,11 +355,13 @@ $('#addBtn').click(function() {
 
 // 밑에부터 모달관련
 
+// 결재선추가 모달
 // 모달 관련 DOM 요소
-const openModalButtonAddPeople = document.getElementById('openModalButtonAddPeople');
-const closeModalButtonAddPeople = document.getElementById('closeModalButtonAddPeople');
+const openModalButtonAddPeople = document.getElementById('openModalButtonAddPeople');	// 결재선 추가 버튼
+const closeModalButtonAddPeople = document.getElementById('closeModalButtonAddPeople');	// 모달 내 x 버튼
 const modalBackgroundAddPeople = document.getElementById('modalBackgroundAddPeople');
 const modalWrapperAddPeople = document.getElementById('modalWrapperAddPeople');
+const applyModalButtonAddPeople = document.getElementById('applyModalButtonAddPeople');	// 모달 내 확정 버튼
 
 // 모달 열기
 openModalButtonAddPeople.addEventListener('click', () => {
@@ -373,10 +375,232 @@ const closeModalAddPeople = () => {
   modalBackgroundAddPeople.classList.add('hidden');  // 모달 배경 숨기기
 };
 
-closeModalButtonAddPeople.addEventListener('click', closeModalAddPeople); // 닫기 버튼 클릭 시
+if (closeModalButtonAddPeople) closeModalButtonAddPeople.addEventListener('click', closeModalAddPeople); // 닫기 버튼 클릭 시
+if (applyModalButtonAddPeople) applyModalButtonAddPeople.addEventListener('click', () => {
+	// 해당 id를 가진 요소를 찾음
+	var element = document.getElementById('inputContainer');
+	if (element) {
+        // 요소 내의 모든 input 태그들을 찾음
+        var inputs = element.querySelectorAll('input:not([type="hidden"])');
+        
+        if (inputs.length > 0) {
+            // 각 input 태그의 value 값을 출력
+            inputs.forEach(function(input, index) {
+                console.log(`Input ${index + 1}:`, input.value);
+				console.log(inputs.length);
+				let html = `
+		            <div class="flex w-full mb-1">
+		                <input class="text-center w-full" value="${input.value}"></input>
+		            </div>
+		        `;
+				
+				
+				if (inputs.length == 1) { // 값이 1개라면
+					$('#people1 .flex').remove();
+					$('#people1').append(html);  // HTML 추가
+					$('#people2 .flex').remove();
+					$('#people3 .flex').remove();
+				} else if (inputs.length == 2) { // 값이 2개라면 
+					if (index == 0) {
+						$('#people1 .flex').remove();
+						$('#people1').append(html);  // HTML 추가
+					}
+					if (index == 1) {
+						$('#people2 .flex').remove();
+						$('#people2').append(html);  // HTML 추가
+					}
+					if (index == 1) $('#people3 .flex').remove();
+				} else if (inputs.length == 3) {
+					if (index == 0) {
+						$('#people1 .flex').remove();
+						$('#people1').append(html);  // HTML 추가
+					}
+					if (index == 1) {
+						$('#people2 .flex').remove();
+						$('#people2').append(html);  // HTML 추가
+					}
+					if (index == 2) {
+						$('#people3 .flex').remove();
+						$('#people3').append(html);  // HTML 추가
+					}
+				}
+				
+            });
+        } else {
+            console.log('input 태그가 존재하지 않습니다.');
+			$('#people1 .flex').remove();
+			$('#people2 .flex').remove();
+			$('#people3 .flex').remove();
+        }
+    } else {
+        console.log(`id "${elementId}"를 가진 요소를 찾을 수 없습니다.`);
+    }
+	closeModalAddPeople();
+});
 
+// 트리에 팀명이 선택되는 것을 방지하기위해서 팀명 리스트로 받아오기.
+const departmentName = [];
+$.ajax({
+    url: 'http://localhost/academy/restapi/getDepartment',
+    type: 'GET',
+    dataType: 'json',
+    success: (data) => {
+		// name 필드값을 추출해서 리스트로 변환.
+		$.each(data, function(index, item) {
+            departmentName.push(item.name); // departmentName 배열에 name 필드값 추가
+        });
+	},
+	error: (xhr, status, error) => {
+        console.error('Error:', error);
+    }
+});
+console.log(departmentName);
 
+// 트리에 사원목록 출력.
+$.ajax({
+    url: 'http://localhost/academy/restapi/employeeListNode',
+    type: 'GET',
+    dataType: 'json',
+    success: (data) => {
+			var tree = new tui.Tree('#tree', { // Tree 컴포넌트를 초기화하는 생성자.
+			    data: data, // 데이터를 가져옴.
+			    nodeDefaultState: 'opened' // 모든 노드가 기본적으로 열린 상태.
+			}).enableFeature('Selectable', { // Tree 컴포넌트 추가기능 설정.
+			    selectedClassName: 'tui-tree-selected', // 선택된 노드의 CSS설정.
+			});
 
+			var selectedBtn = document.getElementById('selectedBtn');
+			var deselectedBtn = document.getElementById('deselectedBtn');
+			var rootNodeId = tree.getRootNodeId();
+			var firstChildId = tree.getChildIds(rootNodeId)[0];
+			var selectedValue = document.getElementById('selectedValue');
+			var selectedNode = null; // 선택된 노드를 추적하는 변수
+			
+			// 팀명 선택 방지
+		    tree.on('beforeSelect', function(eventData) {
+		        var nodeData = tree.getNodeData(eventData.nodeId);
+				$.each(departmentName, function(i, department) {
+			        if (nodeData.text.includes(department)) { // 팀명 조건 설정
+						console.log(nodeData.text.includes(department))
+			            console.log('팀명은 선택할 수 없습니다.');
+						eventData.preventDefault(); // 기본 동작 취소 (선택 방지)
+			            return false; // 선택 방지
+			        }
+			    });
+		    });
+
+			// 트리의 루트노드ID를 가져옴.
+			tree.on('select', function(eventData) {
+			    var nodeData = tree.getNodeData(eventData.nodeId);
+				selectedValue.value = 'selected : ' + nodeData.text;
+			    selectedNode = nodeData; // 선택된 노드 정보 저장
+			    console.log('Selected:', selectedNode.text);
+			});
+
+			// 트리에서 선택된 항목을 선택해제함.
+			tree.on('deselect', function(eventData) {
+			    var nodeData = tree.getNodeData(eventData.nodeId);
+			    selectedValue.value = 'deselected : ' + nodeData.text;
+			});
+
+			util.addEventListener(selectedBtn, 'click', function() {
+			    tree.select(firstChildId);
+			});
+
+			util.addEventListener(deselectedBtn, 'click', function() {
+			    tree.deselect();
+			});
+
+			// "추가" 버튼 클릭 이벤트 처리
+			var approvalPeopleResult = 0;
+			$('#addEmployeeListButton').click(function() {
+			    if (selectedNode && selectedNode.text) { // selectedNode가 정의되고 text가 존재하는지 확인.
+			        var approvalPeoplesId = 'approvalPeoples' + approvalPeopleResult;
+			        var approvalRemoveBtnId = 'approvalRemoveBtn' + approvalPeopleResult;
+			        let html = `
+			            <div class="flex w-full mb-1">
+			                <input id="${approvalPeoplesId}" type="text" class="form-input ltr:rounded-r-none rtl:rounded-l-none" name="approval" value="${selectedNode.text}" readonly/>
+			                <button id="${approvalRemoveBtnId}" type="button" class="btn btn-danger ltr:rounded-l-none rtl:rounded-r-none" style="width: 80px;">삭제</button>
+			            </div>
+			        `;
+					
+					if (approvalPeopleResult < 3) {
+						// 중복 여부 확인
+				        var isDuplicate = false;
+				        $('#inputContainer input:not([type="hidden"])').each(function() {
+				            if ($(this).val().trim() === selectedNode.text.trim()) {
+				                isDuplicate = true;
+				                return false; // 반복문 중단
+				            }
+				        });
+						
+						if (isDuplicate == false) {
+							$('#inputContainer').append(html);  // HTML을 inputContainer에 추가
+							approvalPeopleResult++; // 추가할 때마다 approvalPeopleResult 증가
+						} else {
+							modalBackgroundAddExist.classList.toggle('hidden', false);
+							modalBackgroundAddExist.classList.toggle('block', true);
+						}
+						
+					}
+			        else {
+						modalBackgroundAddOver.classList.toggle('hidden', false);
+						modalBackgroundAddOver.classList.toggle('block', true);
+					}
+			        // 로그 출력
+			        console.log(approvalPeopleResult);
+			        
+			    } else {
+			        // alert('트리 항목을 선택하세요!');
+			    }
+			});
+
+			// 삭제버튼 클릭 시 해당 input과 삭제 버튼을 삭제.
+			$(document).on('click', '.btn-danger', function() {
+			    // 클릭된 삭제 버튼의 부모 요소인 .flex를 삭제
+			    $(this).closest('.flex').remove();
+				approvalPeopleResult--;
+				console.log(approvalPeopleResult);
+			});
+		},
+    error: (xhr, status, error) => {
+        console.error('Error:', error);
+    }
+});
+	
+// 브라우저에 맞는 맞춤형 메서드를 제공.
+var util = {
+    addEventListener: function(element, eventName, handler) {
+        if (element.addEventListener) {
+            element.addEventListener(eventName, handler, false);
+        } else {
+            element.attachEvent('on' + eventName, handler);
+        }
+    }
+};
+
+// DOM이 준비된 후에 실행
+document.addEventListener('DOMContentLoaded', function() {
+    // ID로 요소를 찾습니다.
+    var selectedBtn = document.getElementById('selectedBtn');
+    var deselectedBtn = document.getElementById('deselectedBtn');
+
+    // 버튼이 존재하는지 확인
+    if (selectedBtn && deselectedBtn) {
+        // 버튼에 클릭 이벤트 리스너 추가
+        util.addEventListener(selectedBtn, 'click', function() {
+            tree.select(firstChildId);
+        });
+
+        util.addEventListener(deselectedBtn, 'click', function() {
+            tree.deselect();
+        });
+    } else {
+        console.log("Buttons not found!");
+    }
+});
+
+/* 트리
 var util = {
             addEventListener: function(element, eventName, handler) {
                 if (element.addEventListener) {
@@ -387,64 +611,80 @@ var util = {
             }
         };
 
-        var data = [
-            {text: 'rootA', children: [
-                {text: 'sub-A1'},
-                {text: 'sub-A2'},
-                {text: 'sub-A3'},
-                {text: 'sub-A4'},
-                {text: 'sub-A5', state: 'closed', children: [
-                    {text:'sub-A5A', children:[
-                        {text:'sub-A5A1'}
-                    ]},
-                    {text:'sub_A5B'}
-                ]},
-                {text: 'sub-A6'},
-                {text: 'sub-A7'},
-                {text: 'sub-A8'},
-                {text: 'sub-A9', state: 'closed', children: [
-                    {text:'sub-A9A'},
-                    {text:'sub-A9B'}
-                ]},
-                {text: 'sub-A10'},
-                {text: 'sub-A11'},
-                {text: 'sub-A12'}
+var data = [
+    {text: 'rootA', children: [
+        {text: 'sub-A1'},
+        {text: 'sub-A2'},
+        {text: 'sub-A3'},
+        {text: 'sub-A4'},
+        {text: 'sub-A5', state: 'closed', children: [
+            {text:'sub-A5A', children:[
+                {text:'sub-A5A1'}
             ]},
-            {text: 'rootB', state:'closed', children: [
-                {text:'sub-B1'},
-                {text:'sub-B2'},
-                {text:'sub-B3'}
-            ]}
-        ];
+            {text:'sub_A5B'}
+        ]},
+        {text: 'sub-A6'},
+        {text: 'sub-A7'},
+        {text: 'sub-A8'},
+        {text: 'sub-A9', state: 'closed', children: [
+            {text:'sub-A9A'},
+            {text:'sub-A9B'}
+        ]},
+        {text: 'sub-A10'},
+        {text: 'sub-A11'},
+        {text: 'sub-A12'}
+    ]},
+    {text: 'rootB', state:'closed', children: [
+        {text:'sub-B1'},
+        {text:'sub-B2'},
+        {text:'sub-B3'}
+    ]}
+];
 
-        var tree = new tui.Tree('#tree', {
-            data: data,
-            nodeDefaultState: 'opened'
-        }).enableFeature('Selectable', {
-            selectedClassName: 'tui-tree-selected',
-        });
+var tree = new tui.Tree('#tree', {
+    data: data,
+    nodeDefaultState: 'opened'
+}).enableFeature('Selectable', {
+    selectedClassName: 'tui-tree-selected',
+});
 
-        var selectedBtn = document.getElementById('selectedBtn');
-        var deselectedBtn = document.getElementById('deselectedBtn');
-        var rootNodeId = tree.getRootNodeId();
-        var firstChildId = tree.getChildIds(rootNodeId)[0];
-        var selectedValue = document.getElementById('selectedValue');
+var selectedBtn = document.getElementById('selectedBtn');
+var deselectedBtn = document.getElementById('deselectedBtn');
+var rootNodeId = tree.getRootNodeId();
+var firstChildId = tree.getChildIds(rootNodeId)[0];
+var selectedValue = document.getElementById('selectedValue');
 
-        tree.on('select', function(eventData) {
-            var nodeData = tree.getNodeData(eventData.nodeId);
-            selectedValue.value = 'selected : ' + nodeData.text;
-        });
+tree.on('select', function(eventData) {
+    var nodeData = tree.getNodeData(eventData.nodeId);
+    selectedValue.value = 'selected : ' + nodeData.text;
+});
 
-        tree.on('deselect', function(eventData) {
-            var nodeData = tree.getNodeData(eventData.nodeId);
-            selectedValue.value = 'deselected : ' + nodeData.text;
-        });
+tree.on('deselect', function(eventData) {
+    var nodeData = tree.getNodeData(eventData.nodeId);
+    selectedValue.value = 'deselected : ' + nodeData.text;
+});
 
-        util.addEventListener(selectedBtn, 'click', function() {
-            tree.select(firstChildId);
-        });
+util.addEventListener(selectedBtn, 'click', function() {
+    tree.select(firstChildId);
+});
 
-        util.addEventListener(deselectedBtn, 'click', function() {
-            tree.deselect();
-        });
+util.addEventListener(deselectedBtn, 'click', function() {
+    tree.deselect();
+});
+*/
 
+// 이미 등록한 회원추가시 경고 모달 관련 DOM 요소
+const openModalButtonAddExist = document.getElementById('openModalButtonAddExist');
+const closeModalButtonAddExist = document.getElementById('closeModalButtonAddExist');
+const modalBackgroundAddExist = document.getElementById('modalBackgroundAddExist');
+const modalWrapperAddExist = document.getElementById('modalWrapperAddExist');
+const employeeBtnAddExist = document.getElementById('employeeBtnAddExist');
+
+// 이미 등록한 회원추가시 모달 닫기
+const closeModalAddExist = () => {
+	  modalBackgroundAddExist.classList.remove('block');
+	  modalBackgroundAddExist.classList.add('hidden');  // 모달 배경 숨기기
+};
+
+if (closeModalButtonAddExist) closeModalButtonAddExist.addEventListener('click', closeModalAddExist); // 닫기 버튼 클릭 시
+if (employeeBtnAddExist) employeeBtnAddExist.addEventListener('click', closeModalAddExist);     // 취소 버튼 클릭 시

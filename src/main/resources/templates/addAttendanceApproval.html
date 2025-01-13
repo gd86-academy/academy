@@ -135,7 +135,7 @@
 							<div class="flex items-center justify-between" style="margin-bottom: 20px; margin-top: 20px;">
 								<div class="text-3xl font-semibold uppercase m-3" style="white-space: nowrap;">근태 신청서</div>
 								<div style="flex-grow: 1; display: flex; justify-content: flex-end;">
-									<table style="table-layout: fixed; width: 60%; height:65px; border: 1px solid #f0f0f0;">
+									<table id = "peoples" style="table-layout: fixed; width: 60%; height:65px; border: 1px solid #f0f0f0;">
 								        <tbody>
 								            <tr class="border-dark-dark-light" style="height: 30px;">
 								                <td class="bg-[#f4f4f4] lecutre-title-align" colspan="3" style="padding: 5px 10px;">결재자</td>				                
@@ -145,15 +145,21 @@
 								            	<td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0;">2</td>
 								            	<td class="lecutre-text-align" style="padding: 5px;">3</td>
 								            </tr>
-								            <tr>
-								                <td class="lecutre-text-align" th:text="${결재자 ?: '-'}" style="border-right: 1px solid #f0f0f0;">
-								                	<input type="hidden" name="approver1" value="${결재자 ?: ''}">
+								            <tr style="height: 50px;">
+								                <td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0;">
+								                	<div class="flex">
+								                		<div id="people1"></div>
+								                	</div>
 								                </td>
-								                <td class="lecutre-text-align" th:text="${결재자 ?: '-'}" style="border-right: 1px solid #f0f0f0;">
-								                	<input type="hidden" name="approver2" value="${결재자 ?: ''}">
+								                <td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0;">
+								                	<div class="flex">
+								                		<div id="people2"></div>
+								                	</div>
 								                </td>
-								                <td class="lecutre-text-align" th:text="${결재자 ?: '-'}">
-								                	<input type="hidden" name="approver3" value="${결재자 ?: ''}">
+								                <td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0;">
+								                	<div class="flex">
+								                		<div id="people3"></div>
+								                	</div>
 								                </td>
 								            </tr>							            
 								        </tbody>
@@ -329,19 +335,92 @@
 	   <div th:replace="fragments/footer :: footer"></div>
 		
 		<!-- 모달 관련 -->
-		<!--  강의삭제 확인 모달 -->
-        <div class="LectureDeleteModal">
-		  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundAddPeople">
-		       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperAddPeople">
+		<!--  결재선 추가 모달 -->
+		<div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundAddPeople">
+		   <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperAddPeople">
+				<div
+					class="panel my-8 overflow-hidden rounded-lg border-0 p-0 md:w-full"
+					id="modal"
+					style="width: 700px; max-width: 90%;"
+				>
+							           
+					<button
+					   type="button"
+					   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+					   id="closeModalButtonAddPeople"
+					>
+						<svg
+							xmlns="http://www.w3.org/2000/svg"
+							width="24px"
+							height="24px"
+							viewBox="0 0 24 24"
+							fill="none"
+							stroke="currentColor"
+							stroke-width="1.5"
+							stroke-linecap="round"
+							stroke-linejoin="round"
+							class="h-6 w-6"
+						>
+							<line x1="18" y1="6" x2="6" y2="18"></line>
+							<line x1="6" y1="6" x2="18" y2="18"></line>
+						</svg>
+					</button>
+					<h3
+						class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
+					>
+					   결재선 추가
+					</h3>
+					<div class="p-5">
+						<!-- 모달내용 -->
+						<div>
+							<div class="flex justify-between p-5 pb-0">
+								<div>
+									<div style="border-radius: 10px;" id="tree" class="tui-tree-wrap"></div>
+								</div>
+								
+								<div style="margin-left: 30px;" class="w-full">
+									<div class="text-xl font-bold mb-3">추가된 사원</div>
+									<div class="text-danger mb-1">최대 3명까지 선택해주세요.</div>
+									<div class="text-danger mb-3">위에 있는 사원부터 결재 순서가 이루어집니다.</div>
+									<!-- 선택한 사원이 추가되는 영역 -->
+									<div id="inputContainer">
+										<input type="hidden" id="selectedBtn">
+										<input type="hidden" id="deselectedBtn">
+										<input type="hidden" id="selectedValue">
+										<input type="hidden" id="approvalRemoveBtn">
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="flex justify-between mb-1 p-5 pt-0 mt-3">
+							<button id="addEmployeeListButton" style="width:300px;" type="button" class="btn btn-dark">선택한 사원추가</button>
+							<div class="flex items-center">
+								<button
+								   id="applyModalButtonAddPeople"
+								   style="width:130px;"
+								   type="button"
+								   class="btn btn-primary">	                          
+								   확정
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+		   </div>
+		</div>
+		
+		<!-- 이미 존재하는 사원추가 시 경고 모달 -->
+        <div class="modal">
+		  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundAddExist">
+		       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperAddExist">
 		           <div
 		               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
 		               id="modal"
 		           >
-		           
 		               <button
 		                   type="button"
 		                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
-		                   id="closeModalButtonAddPeople"
+		                   id="closeModalButtonAddExist"
 		               >
 		                   <svg
 		                       xmlns="http://www.w3.org/2000/svg"
@@ -362,29 +441,27 @@
 		               <h3
 		                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
 		               >
-		                   결재선 추가
+		                   안내
 		               </h3>
 		               <div class="p-5">
-		               <!-- 모달내용 -->
-		               <div class="p-5">
-		                    <div id="tree" class="tui-tree-wrap"></div>
+		                   이미 추가된 사원입니다.
+		                   <div class="mt-8 flex items-center justify-end">
+	                          <button
+	                          	  id="employeeBtnAddExist"
+	                              type="button"
+	                              class="btn btn-primary ltr:ml-4 rtl:mr-4"
+	                          >
+	                              확인
+	                          </button>
+	                      </div>
 		               </div>
-		               <div class="mt-8 flex items-center justify-end">
-			               <a
-	                           type="button"
-	                           class="btn btn-primary ltr:ml-4 rtl:mr-4"
-	                           th:href="@{/}">	                          
-	                           추가
-	                       </a>
-	                   </div>
-	                   </div>
 		           </div>
 		       </div>
-		       
 		   </div>
-		   
-		   <script th:src="@{/customjs/addAttendanceApproval.js}"> </script>
 		</div>
+
+		
+	   <script th:src="@{/customjs/addAttendanceApproval.js}"> </script>
 		
 		
 	</body>
