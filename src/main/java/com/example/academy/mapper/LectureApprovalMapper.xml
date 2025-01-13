@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.academy.mapper.LectureApprovalMapper">
+
+	<!-- 진수우 : 시작시간 선택 시 가능한 시간만 출력 -->
+	<select id="selectLectureApprovalGetBeginTime">
+		SELECT c.code, c.name
+		FROM common c
+		WHERE c.refer1 NOT IN (
+		    SELECT c_inner.refer1
+		    FROM common c_inner
+		    LEFT OUTER JOIN lecture_weekday lw ON c_inner.code BETWEEN lw.begin_time_code AND lw.end_time_code
+		    LEFT OUTER JOIN common cb ON lw.begin_time_code = cb.code -- 시작 시간 참조
+		    LEFT OUTER JOIN common ce ON lw.end_time_code = ce.code   -- 종료 시간 참조
+		    LEFT OUTER JOIN lecture_lecture_weekday llw ON llw.lecture_weekday_no = lw.lecture_weekday_no
+		    LEFT OUTER JOIN lecture l ON l.lecture_no = llw.lecture_no
+		    WHERE c_inner.code LIKE 'TM%'
+		      AND c_inner.refer1 BETWEEN cb.refer1 AND ce.refer1
+		      AND lw.weekday_code = #{weekdayCode}
+		      AND l.classroom_no = #{classroomNo}
+		      AND (l.lecture_begin_date BETWEEN #{beginDate} AND #{endDate} OR l.lecture_end_date BETWEEN #{beginDate} AND #{endDate})
+		      OR ((#{beginDate} BETWEEN l.lecture_begin_date AND l.lecture_end_date) AND (#{endDate} BETWEEN l.lecture_begin_date AND l.lecture_end_date))
+		) AND c.code LIKE 'TM%'
+	</select>
+
+</mapper>

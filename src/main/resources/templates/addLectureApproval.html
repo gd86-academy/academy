@@ -218,13 +218,12 @@
 										<!-- 시작시간 선택 -->
 										<td colspan="2">
 											<div class="flex justify-between">
-												<select id="beginTimeId0" class="form-select mr-3 " name="lectureWeekday[0].beginTimeCode">
-													<option value="" disabled selected>시작시간</option>
-												    <option th:each="ct : ${commonTime}" th:value="${ct.code}" th:text="${ct.name}"></option>
-												</select>										
+												<select id="beginTimeId0" class="form-select mr-3" name="lectureWeekday[0].beginTimeCode" onchange="disableSelectedOption()">
+												    <option value="" disabled selected>시작시간</option>
+												</select>	
 											<div>~</div>
 											<!-- 종료시간 선택 -->
-												<select id="endTimeId0" class="form-select ml-3 " name="lectureWeekday[0].endTimeCode">
+												<select id="endTimeId0" class="form-select ml-3 " name="lectureWeekday[0].endTimeCode" disabled>
 													<option value="" disabled selected>종료시간</option>
 												    <option th:each="ct : ${commonTime}" th:value="${ct.code}" th:text="${ct.name}"></option>
 												</select>
@@ -490,6 +489,57 @@
 		                   <div class="mt-8 flex items-center justify-end">
 	                          <button
 	                          	  id="employeeBtnAddExist"
+	                              type="button"
+	                              class="btn btn-primary ltr:ml-4 rtl:mr-4"
+	                          >
+	                              확인
+	                          </button>
+	                      </div>
+		               </div>
+		           </div>
+		       </div>
+		   </div>
+		</div>
+		
+		<!-- 강의날짜 미입력 경고 모달 -->
+        <div class="modal">
+		  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundNoLectureDate">
+		       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperNoLectureDate">
+		           <div
+		               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
+		               id="modal"
+		           >
+		               <button
+		                   type="button"
+		                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+		                   id="closeModalButtonNoLectureDate"
+		               >
+		                   <svg
+		                       xmlns="http://www.w3.org/2000/svg"
+		                       width="24px"
+		                       height="24px"
+		                       viewBox="0 0 24 24"
+		                       fill="none"
+		                       stroke="currentColor"
+		                       stroke-width="1.5"
+		                       stroke-linecap="round"
+		                       stroke-linejoin="round"
+		                       class="h-6 w-6"
+		                   >
+		                       <line x1="18" y1="6" x2="6" y2="18"></line>
+		                       <line x1="6" y1="6" x2="18" y2="18"></line>
+		                   </svg>
+		               </button>
+		               <h3
+		                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
+		               >
+		                   안내
+		               </h3>
+		               <div class="p-5">
+		                   시작날짜, 종료날짜, 강의실을 먼저 입력해주세요.
+		                   <div class="mt-8 flex items-center justify-end">
+	                          <button
+	                          	  id="employeeBtnNoLectureDate"
 	                              type="button"
 	                              class="btn btn-primary ltr:ml-4 rtl:mr-4"
 	                          >
