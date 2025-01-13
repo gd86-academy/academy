@@ -102,7 +102,7 @@ document.addEventListener('alpine:init', () => {
         init() {
 			// AJAX 요청
 	        $.ajax({
-	            url: `http://localhost/academy/reservationList`,
+	            url: `http://localhost/academy/restapi/reservationList`,
 	            type: 'GET',
 	            dataType: 'json',
 	            success: (data) => {

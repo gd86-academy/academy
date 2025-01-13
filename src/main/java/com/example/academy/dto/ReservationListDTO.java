@@ -25,4 +25,18 @@ public class ReservationListDTO {
 	// 회의실 명
 	private String meetingroomName;
 	
+	// 데이터를 배열로 반환
+	public Object[] toArray() {
+		return new Object[] {
+			this.reservationNo
+			, this.meetingroomNo
+			, this.beginTimeCode
+			, this.endTimeCode 
+			, this.reservationDate
+			, this.reservationPerson
+			, this.reservationTitle
+			, this.reservationContent
+		};
+	}
+	
 }

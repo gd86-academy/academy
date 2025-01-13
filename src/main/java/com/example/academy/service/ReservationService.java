@@ -44,6 +44,7 @@ public class ReservationService {
 	
 	// 박시현 : 회의실 목록 출력
 	public List<ReservationListDTO> getReservationList() {
-		return reservationMapper.selectReservationList();
+		List<ReservationListDTO> result = reservationMapper.selectReservationList();
+		return result;
 	}
 }
