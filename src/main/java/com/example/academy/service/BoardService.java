@@ -1,5 +1,6 @@
 package com.example.academy.service;
 
+import java.io.File;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class BoardService {
 	        log.debug("No files to upload");
 	    } else {
 	        // 파일이 첨부된 경우 파일 처리 로직 실행
-		// 파일정보 데이터베이스에 삽입.
+	    	// 파일정보 데이터베이스에 삽입.
 	    	for(MultipartFile mf : files) {
 				
 	    		InputFile inputFile = new InputFile(); // inputFile 인스턴스 생성.
@@ -57,7 +58,6 @@ public class BoardService {
 				file.setFileCategory("FC002"); // 파일 카테고리.
 				Integer fileRow = filesMapper.updateFile(file); // 파일정보 삽입.
 				log.debug("fileRow = " + fileRow);
-			
 	    	}
 		}
 	}
@@ -81,8 +81,10 @@ public class BoardService {
 	
 	// 공지사항 추가
 	public void addBoard(BoardDTO boardDTO) {
-		Integer boardRow = boardMapper.insertBoard(boardDTO);
-		log.debug("boardRow = " + boardRow);
+		int result1 = 0;
+		int result2 = 0;		
+		result1 += boardMapper.insertBoard(boardDTO);
+		log.debug("result1 = " + result1);
 		Integer boardNo = boardDTO.getBoardNo();
 		log.debug("boardNo = " + boardNo);
 		
@@ -105,18 +107,28 @@ public class BoardService {
 				file.setFileExt(inputFile.getFileExt()); // 파일 확장자.
 				file.setFileSize(mf.getSize()); // 파일 크기.
 				file.setFileType(mf.getContentType()); // 파일 타입.
-				file.setFileCategory("employee"); // 파일 카테고리.
-				Integer fileRow = filesMapper.insertFile(file); // 파일정보 삽입.
-				log.debug("fileRow = " + fileRow);
+				file.setFileCategory("FC002"); // 파일 카테고리.
+				result2 += filesMapper.insertFile(file); // 파일정보 삽입.
+				log.debug("result2 = " + result2);
 				Integer fileNo = file.getFileNo();
 				log.debug("fileNo = " + fileNo);
 				
 				BoardFile boardFile = new BoardFile();
 				boardFile.setBoardNo(boardNo);
 				boardFile.setFileNo(fileNo);
-				Integer boardFileRow = boardFileMapper.insertBoardFile(boardFile);
-				log.debug("boardFileRow = " + boardFileRow);			
-			
+				result2 += boardFileMapper.insertBoardFile(boardFile);
+				log.debug("result2 = " + result2);			
+				
+				// 모든 db에 잘 삽입되었다면 서버에 물리적 파일 저장
+				if(result1 == 1 && result2 == 2) {
+					try {
+						mf.transferTo(new File(System.getProperty("user.dir") + "/src/main/resources/static/upload/" + file.getFileName() + "." + file.getFileExt()));
+					} catch (Exception e) {
+						e.printStackTrace();
+						throw new RuntimeException();
+					} 
+				result2 = 0;
+				}
 			}
 	    }
 	}
