@@ -17,19 +17,19 @@
 	        r.meetingroom_no = (
 	            SELECT meetingroom_no 
 	            FROM meetingroom 
-	            WHERE meetingroom_name = #{meetingroomName} 
+	            WHERE meetingroom_no = #{meetingroomNo} 
 	            LIMIT 1
 	        ),
 	        r.begin_time_code = (
 	            SELECT `code` 
 	            FROM common 
-	            WHERE `name` = #{beginTimeCode} 
+	            WHERE `code` = #{beginTimeCode} 
 	            LIMIT 1
 	        ),
 	        r.end_time_code = (
 	            SELECT `code` 
 	            FROM common 
-	            WHERE `name` = #{endTimeCode} 
+	            WHERE `code` = #{endTimeCode} 
 	            LIMIT 1
 	        )
 	    WHERE r.reservation_no = #{reservationNo}

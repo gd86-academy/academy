@@ -148,44 +148,6 @@ document.addEventListener('alpine:init', () => {
 	
 });
 
-// 삭제 모달
-const openModalButtonDeleteClassroom = document.getElementById('openModalButtonDeleteReservation'); // 삭제 모달 열기 버튼
-const closeModalButtonDeleteClassroom = document.getElementById('closeModalButtonDeleteReservation'); // 삭제 모달 닫기 버튼
-const cancelButtonDeleteClassroom = document.getElementById('cancelButtonDeleteReservation'); // 삭제 모달 취소 버튼
-const modalBackgroundDeleteClassroom = document.getElementById('modalBackgroundDeleteReservation');
-const modalWrapperDeleteClassroom = document.getElementById('modalWrapperDeleteReservation');
-const reservationNoLabel = document.getElementById('reservationNoLabel');
-
-// 삭제 모달 열기 함수
-const openDeleteModal = () => {
-	
-	// 예약 번호를 hidden input에서 가져오기
-	const reservationNo = document.getElementById('reservationNo').value;
-
-	// 모달 텍스트 설정
-	const reservationText = `${reservationNo}번 예약을 취소하시겠습니까?`;
-	reservationNoLabel.innerText = reservationText;
-
-    // 삭제 확인 버튼 클릭 이벤트 설정
-    openModalButtonDeleteReservation.onclick = () => {
-        window.location.href = `http://localhost/academy/removeReservation?reservationNo=${reservationNo}`;
-    };
-
-    // 모달 보이기
-    modalBackgroundDeleteReservation.classList.remove('hidden');
-    modalBackgroundDeleteReservation.classList.add('block');
-};
-// 모달 닫기 함수
-const closeDeleteModal = () => {
-    modalBackgroundDeleteReservation.classList.remove('block');
-    modalBackgroundDeleteReservation.classList.add('hidden');
-};
-
-// 버튼 이벤트 리스너 설정
-closeModalButtonDeleteReservation.addEventListener('click', closeDeleteModal);
-cancelButtonDeleteReservation.addEventListener('click', closeDeleteModal);
-
-
 // 예약수정 유효성 검사
 $('#btnModifyReservation').click(function(){
 	let isValid = true;  
@@ -234,6 +196,49 @@ $('#btnModifyReservation').click(function(){
     	$('#reservationDate').removeClass("errorInput");
     	$('.reservationDate-error').hide();
     }
-	console.log("폼 제출")
-	$('#modifyReservationForm').submit();
+	// isValid가 true일 때만 폼 제출
+    if (isValid) {
+        $('#modifyReservationForm').submit();
+    } else {
+        e.preventDefault(); // 폼 제출을 막음
+        console.log("유효성 검사 실패");
+    }
 })
+
+// 삭제 모달
+const openModalButtonDeleteClassroom = document.getElementById('openModalButtonDeleteReservation'); // 삭제 모달 열기 버튼
+const closeModalButtonDeleteClassroom = document.getElementById('closeModalButtonDeleteReservation'); // 삭제 모달 닫기 버튼
+const cancelButtonDeleteClassroom = document.getElementById('cancelButtonDeleteReservation'); // 삭제 모달 취소 버튼
+const modalBackgroundDeleteClassroom = document.getElementById('modalBackgroundDeleteReservation');
+const modalWrapperDeleteClassroom = document.getElementById('modalWrapperDeleteReservation');
+const reservationNoLabel = document.getElementById('reservationNoLabel');
+
+// 삭제 모달 열기 함수
+const openDeleteModal = () => {
+	
+	// 예약 번호를 hidden input에서 가져오기
+	const reservationNo = document.getElementById('reservationNo').value;
+
+	// 모달 텍스트 설정
+	const reservationText = `${reservationNo}번 예약을 취소하시겠습니까?`;
+	reservationNoLabel.innerText = reservationText;
+
+    // 삭제 확인 버튼 클릭 이벤트 설정
+    openModalButtonDeleteReservation.onclick = () => {
+        window.location.href = `http://localhost/academy/removeReservation?reservationNo=${reservationNo}`;
+    };
+
+    // 모달 보이기
+    modalBackgroundDeleteReservation.classList.remove('hidden');
+    modalBackgroundDeleteReservation.classList.add('block');
+};
+// 모달 닫기 함수
+const closeDeleteModal = () => {
+    modalBackgroundDeleteReservation.classList.remove('block');
+    modalBackgroundDeleteReservation.classList.add('hidden');
+};
+
+// 버튼 이벤트 리스너 설정
+closeModalButtonDeleteReservation.addEventListener('click', closeDeleteModal);
+cancelButtonDeleteReservation.addEventListener('click', closeDeleteModal);
+

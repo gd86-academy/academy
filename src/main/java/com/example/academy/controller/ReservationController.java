@@ -46,15 +46,18 @@ public class ReservationController {
 	@PostMapping("/modifyReservation")
 	public String modifyReservation(@ModelAttribute ReservationListDTO reservationListDTO) {
 		int row = reservationService.modifyReservation(reservationListDTO);
-        if (row > 0) {
-            return "modifyReservation";
+        if (row == 0) {
+        	// 실패 시 
+        	log.debug("실패 : "+row);
+            return "redirect:/modifyReservation";
         } 
+        log.debug("성공 : "+row);
         return "redirect:/reservationList";
 	}
-	
+		
 	// 박시현 : 수정하기 전 input에 정보 출력
 	@GetMapping("/modifyReservation")
-	public String modifyReservation(Model model, @RequestParam Integer reservationNo) {
+	public String modifyReservation(Model model, @RequestParam("reservationNo") Integer reservationNo) {
 		// 스프링시큐리티에서 계정정보 가져오기.
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		
@@ -71,6 +74,7 @@ public class ReservationController {
 	        	log.debug("접근실패");
 	        	return "redirect:/reservationList";
 	        }
+	        log.debug("reservationList : " + reservation);
 
 	        // 시간 조회
 	        List<Common> time = commonService.getTime(); 

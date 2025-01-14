@@ -196,8 +196,13 @@ $('#btnAddReservation').click(function(){
     	$('#reservationDate').removeClass("errorInput");
     	$('.reservationDate-error').hide();
     }
-	console.log("폼 제출")
-	$('#addReservationForm').submit();
+	// isValid가 true일 때만 폼 제출
+    if (isValid) {
+        $('#addReservationForm').submit();
+    } else {
+        e.preventDefault(); // 폼 제출을 막음
+        console.log("유효성 검사 실패");
+    }
 })
 
 
