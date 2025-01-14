@@ -10,6 +10,7 @@ public class AnnualLeaveListDTO {
     private String endDate;
     private String createDate;
     private String updateDate;
+    private String name;
 
     // 데이터를 배열로 반환하는 매서드
     public Object[] toArray() {
@@ -19,6 +20,7 @@ public class AnnualLeaveListDTO {
     			, this.endDate
     			, this.updateDate
     			, this.createDate
+    			, this.name
     	};
     }
 }

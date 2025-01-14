@@ -14,9 +14,22 @@ import com.example.academy.mapper.AnnualLeaveMapper;
 public class AnnualLeaveService {
 	@Autowired AnnualLeaveMapper annualLeaveMapper;
 	
+	public List<Double> getAnnualLeaveCountByMonth(Integer employeeNo) {
+		return annualLeaveMapper.annualLeaveCountByMonth(employeeNo);
+	}
+	
+	public Double getAnnualLeaveCount(Integer employeeNo) {
+		return annualLeaveMapper.annualLeaveCount(employeeNo);
+	}
+	
 	// 월별 연차리스트 조회
 	public List<AnnualLeaveListDTO> getAnnualLeaveList(String month) {
-		return annualLeaveMapper.selectAnnualLeave(month);
+		List<AnnualLeaveListDTO> annualLeaveList = annualLeaveMapper.selectAnnualLeave(month);
+		for(AnnualLeaveListDTO annualLeave : annualLeaveList) {
+			annualLeave.setCreateDate(annualLeave.getCreateDate().substring(0,10));
+			annualLeave.setUpdateDate(annualLeave.getUpdateDate().substring(0,10));
+		}
+		return annualLeaveList;
 	}
 	
 }

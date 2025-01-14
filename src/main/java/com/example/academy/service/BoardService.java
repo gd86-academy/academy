@@ -54,7 +54,7 @@ public class BoardService {
 				file.setFileExt(inputFile.getFileExt()); // 파일 확장자.
 				file.setFileSize(mf.getSize()); // 파일 크기.
 				file.setFileType(mf.getContentType()); // 파일 타입.
-				file.setFileCategory("employee"); // 파일 카테고리.
+				file.setFileCategory("FC002"); // 파일 카테고리.
 				Integer fileRow = filesMapper.updateFile(file); // 파일정보 삽입.
 				log.debug("fileRow = " + fileRow);
 			
