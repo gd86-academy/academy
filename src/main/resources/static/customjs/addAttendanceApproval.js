@@ -160,7 +160,7 @@ $('#btnAddFile').click(function(){
 					<!-- 숨겨진 파일 입력 -->
 					<input 
 					   id="${inputId}" 
-					   name="attendanceApprovalFile"
+					   name="attendanceApprovalFiles"
 					   type="file" 
 					   class="hidden"
 					   multiple

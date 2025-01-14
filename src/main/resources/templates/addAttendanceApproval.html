@@ -131,7 +131,7 @@
 					</div>
 					
 					<div class="panel" style="margin: 0% 15% 0% 15%; padding: 4%; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05); border-radius : 10px;">
-						<form id="addForm" method="post" th:action="@{/addAttendanceApproval}">
+						<form id="addForm" method="post" th:action="@{/addAttendanceApproval}" enctype="multipart/form-data">
 							<div class="flex items-center justify-between" style="margin-bottom: 20px; margin-top: 20px;">
 								<div class="text-3xl font-semibold uppercase m-3" style="white-space: nowrap;">근태 신청서</div>
 								<div style="flex-grow: 1; display: flex; justify-content: flex-end;">
@@ -175,12 +175,14 @@
 								        <tbody>
 								            <tr class="border-dark-dark-light">
 								                <td class="bg-[#f4f4f4] lecutre-title-align">사원 번호</td>
-								                <td class="lecutre-text-align" th:text="${userNo}">
-								                	<input type="hidden" name="employeeNo" value="{userNo}">
+								                <td class="lecutre-text-align">
+								                	<input type="hidden" name="employeeNo" th:value="${userNo}">
+								                	<span th:text="${userNo}"></span>
 								                </td>
 								                <td class="bg-[#f4f4f4] lecutre-title-align">기안자</td>
-								                <td class="lecutre-text-align" th:text="${userName}">
-								                	<input type="hidden" name="employeeName" value="{userName}">
+								                <td class="lecutre-text-align">
+								                	<input type="hidden" name="employeeName" th:value="${userName}">
+								                	<span th:text="${userName}"></span>
 								                </td>					                
 								            </tr>
 								        </tbody>
@@ -197,31 +199,31 @@
 								                <!-- 라디오 버튼 -->
 								                <td class="lecutre-text-align">
 								                	<label class="flex items-center cursor-pointer">
-											            <input type="radio" name="approvalOption" class="form-radio" value="연차" checked/>
+											            <input type="radio" name="attendanceApprovalType" class="form-radio" th:value="CT002" checked/>
 											            <span class="text-white-dark ml-2">연차</span>
 										        	</label>
 								                </td>
 								                <td class="lecutre-text-align">
 								                	<label class="flex items-center cursor-pointer">
-											            <input type="radio" name="approvalOption" class="form-radio" value="반차" />
+											            <input type="radio" name="attendanceApprovalType" class="form-radio" th:value="CT004" />
 											            <span class="text-white-dark ml-2">반차</span>
 										        	</label>
 								                </td>
 								                <td class="lecutre-text-align">
 								                	<label class="flex items-center cursor-pointer">
-											            <input type="radio" name="approvalOption" class="form-radio" value="병가" />
+											            <input type="radio" name="attendanceApprovalType" class="form-radio" th:value="CT001" />
 											            <span class="text-white-dark ml-2">병가</span>
 										        	</label>
 								                </td>
 								                <td class="lecutre-text-align">
 								                	<label class="flex items-center cursor-pointer">
-											            <input type="radio" name="approvalOption" class="form-radio" value="휴가" />
+											            <input type="radio" name="attendanceApprovalType" class="form-radio" th:value="CT003" />
 											            <span class="text-white-dark ml-2">휴가</span>
 										        	</label>
 								                </td>
 								                <td class="lecutre-text-align">
 								                	<label class="flex items-center cursor-pointer">
-											            <input type="radio" name="approvalOption" class="form-radio" value="경조사" />
+											            <input type="radio" name="attendanceApprovalType" class="form-radio" th:value="CT009" />
 											            <span class="text-white-dark ml-2">경조사</span>
 										        	</label>
 								                </td>					                
@@ -238,11 +240,11 @@
 												<td colspan="3">
 													<div class="flex justify-between">
 														<div x-data="form1" class="w-full mr-3">
-									                       	<input name="beginDate" id="beginDate" class="form-input" placeholder="시작날짜" />
+									                       	<input name="attendanceApprovalBeginDate" id="beginDate" class="form-input" placeholder="시작날짜" />
 													   	</div>
 														<div class="align-items-center">~</div>
 														<div x-data="form2" class="w-full ml-3">
-									                       	<input name="endDate" id="endDate" class="form-input" placeholder="종료날짜"/>
+									                       	<input name="attendanceApprovalEndDate" id="endDate" class="form-input" placeholder="종료날짜"/>
 													   	</div>
 													</div>
 													<div class="mt-1">	<!-- 유효성문구 -->

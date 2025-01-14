@@ -1,7 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper
-	namespace="com.example.academy.mapper.AttendanceApprovalMapper">
+<mapper namespace="com.example.academy.mapper.AttendanceApprovalMapper">
+	
+	<!-- 김혜린 : 근태신청서 신청 -->
+	<insert id="insertAttendanceApproval" parameterType="com.example.academy.dto.AttendanceApprovalAddDTO" useGeneratedKeys="true" keyProperty="attendanceApprovalNo">
+		INSERT INTO attendance_approval(
+			employee_no
+			, attendance_approval_title
+			, attendance_approval_content
+			, attendance_approval_begindate
+			, attendance_approval_enddate
+			, attendance_approval_type
+			)
+		VALUES (
+			#{employeeNo}
+			, #{attendanceApprovalTitle}
+			, #{attendanceApprovalContent}
+			, #{attendanceApprovalBeginDate}
+			, #{attendanceApprovalEndDate}
+			, #{attendanceApprovalType}
+			)
+	</insert>
 	
 	<!-- 김혜린 : 근태신청서리스트 조회 -->
 	<select id="selectAttendanceAprrovalList" parameterType="Integer" resultType="com.example.academy.dto.AttendanceApprovalListDTO">

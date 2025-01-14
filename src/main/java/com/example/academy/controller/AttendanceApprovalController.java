@@ -1,5 +1,6 @@
 package com.example.academy.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -8,10 +9,16 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.example.academy.dto.AttendanceApprovalAddDTO;
 import com.example.academy.security.CustomUserDetails;
+import com.example.academy.service.AttendanceApprovalService;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 public class AttendanceApprovalController {
+	@Autowired AttendanceApprovalService attendanceApprovalService;
 	
 	// 김혜린 : 근태 신청
 	@GetMapping("/addAttendanceApproval")
@@ -36,8 +43,12 @@ public class AttendanceApprovalController {
 	
 	// 김혜린 : 근태신청
 	@PostMapping("/addAttendanceApproval")
-	public String addAttendanceApproval() {
-		return "";
+	public String addAttendanceApproval(AttendanceApprovalAddDTO attendanceApprovalAddDTO) {
+		log.debug("============attendanceApprovalAddDTO========" + attendanceApprovalAddDTO);
+		attendanceApprovalService.addAttendanceApproval(attendanceApprovalAddDTO);
+		
+		
+		return "redirect:/applicationList";
 	}
 	
 	

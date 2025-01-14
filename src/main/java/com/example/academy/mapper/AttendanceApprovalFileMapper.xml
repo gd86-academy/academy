@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.academy.mapper.AttendanceApprovalFileMapper">
+
+	<!-- 김혜린 : 근태신청서 파일추가 -->
+	<insert id="insertAttendanceApprovalFile" parameterType="com.example.academy.dto.AttendanceApprovalAddDTO">
+		INSERT INTO attendance_approval_file(
+			attendance_approval_no
+			, file_no
+			)
+		VALUES (
+			#{attendanceApprovalNo}
+			, #{fileNo}
+			)
+	</insert>
+</mapper>
