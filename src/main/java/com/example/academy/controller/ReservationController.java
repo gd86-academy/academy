@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.academy.dto.AddReservationDTO;
 import com.example.academy.dto.MeetingRoomListDTO;
+import com.example.academy.dto.ReservationListDTO;
 import com.example.academy.security.CustomUserDetails;
 import com.example.academy.service.CalendarService;
 import com.example.academy.service.CommonService;
@@ -39,6 +40,48 @@ public class ReservationController {
 			return "/reservationList";
 		}
 		return "redirect:/reservationList";
+	}
+	
+	// 박시현 : 예약 수정
+	@PostMapping("/modifyReservation")
+	public String modifyReservation(@ModelAttribute ReservationListDTO reservationListDTO) {
+		int row = reservationService.modifyReservation(reservationListDTO);
+        if (row > 0) {
+            return "modifyReservation";
+        } 
+        return "redirect:/reservationList";
+	}
+	
+	// 박시현 : 수정하기 전 input에 정보 출력
+	@GetMapping("/modifyReservation")
+	public String modifyReservation(Model model, @RequestParam Integer reservationNo) {
+		// 스프링시큐리티에서 계정정보 가져오기.
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		// 예약자가 본인일 경우에만 열리도록
+		if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+	        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+	        int loggedInUserId = Integer.parseInt(userDetails.getUsername());
+	        
+	        
+	        ReservationListDTO reservation = reservationService.getReservationOne(reservationNo);
+	        model.addAttribute("reservation",reservation);
+	        // 예약자가 로그인한 사용자와 일치하는지 확인
+	        if (reservation.getReservationPerson() != loggedInUserId) {
+	        	log.debug("접근실패");
+	        	return "redirect:/reservationList";
+	        }
+
+	        // 시간 조회
+	        List<Common> time = commonService.getTime(); 
+	        model.addAttribute("time",time);
+	        
+	        // 회의실 조회
+	        List<MeetingRoomListDTO> meetingroom = meetingroomService.getMeetingRoomList(); 
+	        model.addAttribute("meetingroom",meetingroom);
+		}
+		
+		return "modifyReservation";
 	}
 	
 	// 박시현 : 예약 신청

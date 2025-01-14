@@ -6,14 +6,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.academy.dto.ReservationListDTO;
+import com.example.academy.security.CustomUserDetails;
 import com.example.academy.service.ReservationService;
 import com.example.academy.vo.Employee;
 
@@ -22,27 +23,26 @@ import com.example.academy.vo.Employee;
 public class ReservationRestController {
 	@Autowired ReservationService reservationService;
 	
-	// 박시현 : 예약 수정
-	@PostMapping("/modifyReservation")
-	public ResponseEntity<String> modifyReservation(@ModelAttribute ReservationListDTO reservationListDTO) {
-		int row = reservationService.modifyReservation(reservationListDTO);
-        if (row > 0) {
-            return ResponseEntity.ok("Success");
-        } else {
-            return ResponseEntity.badRequest().body("Failed to modify classroom");
+	// 박시현 : 수정페이지 접근권한 확인
+	@GetMapping("/restapi/checkReservationPerson")
+    public Map<String, Boolean> checkReservationPerson(@RequestParam Integer reservationNo) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("hasPermission", false); // 기본값: 권한 없음
+
+        if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+            CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+            int loggedInUserId = Integer.parseInt(userDetails.getUsername());
+
+            ReservationListDTO reservation = reservationService.getReservationOne(reservationNo);
+
+            if (reservation != null && reservation.getReservationPerson() == loggedInUserId) {
+                response.put("hasPermission", true);
+            }
         }
-	}
-	
-	// 박시현 : 수정하기 전 input에 정보 출력
-	@GetMapping("/modifyReservation")
-	public ResponseEntity<ReservationListDTO> modifyReservation(@RequestParam Integer reservationNo) {
-		ReservationListDTO reservation = reservationService.getReservationOne(reservationNo);
-		if (reservation != null) {
-            return ResponseEntity.ok(reservation);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-	}
+        return response;
+    }
 	
 	// 박시현 : 사원검색
 	@GetMapping("/restapi/searchEmployee")

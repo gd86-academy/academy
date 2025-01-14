@@ -74,7 +74,7 @@ public class ReservationService {
         
         // 회의 참여자 추가
         for (ReservationListDTO reservation : reservationList) {
-            List<ReservationEmployeeDTO> employees = reservationMapper.getReservationEmployees(reservation.getReservationNo());
+            List<ReservationEmployeeDTO> employees = reservationMapper.selectReservationEmployees(reservation.getReservationNo());
             reservation.setReservationEmployees(employees);
         }
         

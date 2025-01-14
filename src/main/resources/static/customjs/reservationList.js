@@ -173,7 +173,7 @@ document.addEventListener('alpine:init', () => {
 						    // 툴팁 위치
 						    const rect = info.el.getBoundingClientRect();
 						    tooltip.style.top = `${rect.top + window.scrollY - 10}px`;
-						    tooltip.style.left = `${rect.left + window.scrollX + rect.width}px`;
+						    tooltip.style.left = `${rect.left + window.scrollX + rect.width / 2}px`;
 
 						    // 툴팁 추가
 						    document.body.appendChild(tooltip);
@@ -188,6 +188,28 @@ document.addEventListener('alpine:init', () => {
 						        document.body.removeChild(info.el._tooltip);
 						        delete info.el._tooltip;
 						    }
+						},
+						
+						// 수정페이지 링크
+						eventClick: function(info) {
+							const reservationNo = info.event.id;
+							// 수정 접근권한 확인
+							$.ajax({
+								url: `http://localhost/academy/restapi/checkReservationPerson`,
+						        type: 'GET',
+						        data: {reservationNo},
+								success: function(response) {
+						            if (response.hasPermission) {
+						                // 수정 페이지로 이동
+						                window.location.href = `http://localhost/academy/modifyReservation?reservationNo=${reservationNo}`;
+						            } else {
+						                alert("수정 권한이 없습니다.");
+						            }
+						        },
+						        error: function() {
+						            alert("권한 확인 중 오류가 발생했습니다.");
+						        }
+							})
 						},
 		            });
 

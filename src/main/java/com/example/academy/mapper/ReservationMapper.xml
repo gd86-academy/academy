@@ -8,44 +8,50 @@
 
 	<!-- 박시현 : 예약 수정-->
 	<update id="updateReservation" parameterType="com.example.academy.dto.ReservationListDTO">
-		UPDATE reservation r
-		LEFT OUTER JOIN meetingroom m ON r.meetingroom_no = m.meetingroom_no
-		LEFT OUTER JOIN common com1 ON r.begin_time_code = com1.`code`
-		LEFT OUTER JOIN common com2 ON r.end_time_code = com2.`code`
-		LEFT OUTER JOIN employee e ON r.reservation_person = e.employee_no
-		LEFT OUTER JOIN reservation_employee re ON r.reservation_no = re.reservation_no
-		SET
-		    r.reservation_date = #{reservationDate},
-		    r.reservation_person = #{reservationPerson},
-		    r.reservation_title = #{reservationTitle},
-		    r.reservation_content = #{reservationContent},
-		    r.meetingroom_no = (SELECT meetingroom_no FROM meetingroom WHERE meetingroom_name = #{meetingroomName} LIMIT 1),
-		    r.begin_time_code = (SELECT `code` FROM common WHERE `name` = #{beginTimeCode} LIMIT 1),
-		    r.end_time_code = (SELECT `code` FROM common WHERE `name` = #{endTimeCode} LIMIT 1),
-		    r.reservation_person = (SELECT employee_no FROM employee WHERE employee_name = #{employeeName} LIMIT 1)
-		WHERE r.reservation_no = #{reservationNo}
+	    UPDATE reservation r
+	    SET
+	        r.reservation_date = #{reservationDate},
+	        r.reservation_person = #{reservationPerson},
+	        r.reservation_title = #{reservationTitle},
+	        r.reservation_content = #{reservationContent},
+	        r.meetingroom_no = (
+	            SELECT meetingroom_no 
+	            FROM meetingroom 
+	            WHERE meetingroom_name = #{meetingroomName} 
+	            LIMIT 1
+	        ),
+	        r.begin_time_code = (
+	            SELECT `code` 
+	            FROM common 
+	            WHERE `name` = #{beginTimeCode} 
+	            LIMIT 1
+	        ),
+	        r.end_time_code = (
+	            SELECT `code` 
+	            FROM common 
+	            WHERE `name` = #{endTimeCode} 
+	            LIMIT 1
+	        )
+	    WHERE r.reservation_no = #{reservationNo}
 	</update>
 
 	<!-- 박시현 : 예약번호 별 상세정보 -->
 	<select id="selectReservationOne" parameterType="Integer" resultType="com.example.academy.dto.ReservationListDTO">
 		SELECT
 			r.reservation_no reservationNo
+			, r.meetingroom_no meetingroomNo
 			, r.reservation_date reservationDate
 			, r.reservation_person reservationPerson
 			, r.reservation_title reservationTitle
 			, r.reservation_content reservationContent
+			, r.begin_time_code beginTimeCode
+			, r.end_time_code endTimeCode
 			, m.meetingroom_name meetingroomName
-			, com1.`name` beginTimeCode
-			, com2.`name` endTimeCode
 			, e.employee_name employeeName
 			, re.reservation_no reservationNo
 			, re.employee_no employeeNo
 		FROM reservation r	LEFT OUTER JOIN meetingroom m
 		ON r.meetingroom_no = m.meetingroom_no
-		LEFT OUTER JOIN common com1
-		ON r.begin_time_code = com1.`code`
-		LEFT OUTER JOIN common com2 
-		ON r.end_time_code = com2.`code`
 		LEFT OUTER JOIN employee e
 		ON r.reservation_person = e.employee_no
 		LEFT OUTER JOIN reservation_employee re
@@ -95,7 +101,7 @@
 	</insert>
 	
 	<!-- 박시현) 회의 참여자 조회 -->
-	<select id="getReservationEmployees" resultType="com.example.academy.dto.ReservationEmployeeDTO">
+	<select id="selectReservationEmployees" resultType="com.example.academy.dto.ReservationEmployeeDTO">
 	    SELECT
 	    	re.reservation_no reservationNo
 	        , re.employee_no employeeNo
