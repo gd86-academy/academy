@@ -13,12 +13,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.academy.dto.ClassroomListDTO;
-import com.example.academy.dto.LectureApprovalDTO;
+import com.example.academy.dto.LectureApprovalAddDTO;
 import com.example.academy.dto.LectureOneDTO;
 import com.example.academy.dto.LectureOneTimeListDTO;
 import com.example.academy.security.CustomUserDetails;
 import com.example.academy.service.ClassroomService;
 import com.example.academy.service.CommonService;
+import com.example.academy.service.LectureApprovalService;
 import com.example.academy.service.LectureService;
 import com.example.academy.vo.Common;
 import com.example.academy.vo.Lecture;
@@ -31,13 +32,13 @@ public class LectureApprovalController {
 	@Autowired LectureService lectureService;
 	@Autowired CommonService commonService;
 	@Autowired ClassroomService classroomService;
+	@Autowired LectureApprovalService lectureApprovalService;
 	
 	// 진수우 : 강의결재 신청서 제출.
 	@PostMapping("/addLectureApproval")
-	public String addLectureApproval(Model model, LectureApprovalDTO lectureApprovalDTO) {
-		log.debug("result : " + lectureApprovalDTO);
-		model.addAttribute("lectureApprovalDTO", lectureApprovalDTO);
-		return "test";
+	public String addLectureApproval(Model model, LectureApprovalAddDTO lectureApprovalDTO) {
+		lectureApprovalService.addLectureApproval(lectureApprovalDTO);
+		return "redirect:/applicationList";
 	}
 	
 	// 진수우 : 강의결재 신청서 작성페이지 호출.
@@ -60,7 +61,6 @@ public class LectureApprovalController {
 	    // 1) 강의 요일 조회(셀렉박스)
  		List<Common> commonWeekday = commonService.getWeekday();
  		model.addAttribute("commonWeekday", commonWeekday);
- 		
  		
  		// 2) 강의 시간 조회(셀렉박스)
  		List<Common> commonTime = commonService.getTime();

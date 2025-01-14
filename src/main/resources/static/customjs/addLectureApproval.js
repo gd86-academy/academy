@@ -233,7 +233,7 @@ const employeeBtnNoLectureDate = document.getElementById('employeeBtnNoLectureDa
 const closeModalNoLectureDate = () => {
 	  modalBackgroundNoLectureDate.classList.remove('block');
 	  modalBackgroundNoLectureDate.classList.add('hidden');  // 모달 배경 숨기기
-	  $('select').css('visibility', 'visible');
+	  $('select').prop('disabled', false);
 };
 
 if (closeModalButtonNoLectureDate) closeModalButtonNoLectureDate.addEventListener('click', closeModalNoLectureDate); // 닫기 버튼 클릭 시
@@ -568,7 +568,6 @@ $('#btnAddTime').click(function () {
     }
 });
 
-
 // 요일 선택 시, 시간 데이터를 가져오는 이벤트 바인딩
 $('#weekdayId0').on('click change', function () {
     const selectedWeekday = $(this).val(); // 선택된 요일 값
@@ -577,7 +576,7 @@ $('#weekdayId0').on('click change', function () {
 	const roomId = $('#classroomList').val();
 	
     if (!startDate || !endDate || !roomId) {
-		$('select').css('visibility', 'hidden');
+		$('select').prop('disabled', true);
 		modalBackgroundNoLectureDate.classList.toggle('hidden', false);
 		modalBackgroundNoLectureDate.classList.toggle('block', true);
         return;

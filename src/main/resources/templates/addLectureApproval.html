@@ -171,7 +171,7 @@
 						        <tbody>
 						            <tr class="border-dark-dark-light">
 						                <td class="bg-[#f4f4f4] lecutre-title-align">사원 번호</td>
-						                <td class="lecutre-text-align" th:text="${userNo}"><input type="hidden" name="lecture" value="${userNo}"></td>
+						                <td class="lecutre-text-align" th:text="${userNo}"></td>
 						                <td class="bg-[#f4f4f4] lecutre-title-align">기안자</td>
 						                <td class="lecutre-text-align" th:text="${userName}"><input type="hidden" value="${userNo}"></td>					                
 						            </tr>
@@ -197,6 +197,7 @@
 						        	</tr>
 						        </tbody>
 						    </table>
+						    <input type="hidden" name="lecturer" th:value="${userNo}">
 						</div>
 						<div class="flex justify-end w-full mt-3">
 						    <a type="button" id="BtnEndTime" class="btn btn-outline-dark ltr:rounded-r-none rtl:rounded-l-none mb-3">강의시간 제거</a>

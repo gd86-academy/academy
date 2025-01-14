@@ -2,6 +2,79 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.LectureApprovalMapper">
 
+	<!-- 진수우 : 강의결재신청 시 강의결재/파일 연결테이블에 해당정보 저장 -->
+	<insert id="insertLectureApprovalFile">
+		INSERT INTO lecture_approval_file (
+			file_no
+			, lecture_approval_no
+		) VALUES (
+			#{fileNo}
+			, #{lectureApprovalNo}
+		)
+	</insert>
+
+	<!-- 진수우 : 강의결재신청 시 결재자테이블에 해당정보 저장 -->
+	<insert id="insertApprovalEmployee">
+		INSERT INTO approval_employee (
+			lecture_approval_no
+			, approver
+			, approval_level
+		) VALUES (
+			#{lectureApprovalNo}
+			, #{approver}
+			, #{approvalLevel}
+		)
+	</insert>
+	
+	<!-- 진수우 : 강의결재신청 시 강의결재테이블에 해당정보 저장 -->
+	<insert id="insertLectureApproval" useGeneratedKeys="true" keyProperty="lectureApprovalNo">
+		INSERT INTO lecture_approval (
+			lecturer
+			, lecture_approval_title
+			, lecture_approval_content
+			, lecture_name
+			, lecture_content
+			, classroom_no
+			, lecture_begin_date
+			, lecture_end_date
+			, lecture_approval_step
+		) VALUES (
+			#{lecturer}
+			, #{lectureApprovalTitle}
+			, #{lectureApprovalContent}
+			, #{lectureName}
+			, #{lectureContent}
+			, #{classroomNo}
+			, #{lectureBeginDate}
+			, #{lectureEndDate}
+			, #{lectureApprovalStep}
+		)
+	</insert>
+
+	<!-- 진수우 : 강의결재신청 시 강의결재/강의시간 연결테이블에 해당정보 저장 -->
+	<insert id="insertLectureApprovalLectureWeekday">
+		INSERT INTO lecture_approval_lecture_weekday (
+			lecture_approval_no
+			, lecture_weekday_no
+		) VALUES (
+			#{lectureApprovalNo}
+			, #{lectureWeekdayNo}
+		)
+	</insert>
+
+	<!-- 진수우 : 강의결재신청 시 강의시간테이블에 해당정보 저장 -->
+	<insert id="insertLectureWeekday" parameterType="com.example.academy.vo.LectureWeekday" useGeneratedKeys="true" keyProperty="lectureWeekdayNo">
+		INSERT INTO lecture_weekday (
+			weekday_code
+			, begin_time_code
+			, end_time_code
+		) VALUES (
+			#{weekdayCode}
+			, #{beginTimeCode}
+			, #{endTimeCode}
+		)
+	</insert>
+
 	<!-- 진수우 : 시작시간 선택 시 가능한 시간만 출력 -->
 	<select id="selectLectureApprovalGetBeginTime">
 		SELECT c.code, c.name
