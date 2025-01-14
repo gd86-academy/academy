@@ -104,9 +104,52 @@
 		                <div class="dvanimation animate__animated p-6" :class="[$store.app.animation]">
 		                    <div class="w-full" style="flex: 5.5; text-align: left;">
 			                    <div class="panel">
+									<div class="deleteReservation">
+										<div
+											class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60"
+											id="modalBackgroundDeleteReservation">
+											<div class="flex min-h-screen items-center justify-center px-4"
+												id="modalWrapperDeleteReservation">
+												<div
+													class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
+													id="modal">
+													<!-- 모달 닫기 버튼 -->
+													<button type="button"
+														class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+														id="closeModalButtonDeleteReservation">
+														<svg xmlns="http://www.w3.org/2000/svg" width="24px"
+															height="24px" viewBox="0 0 24 24" fill="none"
+															stroke="currentColor" stroke-width="1.5"
+															stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
+					                        <line x1="18" y1="6" x2="6" y2="18"></line>
+					                        <line x1="6" y1="6" x2="18" y2="18"></line>
+					                    </svg>
+													</button>
+													<h3
+														class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]">
+														안내</h3>
+													<div class="p-5">
+														<p>
+															<span id="reservationNoLabel"></span>
+														</p>
+														<div class="mt-8 flex items-center justify-end">
+															<!-- 취소 버튼 -->
+															<button id="cancelButtonDeleteReservation" type="button"
+																class="btn btn-outline-danger ltr:ml-4 rtl:mr-4">취소
+															</button>
+															<!-- 확인 버튼 -->
+															<button id="openModalButtonDeleteReservation" type="button"
+																class="btn btn-primary ltr:ml-4 rtl:mr-4">확인</button>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
 				                    <form id="modifyReservationForm" th:action="@{/modifyReservation}" method="post">
 				                    	<div class="d-flex items-start justify-between ">
 					                    	<div class="w-100 d-flex flex-wrap">
+												
 					                    		<label for="reservationPerson">예약자</label>
 					                    		<input 
 					                    			id="reservationPerson"
@@ -195,10 +238,11 @@
 							        		</div>
 				                    	</div>
 				                    	<div class="d-grid gap-2 d-md-flex justify-content-md-end mt-3">
+											<input id="reservationNo" name="reservation" th:value="${reservation.reservationNo}" type="hidden">
+							        		<button class="btn btn-danger" type="button" id="btnRemoveReservation" onClick="openDeleteModal()">예약취소</button>
 							        		<button class="btn btn-primary" type="button" id="btnModifyReservation">예약수정</button>
 										</div>
 				                    </form>
-			                    
 			                    </div>
 						 	</div>
 		                </div>

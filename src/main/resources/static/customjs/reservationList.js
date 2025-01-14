@@ -210,6 +210,7 @@ document.addEventListener('alpine:init', () => {
 						            alert("권한 확인 중 오류가 발생했습니다.");
 						        }
 							})
+							openDeleteModal(reservationNo);
 						},
 		            });
 
