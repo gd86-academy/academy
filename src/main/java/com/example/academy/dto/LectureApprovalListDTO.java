@@ -13,7 +13,12 @@ public class LectureApprovalListDTO {
     private String lectureApprovalStatus;  	// 결재상태       
     private String createDate;        
     private String updateDate;
-	
+    
+    // 결재 대기 목록
+    private Integer approver; // 결재자번호, fk : employeeNo
+    private Integer lectureApprovalStep;	// 신청서 현재결재단계
+    private Integer approvalLevel;	// 결재자 결재순위
+    
     // 데이터를 배열로 반환하는 매서드
     public Object[] toArray() {
     	return new Object[] {

@@ -23,12 +23,12 @@ public class ApplicationRestController {
 	// 김혜린 : 나의 신청서 리스트 - 근태신청서
 	@GetMapping("/restapi/attendanceApprovalList")
 	public List<Object[]> attendanceApprovalList(Integer employeeNo) {
-		List<AttendanceApprovalListDTO> AttendanceApprovalList = attendanceApprovalService.getAttendanceApprovalList(employeeNo);
+		List<AttendanceApprovalListDTO> attendanceApprovalList = attendanceApprovalService.getAttendanceApprovalList(employeeNo);
 		List<Object[]> result = new ArrayList<>();
 		
 		log.debug("employeeNo: " + employeeNo);	// 디버깅
 		
-		for(AttendanceApprovalListDTO list : AttendanceApprovalList) {
+		for(AttendanceApprovalListDTO list : attendanceApprovalList) {
 			result.add(list.toArray());	// AttendanceApproval 객체를 배열로 반환
 		}
 		

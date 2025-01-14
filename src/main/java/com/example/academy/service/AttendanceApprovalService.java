@@ -106,7 +106,12 @@ public class AttendanceApprovalService {
 		
 	}
 	
-	// 김혜린 : 근태신청서리스트 조회
+	// 김혜린 : 결재대기목록 - 근태신청서리스트 조회
+	public List<AttendanceApprovalListDTO> getWaitAttendanceApprovalList(Integer employeeNo) {
+		return attendanceApprovalMapper.selectWaitAttendanceAprrovalList(employeeNo);
+	}
+	
+	// 김혜린 : 나의 신청목록 - 근태신청서리스트 조회
 	public List<AttendanceApprovalListDTO> getAttendanceApprovalList(Integer employeeNo) {
 		return attendanceApprovalMapper.selectAttendanceAprrovalList(employeeNo);
 	}

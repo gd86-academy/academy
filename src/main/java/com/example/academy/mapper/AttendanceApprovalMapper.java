@@ -13,7 +13,9 @@ public interface AttendanceApprovalMapper {
 	// 김혜린 : 근태신청서 신청(추가)
 	Integer insertAttendanceApproval(AttendanceApprovalAddDTO attendanceApprovalAddDTO);
 	
+	// 김혜린 : 결재 대기 목록 - 근태신청서 리스트 조회
+	List<AttendanceApprovalListDTO> selectWaitAttendanceAprrovalList(Integer employeeNo);
 	
-	// 김혜린 : 근태신청서 리스트 조회
+	// 김혜린 : 나의 신청 목록 - 근태신청서 리스트 조회
 	List<AttendanceApprovalListDTO> selectAttendanceAprrovalList(Integer employeeNo);
 }

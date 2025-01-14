@@ -15,7 +15,12 @@ import com.example.academy.mapper.delLectureApprovalMapper;
 public class delLectureApprovalService {
 	@Autowired delLectureApprovalMapper ddelLectureApprovalMapper;
 	
-	// 김혜린 : 강의신청서 리스트 조회
+	// 김혜린 : 결재 대기 목록 - 강의신청서 리스트 조회
+	public List<LectureApprovalListDTO> getWaitLectureApprovalList(Integer employeeNo){
+		return ddelLectureApprovalMapper.selectWaitLectureApprovalList(employeeNo);
+	}
+	
+	// 김혜린 : 나의 신청목록 - 강의신청서 리스트 조회
 	public List<LectureApprovalListDTO> getLectureApprovalList(Integer employeeNo){
 		return ddelLectureApprovalMapper.selectLectureApprovalList(employeeNo);
 	}

@@ -22,7 +22,35 @@
 			)
 	</insert>
 	
-	<!-- 김혜린 : 근태신청서리스트 조회 -->
+	<!-- 김혜린 : 결재 대기 목록 - 근태신청서 조회 -->
+	<select id="selectWaitAttendanceAprrovalList" parameterType="Integer" resultType="com.example.academy.dto.AttendanceApprovalListDTO">
+		SELECT 
+			aa.attendance_approval_no attendanceApprovalNo
+			, aa.attendance_approval_title attendanceApprovalTitle
+			, aa.attendance_approval_type attendanceApprovalTypeCode
+			, c1.`name` attendanceApprovalType
+			, aa.employee_no employeeNo
+			, e.employee_name employeeName
+			, aa.attendance_approval_status attendanceApprovalStatusCode 
+			, c2.`name` attendanceApprovalStatus
+			, ae.approver approver
+			, aa.attendance_approval_step attendanceApprovalStep
+			, ae.approval_level approvalLevel
+		FROM attendance_approval aa LEFT OUTER JOIN employee e
+		ON aa.employee_no = e.employee_no
+		LEFT OUTER JOIN common c1
+		ON aa.attendance_approval_type = c1.`code`
+		LEFT OUTER JOIN common c2
+		ON aa.attendance_approval_status = c2.`code`
+		LEFT OUTER JOIN approval_employee ae
+		ON ae.attendance_approval_no = aa.attendance_approval_no
+		WHERE aa.use_yn = 1
+		AND ae.approver = #{employeeNo}
+		AND aa.attendance_approval_status = 'AS001'
+		AND aa.attendance_approval_step = ae.approval_level
+	</select>
+	
+	<!-- 김혜린 : 나의 신청 목록 - 근태신청서리스트 조회 -->
 	<select id="selectAttendanceAprrovalList" parameterType="Integer" resultType="com.example.academy.dto.AttendanceApprovalListDTO">
 		SELECT 
 			aa.attendance_approval_no attendanceApprovalNo
