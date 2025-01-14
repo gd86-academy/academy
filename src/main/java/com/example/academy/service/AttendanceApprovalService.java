@@ -1,7 +1,6 @@
 package com.example.academy.service;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.academy.dto.AttendanceApprovalAddDTO;
 import com.example.academy.dto.AttendanceApprovalListDTO;
+import com.example.academy.dto.AttendanceApprovalOneDTO;
 import com.example.academy.mapper.ApprovalEmployeeMapper;
 import com.example.academy.mapper.AttendanceApprovalFileMapper;
 import com.example.academy.mapper.AttendanceApprovalMapper;
@@ -28,6 +28,15 @@ public class AttendanceApprovalService {
 	@Autowired ApprovalEmployeeMapper approvalEmployeeMapper;
 	@Autowired FilesMapper filesMapper;
 	@Autowired AttendanceApprovalFileMapper attendanceApprovalFileMapper;
+	
+	// 김혜린 : 근태신청서 상세페이지 - 근태신청서 테이블
+	public AttendanceApprovalOneDTO getAttendanceApprovalOne(Integer attendanceApprovalNo) {
+		// 근태신청서 테이블 상세
+		AttendanceApprovalOneDTO attendanceApprovalOne = attendanceApprovalMapper.selectAttendanceApprovalOne(attendanceApprovalNo);
+		
+		return attendanceApprovalOne;
+	}
+	
 	
 	// 김혜린 : 근태신청서 신청
 	public void addAttendanceApproval(AttendanceApprovalAddDTO attendanceApprovalAddDTO) {

@@ -2,6 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.AttendanceApprovalMapper">
 	
+	<!-- 김혜린 : 근태신청서 상세페이지 -->
+	<select id="selectAttendanceApprovalOne" parameterType="Integer" resultType="com.example.academy.dto.AttendanceApprovalOneDTO">
+		SELECT 
+			ap.attendance_approval_no attendanceApprovalNo
+			, ap.employee_no employeeNo
+			, e.employee_name employeeName
+			, ap.attendance_approval_type attendanceApprovalType
+			, ap.create_date createDate
+			, ap.attendance_approval_begindate attendanceApprovalBeginDate
+			, ap.attendance_approval_enddate attendanceApprovalEndDate
+			, ap.attendance_approval_title attendanceApprovalTitle
+			, ap.attendance_approval_content attendanceApprovalContent
+			, ap.attendance_approval_step attendanceApprovalStep
+		FROM attendance_approval ap LEFT OUTER JOIN employee e
+		ON ap.employee_no = e.employee_no
+		WHERE ap.attendance_approval_no = #{attendanceApprovalNo}
+	</select>
+	
 	<!-- 김혜린 : 근태신청서 신청 -->
 	<insert id="insertAttendanceApproval" parameterType="com.example.academy.dto.AttendanceApprovalAddDTO" useGeneratedKeys="true" keyProperty="attendanceApprovalNo">
 		INSERT INTO attendance_approval(

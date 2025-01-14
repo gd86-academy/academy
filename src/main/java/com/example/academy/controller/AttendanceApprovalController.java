@@ -1,5 +1,7 @@
 package com.example.academy.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -10,7 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.academy.dto.AttendanceApprovalAddDTO;
+import com.example.academy.dto.AttendanceApprovalOneDTO;
 import com.example.academy.security.CustomUserDetails;
+import com.example.academy.service.ApprovalEmployeeService;
 import com.example.academy.service.AttendanceApprovalService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +23,25 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 public class AttendanceApprovalController {
 	@Autowired AttendanceApprovalService attendanceApprovalService;
+	@Autowired ApprovalEmployeeService approvalEmployeeService;
+	
+	// 김혜린 : 근태 신청서 상세페이지
+	@GetMapping("/attendanceApprovalOne")
+	public String attenddanceApprovalOne(Model model, Integer attendanceApprovalNo) {
+		
+		log.debug("==============attendanceApprovalNo1 : " + attendanceApprovalNo);	//디버깅
+		// 1) 근태신청서 테이블 상세
+		AttendanceApprovalOneDTO attendanceApproval = attendanceApprovalService.getAttendanceApprovalOne(attendanceApprovalNo);
+		model.addAttribute("attendanceApproval", attendanceApproval);
+		log.debug("근태신청서 상세 : " + attendanceApproval);	//디버깅
+		log.debug("==============attendanceApprovalNo2 : " + attendanceApprovalNo);	//디버깅
+		// 2) 결재자 목록
+		List<AttendanceApprovalOneDTO> approvers  = approvalEmployeeService.getAttendanceApproverList(attendanceApprovalNo);
+		model.addAttribute("approvers", approvers);
+		log.debug("결재자 목록 : " + approvers);	//디버깅
+		
+		return "attendanceApprovalOne";
+	}
 	
 	// 김혜린 : 근태 신청
 	@GetMapping("/addAttendanceApproval")

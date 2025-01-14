@@ -6,9 +6,13 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.example.academy.dto.AttendanceApprovalAddDTO;
 import com.example.academy.dto.AttendanceApprovalListDTO;
+import com.example.academy.dto.AttendanceApprovalOneDTO;
 
 @Mapper
 public interface AttendanceApprovalMapper {
+	
+	// 김혜린 : 근태신청서 상세페이지
+	AttendanceApprovalOneDTO selectAttendanceApprovalOne(Integer attendanceApprovalNo);
 	
 	// 김혜린 : 근태신청서 신청(추가)
 	Integer insertAttendanceApproval(AttendanceApprovalAddDTO attendanceApprovalAddDTO);
