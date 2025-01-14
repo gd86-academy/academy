@@ -34,6 +34,13 @@ public class LectureApprovalController {
 	@Autowired ClassroomService classroomService;
 	@Autowired LectureApprovalService lectureApprovalService;
 	
+	// 진수우 : 강의결재 상세페이지 호출.
+	@GetMapping("/lectureApprovalOne")
+	public String lectureApprovalOne(Model model, Integer lectureApprovalNo) {
+		
+		return "lectureApprovalOne";
+	}
+	
 	// 진수우 : 강의결재 신청서 제출.
 	@PostMapping("/addLectureApproval")
 	public String addLectureApproval(Model model, LectureApprovalAddDTO lectureApprovalDTO) {
