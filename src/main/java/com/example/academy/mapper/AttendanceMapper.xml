@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.academy.mapper.AttendanceMapper">
+	<select id="selectAttendanceList" resultType="">
+		SELECT 
+			DATE_FORMAT(a.attendance_date, '%d') AS DATE
+			, c.name
+			, a.attendance_checkin AS checkin
+			, a.attendance_checkout AS checkout
+			, CONCAT( <!-- 근무 시간을 시:분 형식으로 계산 (기준은 오전 9시 또는 출근 시간) -->
+		        FLOOR(TIMESTAMPDIFF(MINUTE, <!-- TIMESTAMPDIFF(MINUTE, ...)로 계산된 근무 시간 분 단위 값을 FLOOR(... / 60)으로 시간으로 변환 -->
+		            GREATEST(attendance_checkin, CONCAT(DATE(attendance_checkin), ' 09:00:00')), 
+		            attendance_checkout) / 60), 
+		        ':', 
+		        LPAD(MOD(TIMESTAMPDIFF(MINUTE, <!-- 나머지 분은 MOD(..., 60)으로 구한 뒤, LPAD(..., 2, '0')을 사용하여 두 자릿수로 표시 -->
+		            GREATEST(attendance_checkin, CONCAT(DATE(attendance_checkin), ' 09:00:00')), 
+		            attendance_checkout), 60), 2, '0')
+		    ) AS work_time
+			, CONCAT( <!-- 초과 근무 시간은 시:분 형식으로 계산 -->
+		        FLOOR(CASE
+		            WHEN TIMESTAMPDIFF(MINUTE, 
+		                GREATEST(attendance_checkin, CONCAT(DATE(attendance_checkin), ' 09:00:00')), 
+		                attendance_checkout) > 550
+		            THEN TIMESTAMPDIFF(MINUTE, 
+		                GREATEST(attendance_checkin, CONCAT(DATE(attendance_checkin), ' 09:00:00')), 
+		                attendance_checkout) - 550
+		            ELSE 0
+		        END / 60), 
+		        ':', 
+		        LPAD(MOD(CASE
+		            WHEN TIMESTAMPDIFF(MINUTE, 
+		                GREATEST(attendance_checkin, CONCAT(DATE(attendance_checkin), ' 09:00:00')), 
+		                attendance_checkout) > 540
+		            THEN TIMESTAMPDIFF(MINUTE, 
+		                GREATEST(attendance_checkin, CONCAT(DATE(attendance_checkin), ' 09:00:00')), 
+		                attendance_checkout) - 540
+		            ELSE 0
+		        END, 60), 2, '0')
+		    ) AS overtime_time
+		FROM attendance a
+		INNER JOIN common c ON c.code = a.attendance_content
+		WHERE DATE_FORMAT(a.attendance_date, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-%m')
+				AND a.attendance_date &lt;= NOW() <!-- 오늘보다 작거나 같은 날짜 -->
+				AND c.name IS NOT NULL <!-- name이 NULL이 아닌 것만 -->
+	</select>
+</mapper>

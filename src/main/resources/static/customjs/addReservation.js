@@ -103,6 +103,7 @@ document.addEventListener('alpine:init', () => {
 	});
 	
 	// 사원추가
+	let cnt = 0;
 	$('#addResultEmployee').click(function () {
 	    const selectedOption = $('#resultEmployee option:selected'); // 선택된 옵션 가져오기
 	    const employeeNo = selectedOption.val();
@@ -123,11 +124,13 @@ document.addEventListener('alpine:init', () => {
 	            // 선택된 사원을 추가
 	            const newEmployee = `
 	                <div class="d-flex w-100 items-center justify-between mt-2 selectedEmployee-box">
+						<input type="hidden" value="${employeeNo}" name="reservationEmployees[`+(cnt)+`].employeeNo">
 	                    <input 
 	                        class="form-input selectedEmployee"
 	                        type="text"
 	                        value="${employeeName}" 
 	                        data-employee-no="${employeeNo}" 
+	                        name="reservationEmployees[`+(cnt++)+`].employeeName"
 	                        readonly>
 	                    <button type="button" class="btn btn-danger ms-3 removeEmployee" style="word-break:keep-all;">삭제</button>
 	                </div>
