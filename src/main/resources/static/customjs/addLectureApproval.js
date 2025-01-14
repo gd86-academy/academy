@@ -475,6 +475,87 @@ $('#btnAddTime').click(function () {
         let weekdayId = 'weekdayId' + timeResult;
         let beginTimeId = 'beginTimeId' + timeResult;
         let endTimeId = 'endTimeId' + timeResult;
+		
+		// 이전 강의시간은 수정하지 못함.
+		let backWeekdayId = 'weekdayId' + (timeResult - 1);
+		let backbeginTimeId = 'beginTimeId' + (timeResult - 1);
+		let backendTimeId = 'endTimeId' + (timeResult - 1);
+		$(`#${backWeekdayId}`).prop('disabled', true);
+		$(`#${backbeginTimeId}`).prop('disabled', true);
+		$(`#${backendTimeId}`).prop('disabled', true);
+		
+		$('#classroomList').change(function () {
+			$(`#${weekdayId}`).prop('selectedIndex', 0);
+			$(`#${beginTimeId}`).prop('selectedIndex', 0);
+			$(`#${endTimeId}`).prop('selectedIndex', 0);
+			$('#weekdayId0').prop('selectedIndex', 0);
+			$('#beginTimeId0').prop('selectedIndex', 0);
+			$('#endTimeId0').prop('selectedIndex', 0);
+			$('#weekdayId0').prop('disabled', false);
+			$('#beginTimeId0').prop('disabled', false);
+			$('#beginTimeId0 option:not(:first)').remove();
+			$('#endTimeId0 option:not(:first)').remove();
+			
+			// timeResult 값만큼 반복적으로 항목 삭제
+			while (timeResult > 0) {
+			    let lastTimeResult = timeResult;  // 현재 timeResult 값
+			    let lastRowId = 'weekday' + lastTimeResult;  // 동적으로 생성된 ID 생성
+
+			    // 해당 ID를 가진 tr 삭제
+			    $('#' + lastRowId).closest('tr').remove();
+
+			    timeResult--;  // timeResult 감소
+			}
+		});
+		
+		$('#beginDate').change(function () {
+			$(`#${weekdayId}`).prop('selectedIndex', 0);
+			$(`#${beginTimeId}`).prop('selectedIndex', 0);
+			$(`#${endTimeId}`).prop('selectedIndex', 0);
+			$('#weekdayId0').prop('selectedIndex', 0);
+			$('#beginTimeId0').prop('selectedIndex', 0);
+			$('#endTimeId0').prop('selectedIndex', 0);
+			$('#weekdayId0').prop('disabled', false);
+			$('#beginTimeId0').prop('disabled', false);
+			$('#beginTimeId0 option:not(:first)').remove();
+			$('#endTimeId0 option:not(:first)').remove();
+			
+			// timeResult 값만큼 반복적으로 항목 삭제
+			while (timeResult > 0) {
+			    let lastTimeResult = timeResult;  // 현재 timeResult 값
+			    let lastRowId = 'weekday' + lastTimeResult;  // 동적으로 생성된 ID 생성
+
+			    // 해당 ID를 가진 tr 삭제
+			    $('#' + lastRowId).closest('tr').remove();
+
+			    timeResult--;  // timeResult 감소
+			}
+		});
+		
+		$('#endDate').change(function () {
+			$(`#${weekdayId}`).prop('selectedIndex', 0);
+			$(`#${beginTimeId}`).prop('selectedIndex', 0);
+			$(`#${endTimeId}`).prop('selectedIndex', 0);
+			$('#weekdayId0').prop('selectedIndex', 0);
+			$('#beginTimeId0').prop('selectedIndex', 0);
+			$('#endTimeId0').prop('selectedIndex', 0);
+			$('#weekdayId0').prop('disabled', false);
+			$('#beginTimeId0').prop('disabled', false);
+			$('#beginTimeId0 option:not(:first)').remove();
+			$('#endTimeId0 option:not(:first)').remove();
+			
+			// timeResult 값만큼 반복적으로 항목 삭제
+			while (timeResult > 0) {
+			    let lastTimeResult = timeResult;  // 현재 timeResult 값
+			    let lastRowId = 'weekday' + lastTimeResult;  // 동적으로 생성된 ID 생성
+
+			    // 해당 ID를 가진 tr 삭제
+			    $('#' + lastRowId).closest('tr').remove();
+
+			    timeResult--;  // timeResult 감소
+			}
+		});
+		
 
         let html = `
             <tr id="weekday${timeResult}">
@@ -522,6 +603,13 @@ $('#btnAddTime').click(function () {
 		            });
 		        }
 		    }
+		});
+		
+		// 시작시간을 수정 시, 종료시간에 선택했던 값은 초기화처리.
+		$(`#${beginTimeId}`).change(function () {
+			if ($(`#${endTimeId}`).val() != '') {
+				$(`#${endTimeId}`).prop('selectedIndex', 0);
+			}
 		});
 			
         // 요일 선택 시, 시간 데이터를 가져오는 이벤트 바인딩
@@ -576,7 +664,7 @@ $('#weekdayId0').on('click change', function () {
 	const roomId = $('#classroomList').val();
 	
     if (!startDate || !endDate || !roomId) {
-		$('select').prop('disabled', true);
+		 $('select').prop('disabled', true);
 		modalBackgroundNoLectureDate.classList.toggle('hidden', false);
 		modalBackgroundNoLectureDate.classList.toggle('block', true);
         return;
@@ -610,6 +698,13 @@ $('#weekdayId0').on('click change', function () {
     });
 });
 
+// 시작시간 변경 시, 종료시간 초기화.
+$('#beginTimeId0').change(function () {
+	if ($('#endTimeId0').val() != '') {
+		$('#endTimeId0').prop('selectedIndex', 0);
+	}
+});
+
 
 // 강의시간 입력 필드 삭제
 $('#BtnEndTime').click(function() {
@@ -627,6 +722,13 @@ $('#BtnEndTime').click(function() {
         $('#' + lastRowId).closest('tr').remove();  // 해당 tr 삭제
 
         timeResult--;  // timeResult 감소
+		
+		let weekdayId = 'weekdayId' + timeResult;
+        let beginTimeId = 'beginTimeId' + timeResult;
+        let endTimeId = 'endTimeId' + timeResult;
+		$(`#${weekdayId}`).prop('disabled', false);
+		$(`#${beginTimeId}`).prop('disabled', false);
+		$(`#${endTimeId}`).prop('disabled', false);
     }
 });
 
@@ -928,4 +1030,3 @@ function disableSelectedOption() {
 	    previousValue = optionText;
 	}
 }
-
