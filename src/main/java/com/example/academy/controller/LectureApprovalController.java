@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.academy.dto.ClassroomListDTO;
 import com.example.academy.dto.LectureApprovalAddDTO;
+import com.example.academy.dto.LectureApprovalEmployeeListDTO;
+import com.example.academy.dto.LectureApprovalOneDTO;
+import com.example.academy.dto.LectureApprovalWeekdayListDTO;
 import com.example.academy.dto.LectureOneDTO;
 import com.example.academy.dto.LectureOneTimeListDTO;
 import com.example.academy.security.CustomUserDetails;
@@ -22,6 +25,7 @@ import com.example.academy.service.CommonService;
 import com.example.academy.service.LectureApprovalService;
 import com.example.academy.service.LectureService;
 import com.example.academy.vo.Common;
+import com.example.academy.vo.Files;
 import com.example.academy.vo.Lecture;
 
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +41,22 @@ public class LectureApprovalController {
 	// 진수우 : 강의결재 상세페이지 호출.
 	@GetMapping("/lectureApprovalOne")
 	public String lectureApprovalOne(Model model, Integer lectureApprovalNo) {
+		// 강의결재 테이블에서 데이터 가져오기.
+		LectureApprovalOneDTO lectureApprovalOne = lectureApprovalService.getLectureApprovalOne(lectureApprovalNo);
+		model.addAttribute("lectureApprovalOne", lectureApprovalOne);
+		
+		// 강의결재요일 테이블에서 데이터 가져오기.
+		List<LectureApprovalWeekdayListDTO> lectureApprovalWeekday = lectureApprovalService.getLectureApprovalWeekday(lectureApprovalNo);
+		model.addAttribute("lectureApprovalWeekday", lectureApprovalWeekday);
+		
+		// 파일 테이블에서 데이터 가져오기.
+		List<Files> lectureApprovalFile = lectureApprovalService.getLectureApprovalFile(lectureApprovalNo);
+		model.addAttribute("lectureApprovalFile", lectureApprovalFile);
+		log.debug("result -------------------" + lectureApprovalFile);
+		
+		// 결재자 테이블에서 데이터 가져오기.
+		List<LectureApprovalEmployeeListDTO> lectureApprovalEmployee = lectureApprovalService.getLectureApprovalEmployee(lectureApprovalNo);
+		model.addAttribute("lectureApprovalEmployee", lectureApprovalEmployee);
 		
 		return "lectureApprovalOne";
 	}

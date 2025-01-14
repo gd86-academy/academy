@@ -18,5 +18,6 @@ public class LectureApproval {
     private Integer lectureApprovalStep;           
     private String createDate;        
     private String updateDate;   
+    private String useYn;
 
 }

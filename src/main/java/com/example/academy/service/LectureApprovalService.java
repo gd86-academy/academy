@@ -13,7 +13,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.academy.dto.ApprovalAddDTO;
 import com.example.academy.dto.LectureApprovalAddDTO;
+import com.example.academy.dto.LectureApprovalEmployeeListDTO;
 import com.example.academy.dto.LectureApprovalGetBeginTimeDTO;
+import com.example.academy.dto.LectureApprovalOneDTO;
+import com.example.academy.dto.LectureApprovalWeekdayListDTO;
 import com.example.academy.mapper.FilesMapper;
 import com.example.academy.mapper.LectureApprovalMapper;
 import com.example.academy.util.InputFile;
@@ -26,6 +29,26 @@ import com.example.academy.vo.LectureWeekday;
 public class LectureApprovalService {
 	@Autowired LectureApprovalMapper lectureApprovalMapper;
 	@Autowired FilesMapper filesMapper;
+	
+	// 진수우 : 강의결재 상세페이지에서 결재자 출력
+	public List<LectureApprovalEmployeeListDTO> getLectureApprovalEmployee(Integer lectureApprovalNo) {
+		return lectureApprovalMapper.selectLectureApprovalEmployee(lectureApprovalNo);
+	}
+	
+	// 진수우 : 강의결재 상세페이지에서 파일 출력
+	public List<Files> getLectureApprovalFile(Integer lectureApprovalNo) {
+		return lectureApprovalMapper.selectLectureApprovalFile(lectureApprovalNo);
+	}
+		
+	// 진수우 : 강의결재 상세페이지에서 강의시간 출력
+	public List<LectureApprovalWeekdayListDTO> getLectureApprovalWeekday(Integer lectureApprovalNo) {
+		return lectureApprovalMapper.selectLectureApprovalWeekday(lectureApprovalNo);
+	}
+	
+	// 진수우 : 강의결재 상세페이지에서 강의정보 출력
+	public LectureApprovalOneDTO getLectureApprovalOne(Integer lectureApprovalNo) {
+		return lectureApprovalMapper.selectLectureApprovalOne(lectureApprovalNo);
+	}
 	
 	// 진수우 : 강의결재신청 시 폼에 입력한 내용 데이터베이스에 저장.
 	public void addLectureApproval(LectureApprovalAddDTO lectureApprovalAddDTO) {
