@@ -20,7 +20,7 @@ public class ApplicationRestController {
 	@Autowired AttendanceApprovalService attendanceApprovalService;
 	@Autowired delLectureApprovalService ddelLectureApprovalService; // 추후 파일 변경후 수정
 	
-	// 김혜린 : 근태신청서 리스트
+	// 김혜린 : 나의 신청서 리스트 - 근태신청서
 	@GetMapping("/restapi/attendanceApprovalList")
 	public List<Object[]> attendanceApprovalList(Integer employeeNo) {
 		List<AttendanceApprovalListDTO> AttendanceApprovalList = attendanceApprovalService.getAttendanceApprovalList(employeeNo);
@@ -35,7 +35,7 @@ public class ApplicationRestController {
 		return result;
 	}
 	
-	// 김혜린 : 강의신청서 리스트
+	// 김혜린 : 나의 신청서 리스트 - 강의신청서
 	@GetMapping("/restapi/lectureApprovalList")
 	public List<Object[]> lectureApprovalList(Integer employeeNo){
 		List<LectureApprovalListDTO> lectureApprovalList = ddelLectureApprovalService.getLectureApprovalList(employeeNo);
