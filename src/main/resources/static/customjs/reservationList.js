@@ -203,10 +203,12 @@ document.addEventListener('alpine:init', () => {
 						                // 수정 페이지로 이동
 						                window.location.href = `http://localhost/academy/modifyReservation?reservationNo=${reservationNo}`;
 						            } else {
+										
 						                alert("수정 권한이 없습니다.");
 						            }
 						        },
 						        error: function() {
+									console.log(response.hasPermission)
 						            alert("권한 확인 중 오류가 발생했습니다.");
 						        }
 							})

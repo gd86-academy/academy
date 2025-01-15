@@ -43,29 +43,18 @@ public class ReservationService {
 	
 	// 박시현 : 예약 신청
 	public Integer insertReservation(AddReservationDTO addReservationDTO) {
-	    // 예약 정보 추가 (reservation 테이블에 데이터 추가)
-	    Integer row = reservationMapper.insertReservation(addReservationDTO);
-	    
-	    // 참여자 데이터 추가
-	    if (row > 0) {
-	        Integer reservationNo = addReservationDTO.getReservationNo(); // 새로 생성된 예약 번호
-	        
-	        // 예약 참여자들 추가 (reservation_employee 테이블에 데이터 추가)
-	        int employeeRow = 0;
-	        for (ReservationEmployeeDTO employee : addReservationDTO.getReservationEmployees()) {
-	            employee.setReservationNo(reservationNo);  // 각 참여자에 예약 번호 설정
-	            employeeRow += reservationMapper.insertReservationByEmployee(employee);  // 참여자 데이터 추가
-	        }
-	        
-	        // 4. 모든 작업이 성공적으로 완료되었는지 확인
-	        if (employeeRow == addReservationDTO.getReservationEmployees().size()) {
-	            return 1;  // 성공
-	        } else {
-	            return 0;  // 실패 
-	        }
-	    } else {
-	        return 0;  // 예약 신청 데이터 추가 실패
-	    }
+		// 1. 예약 정보 삽입
+        int row = reservationMapper.insertReservation(addReservationDTO);
+        if (row > 0) {
+            Integer reservationNo = addReservationDTO.getReservationNo(); // 생성된 예약 번호
+            
+            // 2. 예약 참여자 삽입
+            for (ReservationEmployeeDTO employee : addReservationDTO.getReservationEmployees()) {
+                employee.setReservationNo(reservationNo);
+                reservationMapper.insertReservationByEmployee(employee);
+            }
+        }
+        return row;
 	}
 	
 	// 박시현 : 회의실 목록 출력
