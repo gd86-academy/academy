@@ -145,16 +145,16 @@ document.addEventListener('alpine:init', () => {
 	                    },
 						
 	                });
-					/*
+					
 					// 행 클릭 이벤트
 					document.querySelector('#myTable tbody').addEventListener('click', (e) => {
 					    const rowElement = e.target.closest('tr'); // 클릭된 행의 인덱스.
 					    if (rowElement) {
 							const tdElements = rowElement.querySelectorAll('td');
-							const lectureNo = tdElements[0].textContent; // 두번째 열 데이터 추출.
-							window.location.href = `/academy/lectureOne?lectureNo=${lectureNo}`;
+							const attendanceApprovalNo = tdElements[0].textContent; // 두번째 열 데이터 추출.
+							window.location.href = `/academy/attendanceApprovalOne?attendanceApprovalNo=${attendanceApprovalNo}`;
 					    }
-					});*/
+					});
 	            },
 	            error: (xhr, status, error) => {
 	                console.error('Error:', error);
@@ -360,16 +360,16 @@ $('#attendanceApprovalBtn').click(function() {
 			// Alpine 스토어에 새 테이블 객체 저장
            Alpine.store('datatable', datatable);
 		   console.log('새로운 테이블 객체:', datatable);
-			/*
-			// 행 클릭 이벤트
+		
+		   // 행 클릭 이벤트
 			document.querySelector('#myTable tbody').addEventListener('click', (e) => {
-				const rowElement = e.target.closest('tr'); // 클릭된 행의 인덱스.
-				if (rowElement) {
+			    const rowElement = e.target.closest('tr'); // 클릭된 행의 인덱스.
+			    if (rowElement) {
 					const tdElements = rowElement.querySelectorAll('td');
-					const lectureNo = tdElements[0].textContent; // 두번째 열 데이터 추출.
-					window.location.href = `/academy/lectureOne?lectureNo=${lectureNo}`;
-				}
-			});*/
+					const attendanceApprovalNo = tdElements[0].textContent; // 두번째 열 데이터 추출.
+					window.location.href = `/academy/attendanceApprovalOne?attendanceApprovalNo=${attendanceApprovalNo}`;
+			    }
+			});
 		},
 		error: (xhr, status, error) => {
 			console.error('Error:', error);
