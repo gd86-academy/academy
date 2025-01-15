@@ -14,11 +14,17 @@ public interface ReservationMapper {
 	// 박시현 : 예약 취소
 	Integer deleteReservation(Integer reservationNo);
 	
+	// 박시현 : 예약 참여자 삭제
+	Integer deleteReservationEmployee(Integer employeeNo);
+	
 	// 박시현 : 예약번호 별 상세정보
 	ReservationListDTO selectReservationOne(Integer reservationNo);
 	
 	// 박시현 : 예약 수정
 	Integer updateReservation(ReservationListDTO reservationListDTO);
+
+	// 박시현 : 예약 참여자 수정
+	Integer updateReservationEmployee(ReservationEmployeeDTO reservationEmployeeDTO);
 	
 	// 박시현 : 예약시 참여자 추가
 	Integer insertReservationByEmployee(ReservationEmployeeDTO reservationEmployeeDTO);
@@ -29,7 +35,7 @@ public interface ReservationMapper {
 	// 박시현 : 회의실 예약 신청 
 	Integer insertReservation(AddReservationDTO addReservationListDTO);
 	
-	
+	// 박시현 : 예약 참여자 조회
 	List<ReservationEmployeeDTO> selectReservationEmployees(Integer reservationNo);
 	
 	// 박시현 : 회의실예약 목록 조회

@@ -11,10 +11,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.academy.dto.AddReservationDTO;
 import com.example.academy.dto.MeetingRoomListDTO;
+import com.example.academy.dto.ReservationEmployeeDTO;
 import com.example.academy.dto.ReservationListDTO;
 import com.example.academy.security.CustomUserDetails;
 import com.example.academy.service.CalendarService;
@@ -22,6 +24,8 @@ import com.example.academy.service.CommonService;
 import com.example.academy.service.MeetingRoomService;
 import com.example.academy.service.ReservationService;
 import com.example.academy.vo.Common;
+import com.example.academy.vo.ReservationEmployee;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -66,15 +70,14 @@ public class ReservationController {
 	        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 	        int loggedInUserId = Integer.parseInt(userDetails.getUsername());
 	        
-	        
 	        ReservationListDTO reservation = reservationService.getReservationOne(reservationNo);
-	        model.addAttribute("reservation",reservation);
 	        // 예약자가 로그인한 사용자와 일치하는지 확인
 	        if (reservation.getReservationPerson() != loggedInUserId) {
 	        	log.debug("접근실패");
 	        	return "redirect:/reservationList";
 	        }
 	        log.debug("reservationList : " + reservation);
+	        model.addAttribute("reservation",reservation);
 
 	        // 시간 조회
 	        List<Common> time = commonService.getTime(); 
@@ -83,6 +86,7 @@ public class ReservationController {
 	        // 회의실 조회
 	        List<MeetingRoomListDTO> meetingroom = meetingroomService.getMeetingRoomList(); 
 	        model.addAttribute("meetingroom",meetingroom);
+	        
 		}
 		
 		return "modifyReservation";

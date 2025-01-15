@@ -65,13 +65,51 @@ document.addEventListener('alpine:init', () => {
         ],
     }));
 	
+	// 수정 페이지 로드 시 참여자 목록을 가져오기
+	$(document).ready(function() {
+	    const reservationNo = $('#reservationNo').val(); // 예약 번호 가져오기
+	    let cnt = 0;
+	    
+	    if (reservationNo) {
+	        $.ajax({
+	            url: 'http://localhost/academy/restapi/getReservationEmployeeOne?reservationNo=' + reservationNo, // 참여자 목록을 가져오는 API
+	            type: 'GET',
+	            data: { reservationNo: reservationNo },
+	            dataType: 'json',
+	            success: function(data) {
+	                if (data.length > 0) {
+	                    data.forEach(employee => {
+	                        const existingEmployee = `
+	                            <div class="d-flex w-100 items-center justify-between mt-2 selectedEmployee-box">
+	                                <input type="hidden" value="${employee.employeeNo}" name="reservationEmployees[` + (cnt) + `].employeeNo">
+	                                <input 
+	                                    class="form-input selectedEmployee"
+	                                    type="text"
+	                                    value="${employee.employeeName}" 
+	                                    data-employee-no="${employee.employeeNo}" 
+	                                    name="reservationEmployees[` + (cnt++) + `].employeeName"
+	                                    readonly>
+	                                <button type="button" class="btn btn-danger ms-3 removeEmployee" style="word-break:keep-all;">삭제</button>
+	                            </div>
+	                        `;
+	                        $('#selectEmployeesContainer').append(existingEmployee);
+	                    });
+	                }
+	            },
+	            error: function(xhr, status, error) {
+	                console.error('Error fetching reservation employees:', error);
+	            }
+	        });
+	    }
+	});
+
 	// 사원검색
 	$('#btnEmployee').click(function() {
 	    let searchValue = $('#searchEmployee').val().trim();
 	    if (searchValue === '') {
 	        $('#searchEmployee').addClass("errorInput");
 	        $('.searchEmployee-error').show();
-			$('#resultEmployee option').hide();
+	        $('#resultEmployee option').hide();
 	        return; // 입력이 비어있다면 검색을 하지 않음
 	    } else {
 	        $('#searchEmployee').removeClass("errorInput");
@@ -90,8 +128,7 @@ document.addEventListener('alpine:init', () => {
 	            if (data.length > 0) {
 	                data.forEach(employee => {
 	                    $('#resultEmployee').append(`<option value="${employee.employeeNo}">${employee.employeeName}</option>`);
-					});
-					
+	                });
 	            } else {
 	                $('#resultEmployee').append('<option value="">검색된 사원이 없습니다</option>');
 	            }
@@ -101,52 +138,82 @@ document.addEventListener('alpine:init', () => {
 	        }
 	    });
 	});
-	
+
 	// 사원추가
+	let cnt = 0;
 	$('#addResultEmployee').click(function () {
 	    const selectedOption = $('#resultEmployee option:selected'); // 선택된 옵션 가져오기
 	    const employeeNo = selectedOption.val();
 	    const employeeName = selectedOption.text();
 
-		if (employeeNo && employeeName) {
+	    if (employeeNo && employeeName) {
 	        // 중복 검사
 	        let exists = false;
-			$('#selectEmployeesContainer .selectedEmployee').each(function () {
-			    // data()로 읽은 값과 employeeNo를 문자열로 비교
-			    if ($(this).attr('data-employee-no') === String(employeeNo)) {
-			        exists = true; // 이미 추가된 사원이면 추가하지 않음
-			        return false; // 반복문 종료
-			    }
-			});
+	        $('#selectEmployeesContainer .selectedEmployee').each(function () {
+	            // data()로 읽은 값과 employeeNo를 문자열로 비교
+	            if ($(this).attr('data-employee-no') === String(employeeNo)) {
+	                exists = true; // 이미 추가된 사원이면 추가하지 않음
+					$('#selectEmployeesContainer .selectedEmployee').each(function () {
+			            // data()로 읽은 값과 employeeNo를 문자열로 비교
+			            if ($(this).attr('data-employee-no') === String(employeeNo)) {
+			                exists = true; // 이미 추가된 사원이면 추가하지 않음
+			                return false; // 반복문 종료
+			            }
+			        });
+	            }
+	        });
 
 	        if (!exists) {
 	            // 선택된 사원을 추가
 	            const newEmployee = `
 	                <div class="d-flex w-100 items-center justify-between mt-2 selectedEmployee-box">
+	                    <input type="hidden" class="selectedEmployeeNo" value="${employeeNo}" name="reservationEmployees[` + (cnt) + `].employeeNo">
 	                    <input 
 	                        class="form-input selectedEmployee"
 	                        type="text"
 	                        value="${employeeName}" 
 	                        data-employee-no="${employeeNo}" 
+	                        name="reservationEmployees[` + (cnt++) + `].employeeName"
 	                        readonly>
 	                    <button type="button" class="btn btn-danger ms-3 removeEmployee" style="word-break:keep-all;">삭제</button>
 	                </div>
 	            `;
 	            $('#selectEmployeesContainer').append(newEmployee);
-				// 검색기록 초기화
-				$('#searchEmployee').val(''); 
-				$('#resultEmployee').empty();
+	            // 검색기록 초기화
+	            $('#searchEmployee').val(''); 
+	            $('#resultEmployee').empty();
 	        }
 	    }
 	});
 
 	// 삭제 버튼 기능 추가
 	$(document).on('click', '.removeEmployee', function () {
-	    // 현재 클릭한 삭제 버튼의 부모 요소 (.d-flex)를 제거
-	    $(this).closest('.selectedEmployee-box').remove();
-	});
+	    const employeeNo = $(this).closest('.selectedEmployee-box').find('input[name*="employeeNo"]').val();
+	    console.log(employeeNo); // 값 확인
+
+	    if (employeeNo) {
+	        // self로 this를 참조하여 success 콜백 내에서 사용할 수 있도록 함
+	        const self = this;
+
+	        $.ajax({
+	            url: 'http://localhost/academy/restapi/removeReservationEmployee',
+	            type: 'GET',
+				data: {
+			       employeeNo 
+			    },
+	            success: function(response) {
+	                console.log("삭제 성공");
+	                // UI에서 해당 사원 항목 제거
+	                $(self).closest('.selectedEmployee-box').remove();
+	            },
+	            error: function(xhr, status, error) {
+	                console.error('Error:', error);
+	            }
+	        });
+	    }
 	
-});
+	});
+});	
 
 // 예약수정 유효성 검사
 $('#btnModifyReservation').click(function(){

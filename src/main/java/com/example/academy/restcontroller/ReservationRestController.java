@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.academy.dto.ReservationEmployeeDTO;
 import com.example.academy.dto.ReservationListDTO;
 import com.example.academy.security.CustomUserDetails;
 import com.example.academy.service.ReservationService;
@@ -24,6 +25,27 @@ import com.example.academy.vo.Employee;
 @RestController
 public class ReservationRestController {
 	@Autowired ReservationService reservationService;
+	
+	// 박시현 : 수정페이지 - 추가 버튼 클릭 시 테이블에서 참여자 추가
+	
+	// 박시현 : 수정페이지 - 삭제 버튼 클릭시 테이블에서 참여자 삭제
+	@GetMapping("/restapi/removeReservationEmployee")
+	public String removeReservationEmployee(@RequestParam("employeeNo") Integer employeeNo) {
+		reservationService.removeReservationEmployee(employeeNo);
+	    return "redirect:/modifyReservation"; 
+	}
+	
+	// 박시현 : 수정페이지 - 이미 등록되있던 예약 참여자 보여주기
+	@GetMapping("/restapi/getReservationEmployeeOne") 
+	public ResponseEntity<List<ReservationEmployeeDTO>> getReservationEmployeeOne(@RequestParam Integer reservationNo) {
+		List<ReservationEmployeeDTO> employees = reservationService.getReservationEmployee(reservationNo);
+        
+        if (employees.isEmpty()) {
+            return ResponseEntity.noContent().build(); // 참여자가 없으면 204 No Content 반환
+        }
+        
+        return ResponseEntity.ok(employees);
+	}
 	
 	// 박시현 : 수정페이지 접근권한 확인
 	@GetMapping("/restapi/checkReservationPerson")

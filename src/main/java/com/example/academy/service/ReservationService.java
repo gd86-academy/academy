@@ -26,14 +26,49 @@ public class ReservationService {
 		return reservationMapper.deleteReservation(reservationNo);
 	}
 	
+	// 박시현 : 예약 참여자 삭제
+	public Integer removeReservationEmployee(Integer employeeNo) {
+		return reservationMapper.deleteReservationEmployee(employeeNo);
+	}
+	
+	// 박시현 : 수정페이지 - 예약참여자 조회
+	public List<ReservationEmployeeDTO> getReservationEmployee(Integer reservationNo) {
+		return reservationMapper.selectReservationEmployees(reservationNo);
+	}
+	
+	// 박시현 : 수정페이지 - 참여자 추가
+	public Integer modifyReservationEmployee(ReservationEmployeeDTO reservationEmployeeDTO) {
+		return reservationMapper.updateReservationEmployee(reservationEmployeeDTO);
+	}
+	
 	// 박시현 : 예약 수정
 	public Integer modifyReservation(ReservationListDTO reservationListDTO) {
-		return reservationMapper.updateReservation(reservationListDTO);
+		Integer row = reservationMapper.updateReservation(reservationListDTO);
+		
+		if (row > 0) {
+            Integer reservationNo = reservationListDTO.getReservationNo();// 생성된 예약 번호
+            
+            // 예약 참여자 삽입
+            for (ReservationEmployeeDTO employee : reservationListDTO.getReservationEmployees()) {
+                employee.setReservationNo(reservationNo);
+                reservationMapper.insertReservationByEmployee(employee);
+            }
+        }
+
+	    return row;
 	}
 	
 	// 박시현 : 예약번호별 상세정보
 	public ReservationListDTO getReservationOne(Integer reservationNo) {
-		return reservationMapper.selectReservationOne(reservationNo);
+	    ReservationListDTO reservationOne = reservationMapper.selectReservationOne(reservationNo);
+	    
+	    // 예약 직원 정보 가져오기
+	    List<ReservationEmployeeDTO> employees = reservationMapper.selectReservationEmployees(reservationOne.getReservationNo());
+	    
+	    // 직원 목록을 예약 객체에 설정
+	    reservationOne.setReservationEmployees(employees);
+	    
+	    return reservationOne;
 	}
 	
 	// 박시현 : 예약 신청 - 사원 검색
@@ -43,12 +78,12 @@ public class ReservationService {
 	
 	// 박시현 : 예약 신청
 	public Integer insertReservation(AddReservationDTO addReservationDTO) {
-		// 1. 예약 정보 삽입
+		// 예약 정보 삽입
         int row = reservationMapper.insertReservation(addReservationDTO);
         if (row > 0) {
             Integer reservationNo = addReservationDTO.getReservationNo(); // 생성된 예약 번호
             
-            // 2. 예약 참여자 삽입
+            // 예약 참여자 삽입
             for (ReservationEmployeeDTO employee : addReservationDTO.getReservationEmployees()) {
                 employee.setReservationNo(reservationNo);
                 reservationMapper.insertReservationByEmployee(employee);
