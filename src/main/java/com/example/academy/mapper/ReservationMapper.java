@@ -15,7 +15,7 @@ public interface ReservationMapper {
 	Integer deleteReservation(Integer reservationNo);
 	
 	// 박시현 : 예약 참여자 삭제
-	Integer deleteReservationEmployee(Integer employeeNo);
+	Integer deleteReservationEmployee(Integer reservationNo);
 	
 	// 박시현 : 예약번호 별 상세정보
 	ReservationListDTO selectReservationOne(Integer reservationNo);

@@ -188,30 +188,8 @@ document.addEventListener('alpine:init', () => {
 
 	// 삭제 버튼 기능 추가
 	$(document).on('click', '.removeEmployee', function () {
-	    const employeeNo = $(this).closest('.selectedEmployee-box').find('input[name*="employeeNo"]').val();
-	    console.log(employeeNo); // 값 확인
-
-	    if (employeeNo) {
-	        // self로 this를 참조하여 success 콜백 내에서 사용할 수 있도록 함
-	        const self = this;
-
-	        $.ajax({
-	            url: 'http://localhost/academy/restapi/removeReservationEmployee',
-	            type: 'GET',
-				data: {
-			       employeeNo 
-			    },
-	            success: function(response) {
-	                console.log("삭제 성공");
-	                // UI에서 해당 사원 항목 제거
-	                $(self).closest('.selectedEmployee-box').remove();
-	            },
-	            error: function(xhr, status, error) {
-	                console.error('Error:', error);
-	            }
-	        });
-	    }
-	
+		// 현재 클릭한 삭제 버튼의 부모 요소 (.d-flex)를 제거
+	    $(this).closest('.selectedEmployee-box').remove();
 	});
 });	
 

@@ -23,9 +23,16 @@ public class ReservationService {
 	
 	// 박시현 : 예약 취소
 	public Integer removeReservation(Integer reservationNo) {
-		return reservationMapper.deleteReservation(reservationNo);
+	    // 예약 삭제
+	    Integer row = reservationMapper.deleteReservation(reservationNo);
+	    
+	    if(row > 0) {
+	        // 예약 직원 삭제 (삭제된 직원 번호 반환)
+	        reservationMapper.deleteReservationEmployee(reservationNo);
+	        
+	    }
+	    return row;
 	}
-	
 	// 박시현 : 예약 참여자 삭제
 	public Integer removeReservationEmployee(Integer employeeNo) {
 		return reservationMapper.deleteReservationEmployee(employeeNo);

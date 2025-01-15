@@ -11,7 +11,9 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,6 +29,11 @@ public class ReservationRestController {
 	@Autowired ReservationService reservationService;
 	
 	// 박시현 : 수정페이지 - 추가 버튼 클릭 시 테이블에서 참여자 추가
+	@PostMapping("/restapi/addReservationEmployee")
+	public ResponseEntity<String> addReservationEmployee(@RequestBody ReservationEmployeeDTO reservationEmloyeeDTO) {
+	    reservationService.modifyReservationEmployee(reservationEmloyeeDTO);
+	    return ResponseEntity.ok("success");
+	}
 	
 	// 박시현 : 수정페이지 - 삭제 버튼 클릭시 테이블에서 참여자 삭제
 	@GetMapping("/restapi/removeReservationEmployee")
@@ -41,7 +48,7 @@ public class ReservationRestController {
 		List<ReservationEmployeeDTO> employees = reservationService.getReservationEmployee(reservationNo);
         
         if (employees.isEmpty()) {
-            return ResponseEntity.noContent().build(); // 참여자가 없으면 204 No Content 반환
+            return ResponseEntity.noContent().build(); 
         }
         
         return ResponseEntity.ok(employees);
