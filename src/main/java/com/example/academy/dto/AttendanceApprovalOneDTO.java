@@ -25,6 +25,8 @@ public class AttendanceApprovalOneDTO {
 	    private Integer approvalEmployeeNo;	// PK 결재자 번호
 	    private Integer approver;	// FK 결재자(employee_no)
 	    private Integer approvalLevel;	// 결재자 결재순위
+	    private String approvalEmployeeStatusCode; // 결재자 결재상태코드
+	    private String approvalEmployeeStatus; // 결재자 결재상태
 	    private String employeeDepartmentCode;	// 부서코드
 	    private String employeeDepartment;	// 부서
 	    

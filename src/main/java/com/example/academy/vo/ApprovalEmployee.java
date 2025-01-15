@@ -10,6 +10,7 @@ public class ApprovalEmployee {
     private Integer lectureApprovalNo;
     private Integer approver;
     private Integer approvalLevel;
+    private String approvalEmployeeStatus;    
     private String createDate;
     private String updateDate;
     

@@ -10,6 +10,8 @@
 			, e.employee_department employeeDepartmentCode
 			, c1.`name` employeeDepartment
 			, ae.approval_level approvalLevel
+			, ae.approval_employee_status approvalEmployeeStatusCode
+			, c2.`name` approvalEmployeeStatus
 			, f.file_name fileName
 			, f.file_ext fileExt
 		FROM approval_employee ae LEFT OUTER JOIN employee e
