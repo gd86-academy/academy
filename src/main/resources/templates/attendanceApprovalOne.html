@@ -131,35 +131,69 @@
 							<div style="flex-grow: 1; display: flex; justify-content: flex-end;">
 								<table id = "peoples" style="table-layout: fixed; width: 60%; height:65px; border: 1px solid #f0f0f0;">
 							        <tbody>
-							        	<!-- 1행 : 결재자 부서 + 이름 출력 -->
-							            <tr class="border-dark-dark-light" style="height: 30px;">
-							                <td class="bg-[#f4f4f4] lecutre-title-align" style="padding: 5px 10px;" 
-										        th:each="approver : ${approvers}">
-										        <span th:text="${approver.employeeDepartment} +' '+${approver.employeeName}"></span>
-										    </td>
-										    
+										<!-- 1행 : 결재자 부서 + 이름 출력 -->
+										<tr class="border-dark-dark-light" style="height: 30px;">
+											<td class="bg-[#f4f4f4] lecutre-title-align" style="padding: 5px 10px;">
+												<div th:each="approver : ${approvers}">
+													<span th:if="${approver.approvalLevel == 1}" 
+													th:text="${approver.employeeDepartment} + ' ' +${approver.employeeName}"></span>
+												</div>												
+											</td>
+											<td class="bg-[#f4f4f4] lecutre-title-align" style="padding: 5px 10px;">
+												<div th:each="approver : ${approvers}">
+													<span th:if="${approver.approvalLevel == 2}" 
+													th:text="${approver.employeeDepartment} + ' ' +${approver.employeeName}"></span>
+												</div>												
+											</td>
+											<td class="bg-[#f4f4f4] lecutre-title-align" style="padding: 5px 10px;">
+												<div th:each="approver : ${approvers}">
+													<span th:if="${approver.approvalLevel == 3}" 
+													th:text="${approver.employeeDepartment} + ' ' +${approver.employeeName}"></span>
+												</div>												
+											</td>			
 										</tr> 
-										
-										
 										<!-- 2행 : 도장사진 및 대기 출력 -->
-										<!--  수정하기********* -->
+										<!-- 구현중 /........미완성 -->
 										<tr style="height: 50px;">
+											<!-- 1열 : 결재단계1 -->
 							                <td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0;">
-							                	<div class="flex">
-							                		<div id="people1"></div>
-							                	</div>
-							                </td>
+												<div th:each="approver : ${approvers}">
+													<!-- 신청서 step이 1이면 '대기'출력 -->
+													<div th:if="${step == 1  && approver.approvalLevel == 1}">
+														<div class="flex justify-center items-center">
+									                		<span style="color: gray;">대기</span>
+									                	</div>
+													</div>
+													<!-- 신청서 step이 2이고, 결재자1이 승인한 상태면 -->
+													<div th:if="${step == 2  && approver.approvalLevel == 1}">
+														<div class="flex justify-center items-center">
+									                		<img th:src="@{/upload/{fileName}.{fileExt}(fileName=${approver.fileName}, fileExt=${approver.fileExt})}" 
+												                		 style="width: 50px; height: 50px; object-fit: cover;"/>	
+									                	</div>
+													</div>
+													
+													<!-- 신청서 step이 2이고, 결재자1이 반려한 상태면 -->
+												</div>												
+											</td>	
+											<!-- 2열 : 결재단계2 -->
 							                <td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0;">
-							                	<div class="flex">
-							                		<div id="people2"></div>
-							                	</div>
-							                </td>
+												<div th:each="approver : ${approvers}">
+													<div class="flex justify-center items-center" th:if="${approver.approvalLevel == 2}">
+								                		<img th:src="@{/upload/{fileName}.{fileExt}(fileName=${approver.fileName}, fileExt=${approver.fileExt})}" 
+											                		 style="width: 50px; height: 50px; object-fit: cover;"/>	
+								                	</div>
+												</div>												
+											</td>	
 							                <td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0;">
-							                	<div class="flex">
-							                		<div id="people3"></div>
-							                	</div>
-							                </td>
+												<div th:each="approver : ${approvers}">
+													<div class="flex justify-center items-center" th:if="${approver.approvalLevel == 3}">
+								                		<img th:src="@{/upload/{fileName}.{fileExt}(fileName=${approver.fileName}, fileExt=${approver.fileExt})}" 
+											                		 style="width: 50px; height: 50px; object-fit: cover;"/>	
+								                	</div>
+												</div>												
+											</td>	
 							            </tr>	
+							            
 							            <!-- 3행 -->
 							            <tr>
 							            	<td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0; padding: 5px 10px;">1</td>
@@ -278,14 +312,14 @@
 							            <tr class="border-dark-dark-light ">
 							                <td class="bg-[#f4f4f4] lecutre-title-align">결재제목</td>
 							                <td colspan="3">
-							                	<input id="attendanceApprovalTitle" name="attendanceApprovalTitle" 
+							                	<input id="attendanceApprovalTitle" name="attendanceApprovalTitle"  style="pointer-events: none;"
 							                		type="text" class="form-input" placeholder="결재제목" th:value="${attendanceApproval.attendanceApprovalTitle}">
 							                </td>				                
 							            </tr>
 							            <tr class="border-dark-dark-light ">
 							                <td class="bg-[#f4f4f4] lecutre-title-align">결재내용</td>
 							                <td colspan="3">
-							                	<textarea id="attendanceApprovalContent" name="attendanceApprovalContent" 
+							                	<textarea id="attendanceApprovalContent" name="attendanceApprovalContent"  style="pointer-events: none;"
 							                			rows="15" cols="205" class="custom-textarea w-full" placeholder="결재내용을 입력해주세요."
 							                			th:text="${attendanceApproval.attendanceApprovalContent}"></textarea>
 							                </td>				                
@@ -308,6 +342,16 @@
 							<!-- 첨부파일 -->
 							
 							
+							<!-- 버튼 --> 
+							<div class="mt-8 flex items-center justify-end">
+	                           <button id="" type="button" class="btn btn-dark" style="width:130px;">
+	                               수정
+	                           </button>
+	                           <button id="addBtn" type="button" class="btn btn-danger ltr:ml-4 rtl:mr-4" style="width:130px;">
+	                           		삭제
+	                           </button>
+	                       </div>
+							
                        </div>
 					</div>
 					
@@ -320,7 +364,7 @@
 		
 
 		
-	   <script th:src="@{/customjs/addAttendanceApproval.js}"> </script>
+	   <script th:src="@{/customjs/attendanceApprovalOne.js}"> </script>
 		
 		
 	</body>

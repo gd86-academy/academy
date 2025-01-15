@@ -33,6 +33,8 @@ public class AttendanceApprovalController {
 		// 1) 근태신청서 테이블 상세
 		AttendanceApprovalOneDTO attendanceApproval = attendanceApprovalService.getAttendanceApprovalOne(attendanceApprovalNo);
 		model.addAttribute("attendanceApproval", attendanceApproval);
+		// 근태신청서 현재 결재단계
+		model.addAttribute("step",attendanceApproval.getAttendanceApprovalStep());
 		log.debug("근태신청서 상세 : " + attendanceApproval);	//디버깅
 		log.debug("==============attendanceApprovalNo2 : " + attendanceApprovalNo);	//디버깅
 		// 2) 결재자 목록
