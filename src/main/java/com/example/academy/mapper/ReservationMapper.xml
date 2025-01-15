@@ -41,14 +41,13 @@
 	</update>
 	
 	<!-- 박시현 : 예약 참여자 수정 -->
-	<!--
 	<update id="updateReservationEmployee" parameterType="com.example.academy.dto.ReservationEmployeeDTO">
 		UPDATE reservation_employee re
 	    SET re.employee_no = #{employeeNo}                
 	    WHERE re.reservation_no = #{reservationNo} 
 	    AND re.employee_no = #{employeeNo} 
 	</update>
- 	-->
+	
 	<!-- 박시현 : 예약번호 별 상세정보 -->
 	<select id="selectReservationOne" parameterType="Integer" resultType="com.example.academy.dto.ReservationListDTO">
 		SELECT
@@ -76,7 +75,7 @@
 
 	<!-- 박시현 : 회의 참여자 추가 -->
 	<insert id="insertReservationByEmployee" parameterType="com.example.academy.dto.ReservationEmployeeDTO">
-	    INSERT INTO reservation_employee (
+	    INSERT IGNORE INTO reservation_employee (
 	        reservation_no,
 	        employee_no
 	    ) VALUES (

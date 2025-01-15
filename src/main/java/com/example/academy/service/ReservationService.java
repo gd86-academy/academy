@@ -33,19 +33,10 @@ public class ReservationService {
 	    }
 	    return row;
 	}
-	// 박시현 : 예약 참여자 삭제
-	public Integer removeReservationEmployee(Integer employeeNo) {
-		return reservationMapper.deleteReservationEmployee(employeeNo);
-	}
 	
 	// 박시현 : 수정페이지 - 예약참여자 조회
 	public List<ReservationEmployeeDTO> getReservationEmployee(Integer reservationNo) {
 		return reservationMapper.selectReservationEmployees(reservationNo);
-	}
-	
-	// 박시현 : 수정페이지 - 참여자 추가
-	public Integer modifyReservationEmployee(ReservationEmployeeDTO reservationEmployeeDTO) {
-		return reservationMapper.updateReservationEmployee(reservationEmployeeDTO);
 	}
 	
 	// 박시현 : 예약 수정
@@ -53,7 +44,7 @@ public class ReservationService {
 		Integer row = reservationMapper.updateReservation(reservationListDTO);
 		
 		if (row > 0) {
-            Integer reservationNo = reservationListDTO.getReservationNo();// 생성된 예약 번호
+			Integer reservationNo = reservationListDTO.getReservationNo(); // 생성된 예약 번gh
             
             // 예약 참여자 삽입
             for (ReservationEmployeeDTO employee : reservationListDTO.getReservationEmployees()) {
