@@ -144,87 +144,87 @@ document.addEventListener('alpine:init', () => {
 	
 	// 현재 시간 출력
 	Alpine.data('contacts2', () => ({
-	        currentTime: '', // 현재 시간을 저장할 데이터
+        currentTime: '', // 현재 시간을 저장할 데이터
 
-	        init() {
-	            // 컴포넌트 초기화 시 실시간 시간 업데이트 시작
-	            this.updateTime();
-	            setInterval(() => this.updateTime(), 1000); // 1초마다 업데이트
-	        },
+        init() {
+            // 컴포넌트 초기화 시 실시간 시간 업데이트 시작
+            this.updateTime();
+            setInterval(() => this.updateTime(), 1000); // 1초마다 업데이트
+        },
 
-	        updateTime() {
-	            const now = new Date();
-	            let hours = now.getHours();
-	            let minutes = now.getMinutes();
-	            let seconds = now.getSeconds();
+        updateTime() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            let seconds = now.getSeconds();
 
-	            if (hours < 10) {
-	                hours = '0' + hours;
-	            }
-	            if (minutes < 10) {
-	                minutes = '0' + minutes;
-	            }
-	            if (seconds < 10) {
-	                seconds = '0' + seconds;
-	            }
+            if (hours < 10) {
+                hours = '0' + hours;
+            }
+            if (minutes < 10) {
+                minutes = '0' + minutes;
+            }
+            if (seconds < 10) {
+                seconds = '0' + seconds;
+            }
 
-	            this.currentTime = `${hours}:${minutes}:${seconds}`; // 시간 데이터 업데이트
-	        }
-	    }));
+            this.currentTime = `${hours}:${minutes}:${seconds}`; // 시간 데이터 업데이트
+        }
+    }));
 		
 	
+	// 연차 통계 차트
 	Alpine.data('analytics', () => ({
-		init() {
-			// statistics
-            setTimeout(() => {
-                // followers
-                this.followers = new ApexCharts(this.$refs.followers, this.followersOptions);
-                this.followers.render();
-            }, 300);
-		},
-		
-	   get followersOptions() {
-           return {
-               series: [
-                   {
-                       data: [38, 60, 38, 52, 36, 40],
-                   },
-               ],
-               chart: {
-                   height: 160,
-                   type: 'area',
-                   fontFamily: 'Nunito, sans-serif',
-                   sparkline: {
-                       enabled: true,
-                   },
-               },
-               stroke: {
-                   curve: 'smooth',
-                   width: 2,
-               },
-               colors: ['#4361ee'],
-               grid: {
-                   padding: {
-                       top: 5,
-                   },
-               },
-               yaxis: {
-                   show: false,
-               },
-               tooltip: {
-                   x: {
-                       show: false,
-                   },
-                   y: {
-                       title: {
-                           formatter: (formatter = () => {
-                               return '';
-                           }),
-                       },
-                   },
-               },
-           };
-       },
+	    init() {
+	        setTimeout(() => {
+	            // followers
+	            this.followers = new ApexCharts(this.$refs.followers, this.followersOptions);
+	            this.followers.render();
+	        }, 300);
+	    },
+
+	    get followersOptions() {
+	        return {
+	            series: [
+	                {
+	                    data: totalWorkTimeList,  // 서버에서 받은 연차 데이터 사용
+	                },
+	            ],
+	            chart: {
+	                height: 160,
+	                type: 'area',
+	                fontFamily: 'Nunito, sans-serif',
+	                sparkline: {
+	                    enabled: true,
+	                },
+	            },
+	            stroke: {
+	                curve: 'smooth',
+	                width: 2,
+	            },
+	            colors: ['#4361ee'],
+	            grid: {
+	                padding: {
+	                    top: 5,
+	                },
+	            },
+	            yaxis: {
+	                show: false,
+	            },
+	            tooltip: {
+	                x: {
+	                    show: false,
+	                },
+	                y: {
+	                    title: {
+	                        formatter: (formatter = () => {
+	                            return '';
+	                        }),
+	                    },
+	                },
+	            },
+	        };
+	    },
 	}));
 });
 

@@ -1,5 +1,22 @@
 package com.example.academy.mapper;
 
+import java.util.List;
+
+import org.apache.ibatis.annotations.Mapper;
+
+import com.example.academy.dto.AttendanceContentDTO;
+import com.example.academy.dto.AttendanceListDTO;
+
+@Mapper
 public interface AttendanceMapper {
 
+	// 최근 6개월 월별 근무시간 총합 조회
+	List<Integer> selectWorkTimeByMonth(Integer employeeNo);
+	
+	// 당일 월 지각, 조퇴, 결근 횟수 조회
+	AttendanceContentDTO selectAttendanceContent(Integer employeeNo);
+	
+	// 출근 관리 리스트 조회
+	List<AttendanceListDTO> selectAttendanceList(AttendanceListDTO attendanceListDTO);
+	
 }

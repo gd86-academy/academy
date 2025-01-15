@@ -104,7 +104,7 @@
 	</select>
 	
 	<!-- 월별 연차리스트 -->
-	<select id="selectAnnualLeave" parameterType="String"
+	<select id="selectAnnualLeave" parameterType="com.example.academy.dto.AnnualLeaveListDTO"
 								   resultType="com.example.academy.dto.AnnualLeaveListDTO">
 		SELECT
 		    ap.attendance_approval_no approvalNo,
@@ -118,6 +118,7 @@
 		INNER JOIN common name ON name.`code` = ap.attendance_approval_type
 		INNER JOIN common status ON status.`code` = ap.attendance_approval_status
 		WHERE ap.use_yn = 1
+			AND ap.employee_no = #{employeeNo}
 		    AND DATE_FORMAT(ap.attendance_approval_begindate, '%Y-%m') = #{month}
 		    AND status.name = '승인'
 		    AND (name.name = '연차' OR name.name = '반차')
