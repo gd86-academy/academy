@@ -38,9 +38,35 @@ public class LectureApprovalController {
 	@Autowired ClassroomService classroomService;
 	@Autowired LectureApprovalService lectureApprovalService;
 	
-	// 진수우 : 강의결재 상세페이지 호출.
-	@GetMapping("/lectureApprovalOne")
-	public String lectureApprovalOne(Model model, Integer lectureApprovalNo) {
+	// 진수우 : 강의결재 수정페이지 호출.
+	@GetMapping("/modifyLectureApproval")
+	public String modifyLectureApproval(Model model, Integer lectureApprovalNo) {
+		// 스프링시큐리티에서 계정정보 가져오기.
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		// 로그인 상태일 때만 model에 정보담기.
+	    if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+	        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+	        model.addAttribute("userNo", Integer.parseInt(userDetails.getUsername()));
+	        model.addAttribute("userName", userDetails.getUserRealName());
+	        model.addAttribute("userMail", userDetails.getUserMail());
+	        model.addAttribute("userRole", userDetails.getUserRole());
+	        model.addAttribute("userPhotoFileName", userDetails.getUserPhotoFileName());
+	        model.addAttribute("userPhotoFileExt", userDetails.getUserPhotoFileExt());
+	    }
+	    
+	    // 1) 강의 요일 조회(셀렉박스)
+  		List<Common> commonWeekday = commonService.getWeekday();
+  		model.addAttribute("commonWeekday", commonWeekday);
+  		
+  		// 2) 강의 시간 조회(셀렉박스)
+  		List<Common> commonTime = commonService.getTime();
+  		model.addAttribute("commonTime", commonTime);
+  		
+  		// 3) 강의실 조회(셀렉박스)
+  		List<ClassroomListDTO> classroomList = classroomService.getClassroomList();
+ 	 	model.addAttribute("classroomList", classroomList);
+	 	 	
 		// 강의결재 테이블에서 데이터 가져오기.
 		LectureApprovalOneDTO lectureApprovalOne = lectureApprovalService.getLectureApprovalOne(lectureApprovalNo);
 		model.addAttribute("lectureApprovalOne", lectureApprovalOne);
@@ -52,7 +78,42 @@ public class LectureApprovalController {
 		// 파일 테이블에서 데이터 가져오기.
 		List<Files> lectureApprovalFile = lectureApprovalService.getLectureApprovalFile(lectureApprovalNo);
 		model.addAttribute("lectureApprovalFile", lectureApprovalFile);
-		log.debug("result -------------------" + lectureApprovalFile);
+		
+		// 결재자 테이블에서 데이터 가져오기.
+		List<LectureApprovalEmployeeListDTO> lectureApprovalEmployee = lectureApprovalService.getLectureApprovalEmployee(lectureApprovalNo);
+		model.addAttribute("lectureApprovalEmployee", lectureApprovalEmployee);
+		
+		return "modifyLectureApproval";
+	}
+	
+	// 진수우 : 강의결재 상세페이지 호출.
+	@GetMapping("/lectureApprovalOne")
+	public String lectureApprovalOne(Model model, Integer lectureApprovalNo) {
+		// 스프링시큐리티에서 계정정보 가져오기.
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		// 로그인 상태일 때만 model에 정보담기.
+	    if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+	        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+	        model.addAttribute("userNo", Integer.parseInt(userDetails.getUsername()));
+	        model.addAttribute("userName", userDetails.getUserRealName());
+	        model.addAttribute("userMail", userDetails.getUserMail());
+	        model.addAttribute("userRole", userDetails.getUserRole());
+	        model.addAttribute("userPhotoFileName", userDetails.getUserPhotoFileName());
+	        model.addAttribute("userPhotoFileExt", userDetails.getUserPhotoFileExt());
+	    }
+	    
+		// 강의결재 테이블에서 데이터 가져오기.
+		LectureApprovalOneDTO lectureApprovalOne = lectureApprovalService.getLectureApprovalOne(lectureApprovalNo);
+		model.addAttribute("lectureApprovalOne", lectureApprovalOne);
+		
+		// 강의결재요일 테이블에서 데이터 가져오기.
+		List<LectureApprovalWeekdayListDTO> lectureApprovalWeekday = lectureApprovalService.getLectureApprovalWeekday(lectureApprovalNo);
+		model.addAttribute("lectureApprovalWeekday", lectureApprovalWeekday);
+		
+		// 파일 테이블에서 데이터 가져오기.
+		List<Files> lectureApprovalFile = lectureApprovalService.getLectureApprovalFile(lectureApprovalNo);
+		model.addAttribute("lectureApprovalFile", lectureApprovalFile);
 		
 		// 결재자 테이블에서 데이터 가져오기.
 		List<LectureApprovalEmployeeListDTO> lectureApprovalEmployee = lectureApprovalService.getLectureApprovalEmployee(lectureApprovalNo);

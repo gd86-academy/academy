@@ -8,6 +8,7 @@
 			ae.approval_employee_no approvalEmployee
 			, ae.lecture_approval_no lectureApprovalNo
 			, e.employee_name approver
+			, ae.approver approverNo
 			, ae.approval_level approvalLevel
 		FROM approval_employee ae
 		LEFT OUTER JOIN employee e ON ae.approver = e.employee_no

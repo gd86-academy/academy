@@ -133,7 +133,11 @@ const closeModalAddPeople = () => {
 };
 
 if (closeModalButtonAddPeople) closeModalButtonAddPeople.addEventListener('click', closeModalAddPeople); // 닫기 버튼 클릭 시
+
+
+// 확정버튼을 누를 시 
 if (applyModalButtonAddPeople) applyModalButtonAddPeople.addEventListener('click', () => {
+
 	// 해당 id를 가진 요소를 찾음
 	var element = document.getElementById('inputContainer');
 	if (element) {
@@ -147,12 +151,20 @@ if (applyModalButtonAddPeople) applyModalButtonAddPeople.addEventListener('click
 				console.log(inputs.length);
 				let html = `
 		            <div class="flex w-full mb-1">
-		                <input class="text-center w-full" value="${input.value}"></input>
+		                <input class="text-center w-full" value="${input.value}" disabled></input>
 		            </div>
 		        `;
 				
 				
-				if (inputs.length == 1) { // 값이 1개라면
+				
+				if (inputs.length == 0) {
+					
+					$('#people1 .flex').remove();
+					$('#people2 .flex').remove();
+					$('#people3 .flex').remove();
+				} else if (inputs.length == 1) { // 값이 1개라면
+					// cnfrk
+					$('#alreadyPeople').remove(); // 숨김 처리
 					$('#people1 .flex').remove();
 					$('#people1').append(html);  // HTML 추가
 					$('#people2 .flex').remove();
@@ -485,6 +497,7 @@ $('#btnAddTime').click(function () {
 		$(`#${backendTimeId}`).prop('disabled', true);
 		
 		$('#classroomList').change(function () {
+			$('#alreadyLectureTime').attr('hidden', true); // 숨김 처리
 			$(`#${weekdayId}`).prop('selectedIndex', 0);
 			$(`#${beginTimeId}`).prop('selectedIndex', 0);
 			$(`#${endTimeId}`).prop('selectedIndex', 0);
@@ -495,6 +508,7 @@ $('#btnAddTime').click(function () {
 			$('#beginTimeId0').prop('disabled', false);
 			$('#beginTimeId0 option:not(:first)').remove();
 			$('#endTimeId0 option:not(:first)').remove();
+								
 			
 			// timeResult 값만큼 반복적으로 항목 삭제
 			while (timeResult > 0) {
@@ -561,17 +575,17 @@ $('#btnAddTime').click(function () {
             <tr id="weekday${timeResult}">
                 <td class="bg-[#f4f4f4] lecutre-title-align"></td>
                 <td>
-                    <select id="${weekdayId}" class="form-select weekday-select" name="lectureWeekday[${timeResult}].weekdayCode">
+                    <select id="${weekdayId}" class="form-select weekday-select form-input disabled:pointer-events-none disabled:bg-[#eee] dark:disabled:bg-[#1b2e4b] cursor-not-allowed" name="lectureWeekday[${timeResult}].weekdayCode">
                         <option value="" disabled selected>요일</option>
                     </select>
                 </td>
                 <td colspan="2">
                     <div class="flex justify-between">
-                        <select id="${beginTimeId}" class="form-select mr-3 " name="lectureWeekday[${timeResult}].beginTimeCode" onchange="disableSelectedOption()">
+                        <select id="${beginTimeId}" class=" mr-3 form-input disabled:pointer-events-none disabled:bg-[#eee] dark:disabled:bg-[#1b2e4b] cursor-not-allowed" name="lectureWeekday[${timeResult}].beginTimeCode" onchange="disableSelectedOption()">
                             <option value="" disabled selected>시작시간</option>
                         </select>
                         <div>~</div>
-                        <select id="${endTimeId}" class="form-select ml-3 " name="lectureWeekday[${timeResult}].endTimeCode" disabled>
+                        <select id="${endTimeId}" class=" ml-3 form-input disabled:pointer-events-none disabled:bg-[#eee] dark:disabled:bg-[#1b2e4b] cursor-not-allowed" name="lectureWeekday[${timeResult}].endTimeCode" disabled>
                             <option value="" disabled selected>종료시간</option>
                         </select>
                     </div>
@@ -806,7 +820,10 @@ $.ajax({
 			});
 
 			// "추가" 버튼 클릭 이벤트 처리
-			var approvalPeopleResult = 0;
+			var element = document.getElementById('inputContainer');
+			var inputs = element.querySelectorAll('input:not([type="hidden"])');
+			var approvalPeopleResult = inputs.length;
+			console.log('approvalPeopleResult : ' + approvalPeopleResult);
 			$('#addEmployeeListButton').click(function() {
 			    if (selectedNode && selectedNode.text) { // selectedNode가 정의되고 text가 존재하는지 확인.
 			        var approvalPeoplesId = 'approvalPeoples' + approvalPeopleResult;
@@ -817,6 +834,7 @@ $.ajax({
 			                <button id="${approvalRemoveBtnId}" type="button" class="btn btn-danger ltr:rounded-l-none rtl:rounded-r-none" style="width: 80px;">삭제</button>
 			            </div>
 			        `;
+					
 					
 					if (approvalPeopleResult < 3) {
 						// 중복 여부 확인
@@ -894,9 +912,13 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
-let result = 0;  // 전역 변수로 result 선언
+var element = document.getElementById('fileCount');
+var inputs = element.querySelectorAll('input:not([type="hidden"])');
+let result = inputs.length;  // 전역 변수로 result 선언
+
 // 첨부파일 폼 추가버튼 클릭 시
 $('#btnAddFile').click(function(){
+	console.log('result 값 : ' + result);
 	// 마지막 파일 입력필드가 비어있다면
 	if ($('#fileDiv input[type="file"]').last().val() === '') {
 		modalBackgroundAddFileError.classList.toggle('hidden', false);
@@ -909,7 +931,7 @@ $('#btnAddFile').click(function(){
 		let removeButtonId = 'removeFileBtn' + result;	// 고유한 removeButtonId 생성 (휴지통 버튼)
 		
 		let html = `
-			<div class="flex mt-1" id = "fileField${result}">
+			<div class="flex mt-1 w-full" id = "fileField${result}">
 	       		<!-- 커스텀 버튼 -->
 	           <button 
 	               type="button" 
@@ -1030,3 +1052,47 @@ function disableSelectedOption() {
 	    previousValue = optionText;
 	}
 }
+
+// 강의수정페이지에서 강의시간 재선택 버튼을 누르면 기존 강의시간 숨김처리 후 새로운 입력창 출력.
+$('#modifyLectureTime').click(function () {
+    $('#alreadyLectureTime').remove();; // 숨김 처리
+    $('#newLectureTime').removeAttr('hidden');     // 숨김 해제
+});
+
+// 강의수정페이지에서 강의날짜 항목을 하나라도 변경하면 기존 강의시간 숨김처리 후 새로운 입력창 출력.
+$(document).on('change', '#classroomList', function () {
+	$('#alreadyLectureTime').remove();; // 숨김 처리
+	$('#weekdayId0').prop('selectedIndex', 0);
+	$('#beginTimeId0').prop('selectedIndex', 0);
+	$('#endTimeId0').prop('selectedIndex', 0);
+	$('#weekdayId0').prop('disabled', false);
+	$('#beginTimeId0').prop('disabled', false);
+	$('#endTimeId0').prop('disabled', true);
+	$('#beginTimeId0 option:not(:first)').remove();
+	$('#endTimeId0 option:not(:first)').remove();
+	$('#newLectureTime').removeAttr('hidden');     // 숨김 해제
+});
+$(document).on('change', '#beginDate', function () {
+	$('#alreadyLectureTime').remove();; // 숨김 처리
+	$('#weekdayId0').prop('selectedIndex', 0);
+	$('#beginTimeId0').prop('selectedIndex', 0);
+	$('#endTimeId0').prop('selectedIndex', 0);
+	$('#weekdayId0').prop('disabled', false);
+	$('#beginTimeId0').prop('disabled', false);
+	$('#endTimeId0').prop('disabled', true);
+	$('#beginTimeId0 option:not(:first)').remove();
+	$('#endTimeId0 option:not(:first)').remove();
+	$('#newLectureTime').removeAttr('hidden');     // 숨김 해제
+});
+$(document).on('change', '#endDate', function () {
+	$('#alreadyLectureTime').remove();; // 숨김 처리
+	$('#weekdayId0').prop('selectedIndex', 0);
+	$('#beginTimeId0').prop('selectedIndex', 0);
+	$('#endTimeId0').prop('selectedIndex', 0);
+	$('#weekdayId0').prop('disabled', false);
+	$('#beginTimeId0').prop('disabled', false);
+	$('#endTimeId0').prop('disabled', true);
+	$('#beginTimeId0 option:not(:first)').remove();
+	$('#endTimeId0 option:not(:first)').remove();
+	$('#newLectureTime').removeAttr('hidden');     // 숨김 해제
+});

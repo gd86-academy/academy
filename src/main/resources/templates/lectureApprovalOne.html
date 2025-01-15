@@ -143,21 +143,21 @@
 							                <td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0;">
 						                		<div th:each="employee : ${lectureApprovalEmployee}">
 						                			<div th:if="${employee.approvalLevel == 1}">
-						                				<span th:text="${employee.approver}"></span>
+						                				<input class="text-center w-full" th:value="${employee.approver}"></input>
 						                			</div>
 						                		</div>
 							                </td>
 							                <td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0;">
 						                		<div th:each="employee : ${lectureApprovalEmployee}">
 						                			<div th:if="${employee.approvalLevel == 2}">
-						                				<span th:text="${employee.approver}"></span>
+						                				<input class="text-center w-full" th:value="${employee.approver}"></input>
 						                			</div>
 						                		</div>
 							                </td>
 							                <td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0;">
 						                		<div th:each="employee : ${lectureApprovalEmployee}">
 						                			<div th:if="${employee.approvalLevel == 3}">
-						                				<span th:text="${employee.approver}"></span>
+						                				<input class="text-center w-full" th:value="${employee.approver}"></input>
 						                			</div>
 						                		</div>
 							                </td>
@@ -348,12 +348,12 @@
 						</div>
 						<!-- 버튼 --> 
 						<div class="mt-8 flex items-center justify-end">
-                           <button id="" type="button" class="btn btn-dark" style="width:130px;">
+                           <a id="" type="button" class="btn btn-dark" style="width:130px;" th:href="@{/modifyLectureApproval(lectureApprovalNo=${lectureApprovalOne.lectureApprovalNo})}">
                                수정
-                           </button>
-                           <button id="addBtn" type="button" class="btn btn-danger ltr:ml-4 rtl:mr-4" style="width:130px;">
+                           </a>
+                           <a id="addBtn" type="button" class="btn btn-danger ltr:ml-4 rtl:mr-4" style="width:130px;">
                            		삭제
-                           </button>
+                           </a>
                        </div>
                     </div>
                       
@@ -365,262 +365,6 @@
 					
 				</div> <!-- 메인화면 div 끝 -->
 			</div>
-		
-		<!-- 5개 강의시간추가시 경고 모달 -->
-        <div class="modal">
-		  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundAddOver">
-		       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperAddOver">
-		           <div
-		               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
-		               id="modal"
-		           >
-		               <button
-		                   type="button"
-		                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
-		                   id="closeModalButtonAddOver"
-		               >
-		                   <svg
-		                       xmlns="http://www.w3.org/2000/svg"
-		                       width="24px"
-		                       height="24px"
-		                       viewBox="0 0 24 24"
-		                       fill="none"
-		                       stroke="currentColor"
-		                       stroke-width="1.5"
-		                       stroke-linecap="round"
-		                       stroke-linejoin="round"
-		                       class="h-6 w-6"
-		                   >
-		                       <line x1="18" y1="6" x2="6" y2="18"></line>
-		                       <line x1="6" y1="6" x2="18" y2="18"></line>
-		                   </svg>
-		               </button>
-		               <h3
-		                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
-		               >
-		                   안내
-		               </h3>
-		               <div class="p-5">
-		                   입력가능한 개수를 초과했습니다.
-		                   <div class="mt-8 flex items-center justify-end">
-	                          <button
-	                          	  id="employeeBtnAddOver"
-	                              type="button"
-	                              class="btn btn-primary ltr:ml-4 rtl:mr-4"
-	                          >
-	                              확인
-	                          </button>
-	                      </div>
-		               </div>
-		           </div>
-		       </div>
-		   </div>
-		</div>
-		
-		<!-- 이미 존재하는 사원추가 시 경고 모달 -->
-        <div class="modal">
-		  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundAddExist">
-		       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperAddExist">
-		           <div
-		               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
-		               id="modal"
-		           >
-		               <button
-		                   type="button"
-		                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
-		                   id="closeModalButtonAddExist"
-		               >
-		                   <svg
-		                       xmlns="http://www.w3.org/2000/svg"
-		                       width="24px"
-		                       height="24px"
-		                       viewBox="0 0 24 24"
-		                       fill="none"
-		                       stroke="currentColor"
-		                       stroke-width="1.5"
-		                       stroke-linecap="round"
-		                       stroke-linejoin="round"
-		                       class="h-6 w-6"
-		                   >
-		                       <line x1="18" y1="6" x2="6" y2="18"></line>
-		                       <line x1="6" y1="6" x2="18" y2="18"></line>
-		                   </svg>
-		               </button>
-		               <h3
-		                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
-		               >
-		                   안내
-		               </h3>
-		               <div class="p-5">
-		                   이미 추가된 사원입니다.
-		                   <div class="mt-8 flex items-center justify-end">
-	                          <button
-	                          	  id="employeeBtnAddExist"
-	                              type="button"
-	                              class="btn btn-primary ltr:ml-4 rtl:mr-4"
-	                          >
-	                              확인
-	                          </button>
-	                      </div>
-		               </div>
-		           </div>
-		       </div>
-		   </div>
-		</div>
-		
-		<!-- 강의날짜 미입력 경고 모달 -->
-        <div class="modal">
-		  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundNoLectureDate">
-		       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperNoLectureDate">
-		           <div
-		               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
-		               id="modal"
-		           >
-		               <button
-		                   type="button"
-		                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
-		                   id="closeModalButtonNoLectureDate"
-		               >
-		                   <svg
-		                       xmlns="http://www.w3.org/2000/svg"
-		                       width="24px"
-		                       height="24px"
-		                       viewBox="0 0 24 24"
-		                       fill="none"
-		                       stroke="currentColor"
-		                       stroke-width="1.5"
-		                       stroke-linecap="round"
-		                       stroke-linejoin="round"
-		                       class="h-6 w-6"
-		                   >
-		                       <line x1="18" y1="6" x2="6" y2="18"></line>
-		                       <line x1="6" y1="6" x2="18" y2="18"></line>
-		                   </svg>
-		               </button>
-		               <h3
-		                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
-		               >
-		                   안내
-		               </h3>
-		               <div class="p-5">
-		                   시작날짜, 종료날짜, 강의실을 먼저 입력해주세요.
-		                   <div class="mt-8 flex items-center justify-end">
-	                          <button
-	                          	  id="employeeBtnNoLectureDate"
-	                              type="button"
-	                              class="btn btn-primary ltr:ml-4 rtl:mr-4"
-	                          >
-	                              확인
-	                          </button>
-	                      </div>
-		               </div>
-		           </div>
-		       </div>
-		   </div>
-		</div>
-		
-		<!-- 유효성검사 경고 모달 -->
-        <div class="modal">
-		  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundSubmitError">
-		       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperSubmitError">
-		           <div
-		               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
-		               id="modal"
-		           >
-		               <button
-		                   type="button"
-		                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
-		                   id="closeModalButtonSubmitError"
-		               >
-		                   <svg
-		                       xmlns="http://www.w3.org/2000/svg"
-		                       width="24px"
-		                       height="24px"
-		                       viewBox="0 0 24 24"
-		                       fill="none"
-		                       stroke="currentColor"
-		                       stroke-width="1.5"
-		                       stroke-linecap="round"
-		                       stroke-linejoin="round"
-		                       class="h-6 w-6"
-		                   >
-		                       <line x1="18" y1="6" x2="6" y2="18"></line>
-		                       <line x1="6" y1="6" x2="18" y2="18"></line>
-		                   </svg>
-		               </button>
-		               <h3
-		                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
-		               >
-		                   안내
-		               </h3>
-		               <div class="p-5">
-		                   입력되지 않은 항목이 있습니다.
-		                   <div class="mt-8 flex items-center justify-end">
-	                          <button
-	                          	  id="employeeBtnSubmitError"
-	                              type="button"
-	                              class="btn btn-primary ltr:ml-4 rtl:mr-4"
-	                          >
-	                              확인
-	                          </button>
-	                      </div>
-		               </div>
-		           </div>
-		       </div>
-		   </div>
-		</div>
-		
-		<!-- 파일을 첨부하지 않고 첨부파일추가 버튼을 누를 때 경고 모달 -->
-        <div class="modal">
-		  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundAddFileError">
-		       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperAddFileError">
-		           <div
-		               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
-		               id="modal"
-		           >
-		               <button
-		                   type="button"
-		                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
-		                   id="closeModalButtonAddFileError"
-		               >
-		                   <svg
-		                       xmlns="http://www.w3.org/2000/svg"
-		                       width="24px"
-		                       height="24px"
-		                       viewBox="0 0 24 24"
-		                       fill="none"
-		                       stroke="currentColor"
-		                       stroke-width="1.5"
-		                       stroke-linecap="round"
-		                       stroke-linejoin="round"
-		                       class="h-6 w-6"
-		                   >
-		                       <line x1="18" y1="6" x2="6" y2="18"></line>
-		                       <line x1="6" y1="6" x2="18" y2="18"></line>
-		                   </svg>
-		               </button>
-		               <h3
-		                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
-		               >
-		                   안내
-		               </h3>
-		               <div class="p-5">
-		                   이전 항목을 입력하고 추가버튼을 눌러주세요.
-		                   <div class="mt-8 flex items-center justify-end">
-	                          <button
-	                          	  id="employeeBtnAddFileError"
-	                              type="button"
-	                              class="btn btn-primary ltr:ml-4 rtl:mr-4"
-	                          >
-	                              확인
-	                          </button>
-	                      </div>
-		               </div>
-		           </div>
-		       </div>
-		   </div>
-		</div>
-		
 	   <script th:src="@{/customjs/addLectureApproval.js}"> </script>
 	   
 	</body>
