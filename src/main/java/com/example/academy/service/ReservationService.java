@@ -53,6 +53,17 @@ public class ReservationService {
             }
         }
 
+		// 예약 유저 삭제기능 (DTO에 컬럼변수 추가해야함)
+		/* html id='selectEmployeesContainer'에 추가해야할거 (스크립트 로직은 추가로 넣어야함)
+			<input type="hidden" id="aaaaaaaaaaaaaaaa" name="deleteUser" value="">
+		 */
+		String[] aa = reservationListDTO.getDeleteUser().split(",");
+		for(var i=0 ; i<aa.length ; i++){
+			reservationMapper.deleteReservationEmployee(Integer.parseInt(aa[i]));
+		}
+
+
+
 	    return row;
 	}
 	
