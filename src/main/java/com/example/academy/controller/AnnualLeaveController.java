@@ -33,13 +33,15 @@ public class AnnualLeaveController {
 	        // 현재 시각을 가져와서 "yyyy-MM" 형식으로 포맷팅
 	        String currentMonth = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM"));
 	        
+	        // 이번 달 연차 개수 조회
 	        Double annualLeaveCount = annualLeaveService.getAnnualLeaveCount(Integer.parseInt(userDetails.getUsername()));     
 	        
+	        // 최근 6개월 간 연차 사용 갯수 총합
 	        List<Double> annualLeaveCountList = annualLeaveService.getAnnualLeaveCountByMonth(Integer.parseInt(userDetails.getUsername()));
 	        
 	        // 모델에 추가	        
-	        model.addAttribute("annualLeaveCountList", annualLeaveCountList);
-	        model.addAttribute("count", annualLeaveCount);
+	        model.addAttribute("annualLeaveCountList", annualLeaveCountList); // 최근 6개월 간 연차 사용 갯수 총합
+	        model.addAttribute("count", annualLeaveCount); // 이번 달 연차 사용 개수
 	        model.addAttribute("employeeNo", Integer.parseInt(userDetails.getUsername()));
 	        model.addAttribute("userName", userDetails.getUserRealName());
 	        model.addAttribute("userMail", userDetails.getUserMail());

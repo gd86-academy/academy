@@ -16,6 +16,6 @@ public interface AnnualLeaveMapper {
 	Double annualLeaveCount(Integer employeeNo);
 	
 	// 월별 연차리스트 조회
-	List<AnnualLeaveListDTO> selectAnnualLeave(String month);
+	List<AnnualLeaveListDTO> selectAnnualLeave(AnnualLeaveListDTO annualLeaveListDTO);
 	
 }

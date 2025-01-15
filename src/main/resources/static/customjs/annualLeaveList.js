@@ -112,32 +112,22 @@ document.addEventListener('alpine:init', () => {
 
 	        // AJAX 요청
 	        $.ajax({
-	            url: 'http://localhost/academy/restapi/attendanceList',
+	            url: 'http://localhost/academy/restapi/annualLeaveList',
 	            type: 'GET',
 	            dataType: 'json',
 	            data: { month }, // 'YYYY-MM' 형식으로 전달
 	            success: (data) => {
-					// 출근 시간, 퇴근 시간을 '00:00:00' 형식으로 변환하는 함수
-		            const formatTime = (time) => {
-		                if (!time) return '00:00:00';
-		                const date = new Date(time);
-		                const hours = String(date.getHours()).padStart(2, '0');
-		                const minutes = String(date.getMinutes()).padStart(2, '0');
-		                const seconds = String(date.getSeconds()).padStart(2, '0');
-		                return `${hours}:${minutes}:${seconds}`;
-		            };
-					
 	                // 테이블 데이터 설정
 	                this.datatable = new simpleDatatables.DataTable('#myTable', {
 	                    data: {
-	                        headings: ['일자', '근무상태', '출근시간', '퇴근시간', '근무시간', '초과시간'],
+	                        headings: ['번호', '시작날짜', '종료날짜', '신청일자', '승인날짜', '신청종류'],
 	                        data: data.map(item => [
-	                            item[0], // 일자
-	                            item[1], // 근무상태
-								formatTime(item[2]), // 출근시간
-		                        formatTime(item[3]), // 퇴근시간
-	                            item[4], // 근무시간
-	                            item[5], // 초과시간								
+	                            item[0], // 번호
+	                            item[1], // 시작날짜
+	                            item[2], // 종료날짜
+	                            item[3], // 신청일자
+	                            item[4], // 승인날짜
+	                            item[5], // 신청종류								
 	                        ])
 	                    },
 	                    searchable: false,
@@ -181,7 +171,6 @@ document.addEventListener('alpine:init', () => {
 	    },
 	}));
 
-	// 연차 통계 차트
 	Alpine.data('analytics', () => ({
 	    init() {
 	        setTimeout(() => {
@@ -195,7 +184,7 @@ document.addEventListener('alpine:init', () => {
 	        return {
 	            series: [
 	                {
-	                    data: totalWorkTimeList,  // 서버에서 받은 연차 데이터 사용
+	                    data: annualLeaveCountList,  // 서버에서 받은 연차 데이터 사용
 	                },
 	            ],
 	            chart: {

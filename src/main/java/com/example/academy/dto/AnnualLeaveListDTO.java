@@ -11,6 +11,9 @@ public class AnnualLeaveListDTO {
     private String createDate;
     private String updateDate;
     private String name;
+    
+    private String month;
+    private Integer employeeNo;
 
     // 데이터를 배열로 반환하는 매서드
     public Object[] toArray() {
