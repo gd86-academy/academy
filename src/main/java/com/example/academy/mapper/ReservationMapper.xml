@@ -46,7 +46,7 @@
 	
 	<!-- 박시현 : 예약 참여자 수정 -->
 	<insert id="updateReservationEmployee" parameterType="com.example.academy.dto.ReservationEmployeeDTO">
-		INSERT INTO reservation_employee (
+		INSERT IGNORE INTO reservation_employee (
 	        reservation_no,
 	        employee_no
 	    ) 
@@ -54,7 +54,6 @@
 	        #{reservationNo},
 	        #{employeeNo}
 	    )
-	    ON DUPLICATE KEY UPDATE employee_no = VALUES(employee_no)
 	</insert>
 	
 	<!-- 박시현 : 예약번호 별 상세정보 -->

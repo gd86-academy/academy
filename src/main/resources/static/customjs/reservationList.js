@@ -128,6 +128,7 @@ document.addEventListener('alpine:init', () => {
 		                    center: 'title',
 		                    right: 'dayGridMonth,timeGridWeek,timeGridDay',
 		                },
+						locale: "ko",
 		                editable: true,
 		                dayMaxEvents: true,
 		                selectable: true,
