@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.academy.dto.AttendanceApprovalAddDTO;
 import com.example.academy.dto.AttendanceApprovalListDTO;
+import com.example.academy.dto.AttendanceApprovalModifyDTO;
 import com.example.academy.dto.AttendanceApprovalOneDTO;
 import com.example.academy.mapper.ApprovalEmployeeMapper;
 import com.example.academy.mapper.AttendanceApprovalFileMapper;
@@ -28,6 +29,12 @@ public class AttendanceApprovalService {
 	@Autowired ApprovalEmployeeMapper approvalEmployeeMapper;
 	@Autowired FilesMapper filesMapper;
 	@Autowired AttendanceApprovalFileMapper attendanceApprovalFileMapper;
+	
+	// 김혜린 : 근태신청서 수정페이지
+	public void modifyAttendanceApproval(AttendanceApprovalModifyDTO attendanceApprovalModifyDTO) {
+		// 1) 근태신청서 테이블 수정
+		attendanceApprovalMapper.updateAttendanceApproval(attendanceApprovalModifyDTO);
+	}
 	
 	// 김혜린 : 근태신청서 상세페이지 - 근태신청서 테이블
 	public AttendanceApprovalOneDTO getAttendanceApprovalOne(Integer attendanceApprovalNo) {

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.academy.dto.AttendanceApprovalAddDTO;
+import com.example.academy.dto.AttendanceApprovalModifyDTO;
 import com.example.academy.dto.AttendanceApprovalOneDTO;
 import com.example.academy.security.CustomUserDetails;
 import com.example.academy.service.ApprovalEmployeeService;
@@ -31,6 +32,7 @@ public class AttendanceApprovalController {
 	// 김혜린 : 근태 신청서 수정페이지
 	@GetMapping("/modifyAttendanceApproval")
 	public String modifyAttendanceApproval(Model model, Integer attendanceApprovalNo) {
+		// 원래 정보 불러오기
 		// 1) 근태신청서 테이블 정보
 		AttendanceApprovalOneDTO attendanceApproval = attendanceApprovalService.getAttendanceApprovalOne(attendanceApprovalNo);
 		model.addAttribute("attendanceApproval", attendanceApproval);
@@ -52,9 +54,11 @@ public class AttendanceApprovalController {
 	}
 	// 김혜린 : 근태 신청서 수정페이지
 	@PostMapping("/modifyAttendanceApproval")
-	public String modifyAttendanceApproval() {
+	public String modifyAttendanceApproval(AttendanceApprovalModifyDTO attendanceApprovalModifyDTO) {
 		
-		return "redirect:/attendanceApprovalOne?attendanceApprovalNo="  ;
+		attendanceApprovalService.modifyAttendanceApproval(attendanceApprovalModifyDTO);
+		
+		return "redirect:/attendanceApprovalOne?attendanceApprovalNo=" + attendanceApprovalModifyDTO.getAttendanceApprovalNo();
 	}
 	
 	// 김혜린 : 근태 신청서 상세페이지
