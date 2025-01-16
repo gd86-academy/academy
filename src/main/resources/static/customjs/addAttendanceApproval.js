@@ -1,3 +1,4 @@
+
 document.addEventListener('alpine:init', () => {
     // main section
     Alpine.data('scrollToTop', () => ({

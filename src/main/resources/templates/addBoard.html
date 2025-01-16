@@ -121,195 +121,38 @@
 	                        <br>
 	
 	                        <!-- 첨부파일 -->
-	                        <div>
-	                            <div class="flex items-center space-x-3">
-	                            	<label for="boardFile">첨부파일</label>
-	                                <!-- +버튼 -->
-	                                <button
-	                                    type="button"
-	                                    id="btnAddFile"
-	                                    class="btn btn-primary text-center" style="width: 30px; height: 30px;">
-	                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2">
-	                                        <line x1="12" y1="5" x2="12" y2="19"></line>
-	                                        <line x1="5" y1="12" x2="19" y2="12"></line>
-	                                    </svg>
-	                                </button>
-	                                <!-- -버튼 -->
-	                                <button
-	                                    type="button"
-	                                    id="btnRemoveFile"
-	                                    class="btn btn-danger text-center" style="width: 30px; height: 30px;">
-	                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2">
-	                                        <line x1="5" y1="12" x2="19" y2="12"></line>
-	                                    </svg>
-	                                </button>
-	                            </div>
-	                            <div id="fileDiv">
+							<div>
+								<!-- 타이틀, 파일추가 버튼 -->
+								<div class="flex justify-between space-x-3">
+									<div>
+										<label class="text-lg">첨부파일</label>
+									</div>
+									<div>
+										<a type="button" id="btnAddFile" class="btn btn-outline-primary ">+ 첨부파일 추가</a>
+									</div>
+								</div>
+								<!-- 파일선택 폼 -->
+								<div id="fileDiv">
 							       <div class="flex mt-1">
-							           <button 
-							               type="button" 
-							               class="btn btn-primary ltr:rounded-r-none rtl:rounded-l-none" 
-							               style="width: 150px;"
-							               onclick="document.getElementById('boardFiles').click();">
-							               파일 선택
-							           </button>
-							           <input 
-							               id="boardFiles" 
-							               name="boardFiles"
-							               type="file" 
-							               class="hidden"
-							               multiple
-							               onchange="document.getElementById('boardFilesNameDisplay').value = this.files[0] ? this.files[0].name : '';" />
-							           <input 
-							               id="boardFilesNameDisplay" 
-							               type="text" 
-							               placeholder="첨부된 파일이 없습니다."
-							               class="form-input ltr:rounded-l-none rtl:rounded-r-none flex-grow" 
-							               readonly />
+							       		<!-- 첨부파일 추가 버튼 클릭시 폼추가되는 자리 -->
 							       </div>
 							   </div>
-	                        </div>
+							</div>
+								
+							<!-- 버튼 -->	
 	                        <div class="flex justify-end mt-3">
 	                        	<button type="button" id="submitButton" class="btn btn-primary" style="width: 130px;">등록</button>
 	                        </div>
 	                    </div>
-	
-	                    
 	                </div>
 	            </div>
 	        </div>
+	        
 	       <!--  풋터 파일 연결 -->
                 <div th:replace="fragments/footer :: footer"></div>
 	    </div>
  
- 	<!-- JavaScript 코드 -->
-	<script>
-	var quill = new Quill('#editor', {
-	    theme: 'snow'
-	});
-
-	// 전송 버튼 클릭 이벤트
-	$('#submitButton').on('click', function() {
-	    // Quill 에디터의 내용을 HTML로 추출
-	    var boardContent = quill.root.innerHTML;
-
-	    // 다른 input 필드의 값들 추출
-	    var boardTitle = $('#boardTitle').val();
-	    var createEmployeeNo = parseInt($('#createEmployeeNo').val(), 10);
-	    var updateEmployeeNo = parseInt($('#updateEmployeeNo').val(), 10);
-	 	
-	    // 동적으로 추가된 파일 입력 필드의 파일을 모두 가져오기
-	    var boardFiles = [];
-	    $('#fileDiv input[type="file"]').each(function() {
-	        var fileInput = $(this)[0];
-	        if (fileInput.files.length > 0) {
-	            boardFiles.push(fileInput.files[0]);
-	        }
-	    });
-
-	    // 제목 입력 여부 확인
-	    if (!boardTitle.trim()) {
-	        alert("제목을 입력해주세요.");
-	        return;
-	    }
-
-	    // 내용 입력 여부 확인
-	    if (!boardContent.trim() || boardContent === '<p><br></p>') {
-	        alert("내용을 입력해주세요.");
-	        return;
-	    }
-
-	    // POST 요청을 위해 FormData 객체 생성
-	    var formData = new FormData();
-	    formData.append('boardTitle', boardTitle); // 제목
-	    formData.append('boardContent', boardContent); // Quill 에디터 내용
-	    formData.append('createEmployeeNo', createEmployeeNo); // 작성자
-	    formData.append('updateEmployeeNo', updateEmployeeNo); // 수정자
-		
-	    // 파일이 있다면 추가
-	    boardFiles.forEach(function(file) {
-	        formData.append('boardFiles[]', file);  // 여러 파일 처리
-	    });
-
-	    // jQuery AJAX 요청
-	    $.ajax({
-	        url: 'http://localhost/academy/addBoard',
-	        type: 'POST',
-	        data: formData,
-	        processData: false, // FormData 사용 시 false로 설정
-	        contentType: false, // FormData 사용 시 false로 설정
-	        success: function(response) {
-	            console.log('Success:', response);
-	            alert("게시글이 성공적으로 등록되었습니다.");
-	            // 성공 후 페이지 이동
-	           window.location.href = '/academy/boardList'; // 게시판 목록 페이지로 이동
-	        },
-	        error: function(xhr, status, error) {
-	            console.error('Error:', error);
-	            alert("게시글 등록 중 오류가 발생했습니다. 다시 시도해주세요.");
-	        }
-	    });
-	});
-	
-	let result = 0;  // 전역 변수로 result 선언
-
-	// 파일 입력 필드 추가
-	$('#btnAddFile').click(function() {
-	    // 마지막 파일 입력 필드가 비어 있지 않다면
-	    if ($('#fileDiv input[type="file"]').last().val() === '') {
-	        alert('첨부하지 않은 파일이 이미 존재합니다.');
-	    } else {
-	        result++;  // result 증가 (파일 입력 필드마다 고유 값이 생성됨)
-	        
-	        let inputId = 'boardFiles' + result;  // 고유 input ID 생성
-	        let displayId = 'boardFilesNameDisplay' + result;  // 고유 display ID 생성
-	        
-	        let html = `
-	        	<div class="flex mt-1">
-		           <button 
-		               type="button" 
-		               class="btn btn-primary ltr:rounded-r-none rtl:rounded-l-none" 
-		               style="width: 150px;"
-		               onclick="document.getElementById('${inputId}').click();">
-		               파일 선택
-		           </button>
-		           <input 
-		               id="${inputId}" 
-		               name="boardFiles[]"
-		               type="file" 
-		               class="hidden" 
-		               onchange="document.getElementById('${displayId}').value = this.files[0] ? this.files[0].name : '';" />
-		           <input 
-		               id="${displayId}" 
-		               type="text" 
-		               placeholder="첨부된 파일이 없습니다."
-		               class="form-input ltr:rounded-l-none rtl:rounded-r-none flex-grow" 
-		               readonly />
-		       </div>
-	        `;
-	        $('#fileDiv').append(html); // 파일 입력 필드 추가
-	    }
-	});
-
-
-	// 파일 입력 필드 삭제
-	$('#btnRemoveFile').click(function() {
-		// 파일 입력 필드가 하나 이상 존재하는지 확인
-	    if ($('#fileDiv .flex').length === 0) { // .flex 클래스가 있는 요소가 없다면
-	        alert('삭제할 파일 입력 필드가 없습니다.');
-	    } else {
-	    	// 마지막 입력 필드를 삭제
-	        let lastInputId = 'boardFiles' + result; // 마지막으로 추가된 파일 입력 필드의 ID
-	        let lastDisplayId = 'boardFilesNameDisplay' + result; // 마지막으로 추가된 파일 이름 표시 필드의 ID
-	        
-	     	// 파일 입력 필드와 파일 이름 표시 필드 삭제
-	        $('#' + lastInputId).closest('.flex').remove();  // 마지막 .flex 요소 (파일 입력 필드 전체) 삭제
-	        $('#' + lastDisplayId).remove();  // 해당 파일 이름 표시 필드 삭제
-	        
-	        result--;  // result 감소
-	    }
-	});
-	</script>
+ 	<script th:src="@{/customjs/addBoard.js}"> </script>
  
     </body>
 </html>

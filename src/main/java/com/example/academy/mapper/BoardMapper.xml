@@ -2,7 +2,22 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.BoardMapper">
 
-	<!-- 공지사항 useyn 변경 -->
+	<!-- 메인페이지에 최신 공지사항 3개 조회 -->
+	<select id="selectBoardListByMain" resultType="com.example.academy.dto.BoardListByMainDTO">
+		SELECT
+					b.board_no boardNo
+					, b.board_title boardTitle
+					, e.employee_name employeeName
+					, b.create_date createDate
+					, b.update_date updateDate
+		FROM board b
+		LEFT OUTER JOIN employee e ON e.employee_no = b.update_employee_no
+		WHERE b.use_yn = 1
+		ORDER BY createDate DESC
+		LIMIT 3
+	</select>
+
+	<!-- 공지사항 삭제 버튼 클릭 시 yn 수정 -->
 	<update id="updateBoardYN" parameterType="Integer">
 		UPDATE board
 		SET use_yn = 0

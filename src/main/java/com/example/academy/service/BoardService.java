@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.academy.dto.BoardDTO;
+import com.example.academy.dto.BoardListByMainDTO;
 import com.example.academy.dto.BoardListDTO;
 import com.example.academy.mapper.BoardFileMapper;
 import com.example.academy.mapper.BoardMapper;
@@ -27,6 +28,16 @@ public class BoardService {
 	@Autowired FilesMapper filesMapper;
 	@Autowired BoardFileMapper boardFileMapper;
 	
+	// 메인페이지에 최신 공지사항 3개 조회
+	public List<BoardListByMainDTO> getBoardListByMain() {
+		List<BoardListByMainDTO> boardList = boardMapper.selectBoardListByMain();
+		for(BoardListByMainDTO board : boardList) {
+			board.setCreateDate(board.getCreateDate().substring(0, 10));
+		}
+		return boardList;
+	}
+	
+	// 공지사항 삭제 버튼 클릭 시 yn 수정
 	public Integer updateBoardYN(Integer boardNo) {
 		return boardMapper.updateBoardYN(boardNo);
 	}
@@ -137,7 +148,7 @@ public class BoardService {
 	public List<BoardListDTO> getBoardList() {
 		List<BoardListDTO> boardList = boardMapper.selectBoardList();
 		for(BoardListDTO board : boardList) {
-			board.setUpdateDate(board.getUpdateDate().substring(0, 10));
+			board.setUpdateDate(board.getCreateDate().substring(0, 10));
 		}
 		return boardList;
 	}

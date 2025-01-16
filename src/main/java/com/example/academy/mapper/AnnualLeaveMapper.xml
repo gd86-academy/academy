@@ -59,10 +59,10 @@
 		ORDER BY DATE_FORMAT(m.first_date, '%Y-%m') <!-- 최신 월부터 출력 -->											 
 	</select>
 	
-	<!-- 월별 사용연차 개수 조회 -->
+	<!-- 년별 사용연차 개수 조회 -->
 	<select id="annualLeaveCount" parameterType="Integer"
 								  resultType="Double">
-		WITH RECURSIVE date_range AS (
+		WITH RECURSIVE date_range AS ( <!-- 근태 승인 기간을 계산 CTE -->
 		    SELECT 
 		        attendance_approval_no,
 		        attendance_approval_begindate AS date,
@@ -82,10 +82,10 @@
 		SELECT
 		    SUM(CASE 
 		        WHEN name.name = '연차' THEN (
-		            SELECT COUNT(*)
+		            SELECT COUNT(*) <!-- 평일 날짜 개수만 계산 -->
 		            FROM date_range dr
 		            WHERE dr.attendance_approval_no = ap.attendance_approval_no
-		              AND DAYOFWEEK(dr.date) NOT IN (1, 7)
+		              AND DAYOFWEEK(dr.date) NOT IN (1, 7) 
 		        )
 		        WHEN name.name = '반차' THEN 0.5
 		        ELSE 0
@@ -119,7 +119,7 @@
 		INNER JOIN common status ON status.`code` = ap.attendance_approval_status
 		WHERE ap.use_yn = 1
 			AND ap.employee_no = #{employeeNo}
-		    AND DATE_FORMAT(ap.attendance_approval_begindate, '%Y-%m') = #{month}
+		    AND DATE_FORMAT(ap.attendance_approval_begindate, '%Y-%m') = #{month} <!-- ex) 2025-01월 데이터만 조회 -->
 		    AND status.name = '승인'
 		    AND (name.name = '연차' OR name.name = '반차')
 		    AND ap.attendance_approval_begindate &lt; NOW()

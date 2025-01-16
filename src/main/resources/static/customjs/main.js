@@ -172,7 +172,6 @@ document.addEventListener('alpine:init', () => {
         }
     }));
 		
-	
 	// 연차 통계 차트
 	Alpine.data('analytics', () => ({
 	    init() {

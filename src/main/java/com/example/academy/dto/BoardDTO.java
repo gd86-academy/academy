@@ -17,15 +17,17 @@ public class BoardDTO {
 	private Integer boardCount;
 	private String createDate;
 	private String updateDate;
-	private Integer fileNo;
-	private String fileName;
-	private String fileExt;
-	private String fileOrigin;
-	private Long fileSize;
-	private String fileType;
-	private String fileCategory;
 	private String employeeName;
 	private String employeeDepartment;
 	
 	private List<MultipartFile> boardFiles;
+	
+	private Integer fileNo;
+	private String fileName;
+	private String fileExt;
+	private String fileOrigin;
+	private String fileSize;
+	private String fileType;
+	private String fileCategory;
+
 }

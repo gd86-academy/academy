@@ -13,11 +13,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.academy.dto.AttendanceContentDTO;
+import com.example.academy.dto.BoardListByMainDTO;
 import com.example.academy.dto.PasswordModifyDTO;
 import com.example.academy.security.CustomUserDetails;
 import com.example.academy.service.AnnualLeaveService;
 import com.example.academy.service.AttendanceService;
 import com.example.academy.service.AuthService;
+import com.example.academy.service.BoardService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -27,6 +29,7 @@ public class AuthController {
 	@Autowired AuthService authService;
 	@Autowired AnnualLeaveService annualLeaveService;
 	@Autowired AttendanceService attendanceService;
+	@Autowired BoardService boardService;
 	
 	// 진수우 : 사원 비밀번호 변경.
 	@PostMapping("/modifyPassword")
@@ -54,6 +57,10 @@ public class AuthController {
 	        // 최근 6개월 월별 근무시간 총합 조회
 	        List<Integer> totalWorkTime = attendanceService.getAttendanceTotalWorkTime(Integer.parseInt(userDetails.getUsername()));
 	        
+	        // 최근 공지사항 3개 조회
+	        List<BoardListByMainDTO> boardList = boardService.getBoardListByMain();
+	        	        
+	        model.addAttribute("boardList", boardList); // 최근 공지사항 3개 조회
 	        model.addAttribute("count", annualLeaveCount); // 이번 달 연차 사용 갯수
 	        model.addAttribute("totalWorkTimeList", totalWorkTime); // 최근 6개월 월별 근무시간 총합 리스트
 	        model.addAttribute("absence", content.getAbsence()); // 결근

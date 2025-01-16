@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.academy.dto.BoardListByMainDTO;
 import com.example.academy.dto.BoardListDTO;
 import com.example.academy.service.BoardService;
 
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class BoardRestController {
 	@Autowired BoardService boardService;
 	
+	// 공지사항 리스트 조회
 	@GetMapping("/restapi/boardList")
 	public List<Object[]> boardList() {
 		List<BoardListDTO> boardsList = boardService.getBoardList();
