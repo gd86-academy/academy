@@ -121,6 +121,11 @@ document.addEventListener('alpine:init', () => {
 		            }));
 
 		            var calendarEl = document.getElementById('calendar');
+					const handleDayCellContent = (arg) => {
+					    // 숫자 부분만 추출
+					    const dayNumber = arg.dayNumberText.replace("일", ""); 
+					    return { html: `<span>${dayNumber}</span>` }; // 숫자만 반환
+					};
 		            this.calendar = new FullCalendar.Calendar(calendarEl, {
 		                initialView: 'dayGridMonth',
 		                headerToolbar: {
@@ -129,10 +134,18 @@ document.addEventListener('alpine:init', () => {
 		                    right: 'dayGridMonth,timeGridWeek,timeGridDay',
 		                },
 						locale: "ko",
+						buttonText: {
+						    today: '오늘',          // "Today" 
+						    month: '월간',          // "Month" 
+						    week: '주간',           // "Week" 
+						    day: '일간',            // "Day"
+						    list: '목록'            // "List" 
+						},
 		                editable: true,
 		                dayMaxEvents: true,
 		                selectable: true,
 		                droppable: true,
+						dayCellContent: handleDayCellContent,
 		                eventClick: (event) => {
 		                    this.editEvent(event);
 		                },
