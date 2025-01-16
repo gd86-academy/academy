@@ -68,7 +68,7 @@ document.addEventListener('alpine:init', () => {
 	// 수정 페이지 로드 시 참여자 목록을 가져오기
 	$(document).ready(function() {
 	    const reservationNo = $('#reservationNo').val(); // 예약 번호 가져오기
-	    let cnt = 0;
+	    let cnt = $('#selectEmployeesContainer .selectedEmployee').length;
 	    
 	    if (reservationNo) {
 	        $.ajax({
@@ -87,12 +87,13 @@ document.addEventListener('alpine:init', () => {
 	                                    type="text"
 	                                    value="${employee.employeeName}" 
 	                                    data-employee-no="${employee.employeeNo}" 
-	                                    name="reservationEmployees[` + (cnt++) + `].employeeName"
+	                                    name="reservationEmployees[${cnt}].employeeName"
 	                                    readonly>
 	                                <button type="button" class="btn btn-danger ms-3 removeEmployee" style="word-break:keep-all;">삭제</button>
 	                            </div>
 	                        `;
 	                        $('#selectEmployeesContainer').append(existingEmployee);
+							cnt++; // 추가된 사원마다 cnt 증가
 	                    });
 	                }
 	            },
@@ -104,12 +105,14 @@ document.addEventListener('alpine:init', () => {
 	});
 
 	// 사원검색
-	$('#btnEmployee').click(function() {
+	function searchEmployee() {
 	    let searchValue = $('#searchEmployee').val().trim();
+
 	    if (searchValue === '') {
 	        $('#searchEmployee').addClass("errorInput");
 	        $('.searchEmployee-error').show();
-	        $('#resultEmployee option').hide();
+	        $('#resultEmployee').empty(); // 기존 결과 제거
+	        $('#resultEmployee').append('<option value="">검색어를 입력해주세요</option>');
 	        return; // 입력이 비어있다면 검색을 하지 않음
 	    } else {
 	        $('#searchEmployee').removeClass("errorInput");
@@ -122,26 +125,48 @@ document.addEventListener('alpine:init', () => {
 	        type: 'GET',
 	        data: { searchEmployee: searchValue },
 	        dataType: 'json',
-	        success: function(data) {
+	        success: function (data) {
 	            // 검색 결과를 #resultEmployee에 표시
 	            $('#resultEmployee').empty(); // 기존 옵션 제거
 	            if (data.length > 0) {
 	                data.forEach(employee => {
-	                    $('#resultEmployee').append(`<option value="${employee.employeeNo}">${employee.employeeName}</option>`);
+	                    $('#resultEmployee').append(
+	                        `<option value="${employee.employeeNo}">${employee.employeeName}</option>`
+	                    );
 	                });
 	            } else {
 	                $('#resultEmployee').append('<option value="">검색된 사원이 없습니다</option>');
 	            }
 	        },
-	        error: function(xhr, status, error) {
+	        error: function (xhr, status, error) {
 	            console.error('Error:', error);
 	        }
 	    });
+	}
+
+	// 키보드 입력 이벤트 
+	$('#searchEmployee').on('keyup', function () {
+	    searchEmployee(); //검색 함수 호출
+	});
+	
+	// 검색창에서 엔터 키 처리
+	/*
+	$('#searchEmployee').on('keydown', function (e) {
+	    if (e.key === 'Enter' || e.keyCode === 13) {
+	        e.preventDefault(); // 엔터 키로 폼이 제출되는 것을 막음
+	        searchEmployee(); // 검색 함수 호출
+	    }
+	});
+	*/
+
+	// 클릭 이벤트
+	$('#btnEmployee').on('click', function () {
+	    searchEmployee(); // 검색 함수 호출
 	});
 
 	// 사원추가
-	let cnt = 0;
 	$('#addResultEmployee').click(function () {
+		let cnt = $('#selectEmployeesContainer .selectedEmployee').length;
 	    const selectedOption = $('#resultEmployee option:selected'); // 선택된 옵션 가져오기
 	    const employeeNo = selectedOption.val();
 	    const employeeName = selectedOption.text();
@@ -165,31 +190,53 @@ document.addEventListener('alpine:init', () => {
 
 	        if (!exists) {
 	            // 선택된 사원을 추가
-	            const newEmployee = `
-	                <div class="d-flex w-100 items-center justify-between mt-2 selectedEmployee-box">
-	                    <input type="hidden" class="selectedEmployeeNo" value="${employeeNo}" name="reservationEmployees[` + (cnt) + `].employeeNo">
-	                    <input 
-	                        class="form-input selectedEmployee"
-	                        type="text"
-	                        value="${employeeName}" 
-	                        data-employee-no="${employeeNo}" 
-	                        name="reservationEmployees[` + (cnt++) + `].employeeName"
-	                        readonly>
-	                    <button type="button" class="btn btn-danger ms-3 removeEmployee" style="word-break:keep-all;">삭제</button>
-	                </div>
-	            `;
-	            $('#selectEmployeesContainer').append(newEmployee);
+				const newEmployee = `
+                    <div class="d-flex w-100 items-center justify-between mt-2 selectedEmployee-box">
+                        <input type="hidden" class="selectedEmployeeNo" value="${employeeNo}" name="reservationEmployees[${cnt}].employeeNo">
+                        <input 
+                            class="form-input selectedEmployee"
+                            type="text"
+                            value="${employeeName}" 
+                            data-employee-no="${employeeNo}" 
+                            name="reservationEmployees[${cnt}].employeeName"
+                            readonly>
+                        <button type="button" class="btn btn-danger ms-3 removeEmployee" style="word-break:keep-all;">삭제</button>
+                    </div>
+                `;
+                $('#selectEmployeesContainer').append(newEmployee);
+                cnt++; // cnt 증가
 	            // 검색기록 초기화
 	            $('#searchEmployee').val(''); 
 	            $('#resultEmployee').empty();
+				
 	        }
 	    }
 	});
 
 	// 삭제 버튼 기능 추가
 	$(document).on('click', '.removeEmployee', function () {
-		// 현재 클릭한 삭제 버튼의 부모 요소 (.d-flex)를 제거
-	    $(this).closest('.selectedEmployee-box').remove();
+	    const parentElement = $(this).closest('.selectedEmployee-box');
+	    const employeeNo = parentElement.find('.selectedEmployee').data('employee-no'); 
+		
+	    // employeeNo 값 확인
+	    if (!employeeNo) {
+	        console.error('employeeNo가 유효하지 않습니다:', employeeNo);
+	        return;
+	    }
+
+	    const deleteField = $('#deleteEmployee');
+	    let currentValues = deleteField.val() || ''; // null 방지
+
+	    // 값 추가 (중복 방지)
+	    if (!currentValues.split(',').includes(String(employeeNo))) {
+	        currentValues = currentValues ? `${currentValues},${employeeNo}` : employeeNo;
+	        deleteField.val(currentValues); // 값 설정
+	        console.log('삭제된 employeeNo 추가됨:', deleteField.val());
+	    } else {
+	        console.log('employeeNo가 이미 존재합니다:', employeeNo);
+	    }
+
+	    parentElement.remove(); // DOM에서 삭제
 	});
 });	
 

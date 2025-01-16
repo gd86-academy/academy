@@ -31,6 +31,9 @@ public class ReservationListDTO {
 	// 회의실 명
 	private String meetingroomName;
 	
+	// 예약 참여자 삭제
+	private String[] deleteEmployee;
+	
 	
 	// 데이터를 배열로 반환
 	public Object[] toArray() {

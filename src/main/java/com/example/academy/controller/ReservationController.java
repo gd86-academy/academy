@@ -18,6 +18,7 @@ import com.example.academy.dto.AddReservationDTO;
 import com.example.academy.dto.MeetingRoomListDTO;
 import com.example.academy.dto.ReservationEmployeeDTO;
 import com.example.academy.dto.ReservationListDTO;
+import com.example.academy.mapper.ReservationMapper;
 import com.example.academy.security.CustomUserDetails;
 import com.example.academy.service.CalendarService;
 import com.example.academy.service.CommonService;
@@ -35,11 +36,12 @@ public class ReservationController {
 	@Autowired CalendarService calendarService;
 	@Autowired CommonService commonService;
 	@Autowired MeetingRoomService meetingroomService;
+	@Autowired ReservationMapper reservationMapper;
 	
 	// 박시현 : 예약 취소
 	@GetMapping("/removeReservation")
-	public String removeReservation(@RequestParam Integer reservationNo) {
-	    Integer row = reservationService.removeReservation(reservationNo);
+	public String removeReservation(@RequestParam Integer reservationNo, @RequestParam Integer employeeNo) {
+	    Integer row = reservationService.removeReservation(reservationNo, employeeNo);
 	    if (row > 0) {
 	        return "redirect:/reservationList"; // 성공 시 reservationList로 리다이렉트
 	    }
@@ -48,8 +50,8 @@ public class ReservationController {
 	
 	// 박시현 : 예약 수정
 	@PostMapping("/modifyReservation")
-	public String modifyReservation(@ModelAttribute ReservationListDTO reservationListDTO) {
-		int row = reservationService.modifyReservation(reservationListDTO);
+	public String modifyReservation(@ModelAttribute ReservationListDTO reservationListDTO, ReservationEmployeeDTO reservationEmployeeDTO) {
+		int row = reservationService.modifyReservation(reservationListDTO, reservationEmployeeDTO);
         if (row == 0) {
         	// 실패 시 
         	log.debug("실패 : "+row);

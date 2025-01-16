@@ -22,13 +22,13 @@ public class ReservationService {
 	@Autowired ReservationMapper reservationMapper;
 	
 	// 박시현 : 예약 취소
-	public Integer removeReservation(Integer reservationNo) {
+	public Integer removeReservation(Integer reservationNo, Integer employeeNo) {
 	    // 예약 삭제
 	    Integer row = reservationMapper.deleteReservation(reservationNo);
 	    
 	    if(row > 0) {
 	        // 예약 직원 삭제 (삭제된 직원 번호 반환)
-	        reservationMapper.deleteReservationEmployee(reservationNo);
+	        reservationMapper.deleteReservationEmployee(employeeNo, reservationNo);
 	        
 	    }
 	    return row;
@@ -40,29 +40,38 @@ public class ReservationService {
 	}
 	
 	// 박시현 : 예약 수정
-	public Integer modifyReservation(ReservationListDTO reservationListDTO) {
-		Integer row = reservationMapper.updateReservation(reservationListDTO);
-		
-		if (row > 0) {
-			Integer reservationNo = reservationListDTO.getReservationNo(); // 생성된 예약 번gh
-            
-            // 예약 참여자 삽입
-            for (ReservationEmployeeDTO employee : reservationListDTO.getReservationEmployees()) {
-                employee.setReservationNo(reservationNo);
-                reservationMapper.insertReservationByEmployee(employee);
-            }
-        }
+	public Integer modifyReservation(ReservationListDTO reservationListDTO, ReservationEmployeeDTO reservationEmployeeDTO) {
+	    Integer row = reservationMapper.updateReservation(reservationListDTO);
 
-		// 예약 유저 삭제기능 (DTO에 컬럼변수 추가해야함)
-		/* html id='selectEmployeesContainer'에 추가해야할거 (스크립트 로직은 추가로 넣어야함)
-			<input type="hidden" id="aaaaaaaaaaaaaaaa" name="deleteUser" value="">
-		 */
-		String[] aa = reservationListDTO.getDeleteUser().split(",");
-		for(var i=0 ; i<aa.length ; i++){
-			reservationMapper.deleteReservationEmployee(Integer.parseInt(aa[i]));
-		}
+	    if (row > 0) {
+	        Integer reservationNo = reservationListDTO.getReservationNo(); // 생성된 예약 번호
 
+	        // 예약 참여자 삽입
+	        List<ReservationEmployeeDTO> employees = reservationListDTO.getReservationEmployees();
+	        if (employees != null && !employees.isEmpty()) {
+	            for (ReservationEmployeeDTO employee : employees) {
+	                // employeeNo가 null이거나 0이면 추가하지 않음
+	                if (employee.getEmployeeNo() == null || employee.getEmployeeNo() == 0) {
+	                    System.out.println("employeeNo : " + employee.getEmployeeNo());
+	                    continue; // 유효하지 않으면 건너뛰기
+	                }
 
+	                employee.setReservationNo(reservationNo);
+	                reservationMapper.insertReservationByEmployee(employee); // 유효한 employee만 추가
+	            }
+	        }
+	    }
+
+	    // 예약 유저 삭제기능 (DTO에 컬럼변수 추가해야함)
+	    String[] deleteEmployees = reservationListDTO.getDeleteEmployee();
+	    if (deleteEmployees != null && deleteEmployees.length > 0) {
+	        for (String employeeNo : deleteEmployees) {
+	            if (employeeNo != null && !employeeNo.isEmpty()) {
+	                Integer empNo = Integer.parseInt(employeeNo);
+	                reservationMapper.deleteReservationEmployee(empNo, reservationListDTO.getReservationNo());
+	            }
+	        }
+	    }
 
 	    return row;
 	}
@@ -87,17 +96,30 @@ public class ReservationService {
 	
 	// 박시현 : 예약 신청
 	public Integer insertReservation(AddReservationDTO addReservationDTO) {
+		
 		// 예약 정보 삽입
-        int row = reservationMapper.insertReservation(addReservationDTO);
-        if (row > 0) {
-            Integer reservationNo = addReservationDTO.getReservationNo(); // 생성된 예약 번호
-            
-            // 예약 참여자 삽입
-            for (ReservationEmployeeDTO employee : addReservationDTO.getReservationEmployees()) {
-                employee.setReservationNo(reservationNo);
-                reservationMapper.insertReservationByEmployee(employee);
-            }
-        }
+		int row = reservationMapper.insertReservation(addReservationDTO);
+		
+		if (row > 0) {
+	        Integer reservationNo = addReservationDTO.getReservationNo(); // 생성된 예약 번호
+	        
+	        // 예약 참여자 삽입
+	        for (ReservationEmployeeDTO employee : addReservationDTO.getReservationEmployees()) {
+	            // employeeNo가 null이거나 0보다 작거나 같으면 삽입하지 않음
+	            if (employee.getEmployeeNo() != null && employee.getEmployeeNo() > 0) {
+	                employee.setReservationNo(reservationNo);
+	                reservationMapper.insertReservationByEmployee(employee);
+	            } 
+	            // employeeNo가 null이거나 0보다 작거나 같으면 삭제
+	            else if (employee.getEmployeeNo() == null || employee.getEmployeeNo() <= 0) {
+	                if (employee.getEmployeeNo() != null) {
+	                    reservationMapper.deleteReservationEmployee(employee.getEmployeeNo(), employee.getReservationNo());
+	                }
+	                // 로그로 삽입되지 않은 이유를 확인
+	                System.out.println("Invalid employeeNo (null or <= 0). Skipping or deleting employee: " + employee.getEmployeeNo());
+	            }
+	        }
+	    }
         return row;
 	}
 	

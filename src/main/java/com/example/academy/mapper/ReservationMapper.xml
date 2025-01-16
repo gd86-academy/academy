@@ -8,7 +8,7 @@
 	
 	<!-- 박시현 : 예약 참여자 삭제 -->
 	<delete id="deleteReservationEmployee" parameterType="com.example.academy.dto.ReservationEmployeeDTO">
-		DELETE from reservation_employee WHERE reservation_no = #{reservationNo} 
+		DELETE from reservation_employee WHERE employee_no = #{employeeNo} AND reservation_no = #{reservationNo}
 	</delete>
  
 	<!-- 박시현 : 예약 수정-->
