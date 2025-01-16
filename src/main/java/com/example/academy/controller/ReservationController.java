@@ -40,8 +40,8 @@ public class ReservationController {
 	
 	// 박시현 : 예약 취소
 	@GetMapping("/removeReservation")
-	public String removeReservation(@RequestParam Integer reservationNo, @RequestParam Integer employeeNo) {
-	    Integer row = reservationService.removeReservation(reservationNo, employeeNo);
+	public String removeReservation(@RequestParam Integer reservationNo) {
+	    Integer row = reservationService.removeReservation(reservationNo);
 	    if (row > 0) {
 	        return "redirect:/reservationList"; // 성공 시 reservationList로 리다이렉트
 	    }

@@ -22,13 +22,13 @@ public class ReservationService {
 	@Autowired ReservationMapper reservationMapper;
 	
 	// 박시현 : 예약 취소
-	public Integer removeReservation(Integer reservationNo, Integer employeeNo) {
+	public Integer removeReservation(Integer reservationNo) {
 	    // 예약 삭제
 	    Integer row = reservationMapper.deleteReservation(reservationNo);
 	    
 	    if(row > 0) {
 	        // 예약 직원 삭제 (삭제된 직원 번호 반환)
-	        reservationMapper.deleteReservationEmployee(employeeNo, reservationNo);
+	        reservationMapper.deleteReservationByEmployee(reservationNo);
 	        
 	    }
 	    return row;
@@ -43,10 +43,22 @@ public class ReservationService {
 	public Integer modifyReservation(ReservationListDTO reservationListDTO, ReservationEmployeeDTO reservationEmployeeDTO) {
 	    Integer row = reservationMapper.updateReservation(reservationListDTO);
 
+	    // 예약 유저 삭제기능 (DTO에 컬럼변수 추가해야함)
+	    String[] deleteEmployees = reservationListDTO.getDeleteEmployee();
+	    if (deleteEmployees != null && deleteEmployees.length > 0) {
+	        for (String employeeNo : deleteEmployees) {
+	            if (employeeNo != null && !employeeNo.isEmpty()) {
+	                Integer empNo = Integer.parseInt(employeeNo);
+	                reservationMapper.deleteReservationEmployee(empNo, reservationListDTO.getReservationNo());
+	                log.debug("삭제 employeeNo : " + empNo);
+	            }
+	        }
+	    }
+	    
 	    if (row > 0) {
 	        Integer reservationNo = reservationListDTO.getReservationNo(); // 생성된 예약 번호
 
-	        // 예약 참여자 삽입
+	        // 예약 참여자 삽입(에러/ 이미 등록된 참여자는 추가가되지않고 삭제만 됨)
 	        List<ReservationEmployeeDTO> employees = reservationListDTO.getReservationEmployees();
 	        if (employees != null && !employees.isEmpty()) {
 	            for (ReservationEmployeeDTO employee : employees) {
@@ -57,18 +69,8 @@ public class ReservationService {
 	                }
 
 	                employee.setReservationNo(reservationNo);
-	                reservationMapper.insertReservationByEmployee(employee); // 유효한 employee만 추가
-	            }
-	        }
-	    }
-
-	    // 예약 유저 삭제기능 (DTO에 컬럼변수 추가해야함)
-	    String[] deleteEmployees = reservationListDTO.getDeleteEmployee();
-	    if (deleteEmployees != null && deleteEmployees.length > 0) {
-	        for (String employeeNo : deleteEmployees) {
-	            if (employeeNo != null && !employeeNo.isEmpty()) {
-	                Integer empNo = Integer.parseInt(employeeNo);
-	                reservationMapper.deleteReservationEmployee(empNo, reservationListDTO.getReservationNo());
+	                reservationMapper.updateReservationEmployee(employee); 
+	                log.debug("추가 employeeNo : " + employees);
 	            }
 	        }
 	    }

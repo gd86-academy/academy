@@ -5,6 +5,10 @@
 	<delete id="deleteReservation" parameterType="com.example.academy.dto.ReservationListDTO">
 		DELETE from reservation WHERE reservation_no = #{reservationNo} 
 	</delete>
+	<!-- 박시현 : 예약 취소 시 예약 참여자 삭제 -->
+	<delete id="deleteReservationByEmployee" parameterType="com.example.academy.dto.ReservationListDTO">
+		DELETE from reservation_employee WHERE reservation_no = #{reservationNo} 
+	</delete>
 	
 	<!-- 박시현 : 예약 참여자 삭제 -->
 	<delete id="deleteReservationEmployee" parameterType="com.example.academy.dto.ReservationEmployeeDTO">
@@ -41,12 +45,17 @@
 	</update>
 	
 	<!-- 박시현 : 예약 참여자 수정 -->
-	<update id="updateReservationEmployee" parameterType="com.example.academy.dto.ReservationEmployeeDTO">
-		UPDATE reservation_employee re
-	    SET re.employee_no = #{employeeNo}                
-	    WHERE re.reservation_no = #{reservationNo} 
-	    AND re.employee_no = #{employeeNo} 
-	</update>
+	<insert id="updateReservationEmployee" parameterType="com.example.academy.dto.ReservationEmployeeDTO">
+		INSERT INTO reservation_employee (
+	        reservation_no,
+	        employee_no
+	    ) 
+	    VALUES (
+	        #{reservationNo},
+	        #{employeeNo}
+	    )
+	    ON DUPLICATE KEY UPDATE employee_no = VALUES(employee_no)
+	</insert>
 	
 	<!-- 박시현 : 예약번호 별 상세정보 -->
 	<select id="selectReservationOne" parameterType="Integer" resultType="com.example.academy.dto.ReservationListDTO">
@@ -75,7 +84,7 @@
 
 	<!-- 박시현 : 회의 참여자 추가 -->
 	<insert id="insertReservationByEmployee" parameterType="com.example.academy.dto.ReservationEmployeeDTO">
-	    INSERT IGNORE INTO reservation_employee (
+	    INSERT INTO reservation_employee (
 	        reservation_no,
 	        employee_no
 	    ) VALUES (
