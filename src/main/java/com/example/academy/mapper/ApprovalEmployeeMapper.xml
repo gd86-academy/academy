@@ -18,6 +18,8 @@
 		ON ae.approver = e.employee_no
 		LEFT OUTER JOIN common c1
 		ON e.employee_department = c1.`code`
+		LEFT OUTER JOIN common c2
+		ON ae.approval_employee_status = c2.`code`
 		LEFT OUTER JOIN file f
 		ON e.stamp_file_no = f.file_no
 		WHERE ae.attendance_approval_no = #{attendanceApprovalNo}

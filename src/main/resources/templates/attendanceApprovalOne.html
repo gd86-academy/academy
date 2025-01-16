@@ -141,15 +141,17 @@
 											</td>
 											<td class="bg-[#f4f4f4] lecutre-title-align" style="padding: 5px 10px;">
 												<div th:each="approver : ${approvers}">
-													<span th:if="${approver.approvalLevel == 2}" 
+													<span th:if="${approver.approvalLevel == 2}"
 													th:text="${approver.employeeDepartment} + ' ' +${approver.employeeName}"></span>
 												</div>												
+												<span th:if="${#lists.size(approvers) < 2}">-</span>	<!-- 결재자2 없는경우 -->
 											</td>
 											<td class="bg-[#f4f4f4] lecutre-title-align" style="padding: 5px 10px;">
 												<div th:each="approver : ${approvers}">
 													<span th:if="${approver.approvalLevel == 3}" 
 													th:text="${approver.employeeDepartment} + ' ' +${approver.employeeName}"></span>
 												</div>												
+												<span th:if="${#lists.size(approvers) < 3}">-</span>	<!-- 결재자3 없는경우 -->
 											</td>			
 										</tr> 
 										<!-- 2행 : 도장사진 및 대기 출력 -->
@@ -157,41 +159,124 @@
 										<tr style="height: 50px;">
 											<!-- 1열 : 결재단계1 -->
 							                <td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0;">
-												<div th:each="approver : ${approvers}">
-													<!-- 신청서 step이 1이면 '대기'출력 -->
-													<div th:if="${step == 1  && approver.approvalLevel == 1}">
-														<div class="flex justify-center items-center">
+												<!-- 신청서 step이 1이면 -->
+												<div th:if="${step == 1}">
+								                	<div th:each="a : ${approvers}">
+														<!-- 결재자1이 대기상태면 -->
+														<div th:if="${a.approvalLevel == 1 && a.approvalEmployeeStatus == '대기'}" class="flex justify-center items-center">
 									                		<span style="color: gray;">대기</span>
 									                	</div>
-													</div>
-													<!-- 신청서 step이 2이고, 결재자1이 승인한 상태면 -->
-													<div th:if="${step == 2  && approver.approvalLevel == 1}">
-														<div class="flex justify-center items-center">
-									                		<img th:src="@{/upload/{fileName}.{fileExt}(fileName=${approver.fileName}, fileExt=${approver.fileExt})}" 
-												                		 style="width: 50px; height: 50px; object-fit: cover;"/>	
+									                	<!-- 결재자1이 반려한 상태면 -->
+									                	<div th:if="${a.approvalLevel == 1 && a.approvalEmployeeStatus == '반려'}" class="flex justify-center items-center">
+									                		<span style="color: red;">반려</span>
 									                	</div>
 													</div>
-													
-													<!-- 신청서 step이 2이고, 결재자1이 반려한 상태면 -->
-												</div>												
-											</td>	
+												</div>	
+												<!-- 신청서 step이 2,3,4이면 : 결재자 1은 무조건 승인상태(반려시 결재단계 안넘어가기때문) -->							
+												<div th:if="${step == 2 || step == 3 || step == 4}">
+													<div th:each="a : ${approvers}">
+														<div th:if="${a.approvalLevel == 1}" class="flex justify-center items-center">
+									                		<img th:src="@{/upload/{fileName}.{fileExt}(fileName=${a.fileName}, fileExt=${a.fileExt})}" 
+										                		 style="width: 50px; height: 50px; object-fit: cover;"/>
+									                	</div>
+									                </div>
+												</div>										
+											</td>	<!-- 1열 끝  -->
 											<!-- 2열 : 결재단계2 -->
 							                <td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0;">
-												<div th:each="approver : ${approvers}">
-													<div class="flex justify-center items-center" th:if="${approver.approvalLevel == 2}">
-								                		<img th:src="@{/upload/{fileName}.{fileExt}(fileName=${approver.fileName}, fileExt=${approver.fileExt})}" 
-											                		 style="width: 50px; height: 50px; object-fit: cover;"/>	
-								                	</div>
+												<!-- 신청서 step이 1이면 -->
+												<div th:if="${step == 1}">
+													<div th:each="a : ${approvers}">
+														<!-- 결재자1이 대기상태면 -->
+														<div th:if="${a.approvalLevel == 1 && a.approvalEmployeeStatus == '대기'}" class="flex justify-center items-center">
+									                		<span>-</span>
+									                	</div>
+									                	<!-- 결재자1이 반려한 상태면 -->
+									                	<div th:if="${a.approvalLevel == 1 && a.approvalEmployeeStatus == '반려'}" class="flex justify-center items-center">
+									                		<span>-</span>
+									                	</div>
+													</div>
+												</div>
+												<!-- 신청서 step이 2이면 -->
+												<div th:if="${step == 2}">
+													<div th:each="a : ${approvers}">
+														<!-- 결재자2가 대기상태면 -->
+														<div th:if="${a.approvalLevel == 2 && a.approvalEmployeeStatus == '대기'}" class="flex justify-center items-center">
+									                		<span style="color: gray;">대기</span>
+									                	</div>
+									                	<!-- 결재자2가 반려한 상태면 -->
+									                	<div th:if="${a.approvalLevel == 2 && a.approvalEmployeeStatus == '반려'}" class="flex justify-center items-center">
+									                		<span style="color: red;">반려</span>
+									                	</div>
+													</div>
+								                	<!-- 결재자2 없는경우 -->
+								                	<span th:if="${#lists.size(approvers) < 2}">-</span>
+												</div>											
+												<!-- 신청서 step이 3,4이면 : 결재자 2는 무조건 승인상태 -->
+												<div th:if="${step == 3 || step == 4}">
+													<div th:each="a : ${approvers}">
+														<div th:if="${a.approvalLevel == 2}" class="flex justify-center items-center">
+									                		<img th:src="@{/upload/{fileName}.{fileExt}(fileName=${a.fileName}, fileExt=${a.fileExt})}" 
+										                		 style="width: 50px; height: 50px; object-fit: cover;"/>
+									                	</div>
+									                </div>
 												</div>												
-											</td>	
+											</td>	<!-- 2열 끝  -->
+											<!-- 3열 : 결재단계3 -->
 							                <td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0;">
-												<div th:each="approver : ${approvers}">
-													<div class="flex justify-center items-center" th:if="${approver.approvalLevel == 3}">
-								                		<img th:src="@{/upload/{fileName}.{fileExt}(fileName=${approver.fileName}, fileExt=${approver.fileExt})}" 
-											                		 style="width: 50px; height: 50px; object-fit: cover;"/>	
-								                	</div>
+												<!-- 신청서 step이 1이면 -->
+												<div th:if="${step == 1}">
+													<div th:each="a : ${approvers}">
+														<!-- 결재자1이 대기상태면 -->
+														<div th:if="${a.approvalLevel == 1 && a.approvalEmployeeStatus == '대기'}" class="flex justify-center items-center">
+									                		<span>-</span>
+									                	</div>
+									                	<!-- 결재자1이 반려한 상태면 -->
+									                	<div th:if="${a.approvalLevel == 1 && a.approvalEmployeeStatus == '반려'}" class="flex justify-center items-center">
+									                		<span>-</span>
+									                	</div>
+													</div>
+												</div>
+												<!-- 신청서 step이 2이면 -->
+												<div th:if="${step == 2}">
+													<div th:each="a : ${approvers}">
+														<!-- 결재자2가 대기상태면 -->
+														<div th:if="${a.approvalLevel == 2 && a.approvalEmployeeStatus == '대기'}" class="flex justify-center items-center">
+									                		<span>-</span>
+									                	</div>
+									                	<!-- 결재자2가 반려한 상태면 -->
+									                	<div th:if="${a.approvalLevel == 2 && a.approvalEmployeeStatus == '반려'}" class="flex justify-center items-center">
+									                		<span>-</span>
+									                	</div>
+													</div>
+													<!-- 결재자2 없는경우 -->
+								                	<span th:if="${#lists.size(approvers) < 2}">-</span>
+												</div>											
+												<!-- 신청서 step이 3이면 -->
+												<div th:if="${step == 3}">
+													<div th:each="a : ${approvers}">
+														<!-- 결재자3이 대기상태면 -->
+														<div th:if="${a.approvalLevel == 3 && a.approvalEmployeeStatus == '대기'}" class="flex justify-center items-center">
+									                		<span style="color: gray;">대기</span>
+									                	</div>
+									                	<!-- 결재자3이 반려한 상태면 -->
+									                	<div th:if="${a.approvalLevel == 3 && a.approvalEmployeeStatus == '반려'}" class="flex justify-center items-center">
+									                		<span style="color: red;">반려</span>
+									                	</div>
+													</div>
+								                	<!-- 결재자3 없는경우 -->
+								                	<span th:if="${#lists.size(approvers) < 3}">-</span>
+												</div>											
+												<!-- 신청서 step이 4이면 : 결재자 3는 무조건 승인상태 -->
+												<div th:if="${step == 4}">
+													<div th:each="a : ${approvers}">
+														<div th:if="${a.approvalLevel == 3}" class="flex justify-center items-center">
+									                		<img th:src="@{/upload/{fileName}.{fileExt}(fileName=${a.fileName}, fileExt=${a.fileExt})}" 
+										                		 style="width: 50px; height: 50px; object-fit: cover;"/>
+									                	</div>
+									                </div>
 												</div>												
-											</td>	
+											</td>	<!-- 3열 끝  -->
 							            </tr>	
 							            
 							            <!-- 3행 -->
@@ -340,7 +425,20 @@
 							<div style="height: 15px;"></div>
 							
 							<!-- 첨부파일 -->
-							
+							<div>
+								<!-- 타이틀 -->
+								<div class="flex justify-between space-x-3">
+									<div>
+										<label class="text-lg">첨부파일</label>
+									</div>
+								</div>
+								<!-- 파일선택 폼 -->
+								<div id="fileDiv">
+							       <div class="flex mt-1">
+							       		<!-- 첨부파일 추가 버튼 클릭시 폼추가되는 자리 -->
+							       </div>
+							   </div>
+							</div>
 							
 							<!-- 버튼 --> 
 							<div class="mt-8 flex items-center justify-end">

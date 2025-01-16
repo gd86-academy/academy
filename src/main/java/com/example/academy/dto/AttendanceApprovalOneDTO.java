@@ -18,7 +18,7 @@ public class AttendanceApprovalOneDTO {
 	    private String attendanceApprovalContent;	// 신청내용
 	    private String attendanceApprovalBeginDate;	// 시작날짜
 	    private String attendanceApprovalEndDate;	// 종료날짜
-	    private String attendanceApprovalStep;	// 현재 결재단계
+	    private Integer attendanceApprovalStep;	// 현재 결재단계
 	    
 	    // approval_employee (결재자) 테이블
 	    //private List<String> approvers;	// 결재자 배열로 받기
