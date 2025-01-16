@@ -433,7 +433,11 @@
 									</div>
 								</div>
 								<!-- 첨부파일 자리 -->
-								<div class="flex flex-wrap items-center">
+								<div class="flex flex-wrap items-center mt-3">
+									<!-- 첨부파일 없는 경우 -->
+									<div th:if="${#lists.isEmpty(files)}">
+										<span class="text-white-dark">첨부된 파일이 없습니다.</span>
+									</div>
 									<!-- 첨부파일 버튼 -->
 									<div th:each="f : ${files}">
 										<button
