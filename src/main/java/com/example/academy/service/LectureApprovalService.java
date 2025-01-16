@@ -54,7 +54,6 @@ public class LectureApprovalService {
 	public void addLectureApproval(LectureApprovalAddDTO lectureApprovalAddDTO) {
 		
 		// 강의결재테이블에 입력한 내용 insert.
-		lectureApprovalAddDTO.setLectureApprovalStep(lectureApprovalAddDTO.getApproval().size()); // 결재자 수 가져와서 set.
 		lectureApprovalMapper.insertLectureApproval(lectureApprovalAddDTO);
 		Integer lectureApprovalNo = lectureApprovalAddDTO.getLectureApprovalNo(); // insert할 때 생성된 결재번호 가져옴.
 		

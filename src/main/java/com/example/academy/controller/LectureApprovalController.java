@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.academy.dto.ClassroomListDTO;
 import com.example.academy.dto.LectureApprovalAddDTO;
 import com.example.academy.dto.LectureApprovalEmployeeListDTO;
+import com.example.academy.dto.LectureApprovalModifyDTO;
 import com.example.academy.dto.LectureApprovalOneDTO;
 import com.example.academy.dto.LectureApprovalWeekdayListDTO;
 import com.example.academy.dto.LectureOneDTO;
@@ -37,6 +38,13 @@ public class LectureApprovalController {
 	@Autowired CommonService commonService;
 	@Autowired ClassroomService classroomService;
 	@Autowired LectureApprovalService lectureApprovalService;
+	
+	// 진수우 : 강의결재 수정 제출.
+	@PostMapping("/modifyLectureApproval")
+	public String modifyLectureApproval(Model model, LectureApprovalModifyDTO lectureApprovalDTO) {
+		//log.debug("result =============================" + lectureApprovalDTO);
+		return "test";
+	}
 	
 	// 진수우 : 강의결재 수정페이지 호출.
 	@GetMapping("/modifyLectureApproval")
@@ -125,7 +133,8 @@ public class LectureApprovalController {
 	// 진수우 : 강의결재 신청서 제출.
 	@PostMapping("/addLectureApproval")
 	public String addLectureApproval(Model model, LectureApprovalAddDTO lectureApprovalDTO) {
-		lectureApprovalService.addLectureApproval(lectureApprovalDTO);
+		//lectureApprovalService.addLectureApproval(lectureApprovalDTO);
+		log.debug("result =============================" + lectureApprovalDTO);
 		return "redirect:/applicationList";
 	}
 	

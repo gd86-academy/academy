@@ -156,7 +156,8 @@ if (applyModalButtonAddPeople) applyModalButtonAddPeople.addEventListener('click
 		        `;
 				
 				
-				
+				$('#alreadyPeople').remove(); // 숨김 처리
+				$('#newPeople').removeAttr('hidden');
 				if (inputs.length == 0) {
 					
 					$('#people1 .flex').remove();
@@ -164,7 +165,7 @@ if (applyModalButtonAddPeople) applyModalButtonAddPeople.addEventListener('click
 					$('#people3 .flex').remove();
 				} else if (inputs.length == 1) { // 값이 1개라면
 					// cnfrk
-					$('#alreadyPeople').remove(); // 숨김 처리
+					
 					$('#people1 .flex').remove();
 					$('#people1').append(html);  // HTML 추가
 					$('#people2 .flex').remove();
@@ -338,46 +339,48 @@ $('#addBtn').click(function() {
         $('.endDate-error').hide();
         $('#endDate').removeClass("errorInput");
     }
- 	
-	$('#timeDiv tr').each(function(index) {
-        // 각 select 요소에 대한 검사
-		console.log($('#timeDiv tr').length);
-        const weekday = $(this).find(`#weekdayId${index}`);
-        const beginTime = $(this).find(`#beginTimeId${index}`);
-        const endTime = $(this).find(`#endTimeId${index}`);
-
-        // 요일 검사
-        if (weekday.val() === '' || weekday.val() === null) {
-            weekday.addClass('errorInput');
-            $(this).find('.weekday-error').show();
-            isVal = false;
-        } else {
-            weekday.removeClass('errorInput');
-            $(this).find('.weekday-error').hide();
-        }
-		console.log("요일" + weekday.val());
-        // 시작시간 검사
-        if (beginTime.val() === '' || beginTime.val() === null) {
-            beginTime.addClass('errorInput');
-            $(this).find('.beginTime-error').show();
-            isVal = false;
-        } else {
-            beginTime.removeClass('errorInput');
-            $(this).find('.beginTime-error').hide();
-        }
-		console.log("시작시간" + beginTime.val());
-        // 종료시간 검사
-        if (endTime.val() === '' || endTime.val() === null) {
-            endTime.addClass('errorInput');
-            $(this).find('.endTime-error').show();
-            isVal = false;
-        } else {
-            endTime.removeClass('errorInput');
-            $(this).find('.endTime-error').hide();
-        }
-		console.log("종료시간" + endTime.val());
-    });
 	
+	if ($('#alreadyLectureTime').length === 0) {
+		$('#timeDiv tr').each(function(index) {
+	        // 각 select 요소에 대한 검사
+			console.log($('#timeDiv tr').length);
+	        const weekday = $(this).find(`#weekdayId${index}`);
+	        const beginTime = $(this).find(`#beginTimeId${index}`);
+	        const endTime = $(this).find(`#endTimeId${index}`);
+
+	        // 요일 검사
+	        if (weekday.val() === '' || weekday.val() === null) {
+	            weekday.addClass('errorInput');
+	            $(this).find('.weekday-error').show();
+	            isVal = false;
+	        } else {
+	            weekday.removeClass('errorInput');
+	            $(this).find('.weekday-error').hide();
+	        }
+			console.log("요일" + weekday.val());
+	        // 시작시간 검사
+	        if (beginTime.val() === '' || beginTime.val() === null) {
+	            beginTime.addClass('errorInput');
+	            $(this).find('.beginTime-error').show();
+	            isVal = false;
+	        } else {
+	            beginTime.removeClass('errorInput');
+	            $(this).find('.beginTime-error').hide();
+	        }
+			console.log("시작시간" + beginTime.val());
+	        // 종료시간 검사
+	        if (endTime.val() === '' || endTime.val() === null) {
+	            endTime.addClass('errorInput');
+	            $(this).find('.endTime-error').show();
+	            isVal = false;
+	        } else {
+	            endTime.removeClass('errorInput');
+	            $(this).find('.endTime-error').hide();
+	        }
+			console.log("종료시간" + endTime.val());
+	    });
+	}
+ 	
 	// #inputContainer에 input 요소가 하나도 없으면 추가된 항목이 없다고 판단
     if ($('#inputContainer input:not([type="hidden"])').length === 0) {
         isVal = false;
@@ -453,6 +456,16 @@ $('#addBtn').click(function() {
     // 폼 제출
     if (isVal) {
         console.log("submit 성공");
+		$('#endDate').prop('disabled', false);
+		$('#timeDiv tr').each(function(index) {
+			const weekday = $(this).find(`#weekdayId${index}`);
+	        const beginTime = $(this).find(`#beginTimeId${index}`);
+	        const endTime = $(this).find(`#endTimeId${index}`);
+			weekday.prop('disabled', false);
+			beginTime.prop('disabled', false);
+			endTime.prop('disabled', false);
+		});
+		
         $('#addForm').submit();
     } else {
 	  	modalBackgroundSubmitError.classList.remove('hidden');  // 모달 배경 보이기
@@ -460,7 +473,7 @@ $('#addBtn').click(function() {
 	}
 });
 
-
+// 강의시간 추가 버튼 누를시
 var timeResult= 0;
 $('#btnAddTime').click(function () {
     let isEmpty = false;
@@ -474,15 +487,16 @@ $('#btnAddTime').click(function () {
             return false; // 루프 중단
         }
     });
-
+	timeResult++; // 고유 ID 증가
     if (isEmpty) {
         modalBackgroundAddFileError.classList.toggle('hidden', false);
         modalBackgroundAddFileError.classList.toggle('block', true);
+		timeResult--;
     } else if (timeResult > 4) {
         modalBackgroundAddOver.classList.toggle('hidden', false);
         modalBackgroundAddOver.classList.toggle('block', true);
+		timeResult--;
     } else {
-        timeResult++; // 고유 ID 증가
 
         let weekdayId = 'weekdayId' + timeResult;
         let beginTimeId = 'beginTimeId' + timeResult;
@@ -668,10 +682,11 @@ $('#btnAddTime').click(function () {
             });
         });
     }
+	console.log('timeResult : ' + timeResult);
 });
 
 // 요일 선택 시, 시간 데이터를 가져오는 이벤트 바인딩
-$('#weekdayId0').on('click change', function () {
+$('#weekdayId0').on('change', function () {
     const selectedWeekday = $(this).val(); // 선택된 요일 값
 	const startDate = $('#beginDate').val();
 	const endDate = $('#endDate').val();
@@ -947,7 +962,7 @@ $('#btnAddFile').click(function(){
 	               type="file" 
 	               class="hidden"
 	               multiple
-	               onchange="document.getElementById('${displayId}').value = this.files[0] ? this.files[0].name : '';" />
+	               onchange="alreadyChangeFile()" />
 	           <!-- 파일 이름 표시 -->
 	           <input 
 	               id="${displayId}" 
@@ -997,7 +1012,19 @@ $('#btnAddFile').click(function(){
 function removeFileField(fileId) {
 	// 해당 파일 입력폼과 휴지통 버튼을 포함하는 div 제거
 	$('#fileField'+fileId).remove();
+	$('#fileFieldId'+fileId).remove();
 	
+}
+
+// 기존파일 input에서 파일을 수정할 시 기존 파일이름이 있는 hidden제거.
+function alreadyChangeFile() {
+	document.getElementById('${displayId}').value = this.files[0] ? this.files[0].name : '';
+	// 파일이 선택되면 hidden 속성을 제거
+	    if (fileName) {
+	        displayElement.removeAttribute('hidden');
+	    } else {
+	        displayElement.setAttribute('hidden', true);
+	    }
 }
 
 // 강의시간에서 시작시간을 선택했을 때 종료시간을 선택할 때 시작시간 이전의 시간은 선택되지 안
