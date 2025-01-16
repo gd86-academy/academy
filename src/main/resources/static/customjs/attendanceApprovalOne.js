@@ -119,6 +119,36 @@ document.addEventListener('alpine:init', () => {
     }));
 	
 	
+});
+
+// 파일 크기 단위까지 포함해서 출력
+window.addEventListener('DOMContentLoaded', (event) => {
+		// DOM이 완전히 로드된 후 렌더링이 완료되었을 때 파일 크기 처리
+	   setTimeout(() => {
+	       // 1. 모든 파일 목록 가져오기
+	       document.querySelectorAll('[id^="fileSize"]').forEach(fileElement => {
+	           const fileNo = fileElement.id.replace('fileSize', ''); // id가 fileSize1, fileSize2이므로 fileSize 제거하고 번호만 추출
+	           const fileSize = parseInt(fileElement.value, 10); // 파일 크기 값 가져오기 (정수로 변환)
+	           console.log('원래 fileSize:', fileSize);  // 크기 출력 로그
+	
+	           // 2. 단위 포함해서 크기 계산
+	           let size = '';
+	           if (fileSize < 1000000) {
+	               size = Math.floor(fileSize / 1000) + 'KB';
+	           } else {
+	               size = Math.floor(fileSize / 1000000) + 'MB';
+	           }
+	           console.log('파일 size:', size);  // 크기 출력 로그
+	
+	           // 3. 계산된 size html에 출력
+	           const fileSizePrElement = document.getElementById(`fileSizePr${fileNo}`);
+	           if (fileSizePrElement) {
+	               fileSizePrElement.textContent = size;
+	           } else {
+	               console.error(`fileSizePr${fileNo} 요소를 찾을 수 없습니다.`);
+	           }
+	       });
+	   }, 100);  // 100ms 지연 후 실행 (필요에 따라 조정 가능)
 	
 });
 

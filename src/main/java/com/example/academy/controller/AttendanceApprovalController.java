@@ -15,7 +15,9 @@ import com.example.academy.dto.AttendanceApprovalAddDTO;
 import com.example.academy.dto.AttendanceApprovalOneDTO;
 import com.example.academy.security.CustomUserDetails;
 import com.example.academy.service.ApprovalEmployeeService;
+import com.example.academy.service.AttendanceApprovalFileService;
 import com.example.academy.service.AttendanceApprovalService;
+import com.example.academy.vo.Files;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AttendanceApprovalController {
 	@Autowired AttendanceApprovalService attendanceApprovalService;
 	@Autowired ApprovalEmployeeService approvalEmployeeService;
+	@Autowired AttendanceApprovalFileService attendanceApprovalFileService;
 	
 	// 김혜린 : 근태 신청서 상세페이지
 	@GetMapping("/attendanceApprovalOne")
@@ -41,6 +44,10 @@ public class AttendanceApprovalController {
 		List<AttendanceApprovalOneDTO> approvers  = approvalEmployeeService.getAttendanceApproverList(attendanceApprovalNo);
 		model.addAttribute("approvers", approvers);
 		log.debug("결재자 목록 : " + approvers);	//디버깅
+		// 3) 파일 목록
+		List<Files> files = attendanceApprovalFileService.getAttendanceApprovalFileList(attendanceApprovalNo);
+		model.addAttribute("files", files);
+		log.debug("파일 목록 : " + files);	//디버깅
 		
 		return "attendanceApprovalOne";
 	}
