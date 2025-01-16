@@ -15,8 +15,11 @@
 			, ap.attendance_approval_title attendanceApprovalTitle
 			, ap.attendance_approval_content attendanceApprovalContent
 			, ap.attendance_approval_step attendanceApprovalStep
+			, c1.`name` attendanceApprovalStatus
 		FROM attendance_approval ap LEFT OUTER JOIN employee e
 		ON ap.employee_no = e.employee_no
+		LEFT OUTER JOIN common c1
+		ON ap.attendance_approval_status = c1.`code`
 		WHERE ap.attendance_approval_no = #{attendanceApprovalNo}
 	</select>
 	
