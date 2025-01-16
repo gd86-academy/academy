@@ -118,7 +118,7 @@ public class ReservationService {
 	                    reservationMapper.deleteReservationEmployee(employee.getEmployeeNo(), employee.getReservationNo());
 	                }
 	                // 로그로 삽입되지 않은 이유를 확인
-	                System.out.println("Invalid employeeNo (null or <= 0). Skipping or deleting employee: " + employee.getEmployeeNo());
+	                System.out.println("employeNo : " + employee.getEmployeeNo());
 	            }
 	        }
 	    }

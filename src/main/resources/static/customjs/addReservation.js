@@ -113,7 +113,7 @@ document.addEventListener('alpine:init', () => {
 	// 검색창에서 엔터 키 처리
 	/*
 	$('#searchEmployee').on('keydown', function (e) {
-	    if (e.key === 'Enter' || e.keyCode === 13) {
+	    if (e.key === 'Enter') {
 	        e.preventDefault(); // 엔터 키로 폼이 제출되는 것을 막음
 	        searchEmployee(); // 검색 함수 호출
 	    }

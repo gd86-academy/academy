@@ -68,7 +68,7 @@ document.addEventListener('alpine:init', () => {
 	// 수정 페이지 로드 시 참여자 목록을 가져오기
 	$(document).ready(function() {
 	    const reservationNo = $('#reservationNo').val(); // 예약 번호 가져오기
-	    let cnt = $('#selectEmployeesContainer .selectedEmployee').length;
+	    let cnt = $('#selectEmployeesContainer .selectedEmployee-box').length;
 	    
 	    if (reservationNo) {
 	        $.ajax({
@@ -93,7 +93,7 @@ document.addEventListener('alpine:init', () => {
 	                            </div>
 	                        `;
 	                        $('#selectEmployeesContainer').append(existingEmployee);
-							cnt++; // 추가된 사원마다 cnt 증가
+							cnt++; 
 	                    });
 	                }
 	            },
@@ -152,7 +152,7 @@ document.addEventListener('alpine:init', () => {
 	// 검색창에서 엔터 키 처리
 	/*
 	$('#searchEmployee').on('keydown', function (e) {
-	    if (e.key === 'Enter' || e.keyCode === 13) {
+	    if (e.key === 'Enter') {
 	        e.preventDefault(); // 엔터 키로 폼이 제출되는 것을 막음
 	        searchEmployee(); // 검색 함수 호출
 	    }
@@ -166,7 +166,7 @@ document.addEventListener('alpine:init', () => {
 
 	// 사원추가
 	$('#addResultEmployee').click(function () {
-		let cnt = $('#selectEmployeesContainer .selectedEmployee').length;
+		let cnt = $('#selectEmployeesContainer .selectedEmployee-box').length;
 	    const selectedOption = $('#resultEmployee option:selected'); // 선택된 옵션 가져오기
 	    const employeeNo = selectedOption.val();
 	    const employeeName = selectedOption.text();
@@ -235,7 +235,6 @@ document.addEventListener('alpine:init', () => {
 	    } else {
 	        console.log('employeeNo가 이미 존재합니다:', employeeNo);
 	    }
-
 	    parentElement.remove(); // DOM에서 삭제
 	});
 });	
