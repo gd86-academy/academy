@@ -9,7 +9,7 @@
 			, ap.employee_no employeeNo
 			, e.employee_name employeeName
 			, ap.attendance_approval_type attendanceApprovalType
-			, ap.create_date createDate
+			, ap.update_date updateDate
 			, ap.attendance_approval_begindate attendanceApprovalBeginDate
 			, ap.attendance_approval_enddate attendanceApprovalEndDate
 			, ap.attendance_approval_title attendanceApprovalTitle

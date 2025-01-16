@@ -28,6 +28,35 @@ public class AttendanceApprovalController {
 	@Autowired ApprovalEmployeeService approvalEmployeeService;
 	@Autowired AttendanceApprovalFileService attendanceApprovalFileService;
 	
+	// 김혜린 : 근태 신청서 수정페이지
+	@GetMapping("/modifyAttendanceApproval")
+	public String modifyAttendanceApproval(Model model, Integer attendanceApprovalNo) {
+		// 1) 근태신청서 테이블 정보
+		AttendanceApprovalOneDTO attendanceApproval = attendanceApprovalService.getAttendanceApprovalOne(attendanceApprovalNo);
+		model.addAttribute("attendanceApproval", attendanceApproval);
+		// 근태신청서 현재 결재단계
+		model.addAttribute("step",attendanceApproval.getAttendanceApprovalStep());
+		
+		log.debug("근태신청서 상세 : " + attendanceApproval);	//디버깅
+		log.debug("==============attendanceApprovalNo2 : " + attendanceApprovalNo);	//디버깅
+		// 2) 결재자 목록
+		List<AttendanceApprovalOneDTO> approvers  = approvalEmployeeService.getAttendanceApproverList(attendanceApprovalNo);
+		model.addAttribute("approvers", approvers);
+		log.debug("결재자 목록 : " + approvers);	//디버깅
+		// 3) 파일 목록
+		List<Files> files = attendanceApprovalFileService.getAttendanceApprovalFileList(attendanceApprovalNo);
+		model.addAttribute("files", files);
+		log.debug("파일 목록 : " + files);	//디버깅
+		
+		return "modifyAttendanceApproval";
+	}
+	// 김혜린 : 근태 신청서 수정페이지
+	@PostMapping("/modifyAttendanceApproval")
+	public String modifyAttendanceApproval() {
+		
+		return "redirect:/attendanceApprovalOne?attendanceApprovalNo="  ;
+	}
+	
 	// 김혜린 : 근태 신청서 상세페이지
 	@GetMapping("/attendanceApprovalOne")
 	public String attenddanceApprovalOne(Model model, Integer attendanceApprovalNo) {

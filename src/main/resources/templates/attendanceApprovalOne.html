@@ -414,7 +414,7 @@
 											<td colspan="3">
 												<div x-data="form" class="w-full mr-3">
 							                       	<input name="todayDate" id="todayDate" class="form-input lecutre-text-align" 
-							                       			th:value="${attendanceApproval.createDate}" disabled />
+							                       			th:value="${attendanceApproval.updateDate}" disabled />
 											   	</div>
 											</td>
 							        	</tr>
@@ -528,8 +528,8 @@
 							
 							<!-- 버튼 --> 
 							<!-- 신청서 대기 상태 -->
-							<div th:if="${attendanceApproval.attendanceApprovalStatus == '대기'}" class="mt-8 flex items-center justify-end">
-								<a id="updateBtn" type="button" class="btn btn-dark" style="width:130px;" th:href="@{/}">
+							<div th:if="${step == 1 && attendanceApproval.attendanceApprovalStatus == '대기'}" class="mt-8 flex items-center justify-end">
+								<a id="updateBtn" type="button" class="btn btn-dark" style="width:130px;" th:href="@{/modifyAttendanceApproval(attendanceApprovalNo=${attendanceApproval.attendanceApprovalNo})}">
 									수정
 								</a>
 								<a id="addBtn" type="button" class="btn btn-danger ltr:ml-4 rtl:mr-4" style="width:130px;">
@@ -538,7 +538,7 @@
 							</div>
 							<!-- 신청서 반려 상태 -->
 							<div th:if="${attendanceApproval.attendanceApprovalStatus == '반려'}" class="mt-8 flex items-center justify-end">
-								<a id="updateBtn" type="button" class="btn btn-dark" style="width:130px;" th:href="@{/}">
+								<a id="updateBtn" type="button" class="btn btn-dark" style="width:130px;" th:href="@{/modifyAttendanceApproval(attendanceApprovalNo=${attendanceApproval.attendanceApprovalNo})}">
 									수정
 								</a>	
 							</div>
