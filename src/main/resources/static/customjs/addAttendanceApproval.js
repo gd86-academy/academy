@@ -391,7 +391,7 @@ if (applyModalButtonAddPeople) applyModalButtonAddPeople.addEventListener('click
 				console.log(inputs.length);
 				let html = `
 		            <div class="flex w-full mb-1">
-		                <input name="approvers" class="text-center w-full" value="${input.value}"></input>
+		                <input name="approvers" class="text-center w-full" value="${input.value}" readonly></input>
 		            </div>
 		        `;
 				
@@ -688,4 +688,20 @@ const closeModalAddExist = () => {
 };
 
 if (closeModalButtonAddExist) closeModalButtonAddExist.addEventListener('click', closeModalAddExist); // 닫기 버튼 클릭 시
-if (employeeBtnAddExist) employeeBtnAddExist.addEventListener('click', closeModalAddExist);     // 취소 버튼 클릭 시
+if (employeeBtnAddExist) employeeBtnAddExist.addEventListener('click', closeModalAddExist);     // 취소 버튼
+
+// 추가초과 모달 관련 DOM 요소
+const openModalButtonAddOver = document.getElementById('openModalButtonAddOver');
+const closeModalButtonAddOver = document.getElementById('closeModalButtonAddOver');
+const modalBackgroundAddOver = document.getElementById('modalBackgroundAddOver');
+const modalWrapperAddAddOver = document.getElementById('modalWrapperAddOver');
+const employeeBtnAddAddOver = document.getElementById('employeeBtnAddOver');
+
+// 추가오류 모달 닫기
+const closeModalAddOver = () => {
+	  modalBackgroundAddOver.classList.remove('block');
+	  modalBackgroundAddOver.classList.add('hidden');  // 모달 배경 숨기기
+};
+
+if (closeModalButtonAddOver) closeModalButtonAddOver.addEventListener('click', closeModalAddOver); // 닫기 버튼 클릭 시
+if (employeeBtnAddAddOver) employeeBtnAddAddOver.addEventListener('click', closeModalAddOver);     // 취소 클릭 시

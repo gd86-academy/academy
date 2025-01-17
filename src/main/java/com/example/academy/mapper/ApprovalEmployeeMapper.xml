@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.ApprovalEmployeeMapper">
+	
 	<!-- 김혜린 : 근태신청서 상세페이지 - 결재자 목록 -->
 	<select id="approverList" parameterType="Integer" resultType="com.example.academy.dto.AttendanceApprovalOneDTO">
 		SELECT 
@@ -26,7 +27,7 @@
 	</select>
 
 	<!-- 김혜린 : 근태신청서 결재자 추가 -->
-	<insert id="insertAttendanceApprovalEmployee" parameterType="com.example.academy.dto.AttendanceApprovalAddDTO" useGeneratedKeys="true" keyProperty="attendanceApprovalNo">
+	<insert id="insertAttendanceApprovalEmployee" parameterType="com.example.academy.dto.AttendanceApprovalAddDTO" useGeneratedKeys="true" keyProperty="approvalEmployeeNo">
 		INSERT INTO approval_employee(
 			attendance_approval_no
 			, approver
@@ -38,4 +39,12 @@
 			, #{approvalLevel}
 			)
 	</insert>
+	
+	<!-- 김혜린 : 근태신청서 수정 - 결재자 삭제 -->
+	<delete id="deleteAttendanceApprovalEmployee" parameterType="com.example.academy.dto.AttendanceApprovalAddDTO">
+		DELETE FROM approval_employee
+		WHERE attendance_approval_no = #{attendanceApprovalNo}
+			AND approver = #{approver}
+			AND approval_level = #{approvalLevel}
+	</delete>
 </mapper>

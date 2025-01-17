@@ -1,6 +1,7 @@
 package com.example.academy.service;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,83 @@ public class AttendanceApprovalService {
 	public void modifyAttendanceApproval(AttendanceApprovalModifyDTO attendanceApprovalModifyDTO) {
 		// 1) 근태신청서 테이블 수정
 		attendanceApprovalMapper.updateAttendanceApproval(attendanceApprovalModifyDTO);
+		
+		// 2) 결재자 수정 - approval_employee (결재자) 테이블 수정
+		// 	ㄴ if approvers가 존재한다면 변경(변경된거 기존꺼 삭제후 삽입) / 존재안하면 변경사항 없음
+		List<String> approvers = attendanceApprovalModifyDTO.getApprovers(); // 새로운 결재자 배열
+		List<String> alreadyApprovers = attendanceApprovalModifyDTO.getAlreadyApprovers(); // 변경전 결재자 배열
+		
+		log.debug("새로운 결재자 배열 : " + approvers);
+		log.debug("기존 결재자 배열 : " + alreadyApprovers);
+		
+		if (approvers != null && !approvers.isEmpty()) {	 // approvers가 비어있지 않은 경우(결재자가 바뀐경우임)			
+			AttendanceApprovalAddDTO addDTO = new AttendanceApprovalAddDTO();
+			log.debug("====ModifyDTO의 AttendanceApprovalNo : " + attendanceApprovalModifyDTO.getAttendanceApprovalNo());
+			addDTO.setAttendanceApprovalNo(attendanceApprovalModifyDTO.getAttendanceApprovalNo());	// 근태신청서번호 세팅
+			log.debug("====addDTO의 AttendanceApprovalNo : " + addDTO.getAttendanceApprovalNo());
+			int levelCount = 1; // 결재 순서 카운팅
+			
+			for(int i=0; i< approvers.size(); i++) {
+				String newApprover = approvers.get(i); // 새로운 결재자 가져오기
+				String alreadyApprover = (i < alreadyApprovers.size()) ? alreadyApprovers.get(i) : null;	// 기존결재자 수가 새로운결재자 수보다 작으면 null 반환
+				
+				// 결재자 변경이 없으면 아무것도 안함
+				if(alreadyApprover != null && newApprover.equals(alreadyApprover)) {
+					levelCount++;	
+					continue; // 다음 반복으로 pass
+				}
+				
+				// 결재자가 다르다면 기존 결재자 삭제 후 새로운 결재자 삽입				
+				if(alreadyApprover != null) {
+					// 기존 결재자 삭제
+					String alreadyNumberStr = alreadyApprover.replaceAll("[^0-9]", "");	// 숫자 제외 ""로 바꾸기
+					int alreadyNumber = Integer.parseInt(alreadyNumberStr);	// 기존 approver 값
+					addDTO.setApprover(alreadyNumber);	// 결재자 세팅
+					addDTO.setApprovalLevel(levelCount);	// 결재 순서 세팅
+					log.debug("====기존 결재자 삭제전 addDTO확인 : " + addDTO);
+					approvalEmployeeMapper.deleteAttendanceApprovalEmployee(addDTO);	// 기존 결재자 삭제
+					
+					// 새로운 결재자 삽입
+					String newNumberStr = newApprover.replaceAll("[^0-9]", "");	// 숫자 제외 ""로 바꾸기
+					int newNumber = Integer.parseInt(newNumberStr);	// 새로운 approver 값
+					addDTO.setApprover(newNumber);	// 결재자 세팅
+					addDTO.setApprovalLevel(levelCount);	// 결재 순서 세팅
+					log.debug("====새로운 결재자 삽입전 addDTO확인 : " + addDTO);
+					approvalEmployeeMapper.insertAttendanceApprovalEmployee(addDTO);	// 새로운 결재자 삽입
+					
+					levelCount++;
+				}
+			}
+			
+			// 새로운 결재자가 더 많은 경우, 그만큼 결재자 삽입
+			if(approvers.size() > alreadyApprovers.size()) {
+				for(int i = alreadyApprovers.size(); i<approvers.size(); i++) {
+					String newNumberStr = approvers.get(i).replaceAll("[^0-9]", "");	// 숫자 제외 ""로 바꾸기
+					int newNumber = Integer.parseInt(newNumberStr);
+					addDTO.setApprover(newNumber);	// 결재자 세팅
+					addDTO.setApprovalLevel(levelCount);	// 결재순위 세팅
+					log.debug("==새로운 결재자가 더 많은 경우==삽입전 addDTO확인 : " + addDTO);
+					approvalEmployeeMapper.insertAttendanceApprovalEmployee(addDTO);	// 새로운 결재자 삽입
+					levelCount++;
+				}
+			}
+			
+			// 기존 결재자가 더 많은 경우, 그만큼 결재자 삭제
+			if(approvers.size() < alreadyApprovers.size()) {
+				for(int i=approvers.size(); i<alreadyApprovers.size(); i++) {
+					String alreadyNumberStr = alreadyApprovers.get(i).replaceAll("[^0-9]", "");	// 숫자 제외 ""로 바꾸기
+					int alreadyNumber = Integer.parseInt(alreadyNumberStr);
+					addDTO.setApprover(alreadyNumber);	// 결재자 세팅
+					addDTO.setApprovalLevel(levelCount);	// 결재순위 세팅
+					log.debug("==기존 결재자가 더 많은 경우==삭제전 addDTO확인 : " + addDTO);
+					approvalEmployeeMapper.deleteAttendanceApprovalEmployee(addDTO);	// 기존 결재자 삭제
+					levelCount++;
+				}
+			}
+		}
+		
+		// 3) 파일 수정
+		
 	}
 	
 	// 김혜린 : 근태신청서 상세페이지 - 근태신청서 테이블
@@ -51,7 +129,7 @@ public class AttendanceApprovalService {
 
 		// attendance_approval (근태신청서) 테이블에 추가
 		result += attendanceApprovalMapper.insertAttendanceApproval(attendanceApprovalAddDTO);
-		Integer attendanceApprovalNo = attendanceApprovalAddDTO.getAttendanceApprovalNo();
+		Integer attendanceApprovalNo = attendanceApprovalAddDTO.getAttendanceApprovalNo();	// pk값 받아오기
 		log.debug("attendanceApprovalNo: " + attendanceApprovalNo);
 		log.debug("attendance_approval테이블삽입확인:1? " + result);
 		
@@ -68,6 +146,7 @@ public class AttendanceApprovalService {
 			attendanceApprovalAddDTO.setAttendanceApprovalNo(attendanceApprovalNo);
 			row += approvalEmployeeMapper.insertAttendanceApprovalEmployee(attendanceApprovalAddDTO);
 		}
+		
 		// 모든 결재자가 db에 삽입되면 result +1 
 		if(attendanceApprovalAddDTO.getApprovers().size() == row) {
 			result += 1;
@@ -117,9 +196,6 @@ public class AttendanceApprovalService {
 			}
 			
 		}
-		
-		
-		
 	}
 	
 	// 김혜린 : 결재대기목록 - 근태신청서리스트 조회
