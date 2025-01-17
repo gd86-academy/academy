@@ -171,6 +171,7 @@ document.addEventListener('alpine:init', () => {
 		let meetingroomNo = $('#selectMeetingroom option:selected');
 		let meetingroomCapacity = meetingroomNo.data('capacity');
 		let selectedEmployeeCount = $('#selectEmployeesContainer .selectedEmployee-box').length;
+		selectedEmployeeCount++; // 예약자 포함
 
 		console.log('회의실 수용 인원:', meetingroomCapacity);  // meetingroomCapacity 확인
 		console.log('선택된 사원 수:', selectedEmployeeCount);  // selectedEmployeeCount 확인

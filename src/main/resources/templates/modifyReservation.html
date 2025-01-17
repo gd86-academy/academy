@@ -214,6 +214,7 @@
 													<th:block th:each="meetingroom : ${meetingroom}">
 						                    			<option th:value="${meetingroom.meetingroomNo}" 
 																th:text="${meetingroom.meetingroomName}" 
+																th:selected="${meetingroom.meetingroomNo == reservation.meetingroomNo}"
 																th:data-capacity="${meetingroom.meetingroomCapacity}">
 														</option>
 						                    		</th:block>
