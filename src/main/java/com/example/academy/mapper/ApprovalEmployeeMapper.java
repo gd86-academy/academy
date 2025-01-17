@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.example.academy.dto.AttendanceApprovalAddDTO;
+import com.example.academy.dto.AttendanceApprovalModifyDTO;
 import com.example.academy.dto.AttendanceApprovalOneDTO;
 
 @Mapper
@@ -13,6 +14,10 @@ public interface ApprovalEmployeeMapper {
 	// 김혜린 : 근태신청서 상세페이지 - 결재자 목록
 	List<AttendanceApprovalOneDTO> approverList(Integer attendanceApprovalNo);
 	
-	// 김혜린 : 근태신청서 결재자 추가
-	Integer insertAttendanceApprovalEmployee(AttendanceApprovalAddDTO attendanceApprovalAddDTO); 
+	// 김혜린 : 근태신청서 결재자 추가 / 근태신청서 수정 - 결재자 추가
+	Integer insertAttendanceApprovalEmployee(AttendanceApprovalAddDTO attendanceApprovalAddDTO);
+	
+	// 김혜린 : 근태신청서 수정 - 결재자 삭제
+	Integer deleteAttendanceApprovalEmployee(AttendanceApprovalAddDTO attendanceApprovalAddDTO);
+	
 }

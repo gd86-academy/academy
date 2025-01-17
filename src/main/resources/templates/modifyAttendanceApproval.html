@@ -140,10 +140,38 @@
 									            	<td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0;">2</td>
 									            	<td class="lecutre-text-align" style="padding: 5px;">3</td>
 									            </tr>
-									            <!-- 여기에 이미 등록되어있는 결재자 추가 -->
-									            
+									            <!-- 이미 등록되어있는 결재자 출력 -->
+									            <tr style="height: 50px;" id="alreadyPeople">
+													<td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0;">
+														<div th:each="approver : ${approvers}">
+															<div th:if="${approver.approvalLevel == 1}" class="flex">
+																<div class="flex w-full mb-1">
+													                <input name="alreadyApprovers" class="text-center w-full" th:value="${approver.employeeName} + '[' + ${approver.approver} + ']'" readonly></input>
+													            </div>
+															</div>
+														</div>
+													</td>
+													<td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0;">
+														<div th:each="approver : ${approvers}">
+															<div th:if="${approver.approvalLevel == 2}">
+																<div class="flex w-full mb-1">
+													                <input name="alreadyApprovers" class="text-center w-full" th:value="${approver.employeeName} + '[' + ${approver.approver} + ']'" readonly></input>
+													            </div>
+															</div>
+														</div>
+													</td>
+													<td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0;">
+														<div th:each="approver : ${approvers}">
+															<div th:if="${approver.approvalLevel == 3 || approver.approvalLevel == ''}">
+																<div class="flex w-full mb-1">
+													                <input name="alreadyApprovers" class="text-center w-full" th:value="${approver.employeeName} + '[' + ${approver.approver} + ']'" readonly></input>
+													            </div>
+															</div>
+														</div>
+													</td>
+												</tr>
 									            <!-- 결재선 변경 시 노출 -->
-									            <tr style="height: 50px;">
+									            <tr style="height: 50px;" id="newPeople" hidden>
 									                <td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0;">
 									                	<div class="flex">
 									                		<div id="people1"></div>
@@ -338,7 +366,7 @@
 	   <div th:replace="fragments/footer :: footer"></div>
 		
 		<!-- 모달 관련 -->
-		<!--  결재선 추가 모달 -->
+		<!--  결재선 변경 모달 -->
 		<div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundAddPeople">
 		   <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperAddPeople">
 				<div
@@ -371,7 +399,7 @@
 					<h3
 						class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
 					>
-					   결재선 추가
+					   결재선 변경
 					</h3>
 					<div class="p-5">
 						<!-- 모달내용 -->
@@ -391,8 +419,8 @@
 										<input type="hidden" id="deselectedBtn">
 										<input type="hidden" id="selectedValue">
 										<input type="hidden" id="approvalRemoveBtn">
-										<div th:each="people : ${lectureApprovalEmployee}" class="flex w-full mb-1">
-							                <input id="${approvalPeoplesId}" type="text" class="form-input ltr:rounded-r-none rtl:rounded-l-none" name="approval" th:value="${people.approver} + '[' + ${people.approverNo} + ']'" readonly/>
+										<div th:each="a : ${approvers}" class="flex w-full mb-1">
+							                <input id="${approvalPeoplesId}" type="text" class="form-input ltr:rounded-r-none rtl:rounded-l-none" name="approval" th:value="${a.employeeName} + '[' + ${a.approver} + ']'" readonly/>
 							                <button id="${approvalRemoveBtnId}" type="button" class="btn btn-danger ltr:rounded-l-none rtl:rounded-r-none" style="width: 80px;">삭제</button>
 							            </div>
 									</div>
@@ -455,6 +483,57 @@
 		                   <div class="mt-8 flex items-center justify-end">
 	                          <button
 	                          	  id="employeeBtnAddExist"
+	                              type="button"
+	                              class="btn btn-primary ltr:ml-4 rtl:mr-4"
+	                          >
+	                              확인
+	                          </button>
+	                      </div>
+		               </div>
+		           </div>
+		       </div>
+		   </div>
+		</div>
+		
+		<!-- 3명초과 결재자 추가시 경고 모달 -->
+        <div class="modal">
+		  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundAddOver">
+		       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperAddOver">
+		           <div
+		               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
+		               id="modal"
+		           >
+		               <button
+		                   type="button"
+		                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+		                   id="closeModalButtonAddOver"
+		               >
+		                   <svg
+		                       xmlns="http://www.w3.org/2000/svg"
+		                       width="24px"
+		                       height="24px"
+		                       viewBox="0 0 24 24"
+		                       fill="none"
+		                       stroke="currentColor"
+		                       stroke-width="1.5"
+		                       stroke-linecap="round"
+		                       stroke-linejoin="round"
+		                       class="h-6 w-6"
+		                   >
+		                       <line x1="18" y1="6" x2="6" y2="18"></line>
+		                       <line x1="6" y1="6" x2="18" y2="18"></line>
+		                   </svg>
+		               </button>
+		               <h3
+		                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
+		               >
+		                   안내
+		               </h3>
+		               <div class="p-5">
+		                   입력가능한 개수를 초과했습니다.
+		                   <div class="mt-8 flex items-center justify-end">
+	                          <button
+	                          	  id="employeeBtnAddOver"
 	                              type="button"
 	                              class="btn btn-primary ltr:ml-4 rtl:mr-4"
 	                          >

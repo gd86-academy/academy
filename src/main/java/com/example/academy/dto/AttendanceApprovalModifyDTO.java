@@ -24,6 +24,7 @@ public class AttendanceApprovalModifyDTO {
 		    
 		    // approval_employee (결재자) 테이블
 		    private List<String> approvers;	// 결재자 배열로 받기
+		    private List<String> alreadyApprovers;	// 변경전 결재자 배열로 받기
 		    private Integer approvalEmployeeNo;	// PK 결재자 번호
 		    private Integer approver;	// FK 결재자(employee_no)
 		    private Integer approvalLevel;	// 결재자 결재순위

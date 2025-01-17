@@ -375,12 +375,18 @@ if (applyModalButtonAddPeople) applyModalButtonAddPeople.addEventListener('click
 				console.log(inputs.length);
 				let html = `
 		            <div class="flex w-full mb-1">
-		                <input name="approvers" class="text-center w-full" value="${input.value}"></input>
+		                <input name="approvers" class="text-center w-full" value="${input.value}" readonly></input>
 		            </div>
 		        `;
 				
 				
-				if (inputs.length == 1) { // 값이 1개라면
+				$('#alreadyPeople').attr('hidden', true);	// hidden 속성 추가로 화면에서 노출안됨
+				$('#newPeople').removeAttr('hidden'); // #newPeople의 hidden 속성제거
+				if (inputs.length == 0) {
+					$('#people1 .flex').remove();
+					$('#people2 .flex').remove();
+					$('#people3 .flex').remove();
+				} else if (inputs.length == 1) { // 값이 1개라면
 					$('#people1 .flex').remove();
 					$('#people1').append(html);  // HTML 추가
 					$('#people2 .flex').remove();
@@ -676,3 +682,19 @@ const closeModalAddExist = () => {
 
 if (closeModalButtonAddExist) closeModalButtonAddExist.addEventListener('click', closeModalAddExist); // 닫기 버튼 클릭 시
 if (employeeBtnAddExist) employeeBtnAddExist.addEventListener('click', closeModalAddExist);     // 취소 버튼 클릭 시
+
+// 추가초과 모달 관련 DOM 요소
+const openModalButtonAddOver = document.getElementById('openModalButtonAddOver');
+const closeModalButtonAddOver = document.getElementById('closeModalButtonAddOver');
+const modalBackgroundAddOver = document.getElementById('modalBackgroundAddOver');
+const modalWrapperAddAddOver = document.getElementById('modalWrapperAddOver');
+const employeeBtnAddAddOver = document.getElementById('employeeBtnAddOver');
+
+// 추가오류 모달 닫기
+const closeModalAddOver = () => {
+	  modalBackgroundAddOver.classList.remove('block');
+	  modalBackgroundAddOver.classList.add('hidden');  // 모달 배경 숨기기
+};
+
+if (closeModalButtonAddOver) closeModalButtonAddOver.addEventListener('click', closeModalAddOver); // 닫기 버튼 클릭 시
+if (employeeBtnAddAddOver) employeeBtnAddAddOver.addEventListener('click', closeModalAddOver);     // 취소
