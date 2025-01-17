@@ -125,6 +125,7 @@
 					<h2 class="text-2xl ml-3 mb-5">나의 신청 목록</h2>
 					<div class="panel" style="margin: 0% 15% 0% 15%; padding: 4%; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05); border-radius : 10px;">
 						<form id="addForm" method="post" th:action="@{/modifyLectureApproval}" enctype="multipart/form-data">
+						<input type="hidden" name="lectureApprovalNo" th:value="${lectureApprovalOne.lectureApprovalNo}">
 						<div class="p-5">
 						<div class="flex items-center justify-between" style="margin-bottom: 20px; margin-top: 20px;">
 							<div class="text-3xl font-bold uppercase m-3" style="white-space: nowrap;">&nbsp;강의 신청서</div>
@@ -374,7 +375,7 @@
 						               class="hidden"
 						               multiple
 						               th:onchange="document.getElementById('attendanceApprovalFileNameDisplay[[${stat.index}]]').value = this.files[0] ? this.files[0].name : '';
-            document.getElementById('fileFieldId[[${stat.index}]]').remove();"/>
+            										document.getElementById('fileFieldId[[${stat.index}]]').remove();"/>
 						           <!-- 파일 이름 표시 -->
 						           <input
 						           	   th:id="'attendanceApprovalFileNameDisplay' + ${stat.index}"

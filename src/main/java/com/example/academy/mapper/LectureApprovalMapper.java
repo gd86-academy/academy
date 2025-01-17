@@ -9,6 +9,7 @@ import com.example.academy.dto.ApprovalAddDTO;
 import com.example.academy.dto.LectureApprovalAddDTO;
 import com.example.academy.dto.LectureApprovalEmployeeListDTO;
 import com.example.academy.dto.LectureApprovalGetBeginTimeDTO;
+import com.example.academy.dto.LectureApprovalModifyDTO;
 import com.example.academy.dto.LectureApprovalOneDTO;
 import com.example.academy.dto.LectureApprovalWeekdayListDTO;
 import com.example.academy.vo.Common;
@@ -18,6 +19,33 @@ import com.example.academy.vo.LectureWeekday;
 
 @Mapper
 public interface LectureApprovalMapper {
+	
+	// 진수우 : 강의결재 수정 시 파일테이블에서 삭제할 파일번호 조회
+	Integer selectDeleteFileNo(String fileName);
+	
+	// 진수우 : 강의결재 수정 시 강의결재/파일 연결테이블에서 해당정보 삭제
+	Integer deleteContactLectureApprovalFile(Integer fileNo, Integer lectureApprovalNo);
+	
+	// 진수우 : 강의결재 수정 시 결재자테이블에 있는 데이터 수 카운트
+	Integer countApprovalEmployee(Integer lectureApprovalNo);
+	
+	// 진수우 : 강의결재 수정 시 파일테이블에서 해당정보 삭제
+	Integer deleteLectureApprovalFile(String fileName);
+	
+	// 진수우 : 강의결재 수정 시 결재자테이블에서 결재자 삭제 (없어지거나 결재순서가 바뀐 사원만 삭제)
+	Integer deleteApprovalEmployee(Integer lectureApprovalNo, Integer approvalLevel);
+	
+	// 진수우 : 강의결재 수정 시 결재자테이블에서 수정이 안된 결재자가 있는지 확인
+	Integer selectNotChangeEmployee(Integer approver, Integer approvalLevel, Integer lectureApprovalNo);
+	
+	// 진수우 : 강의결재 수정 시 강의결재/강의시간 연결테이블에서 해당정보 모두 삭제
+	Integer deleteLectureApprovalLectureWeekday(Integer lectureApprovalNo);
+	
+	// 진수우 : 강의결재 수정 시 강의시간테이블에서 해당정보 모두 삭제
+	Integer deleteLectureWeekday(Integer lectureApprovalNo);
+	
+	// 진수우 : 강의결재 수정 시 강의결재테이블에서 해당정보 수정
+	Integer updateLectureApproval(LectureApprovalModifyDTO lectureApprovalModifyDTO);
 	
 	// 진수우 : 강의결재 상세페이지에서 결재자 출력
 	List<LectureApprovalEmployeeListDTO> selectLectureApprovalEmployee(Integer lectureApprovalNo);

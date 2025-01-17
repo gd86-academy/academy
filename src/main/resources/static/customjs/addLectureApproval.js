@@ -928,8 +928,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 var element = document.getElementById('fileCount');
-var inputs = element.querySelectorAll('input:not([type="hidden"])');
-let result = inputs.length;  // 전역 변수로 result 선언
+let result = 0; // 기본 값 설정
+
+// element가 존재하고 input 태그가 있는 경우만 처리
+if (element) {
+    var inputs = element.querySelectorAll('input:not([type="hidden"])');
+    result = inputs ? inputs.length : 0; // inputs가 null 또는 undefined일 경우 0으로 설정
+}
 
 // 첨부파일 폼 추가버튼 클릭 시
 $('#btnAddFile').click(function(){
@@ -962,7 +967,7 @@ $('#btnAddFile').click(function(){
 	               type="file" 
 	               class="hidden"
 	               multiple
-	               onchange="alreadyChangeFile()" />
+	               onchange="document.getElementById('${displayId}').value = this.files[0] ? this.files[0].name : '';" />
 	           <!-- 파일 이름 표시 -->
 	           <input 
 	               id="${displayId}" 

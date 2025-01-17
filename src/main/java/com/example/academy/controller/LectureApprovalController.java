@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.academy.dto.ClassroomListDTO;
 import com.example.academy.dto.LectureApprovalAddDTO;
@@ -42,8 +43,9 @@ public class LectureApprovalController {
 	// 진수우 : 강의결재 수정 제출.
 	@PostMapping("/modifyLectureApproval")
 	public String modifyLectureApproval(Model model, LectureApprovalModifyDTO lectureApprovalDTO) {
-		//log.debug("result =============================" + lectureApprovalDTO);
-		return "test";
+		// 강의결재수정 수행.
+		lectureApprovalService.modifyLectureApproval(lectureApprovalDTO);
+		return "redirect:/applicationList";
 	}
 	
 	// 진수우 : 강의결재 수정페이지 호출.
@@ -133,8 +135,7 @@ public class LectureApprovalController {
 	// 진수우 : 강의결재 신청서 제출.
 	@PostMapping("/addLectureApproval")
 	public String addLectureApproval(Model model, LectureApprovalAddDTO lectureApprovalDTO) {
-		//lectureApprovalService.addLectureApproval(lectureApprovalDTO);
-		log.debug("result =============================" + lectureApprovalDTO);
+		lectureApprovalService.addLectureApproval(lectureApprovalDTO);
 		return "redirect:/applicationList";
 	}
 	
