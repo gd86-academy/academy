@@ -166,6 +166,27 @@ document.addEventListener('alpine:init', () => {
 	            $('#resultEmployee').empty();
 	        }
 	    }
+		
+		// 회의실 선택과 수용 인원 정보 가져오기
+		let meetingroomNo = $('#selectMeetingroom option:selected');
+		let meetingroomCapacity = meetingroomNo.data('capacity');
+		let selectedEmployeeCount = $('#selectEmployeesContainer .selectedEmployee-box').length;
+
+		console.log('회의실 수용 인원:', meetingroomCapacity);  // meetingroomCapacity 확인
+		console.log('선택된 사원 수:', selectedEmployeeCount);  // selectedEmployeeCount 확인
+		
+		if (!meetingroomNo) {
+			$('#modalBackgroundMeetingroomCheck').show();
+			$('#modalWrapperMeetingroomCheck').show();
+		    return;  
+		}
+
+		if (selectedEmployeeCount > meetingroomCapacity) {
+	        $('#selectEmployeesContainer .selectedEmployee-box:last').remove(); // 마지막 추가된 사원 제거
+	        $('.reservationEmployee-error').show(); // 실패 시 에러 메시지 표시
+	    } else {
+	        $('.reservationEmployee-error').hide(); // 에러 메시지 숨기기
+	    }
 	});
 
 	// 삭제 버튼 기능 추가
@@ -220,7 +241,6 @@ $(document).ready(function () {
         $('#modalBackgroundMeetingroomCheck').hide();
         $('#modalWrapperMeetingroomCheck').hide();
     });
-	return;
 });
 
 // 예약신청 유효성 검사

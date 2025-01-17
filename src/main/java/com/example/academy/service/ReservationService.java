@@ -7,8 +7,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.academy.dto.AddReservationDTO;
+import com.example.academy.dto.MeetingRoomListDTO;
+import com.example.academy.dto.MeetingroomEmployeeDTO;
 import com.example.academy.dto.ReservationEmployeeDTO;
 import com.example.academy.dto.ReservationListDTO;
+import com.example.academy.mapper.MeetingRoomMapper;
 import com.example.academy.mapper.ReservationMapper;
 import com.example.academy.vo.Employee;
 

@@ -211,6 +211,26 @@ document.addEventListener('alpine:init', () => {
 				
 	        }
 	    }
+		// 회의실 선택과 수용 인원 정보 가져오기
+		let meetingroomNo = $('#selectMeetingroom option:selected');
+		let meetingroomCapacity = meetingroomNo.data('capacity');
+		let selectedEmployeeCount = $('#selectEmployeesContainer .selectedEmployee-box').length;
+
+		console.log('회의실 수용 인원:', meetingroomCapacity);  // meetingroomCapacity 확인
+		console.log('선택된 사원 수:', selectedEmployeeCount);  // selectedEmployeeCount 확인
+
+		if (!meetingroomNo) {
+			$('#modalBackgroundMeetingroomCheck').show();
+			$('#modalWrapperMeetingroomCheck').show();
+		    return;  
+		}
+
+		if (selectedEmployeeCount > meetingroomCapacity) {
+		    $('#selectEmployeesContainer .selectedEmployee-box:last').remove(); // 마지막 추가된 사원 제거
+		    $('.reservationEmployee-error').show(); // 실패 시 에러 메시지 표시
+		} else {
+		    $('.reservationEmployee-error').hide(); // 에러 메시지 숨기기
+		}
 	});
 
 	// 삭제 버튼 기능 추가
@@ -238,6 +258,30 @@ document.addEventListener('alpine:init', () => {
 	    parentElement.remove(); // DOM에서 삭제
 	});
 });	
+
+// meetingroomCheck모달
+$(document).ready(function () {
+    $('#beginTimeCode, #endTimeCode, #reservationTitle, #reservationDate, #reservationContent, #searchEmployee').on('click', function () {
+        const meetingroom = $('#selectMeetingroom').val();
+
+        if (!meetingroom) {
+            console.log('회의실을 선택하지 않았습니다.');
+            $('#modalBackgroundMeetingroomCheck').show();
+            $('#modalWrapperMeetingroomCheck').show();
+			$('#beginTimeCode, #endTimeCode').val('');
+        }
+    });
+
+    $('#closeModalButtonMeetingroomCheck').on('click', function () {
+        $('#modalBackgroundMeetingroomCheck').hide();
+        $('#modalWrapperMeetingroomCheck').hide();
+    });
+
+    $('#modalBackgroundMeetingroomCheck').on('click', function () {
+        $('#modalBackgroundMeetingroomCheck').hide();
+        $('#modalWrapperMeetingroomCheck').hide();
+    });
+});
 
 // 예약수정 유효성 검사
 $('#btnModifyReservation').click(function(){

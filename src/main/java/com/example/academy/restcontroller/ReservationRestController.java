@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.academy.dto.MeetingRoomListDTO;
+import com.example.academy.dto.MeetingroomEmployeeDTO;
 import com.example.academy.dto.ReservationEmployeeDTO;
 import com.example.academy.dto.ReservationListDTO;
 import com.example.academy.mapper.ReservationMapper;
@@ -24,14 +26,16 @@ import com.example.academy.security.CustomUserDetails;
 import com.example.academy.service.ReservationService;
 import com.example.academy.vo.Employee;
 
+import lombok.extern.slf4j.Slf4j;
+
 
 @RestController
 public class ReservationRestController {
 	@Autowired ReservationService reservationService;
-	
+
 	// 박시현 : 수정페이지 - 이미 등록되있던 예약 참여자 보여주기
 	@GetMapping("/restapi/getReservationEmployeeOne") 
-	public ResponseEntity<List<ReservationEmployeeDTO>> getReservationEmployeeOne(@RequestParam Integer reservationNo) {
+	public ResponseEntity<List<ReservationEmployeeDTO>> getReservationEmployeeOne( Integer reservationNo) {
 		List<ReservationEmployeeDTO> employees = reservationService.getReservationEmployee(reservationNo);
         
         if (employees.isEmpty()) {
