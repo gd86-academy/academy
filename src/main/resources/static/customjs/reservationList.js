@@ -124,7 +124,7 @@ document.addEventListener('alpine:init', () => {
 					const handleDayCellContent = (arg) => {
 					    // 숫자 부분만 추출
 					    const dayNumber = arg.dayNumberText.replace("일", ""); 
-					    return { html: `<span>${dayNumber}</span>` }; // 숫자만 반환
+					    return { html: `<span class="d-block p-2">${dayNumber}</span>` }; // 숫자만 반환
 					};
 		            this.calendar = new FullCalendar.Calendar(calendarEl, {
 		                initialView: 'dayGridMonth',

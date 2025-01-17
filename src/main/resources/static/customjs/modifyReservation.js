@@ -164,9 +164,7 @@ document.addEventListener('alpine:init', () => {
 	    searchEmployee(); // 검색 함수 호출
 	});
 
-	// 사원추가
 	$('#addResultEmployee').click(function () {
-		let cnt = $('#selectEmployeesContainer .selectedEmployee-box').length;
 	    const selectedOption = $('#resultEmployee option:selected'); // 선택된 옵션 가져오기
 	    const employeeNo = selectedOption.val();
 	    const employeeName = selectedOption.text();
@@ -175,42 +173,38 @@ document.addEventListener('alpine:init', () => {
 	        // 중복 검사
 	        let exists = false;
 	        $('#selectEmployeesContainer .selectedEmployee').each(function () {
-	            // data()로 읽은 값과 employeeNo를 문자열로 비교
-	            if ($(this).attr('data-employee-no') === String(employeeNo)) {
-	                exists = true; // 이미 추가된 사원이면 추가하지 않음
-					$('#selectEmployeesContainer .selectedEmployee').each(function () {
-			            // data()로 읽은 값과 employeeNo를 문자열로 비교
-			            if ($(this).attr('data-employee-no') === String(employeeNo)) {
-			                exists = true; // 이미 추가된 사원이면 추가하지 않음
-			                return false; // 반복문 종료
-			            }
-			        });
+	            if ($(this).data('employee-no') === String(employeeNo)) {
+	                exists = true;
+	                return false; // 중복 시 종료
 	            }
 	        });
 
 	        if (!exists) {
+	            // 동적으로 cnt 계산
+	            const cnt = $('#selectEmployeesContainer .selectedEmployee-box').length;
+
 	            // 선택된 사원을 추가
-				const newEmployee = `
-                    <div class="d-flex w-100 items-center justify-between mt-2 selectedEmployee-box">
-                        <input type="hidden" class="selectedEmployeeNo" value="${employeeNo}" name="reservationEmployees[${cnt}].employeeNo">
-                        <input 
-                            class="form-input selectedEmployee"
-                            type="text"
-                            value="${employeeName}" 
-                            data-employee-no="${employeeNo}" 
-                            name="reservationEmployees[${cnt}].employeeName"
-                            readonly>
-                        <button type="button" class="btn btn-danger ms-3 removeEmployee" style="word-break:keep-all;">삭제</button>
-                    </div>
-                `;
-                $('#selectEmployeesContainer').append(newEmployee);
-                cnt++; // cnt 증가
+	            const newEmployee = `
+	                <div class="d-flex w-100 items-center justify-between mt-2 selectedEmployee-box">
+	                    <input type="hidden" class="selectedEmployeeNo" value="${employeeNo}" name="reservationEmployees[${cnt}].employeeNo">
+	                    <input 
+	                        class="form-input selectedEmployee"
+	                        type="text"
+	                        value="${employeeName}" 
+	                        data-employee-no="${employeeNo}" 
+	                        name="reservationEmployees[${cnt}].employeeName"
+	                        readonly>
+	                    <button type="button" class="btn btn-danger ms-3 removeEmployee" style="word-break:keep-all;">삭제</button>
+	                </div>
+	            `;
+	            $('#selectEmployeesContainer').append(newEmployee);
+
 	            // 검색기록 초기화
-	            $('#searchEmployee').val(''); 
+	            $('#searchEmployee').val('');
 	            $('#resultEmployee').empty();
-				
 	        }
 	    }
+
 		// 회의실 선택과 수용 인원 정보 가져오기
 		let meetingroomNo = $('#selectMeetingroom option:selected');
 		let meetingroomCapacity = meetingroomNo.data('capacity');
@@ -226,7 +220,7 @@ document.addEventListener('alpine:init', () => {
 		    return;  
 		}
 
-		if (selectedEmployeeCount >= meetingroomCapacity) {
+		if (selectedEmployeeCount > meetingroomCapacity) {
 		    $('#selectEmployeesContainer .selectedEmployee-box:last').remove(); // 마지막 추가된 사원 제거
 		    $('.reservationEmployee-error').show(); // 실패 시 에러 메시지 표시
 		} else {
@@ -236,6 +230,7 @@ document.addEventListener('alpine:init', () => {
 
 	// 삭제 버튼 기능 추가
 	$(document).on('click', '.removeEmployee', function () {
+		let cnt = $('#selectEmployeesContainer .selectedEmployee-box').length;
 	    const parentElement = $(this).closest('.selectedEmployee-box');
 	    const employeeNo = parentElement.find('.selectedEmployee').data('employee-no'); 
 		
