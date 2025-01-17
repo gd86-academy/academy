@@ -1,10 +1,7 @@
 package com.example.academy.service;
 
-import java.lang.System.Logger;
 import java.time.LocalDate;
 import java.util.List;
-
-import org.mybatis.logging.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,12 +47,11 @@ public class AttendanceService {
 	// 생성자 주입
 	public AttendanceService(AttendanceRepository attendanceRepository, EmployeeRepository employeeRepository) {
 		
-		// private static final Logger logger = LoggerFactory.getLogger(AttendanceService.class);
-		
 		this.attendanceRepository = attendanceRepository;
 		this.employeeRepository = employeeRepository;
 	}
 	
+	@Transactional(rollbackFor = Exception.class)
 	public void generateDailyAttendance() {
 		
 		// 오늘 날짜를 구함
@@ -64,13 +60,23 @@ public class AttendanceService {
 		// 모든 사원 목록 조회
 		List<Employee> employeeList = employeeRepository.findAll();
 		
-		for (Employee employee : employeeList) {
-	        createAttendanceForEmployee(employee, today);  // 직원별 근태 데이터 생성
-	    }
+		if (employeeList.isEmpty()) {
+			log.warn("직원 목록이 비어 있습니다. 근태 데이터를 생성할 수 없습니다.");
+        } else {
+        	log.info("총 {}명의 직원에 대해 근태 데이터를 생성합니다.", employeeList.size());
+        }
+		
+		 // 각 직원에 대해 근태 데이터 생성
+        for (Employee employee : employeeList) {
+        	log.debug("직원번호 {}에 대한 근태 데이터 생성 시작", employee.getEmployeeNo());
+            createAttendanceForEmployee(employee, today);  // 직원별 근태 데이터 생성
+            log.debug("직원번호 {}에 대한 근태 데이터 생성 완료", employee.getEmployeeNo());
+        }
 	}
 	
 	// 직원별 근태 데이터 생성 메서드
 	private void createAttendanceForEmployee(Employee employee, LocalDate today) {
+		// Attendance 객체 생성
 	    Attendance attendance = new Attendance();
 	    attendance.setEmployeeNo(employee.getEmployeeNo());  // 사원 정보 설정
 	    attendance.setAttendanceDate(today);  // 날짜 설정
@@ -81,6 +87,13 @@ public class AttendanceService {
 	    attendance.setCheckoutTime(null);  // NULL
 	    attendance.setAttendanceContent(null);  // NULL
 
-	    attendanceRepository.save(attendance);  // 근태 데이터 저장
+	    try {
+            // 데이터 저장
+            attendanceRepository.save(attendance);  
+            log.info("근태 데이터가 성공적으로 저장되었습니다. 직원번호: {}", employee.getEmployeeNo());
+        } catch (Exception e) {
+            // 예외가 발생한 경우
+        	log.error("근태 데이터 저장 중 오류 발생. 직원번호: {}", employee.getEmployeeNo(), e);
+        }
 	}
 }

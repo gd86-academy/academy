@@ -19,16 +19,16 @@ public class Attendance {
 	@Column(name = "attendance_no")
 	private Integer attendanceNo;
 	
-	@Column(name = "aemployee_no")
+	@Column(name = "employee_no")
     private Integer employeeNo;
 	
 	@Column(name = "attendance_date")
     private LocalDate attendanceDate;
 	
-	@Column(name = "checkin_time")
+	@Column(name = "attendance_checkin")
     private LocalDateTime checkinTime;  // NULL 허용
 	
-	@Column(name = "checkout_time")
+	@Column(name = "attendance_checkout")
     private LocalDateTime checkoutTime;  // NULL 허용
 	
 	@Column(name = "attendance_status")
