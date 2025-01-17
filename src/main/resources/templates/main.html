@@ -145,7 +145,7 @@
 						<div class="flex justify-between">
 							<div class="text-md font-semibold">연차관리</div>
 						</div>
-						<div class="mt-5 flex justify-between items-center">
+						<div class="mt-5 flex justify-center items-center">
 							<!-- 잔여연차 -->
 							<div class="text-base flex flex-col items-center">
 								<div
@@ -153,6 +153,7 @@
 									style="font-size: 20px;">15.0</div>
 								<div class="mt-3 font-semibold text-center">총연차</div>
 							</div>
+							<div style="width: 40px;"></div>
 							<!-- 사용연차 -->
 							<div class="text-base flex flex-col items-center">
 								<div
@@ -160,6 +161,7 @@
 									style="font-size: 20px;"><span th:text="${count}"></span></div>
 								<div class="mt-3 font-semibold text-center">사용연차</div>
 							</div>
+							<div style="width: 40px;"></div>
 							<!-- 총연차 -->
 							<div class="text-base flex flex-col items-center">
 								<div
@@ -215,12 +217,13 @@
 
 				<div class="flex justify-between pt-0 ml-1">
 					<!-- 날씨정보 및 공지사항을 나란히 배치 -->
-					<div class="flex w-full gap-6">
+					<div class="flex w-full">
 						<!-- 날씨 -->
 						<div
 							class="panel bg-gradient-to-r from-blue-500 to-sky-600 w-full mr-3 p-5">
 							<div class="flex items-center justify-between">
-								<div class="text-xl font-bold text-white">날씨</div>
+								<div class="text-xl font-bold text-white ml-3">날씨</div>
+								<div class="font-bold mr-3" style="color: #888ea8">서울특별시</div>
 							</div>
 							<div class="text-base mt-5">
 								<div x-data="contacts1" class="text-white flex items-center">
@@ -229,7 +232,7 @@
 									<div id="currentTemperature" class="text-5xl font-bold"></div>
 								</div>
 								<div id="weeklyWeather"
-									class="mt-5 font-semibold text-white grid grid-cols-2 gap-2">
+									class="p-3 font-semibold text-white ">
 									<!-- 주간 데이터가 동적으로 삽입됩니다 -->
 								</div>
 							</div>
@@ -238,7 +241,8 @@
 						<!-- 공지사항 -->
 						<div class="panel w-full ml-3">
 							<div class="flex justify-between">
-								<div class="text-xl font-bold text-black">공지사항</div>
+								<div class="text-xl font-bold text-black">최근 공지사항</div>
+								<a th:href="@{/boardList}" class="mr-1" style="color: #888ea8">더보기</a>
 							</div>
 							<div class="table-responsive mt-2">
 								<table>
@@ -252,12 +256,12 @@
 									</thead>
 									<tbody>
 										<!-- boardList를 반복하여 tr로 출력 -->
-								        <tr th:each="b : ${boardList}">
-								            <td class="text-center" th:text="${b.boardNo}"></td>
-								            <td class="text-center" th:text="${b.boardTitle}"></td>
-								            <td class="text-center" th:text="${b.employeeName}"></td>
-								            <td class="text-center" th:text="${b.createDate}"></td>
-								        </tr>
+								        <tr th:each="b : ${boardList}" th:onclick="|location.href='@{/boardOne(boardNo=${b.boardNo})}'|">
+										    <td class="text-center" th:text="${b.boardNo}"></td>
+										    <td class="text-center" th:text="${b.boardTitle}"></td>
+										    <td class="text-center" th:text="${b.employeeName}"></td>
+										    <td class="text-center" th:text="${b.createDate}"></td>
+										</tr>
 									</tbody>
 								</table>
 							</div>
@@ -265,15 +269,39 @@
 					</div>
 				</div>
 
-				<div class="flex justify-between mt-5 ml-1 gap-6">
+				<div class="flex justify-between mt-5 ml-1">
 					<!-- 메모 -->
 					<div class="panel w-full mr-3"
 						style="background-color: #FFFACD; color: #000; padding: 1rem;">
 						<div>
-							<div class="text-xl font-bold text-black">메모</div>
-							<div style="height: 260px;"></div>
+							<div class="text-xl font-bold text-black ml-3">메모</div>
+							<form th:action="@{/saveMemo}" th:method="post">
+							<input type="hidden" name="writer" th:value="${writer}">
+							<div class="ml-3 mt-3" style="height: 260px;">
+							    <textarea 
+							    	class="custom-textarea w-full"
+							        rows="12" 
+							        cols="100" 
+							        style="
+							            background-color: transparent; 
+							            border: none; 
+							            outline: none; 
+							            color: inherit; 
+							            resize: none;
+							        "
+							        onfocus="this.style.outline='none'; this.style.border='none';"
+							        th:text="${memoContent}"
+							        placeholder="등록된 메모가 없습니다."
+							        name="memoContent"
+							    ></textarea>
+							</div>
 							<div class="flex justify-end">
-								<button type="button" class="btn btn-warning">저장</button>
+								<a th:if="${memoContent} != null" type="button" class="btn btn-dark mr-1" th:href="@{/removeMemo(employeeNo=${writer})}">삭제</a>
+								<button type="submit" class="btn btn-warning">저장</button>
+							</div>
+							</form>
+							<div  class="flex justify-end">
+								
 							</div>
 						</div>
 					</div>

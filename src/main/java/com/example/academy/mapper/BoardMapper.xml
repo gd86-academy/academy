@@ -14,7 +14,7 @@
 		LEFT OUTER JOIN employee e ON e.employee_no = b.update_employee_no
 		WHERE b.use_yn = 1
 		ORDER BY createDate DESC
-		LIMIT 3
+		LIMIT 5
 	</select>
 
 	<!-- 공지사항 삭제 버튼 클릭 시 yn 수정 -->
