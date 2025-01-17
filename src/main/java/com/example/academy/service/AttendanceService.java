@@ -50,7 +50,7 @@ public class AttendanceService {
 	// 생성자 주입
 	public AttendanceService(AttendanceRepository attendanceRepository, EmployeeRepository employeeRepository) {
 		
-		private static final Logger logger = LoggerFactory.getLogger(AttendanceService.class);
+		// private static final Logger logger = LoggerFactory.getLogger(AttendanceService.class);
 		
 		this.attendanceRepository = attendanceRepository;
 		this.employeeRepository = employeeRepository;
