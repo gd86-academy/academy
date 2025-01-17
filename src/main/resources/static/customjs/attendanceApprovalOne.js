@@ -76,23 +76,6 @@ document.addEventListener('alpine:init', () => {
         },
 	}));
 	
-
-	// 작성날짜 캘린더
-	Alpine.data("form", () => ({
-	    init() {
-			// 오늘 날짜를 YYYY-MM-DD 형식으로 변환
-			const today = new Date().toISOString().split('T')[0];
-			// 입력 필드에 기본값으로 오늘 날짜 설정
-            const inputField = document.getElementById('todayDate');
-            inputField.value = today;
-			
-			// Flatpickr 초기화
-	        flatpickr(inputField, {
-	            dateFormat: 'Y-m-d',	// 날짜 형식 설정 (예: 2025-01-08)
-	            defaultDate: today, // 기본 날짜를 오늘 날짜로 설정
-	        });
-	    },
-	}));
 	
 	// 신청 시작날짜 캘린더
 	Alpine.data("form1", () => ({

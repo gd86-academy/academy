@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<title>근태신청서</title>
+		<title>근태신청서 수정</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/x-icon" th:href="@{/favicon.png}" />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -122,16 +122,10 @@
 	
 				<!-- 메인화면 -->
 				<div class="animate__animated p-6 white-light" :class="[$store.app.animation]"> <!-- 메인화면 div 시작 -->
-					<h2 class="text-2xl ml-3 mb-5">결재신청</h2>
-					
-					<!-- 신청양식 선택버튼 -->
-					<div class="relative inline-flex" style="margin: 0% 15% 0% 15%;">
-					    <a type="button" class="btn btn-primary ltr:rounded-r-none rtl:rounded-l-none mb-3">근태신청</a>
-					    <a type="button" class="btn btn-outline-primary ltr:rounded-l-none rtl:rounded-r-none mb-3" th:href="@{/addLectureApproval}">강의신청</a>
-					</div>
+					<h2 class="text-2xl ml-3 mb-5">근태신청서 수정</h2>
 					
 					<div class="panel" style="margin: 0% 15% 0% 15%; padding: 4%; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05); border-radius : 10px;">
-						<form id="addForm" method="post" th:action="@{/addAttendanceApproval}" enctype="multipart/form-data">
+						<form id="updateForm" method="post" th:action="@{/modifyAttendanceApproval}" enctype="multipart/form-data">
 							<div class="p-3">
 								<div class="flex items-center justify-between" style="margin-bottom: 20px; margin-top: 20px;">
 									<div class="text-3xl font-semibold uppercase m-3" style="white-space: nowrap;">근태 신청서</div>
@@ -146,6 +140,9 @@
 									            	<td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0;">2</td>
 									            	<td class="lecutre-text-align" style="padding: 5px;">3</td>
 									            </tr>
+									            <!-- 여기에 이미 등록되어있는 결재자 추가 -->
+									            
+									            <!-- 결재선 변경 시 노출 -->
 									            <tr style="height: 50px;">
 									                <td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0;">
 									                	<div class="flex">
@@ -167,20 +164,26 @@
 									    </table>
 									</div>
 								</div>
-								<!-- 테이블1 : 사원번호, 기안자 출력 -->
+							
+								<!-- 테이블1 : 신청서번호, 사원번호, 기안자 출력 -->
 								<div class="table-responsive">
 								    <table style="table-layout: fixed; width: 100%; height:65px; border: 1px solid #f0f0f0;">
 								        <tbody>
 								            <tr class="border-dark-dark-light">
+								                <td class="bg-[#f4f4f4] lecutre-title-align">신청서 번호</td>
+								                <td class="lecutre-text-align">
+								                	<input type="hidden" name="attendanceApprovalNo" th:value="${attendanceApproval.attendanceApprovalNo}">
+								                	<span th:text="${attendanceApproval.attendanceApprovalNo}"></span>
+								                </td>
 								                <td class="bg-[#f4f4f4] lecutre-title-align">사원 번호</td>
 								                <td class="lecutre-text-align">
-								                	<input type="hidden" name="employeeNo" th:value="${userNo}">
-								                	<span th:text="${userNo}"></span>
+								                	<input type="hidden" name="employeeNo" th:value="${attendanceApproval.employeeNo}">
+								                	<span th:text="${attendanceApproval.employeeNo}"></span>
 								                </td>
 								                <td class="bg-[#f4f4f4] lecutre-title-align">기안자</td>
 								                <td class="lecutre-text-align">
-								                	<input type="hidden" name="employeeName" th:value="${userName}">
-								                	<span th:text="${userName}"></span>
+								                	<input type="hidden" name="employeeName" th:value="${attendanceApproval.employeeName}">
+								                	<span th:text="${attendanceApproval.employeeName}"></span>
 								                </td>					                
 								            </tr>
 								        </tbody>
@@ -196,32 +199,37 @@
 								                <td class="bg-[#f4f4f4] lecutre-title-align" style="width: 25%;">신청종류</td>
 								                <!-- 라디오 버튼 -->
 								                <td class="lecutre-text-align">
-								                	<label class="flex items-center cursor-pointer">
-											            <input type="radio" name="attendanceApprovalType" class="form-radio" th:value="CT002" checked/>
+								                	<label class="flex items-center cursor-pointer" >
+											            <input type="radio" name="attendanceApprovalType" class="form-radio" th:value="CT002" 
+											            	th:checked="${attendanceApproval.attendanceApprovalType == 'CT002'}"/>
 											            <span class="text-white-dark ml-2">연차</span>
 										        	</label>
 								                </td>
 								                <td class="lecutre-text-align">
-								                	<label class="flex items-center cursor-pointer">
-											            <input type="radio" name="attendanceApprovalType" class="form-radio" th:value="CT004" />
+								                	<label class="flex items-center cursor-pointer" >
+											            <input type="radio" name="attendanceApprovalType" class="form-radio" th:value="CT004"
+											            	th:checked="${attendanceApproval.attendanceApprovalType == 'CT004'}"/>
 											            <span class="text-white-dark ml-2">반차</span>
 										        	</label>
 								                </td>
 								                <td class="lecutre-text-align">
-								                	<label class="flex items-center cursor-pointer">
-											            <input type="radio" name="attendanceApprovalType" class="form-radio" th:value="CT001" />
+								                	<label class="flex items-center cursor-pointer" >
+											            <input type="radio" name="attendanceApprovalType" class="form-radio" th:value="CT001"
+											            	th:checked="${attendanceApproval.attendanceApprovalType == 'CT001'}" />
 											            <span class="text-white-dark ml-2">병가</span>
 										        	</label>
 								                </td>
 								                <td class="lecutre-text-align">
-								                	<label class="flex items-center cursor-pointer">
-											            <input type="radio" name="attendanceApprovalType" class="form-radio" th:value="CT003" />
+								                	<label class="flex items-center cursor-pointer" >
+											            <input type="radio" name="attendanceApprovalType" class="form-radio" th:value="CT003"
+											            	th:checked="${attendanceApproval.attendanceApprovalType == 'CT003'}" />
 											            <span class="text-white-dark ml-2">휴가</span>
 										        	</label>
 								                </td>
 								                <td class="lecutre-text-align">
-								                	<label class="flex items-center cursor-pointer">
-											            <input type="radio" name="attendanceApprovalType" class="form-radio" th:value="CT009" />
+								                	<label class="flex items-center cursor-pointer" >
+											            <input type="radio" name="attendanceApprovalType" class="form-radio" th:value="CT009"
+											            	th:checked="${attendanceApproval.attendanceApprovalType == 'CT009'}" />
 											            <span class="text-white-dark ml-2">경조사</span>
 										        	</label>
 								                </td>					                
@@ -229,7 +237,7 @@
 								        </tbody>
 								    </table>
 								</div>
-								<!-- 테이블3 : 신청날짜 선택 -->
+								<!-- 테이블3 : 신청날짜 -->
 								<div class="table-responsive">
 								    <table style="table-layout: fixed; width: 100%; height:65px; border: 1px solid #f0f0f0;">
 								        <tbody>
@@ -238,15 +246,14 @@
 												<td colspan="3">
 													<div class="flex justify-between">
 														<div x-data="form1" class="w-full mr-3">
-									                       	<input name="attendanceApprovalBeginDate" id="beginDate" class="form-input" placeholder="시작날짜" />
+									                       	<input name="attendanceApprovalBeginDate" id="beginDate" class="form-input" placeholder="시작날짜"
+									                       			th:value="${attendanceApproval.attendanceApprovalBeginDate}" />
 													   	</div>
 														<div class="align-items-center">~</div>
 														<div x-data="form2" class="w-full ml-3">
-									                       	<input name="attendanceApprovalEndDate" id="endDate" class="form-input" placeholder="종료날짜"/>
+									                       	<input name="attendanceApprovalEndDate" id="endDate" class="form-input" placeholder="종료날짜"
+									                       			th:value="${attendanceApproval.attendanceApprovalEndDate}" />
 													   	</div>
-													</div>
-													<div class="mt-1">	<!-- 유효성문구 -->
-														<span class="msg date-error error-label" style="display: none;">신청날짜를 선택해주세요.</span>
 													</div>
 												</td>
 								        	</tr>
@@ -256,7 +263,7 @@
 								
 								<div style="height: 15px;"></div>
 								
-								<!-- 테이블4 : 결재제목, 결재내용 출력 -->
+								<!-- 테이블4 : 결재제목, 결재내용, 작성날짜 출력 -->
 								<div class="table-responsive" style="margin-bottom: 20px;">
 								    <table style="table-layout: fixed; width: 100%; height:65px; border: 1px solid #f0f0f0;">
 								        <tbody>
@@ -264,27 +271,23 @@
 								                <td class="bg-[#f4f4f4] lecutre-title-align">결재제목</td>
 								                <td colspan="3">
 								                	<input id="attendanceApprovalTitle" name="attendanceApprovalTitle" 
-								                		type="text" class="form-input" placeholder="결재제목">
-							                		<div class="mt-1">	<!-- 유효성문구 -->
-														<span class="msg date-error error-label attendanceApprovalTitle-error" style="display: none;">결재제목을 입력해주세요.</span>
-													</div>
+								                		type="text" class="form-input" placeholder="결재제목" th:value="${attendanceApproval.attendanceApprovalTitle}">
 								                </td>				                
 								            </tr>
 								            <tr class="border-dark-dark-light ">
 								                <td class="bg-[#f4f4f4] lecutre-title-align">결재내용</td>
 								                <td colspan="3">
 								                	<textarea id="attendanceApprovalContent" name="attendanceApprovalContent" 
-								                			rows="15" cols="205" class="custom-textarea w-full" placeholder="결재내용을 입력해주세요."></textarea>
-								                	<div class="mt-1">	<!-- 유효성문구 -->
-														<span class="msg date-error error-label attendanceApprovalContent-error" style="display: none;">결재내용을 입력해주세요.</span>
-													</div>
+								                			rows="15" cols="205" class="custom-textarea w-full" placeholder="결재내용을 입력해주세요."
+								                			th:text="${attendanceApproval.attendanceApprovalContent}"></textarea>
 								                </td>				                
 								            </tr>
 								            <tr> <!-- 작성날짜 -->
 								        		<td class="bg-[#f4f4f4] lecutre-title-align">작성날짜</td>
 												<td colspan="3">
 													<div x-data="form" class="w-full mr-3">
-								                       	<input name="todayDate" id="todayDate" class="form-input lecutre-text-align" disabled />
+								                       	<input name="todayDate" id="todayDate" class="form-input lecutre-text-align" 
+								                       			th:value="${attendanceApproval.updateDate}" disabled />
 												   	</div>
 												</td>
 								        	</tr>
@@ -317,10 +320,10 @@
 								<!-- 버튼 --> 
 								<div class="mt-8 flex items-center justify-end">
 		                           <button id="openModalButtonAddPeople" type="button" class="btn btn-dark" style="width:130px;">
-		                               결재선 추가
+		                               결재선 변경
 		                           </button>
-		                           <button type="button" id="addBtn" class="btn btn-primary ltr:ml-4 rtl:mr-4" style="width:130px;">
-		                           		등록
+		                           <button type="button" id="updateBtn" class="btn btn-primary ltr:ml-4 rtl:mr-4" style="width:130px;">
+		                           		수정
 		                           </button>
 		                       </div>
 	                       </div>
@@ -388,6 +391,10 @@
 										<input type="hidden" id="deselectedBtn">
 										<input type="hidden" id="selectedValue">
 										<input type="hidden" id="approvalRemoveBtn">
+										<div th:each="people : ${lectureApprovalEmployee}" class="flex w-full mb-1">
+							                <input id="${approvalPeoplesId}" type="text" class="form-input ltr:rounded-r-none rtl:rounded-l-none" name="approval" th:value="${people.approver} + '[' + ${people.approverNo} + ']'" readonly/>
+							                <button id="${approvalRemoveBtnId}" type="button" class="btn btn-danger ltr:rounded-l-none rtl:rounded-r-none" style="width: 80px;">삭제</button>
+							            </div>
 									</div>
 								</div>
 							</div>
@@ -461,7 +468,7 @@
 		</div>
 
 		
-	   <script th:src="@{/customjs/addAttendanceApproval.js}"> </script>
+	   <script th:src="@{/customjs/modifyAttendanceApproval.js}"> </script>
 		
 		
 	</body>

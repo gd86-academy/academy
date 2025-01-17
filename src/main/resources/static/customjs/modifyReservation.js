@@ -68,7 +68,7 @@ document.addEventListener('alpine:init', () => {
 	// 수정 페이지 로드 시 참여자 목록을 가져오기
 	$(document).ready(function() {
 	    const reservationNo = $('#reservationNo').val(); // 예약 번호 가져오기
-	    let cnt = $('#selectEmployeesContainer .selectedEmployee').length;
+	    let cnt = $('#selectEmployeesContainer .selectedEmployee-box').length;
 	    
 	    if (reservationNo) {
 	        $.ajax({
@@ -93,7 +93,7 @@ document.addEventListener('alpine:init', () => {
 	                            </div>
 	                        `;
 	                        $('#selectEmployeesContainer').append(existingEmployee);
-							cnt++; // 추가된 사원마다 cnt 증가
+							cnt++; 
 	                    });
 	                }
 	            },
@@ -152,7 +152,7 @@ document.addEventListener('alpine:init', () => {
 	// 검색창에서 엔터 키 처리
 	/*
 	$('#searchEmployee').on('keydown', function (e) {
-	    if (e.key === 'Enter' || e.keyCode === 13) {
+	    if (e.key === 'Enter') {
 	        e.preventDefault(); // 엔터 키로 폼이 제출되는 것을 막음
 	        searchEmployee(); // 검색 함수 호출
 	    }
@@ -164,9 +164,7 @@ document.addEventListener('alpine:init', () => {
 	    searchEmployee(); // 검색 함수 호출
 	});
 
-	// 사원추가
 	$('#addResultEmployee').click(function () {
-		let cnt = $('#selectEmployeesContainer .selectedEmployee').length;
 	    const selectedOption = $('#resultEmployee option:selected'); // 선택된 옵션 가져오기
 	    const employeeNo = selectedOption.val();
 	    const employeeName = selectedOption.text();
@@ -175,46 +173,64 @@ document.addEventListener('alpine:init', () => {
 	        // 중복 검사
 	        let exists = false;
 	        $('#selectEmployeesContainer .selectedEmployee').each(function () {
-	            // data()로 읽은 값과 employeeNo를 문자열로 비교
-	            if ($(this).attr('data-employee-no') === String(employeeNo)) {
-	                exists = true; // 이미 추가된 사원이면 추가하지 않음
-					$('#selectEmployeesContainer .selectedEmployee').each(function () {
-			            // data()로 읽은 값과 employeeNo를 문자열로 비교
-			            if ($(this).attr('data-employee-no') === String(employeeNo)) {
-			                exists = true; // 이미 추가된 사원이면 추가하지 않음
-			                return false; // 반복문 종료
-			            }
-			        });
+	            if ($(this).data('employee-no') === String(employeeNo)) {
+	                exists = true;
+	                return false; // 중복 시 종료
 	            }
 	        });
 
 	        if (!exists) {
+	            // 동적으로 cnt 계산
+	            const cnt = $('#selectEmployeesContainer .selectedEmployee-box').length;
+
 	            // 선택된 사원을 추가
-				const newEmployee = `
-                    <div class="d-flex w-100 items-center justify-between mt-2 selectedEmployee-box">
-                        <input type="hidden" class="selectedEmployeeNo" value="${employeeNo}" name="reservationEmployees[${cnt}].employeeNo">
-                        <input 
-                            class="form-input selectedEmployee"
-                            type="text"
-                            value="${employeeName}" 
-                            data-employee-no="${employeeNo}" 
-                            name="reservationEmployees[${cnt}].employeeName"
-                            readonly>
-                        <button type="button" class="btn btn-danger ms-3 removeEmployee" style="word-break:keep-all;">삭제</button>
-                    </div>
-                `;
-                $('#selectEmployeesContainer').append(newEmployee);
-                cnt++; // cnt 증가
+	            const newEmployee = `
+	                <div class="d-flex w-100 items-center justify-between mt-2 selectedEmployee-box">
+	                    <input type="hidden" class="selectedEmployeeNo" value="${employeeNo}" name="reservationEmployees[${cnt}].employeeNo">
+	                    <input 
+	                        class="form-input selectedEmployee"
+	                        type="text"
+	                        value="${employeeName}" 
+	                        data-employee-no="${employeeNo}" 
+	                        name="reservationEmployees[${cnt}].employeeName"
+	                        readonly>
+	                    <button type="button" class="btn btn-danger ms-3 removeEmployee" style="word-break:keep-all;">삭제</button>
+	                </div>
+	            `;
+	            $('#selectEmployeesContainer').append(newEmployee);
+
 	            // 검색기록 초기화
-	            $('#searchEmployee').val(''); 
+	            $('#searchEmployee').val('');
 	            $('#resultEmployee').empty();
-				
 	        }
 	    }
+
+		// 회의실 선택과 수용 인원 정보 가져오기
+		let meetingroomNo = $('#selectMeetingroom option:selected');
+		let meetingroomCapacity = meetingroomNo.data('capacity');
+		let selectedEmployeeCount = $('#selectEmployeesContainer .selectedEmployee-box').length;
+		selectedEmployeeCount++; // 예약자 포함
+
+		console.log('회의실 수용 인원:', meetingroomCapacity);  // meetingroomCapacity 확인
+		console.log('선택된 사원 수:', selectedEmployeeCount);  // selectedEmployeeCount 확인
+
+		if (!meetingroomNo) {
+			$('#modalBackgroundMeetingroomCheck').show();
+			$('#modalWrapperMeetingroomCheck').show();
+		    return;  
+		}
+
+		if (selectedEmployeeCount > meetingroomCapacity) {
+		    $('#selectEmployeesContainer .selectedEmployee-box:last').remove(); // 마지막 추가된 사원 제거
+		    $('.reservationEmployee-error').show(); // 실패 시 에러 메시지 표시
+		} else {
+		    $('.reservationEmployee-error').hide(); // 에러 메시지 숨기기
+		}
 	});
 
 	// 삭제 버튼 기능 추가
 	$(document).on('click', '.removeEmployee', function () {
+		let cnt = $('#selectEmployeesContainer .selectedEmployee-box').length;
 	    const parentElement = $(this).closest('.selectedEmployee-box');
 	    const employeeNo = parentElement.find('.selectedEmployee').data('employee-no'); 
 		
@@ -235,10 +251,33 @@ document.addEventListener('alpine:init', () => {
 	    } else {
 	        console.log('employeeNo가 이미 존재합니다:', employeeNo);
 	    }
-
 	    parentElement.remove(); // DOM에서 삭제
 	});
 });	
+
+// meetingroomCheck모달
+$(document).ready(function () {
+    $('#beginTimeCode, #endTimeCode, #reservationTitle, #reservationDate, #reservationContent, #searchEmployee').on('click', function () {
+        const meetingroom = $('#selectMeetingroom').val();
+
+        if (!meetingroom) {
+            console.log('회의실을 선택하지 않았습니다.');
+            $('#modalBackgroundMeetingroomCheck').show();
+            $('#modalWrapperMeetingroomCheck').show();
+			$('#beginTimeCode, #endTimeCode').val('');
+        }
+    });
+
+    $('#closeModalButtonMeetingroomCheck').on('click', function () {
+        $('#modalBackgroundMeetingroomCheck').hide();
+        $('#modalWrapperMeetingroomCheck').hide();
+    });
+
+    $('#modalBackgroundMeetingroomCheck').on('click', function () {
+        $('#modalBackgroundMeetingroomCheck').hide();
+        $('#modalWrapperMeetingroomCheck').hide();
+    });
+});
 
 // 예약수정 유효성 검사
 $('#btnModifyReservation').click(function(){

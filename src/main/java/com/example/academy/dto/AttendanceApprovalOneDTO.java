@@ -13,7 +13,7 @@ public class AttendanceApprovalOneDTO {
 	    private Integer employeeNo;
 	    private String employeeName;
 	    private String attendanceApprovalType;	// 신청 종류
-	    private String createDate;		// 작성날짜
+	    private String updateDate;		// 작성날짜
 	    private String attendanceApprovalTitle;		// 신청제목
 	    private String attendanceApprovalContent;	// 신청내용
 	    private String attendanceApprovalBeginDate;	// 시작날짜
@@ -23,7 +23,6 @@ public class AttendanceApprovalOneDTO {
 	    private String attendanceApprovalStatus;	// 현재 결재상태
 	    
 	    // approval_employee (결재자) 테이블
-	    //private List<String> approvers;	// 결재자 배열로 받기
 	    private Integer approvalEmployeeNo;	// PK 결재자 번호
 	    private Integer approver;	// FK 결재자(employee_no)
 	    private Integer approvalLevel;	// 결재자 결재순위

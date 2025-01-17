@@ -1,0 +1,90 @@
+package com.example.academy.controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+
+import com.example.academy.dto.AttendanceContentDTO;
+import com.example.academy.dto.BoardListByMainDTO;
+import com.example.academy.security.CustomUserDetails;
+import com.example.academy.service.AnnualLeaveService;
+import com.example.academy.service.AttendanceService;
+import com.example.academy.service.AuthService;
+import com.example.academy.service.BoardService;
+import com.example.academy.service.EmployeeService;
+import com.example.academy.service.MemoService;
+import com.example.academy.vo.Memo;
+
+@Controller
+public class MainController {
+	@Autowired AuthService authService;
+	@Autowired AnnualLeaveService annualLeaveService;
+	@Autowired AttendanceService attendanceService;
+	@Autowired BoardService boardService;
+	@Autowired MemoService memoService;
+	
+	// 진수우 : 메인페이지 호출.
+	@GetMapping("/main")
+	public String main(Model model) {
+		// 스프링시큐리티에서 계정정보 가져오기.
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		// 로그인 상태일 때만 model에 정보담기.
+	    if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+	        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+	        
+	        // 이번년도 연차 개수 조회
+	        Double annualLeaveCount = annualLeaveService.getAnnualLeaveCount(Integer.parseInt(userDetails.getUsername()));
+	        
+	        // 당일 월 지각, 조퇴, 결근 횟수 조회
+	        AttendanceContentDTO content = attendanceService.getAttendanceContent(Integer.parseInt(userDetails.getUsername()));
+ 
+	        // 최근 6개월 월별 근무시간 총합 조회
+	        List<Integer> totalWorkTime = attendanceService.getAttendanceTotalWorkTime(Integer.parseInt(userDetails.getUsername()));
+	        
+	        // 최근 공지사항 5개 조회
+	        List<BoardListByMainDTO> boardList = boardService.getBoardListByMain();
+	        
+	        // 메모 조회.
+	        String memoContent = memoService.getMemo(Integer.parseInt(userDetails.getUsername()));
+	        	        
+	        model.addAttribute("boardList", boardList); // 최근 공지사항 3개 조회
+	        model.addAttribute("count", annualLeaveCount); // 이번 달 연차 사용 갯수
+	        model.addAttribute("totalWorkTimeList", totalWorkTime); // 최근 6개월 월별 근무시간 총합 리스트
+	        model.addAttribute("absence", content.getAbsence()); // 결근
+	        model.addAttribute("earlyLeave", content.getEarlyLeave()); // 조퇴
+	        model.addAttribute("tardy", content.getTardy()); // 지각
+	        model.addAttribute("userNo", userDetails.getUsername());
+	        model.addAttribute("userName", userDetails.getUserRealName());
+	        model.addAttribute("userMail", userDetails.getUserMail());
+	        model.addAttribute("userPhotoFileName", userDetails.getUserPhotoFileName());
+	        model.addAttribute("userPhotoFileExt", userDetails.getUserPhotoFileExt());
+	        model.addAttribute("memoContent", memoContent);
+	        model.addAttribute("writer", Integer.parseInt(userDetails.getUsername()));
+	    }
+		return "main";
+	}
+	
+	// 진수우 : 메모 저장.
+	@PostMapping("/saveMemo")
+	public String saveMemo(Memo memo) {
+		// 메모저장 수행.
+		memoService.saveMemo(memo);
+		return "redirect:/main";
+	}
+	
+	@GetMapping("/removeMemo")
+	public String removeMemo(Integer employeeNo) {
+		// 메모삭제 수행.
+		memoService.removeMemo(employeeNo);
+		return "redirect:/main";
+	}
+	
+}

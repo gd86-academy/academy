@@ -7,8 +7,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.academy.dto.AddReservationDTO;
+import com.example.academy.dto.MeetingRoomListDTO;
+import com.example.academy.dto.MeetingroomEmployeeDTO;
 import com.example.academy.dto.ReservationEmployeeDTO;
 import com.example.academy.dto.ReservationListDTO;
+import com.example.academy.mapper.MeetingRoomMapper;
 import com.example.academy.mapper.ReservationMapper;
 import com.example.academy.vo.Employee;
 
@@ -118,7 +121,7 @@ public class ReservationService {
 	                    reservationMapper.deleteReservationEmployee(employee.getEmployeeNo(), employee.getReservationNo());
 	                }
 	                // 로그로 삽입되지 않은 이유를 확인
-	                System.out.println("Invalid employeeNo (null or <= 0). Skipping or deleting employee: " + employee.getEmployeeNo());
+	                System.out.println("employeNo : " + employee.getEmployeeNo());
 	            }
 	        }
 	    }

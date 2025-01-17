@@ -113,7 +113,7 @@ document.addEventListener('alpine:init', () => {
 	// 검색창에서 엔터 키 처리
 	/*
 	$('#searchEmployee').on('keydown', function (e) {
-	    if (e.key === 'Enter' || e.keyCode === 13) {
+	    if (e.key === 'Enter') {
 	        e.preventDefault(); // 엔터 키로 폼이 제출되는 것을 막음
 	        searchEmployee(); // 검색 함수 호출
 	    }
@@ -166,6 +166,28 @@ document.addEventListener('alpine:init', () => {
 	            $('#resultEmployee').empty();
 	        }
 	    }
+		
+		// 회의실 선택과 수용 인원 정보 가져오기
+		let meetingroomNo = $('#selectMeetingroom option:selected');
+		let meetingroomCapacity = meetingroomNo.data('capacity');
+		let selectedEmployeeCount = $('#selectEmployeesContainer .selectedEmployee-box').length;
+		selectedEmployeeCount++; // 예약자 포함
+
+		console.log('회의실 수용 인원:', meetingroomCapacity);  // meetingroomCapacity 확인
+		console.log('선택된 사원 수:', selectedEmployeeCount);  // selectedEmployeeCount 확인
+		
+		if (!meetingroomNo) {
+			$('#modalBackgroundMeetingroomCheck').show();
+			$('#modalWrapperMeetingroomCheck').show();
+		    return;  
+		}
+
+		if (selectedEmployeeCount > meetingroomCapacity) {
+	        $('#selectEmployeesContainer .selectedEmployee-box:last').remove(); // 마지막 추가된 사원 제거
+	        $('.reservationEmployee-error').show(); // 실패 시 에러 메시지 표시
+	    } else {
+	        $('.reservationEmployee-error').hide(); // 에러 메시지 숨기기
+	    }
 	});
 
 	// 삭제 버튼 기능 추가
@@ -196,6 +218,30 @@ document.addEventListener('alpine:init', () => {
 
 	});
 	
+});
+
+// 회의실 미선택 유효성
+$(document).ready(function () {
+    $('#beginTimeCode, #endTimeCode, #reservationTitle, #reservationDate, #reservationContent, #searchEmployee').on('click', function () {
+        const meetingroom = $('#selectMeetingroom').val();
+
+        if (!meetingroom) {
+            console.log('회의실을 선택하지 않았습니다.');
+            $('#modalBackgroundMeetingroomCheck').show();
+            $('#modalWrapperMeetingroomCheck').show();
+			$('#beginTimeCode, #endTimeCode').val('');
+        }
+    });
+
+    $('#closeModalButtonMeetingroomCheck').on('click', function () {
+        $('#modalBackgroundMeetingroomCheck').hide();
+        $('#modalWrapperMeetingroomCheck').hide();
+    });
+
+    $('#modalBackgroundMeetingroomCheck').on('click', function () {
+        $('#modalBackgroundMeetingroomCheck').hide();
+        $('#modalWrapperMeetingroomCheck').hide();
+    });
 });
 
 // 예약신청 유효성 검사

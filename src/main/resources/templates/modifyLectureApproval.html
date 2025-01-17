@@ -124,7 +124,8 @@
 				<div class="animate__animated p-6 white-light" :class="[$store.app.animation]"> <!-- 메인화면 div 시작 -->
 					<h2 class="text-2xl ml-3 mb-5">나의 신청 목록</h2>
 					<div class="panel" style="margin: 0% 15% 0% 15%; padding: 4%; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05); border-radius : 10px;">
-						<form id="addForm" method="post" th:action="@{/addLectureApproval}" enctype="multipart/form-data">
+						<form id="addForm" method="post" th:action="@{/modifyLectureApproval}" enctype="multipart/form-data">
+						<input type="hidden" name="lectureApprovalNo" th:value="${lectureApprovalOne.lectureApprovalNo}">
 						<div class="p-5">
 						<div class="flex items-center justify-between" style="margin-bottom: 20px; margin-top: 20px;">
 							<div class="text-3xl font-bold uppercase m-3" style="white-space: nowrap;">&nbsp;강의 신청서</div>
@@ -210,7 +211,7 @@
 										<td>
 											<select id="classroomList" class="form-select" name="classroomNo">
 												<option value="" disabled selected>강의실</option>
-											    <option th:each="cr : ${classroomList}" th:selected="${cr.classroomName == lectureApprovalOne.classroomName}" th:text="${cr.classroomName}"></option>
+											    <option th:each="cr : ${classroomList}" th:selected="${cr.classroomName == lectureApprovalOne.classroomName}" th:text="${cr.classroomName}" th:value="${cr.classroomNo}"></option>
 											</select>
 										</td>
 						        	</tr>
@@ -229,16 +230,16 @@
 						            <tr th:each="weekday, stat : ${lectureApprovalWeekday}">
 						            	<td th:if="${stat.index == 0}" class="bg-[#f4f4f4] lecutre-title-align">강의시간</td>
 						        		<td th:if="${stat.index > 0}" class="bg-[#f4f4f4] lecutre-title-align"></td>
-						            	<!-- 요일 선택 -->
+						            	<!-- 요일 출력 -->
 						            	<td>
 											<input class="form-input disabled:pointer-events-none disabled:bg-[#eee] dark:disabled:bg-[#1b2e4b] cursor-not-allowed" th:value="${weekday.weekday}" disabled/>
 										</td>
 										<td colspan="2">
 											<div class="flex justify-between">
-												<!-- 시작시간 -->
+												<!-- 시작시간 출력 -->
 												<input class="form-input disabled:pointer-events-none disabled:bg-[#eee] dark:disabled:bg-[#1b2e4b] cursor-not-allowed mr-3" th:value="${weekday.beginTime}" disabled/>
 												<div>~</div>
-												<!-- 종료시간 -->
+												<!-- 종료시간 출력 -->
 												<input class="form-input disabled:pointer-events-none disabled:bg-[#eee] dark:disabled:bg-[#1b2e4b] cursor-not-allowed ml-3" th:value="${weekday.endTime}" disabled/>
 											</div>					
 										</td>
@@ -267,7 +268,7 @@
 						            	<td class="bg-[#f4f4f4] lecutre-title-align">강의시간</td>
 						            	<!-- 요일 선택 -->
 						            	<td>
-											<select id="weekdayId0" class="form-select" name="lectureWeekday[0].weekdayCode">
+											<select id="weekdayId0" class="form-select disabled:pointer-events-none disabled:bg-[#eee] dark:disabled:bg-[#1b2e4b] cursor-not-allowed" name="lectureWeekday[0].weekdayCode">
 												<option value="" disabled selected>요일</option>
 											    <option th:each="cwk : ${commonWeekday}" th:value="${cwk.code}" th:text="${cwk.name}"></option>
 											</select>
@@ -275,7 +276,7 @@
 										<!-- 시작시간 선택 -->
 										<td colspan="2">
 											<div class="flex justify-between">
-												<select id="beginTimeId0" class="form-select mr-3" name="lectureWeekday[0].beginTimeCode" onchange="disableSelectedOption()">
+												<select id="beginTimeId0" class="form-select mr-3 disabled:pointer-events-none disabled:bg-[#eee] dark:disabled:bg-[#1b2e4b] cursor-not-allowed" name="lectureWeekday[0].beginTimeCode" onchange="disableSelectedOption()">
 												    <option value="" disabled selected>시작시간</option>
 												</select>	
 											<div>~</div>
@@ -356,6 +357,7 @@
 							</div>
 							<!-- 파일선택 폼 -->
 							<div th:each="file, stat : ${lectureApprovalFile}" id="fileCount">
+							   <input type="hidden" th:value="${file.fileName}" name="alreadyFiles" th:id="'fileFieldId' + ${stat.index}">
 					           <div class="flex mt-1" th:id="'fileField' + ${stat.index}">
 						       	   <!-- 커스텀 버튼 -->
 						           <button 
@@ -372,7 +374,8 @@
 						               type="file" 
 						               class="hidden"
 						               multiple
-						               th:onchange="document.getElementById('attendanceApprovalFileNameDisplay[[${stat.index}]]').value = this.files[0] ? this.files[0].name : '';" />
+						               th:onchange="document.getElementById('attendanceApprovalFileNameDisplay[[${stat.index}]]').value = this.files[0] ? this.files[0].name : '';
+            										document.getElementById('fileFieldId[[${stat.index}]]').remove();"/>
 						           <!-- 파일 이름 표시 -->
 						           <input
 						           	   th:id="'attendanceApprovalFileNameDisplay' + ${stat.index}"
@@ -411,7 +414,6 @@
 							           		/>
 							           	</svg>
 						           </button>
-						           <input name="alreadyFiles" type="hidden" th:value="file.fileName">
 						       </div>
 						   </div>
 						   <div id="fileDiv" class="mt-1">
@@ -430,7 +432,7 @@
                        </div>
                        </div>
                        
-                      <!--  결재선 추가 모달 -->
+                      <!--  결재선 변경 모달 -->
 					  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundAddPeople">
 					       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperAddPeople">
 					           <div
