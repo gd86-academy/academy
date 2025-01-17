@@ -198,6 +198,31 @@ document.addEventListener('alpine:init', () => {
 	
 });
 
+// 회의실 미선택 유효성
+$(document).ready(function () {
+    $('#beginTimeCode, #endTimeCode, #reservationTitle, #reservationDate, #reservationContent, #searchEmployee').on('click', function () {
+        const meetingroom = $('#selectMeetingroom').val();
+
+        if (!meetingroom) {
+            console.log('회의실을 선택하지 않았습니다.');
+            $('#modalBackgroundMeetingroomCheck').show();
+            $('#modalWrapperMeetingroomCheck').show();
+			$('#beginTimeCode, #endTimeCode').val('');
+        }
+    });
+
+    $('#closeModalButtonMeetingroomCheck').on('click', function () {
+        $('#modalBackgroundMeetingroomCheck').hide();
+        $('#modalWrapperMeetingroomCheck').hide();
+    });
+
+    $('#modalBackgroundMeetingroomCheck').on('click', function () {
+        $('#modalBackgroundMeetingroomCheck').hide();
+        $('#modalWrapperMeetingroomCheck').hide();
+    });
+	return;
+});
+
 // 예약신청 유효성 검사
 $('#btnAddReservation').click(function(){
 	let isValid = true;  
