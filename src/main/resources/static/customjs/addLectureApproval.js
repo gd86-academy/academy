@@ -685,7 +685,7 @@ $('#btnAddTime').click(function () {
 	console.log('timeResult : ' + timeResult);
 });
 
-// 요일 선택 시, 시간 데이터를 가져오는 이벤트 바인딩
+// 요일 선택 시, 시작시간 데이터를 가져오는 이벤트 바인딩
 $('#weekdayId0').on('change', function () {
     const selectedWeekday = $(this).val(); // 선택된 요일 값
 	const startDate = $('#beginDate').val();
@@ -701,7 +701,6 @@ $('#weekdayId0').on('change', function () {
 
     // 이전 시간 데이터 초기화
     $('#beginTimeId0').empty().append('<option value="" disabled selected>시작시간</option>');
-    $('#endTimeId0').empty().append('<option value="" disabled selected>종료시간</option>');
 
     // 선택된 데이터를 REST API로 전달하여 시간 데이터 요청
     $.ajax({
@@ -718,6 +717,45 @@ $('#weekdayId0').on('change', function () {
 			
             data.forEach(ct => {
                 $('#beginTimeId0').append(`<option value="${ct.code}">${ct.name}</option>`);
+            });
+        },
+        error: function () {
+            alert('시간 데이터를 가져오는 중 오류가 발생했습니다.');
+        }
+    });
+});
+
+// 시작시간 선택 시, 종료시간 데이터를 가져오는 이벤트 바인딩
+$('#weekdayId0').on('change', function () {
+    const selectedWeekday = $(this).val(); // 선택된 요일 값
+	const startDate = $('#beginDate').val();
+	const endDate = $('#endDate').val();
+	const roomId = $('#classroomList').val();
+	
+    if (!startDate || !endDate || !roomId) {
+		 $('select').prop('disabled', true);
+		modalBackgroundNoLectureDate.classList.toggle('hidden', false);
+		modalBackgroundNoLectureDate.classList.toggle('block', true);
+        return;
+    }
+
+    // 이전 시간 데이터 초기화
+    $('#endTimeId0').empty().append('<option value="" disabled selected>종료시간</option>');
+
+    // 선택된 데이터를 REST API로 전달하여 시간 데이터 요청
+    $.ajax({
+        url: `http://localhost/academy/restapi/getEndLectureTime`,
+		contentType: 'application/json', 
+        type: 'POST',
+        data: JSON.stringify({
+            weekdayCode: selectedWeekday,
+            beginDate: startDate,
+            endDate: endDate,
+            classroomNo: roomId
+        }),
+        success: function (data) {
+			
+            data.forEach(ct => {
                 $('#endTimeId0').append(`<option value="${ct.code}">${ct.name}</option>`);
             });
         },
@@ -1054,11 +1092,8 @@ function disableSelectedOption() {
     }
 
     // 첫 번째 <select>에서 선택된 값과 일치하는 옵션 비활성화
-	for (var j = 0; j < timeResult; j++) {
-		
-	}
     for (var i = 0; i < endTimeId.options.length; i++) {
-        if (endTimeId.options[i].value < selectedValue1) {
+        if (endTimeId.options[i].value <= selectedValue1) {
             endTimeId.options[i].disabled = true;
         }
     }
@@ -1070,7 +1105,7 @@ function disableSelectedOption() {
 	var previousValue = parseInt(beginTimeId.options[selectedIndex].text); // 선택된 텍스트 값
 	var selectedvalue = false;
 	// 선택된 옵션 이후부터 루프 실행
-	for (var i = selectedIndex + 1; i < endTimeId.options.length; i++) {
+	for (var i = selectedIndex; i < endTimeId.options.length; i++) {
 	    var optionText = parseInt(endTimeId.options[i].text); // 현재 옵션의 텍스트 값 (숫자로 변환)
 
 	    if (selectedvalue === true) {
