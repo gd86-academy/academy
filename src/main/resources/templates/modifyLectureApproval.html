@@ -144,21 +144,21 @@
 							                <td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0;">
 						                		<div th:each="employee : ${lectureApprovalEmployee}">
 						                			<div th:if="${employee.approvalLevel == 1}">
-						                				<span class="flex" th:text="${employee.approver} + '[' + ${employee.approverNo} + ']'"></span>
+						                				<span class="flex" th:text="${employee.approver} + '[' + ${employee.approverNo} + ']'" style="display: inline-flex; justify-content: center; align-items: center;"></span>
 						                			</div>
 						                		</div>
 							                </td>
 							                <td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0;">
 						                		<div th:each="employee : ${lectureApprovalEmployee}">
 						                			<div th:if="${employee.approvalLevel == 2}">
-						                				<span class="flex" th:text="${employee.approver} + '[' + ${employee.approverNo} + ']'"></span>
+						                				<span class="flex" th:text="${employee.approver} + '[' + ${employee.approverNo} + ']'" style="display: inline-flex; justify-content: center; align-items: center;"></span>
 						                			</div>
 						                		</div>
 							                </td>
 							                <td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0;">
 						                		<div th:each="employee : ${lectureApprovalEmployee}">
 						                			<div th:if="${employee.approvalLevel == 3 || employee.approvalLevel == ''}">
-						                				<span class="flex" th:text="${employee.approver} + '[' + ${employee.approverNo} + ']'"></span>
+						                				<span class="flex" th:text="${employee.approver} + '[' + ${employee.approverNo} + ']'" style="display: inline-flex; justify-content: center; align-items: center;"></span>
 						                			</div>
 						                		</div>
 							                </td>
@@ -773,8 +773,10 @@
 		       </div>
 		   </div>
 		</div>
-		
-	   <script th:src="@{/customjs/addLectureApproval.js}"> </script>
+		<script th:inline="javascript">
+        	var lectureApprovalNo = [[${lectureApprovalOne.lectureApprovalNo}]]
+        </script>
+	   <script th:src="@{/customjs/modifyLectureApproval.js}"> </script>
 	   
 	</body>
 

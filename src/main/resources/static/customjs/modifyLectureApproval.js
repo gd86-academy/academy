@@ -155,6 +155,7 @@ if (applyModalButtonAddPeople) applyModalButtonAddPeople.addEventListener('click
 		            </div>
 		        `;
 				
+				
 				$('#alreadyPeople').remove(); // 숨김 처리
 				$('#newPeople').removeAttr('hidden');
 				if (inputs.length == 0) {
@@ -658,10 +659,11 @@ $('#btnAddTime').click(function () {
 
             // 선택된 데이터를 REST API로 전달하여 시간 데이터 요청
             $.ajax({
-                url: `http://localhost/academy/restapi/getBeginLectureTime`,
+                url: `http://localhost/academy/restapi/getBeginLectureTimeFromModify`,
 				contentType: 'application/json', 
                 type: 'POST',
                 data: JSON.stringify({
+					lectureApprovalNo: lectureApprovalNo,
                     weekdayCode: selectedWeekday,
                     beginDate: startDate,
                     endDate: endDate,
@@ -697,10 +699,11 @@ $('#btnAddTime').click(function () {
 	
 	        // 선택된 데이터를 REST API로 전달하여 시간 데이터 요청
 	        $.ajax({
-	            url: `http://localhost/academy/restapi/getEndLectureTime`,
+	            url: `http://localhost/academy/restapi/getEndLectureTimeFromModify`,
 				contentType: 'application/json', 
 	            type: 'POST',
 	            data: JSON.stringify({
+					lectureApprovalNo: lectureApprovalNo,
 	                weekdayCode: selectedWeekday,
 	                beginDate: startDate,
 	                endDate: endDate,
@@ -740,10 +743,11 @@ $('#weekdayId0').on('change', function () {
 
     // 선택된 데이터를 REST API로 전달하여 시간 데이터 요청
     $.ajax({
-        url: `http://localhost/academy/restapi/getBeginLectureTime`,
+        url: `http://localhost/academy/restapi/getBeginLectureTimeFromModify`,
 		contentType: 'application/json', 
         type: 'POST',
         data: JSON.stringify({
+			lectureApprovalNo: lectureApprovalNo,
             weekdayCode: selectedWeekday,
             beginDate: startDate,
             endDate: endDate,
@@ -780,10 +784,11 @@ $('#weekdayId0').on('change', function () {
 
     // 선택된 데이터를 REST API로 전달하여 시간 데이터 요청
     $.ajax({
-        url: `http://localhost/academy/restapi/getEndLectureTime`,
+        url: `http://localhost/academy/restapi/getEndLectureTimeFromModify`,
 		contentType: 'application/json', 
         type: 'POST',
         data: JSON.stringify({
+			lectureApprovalNo: lectureApprovalNo,
             weekdayCode: selectedWeekday,
             beginDate: startDate,
             endDate: endDate,

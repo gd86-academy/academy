@@ -265,6 +265,16 @@ public class LectureApprovalService {
 		return lectureApprovalMapper.selectLectureApprovalGetEndTime(lectureApprovalGetBeginTimeDTO);
 	}
 	
+	// 진수우 : 시작시간 선택 시 가능한 시간만 출력 + 현재 수정 중인 강의시간도 출력
+	public List<Common> getLectureApprovalGetBeginTimeFromModify(LectureApprovalGetBeginTimeDTO lectureApprovalGetBeginTimeDTO) {
+		return lectureApprovalMapper.selectLectureApprovalGetBeginTimeFromModify(lectureApprovalGetBeginTimeDTO);
+	}
+	
+	// 진수우 : 종료시간 선택 시 가능한 시간만 출력 + 현재 수정 중인 강의시간도 출력
+	public List<Common> getLectureApprovalGetEndTimeFromModify(LectureApprovalGetBeginTimeDTO lectureApprovalGetBeginTimeDTO) {
+		return lectureApprovalMapper.selectLectureApprovalGetEndTimeFromModify(lectureApprovalGetBeginTimeDTO);
+	}
+	
 	// 진수우 : 강의결재 상세페이지에서 결재자 출력
 	public List<LectureApprovalEmployeeListDTO> getLectureApprovalEmployee(Integer lectureApprovalNo) {
 		return lectureApprovalMapper.selectLectureApprovalEmployee(lectureApprovalNo);

@@ -226,7 +226,6 @@
 											<!-- 종료시간 선택 -->
 												<select id="endTimeId0" class="form-select form-input disabled:pointer-events-none disabled:bg-[#eee] dark:disabled:bg-[#1b2e4b] cursor-not-allowed ml-3 " name="lectureWeekday[0].endTimeCode" disabled>
 													<option value="" disabled selected>종료시간</option>
-												    <option th:each="ct : ${commonTime}" th:value="${ct.code}" th:text="${ct.name}"></option>
 												</select>
 											</div>					
 										</td>
