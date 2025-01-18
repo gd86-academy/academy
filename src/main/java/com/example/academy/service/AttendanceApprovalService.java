@@ -111,6 +111,12 @@ public class AttendanceApprovalService {
 		}
 		
 		// 3) 파일 수정
+		// 수정하지 않은 파일 목록 가져오기
+		List<String> alreadyfilesList = attendanceApprovalModifyDTO.getAlreadyFiles();
+		
+		// 데이터베이스에 저장되어있는 파일목록 가져오기
+		
+		
 		
 	}
 	

@@ -40,6 +40,7 @@ public class AttendanceApprovalModifyDTO {
 		    
 		    // file (파일) 테이블
 		    private List<MultipartFile> attendanceApprovalFiles;
+		    private List<String> alreadyFiles;	// 기존 파일
 		    
 		    private Integer fileNo;	// 파일번호	pk
 		    

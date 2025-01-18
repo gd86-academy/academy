@@ -105,14 +105,23 @@ document.addEventListener('alpine:init', () => {
 	
 });
 
+// 첨부파일 관련
+var element = document.getElementById('fileCount');
 let result = 0;  // 전역 변수로 result 선언
+/*
 let inputIds = []; // 모든 inputId를 저장
 let displayIds = []; // 모든 displayId를 저장
 let removeButtonIds = []; // 모든 removeButtonId를 저장
 let errMsgs = [] // 모든 errMsg를 저장
-
+*/
+// element가 존재하고 input 태그가 있는 경우
+if(element){
+	var inputs = element.querySelectorAll('input:not([type="hidden"])');	
+	result = inputs ? inputs.length : 0;	// inputs가 null 또는 undefined일 경우 0로 설정
+}
 // 첨부파일 폼 추가버튼 클릭 시
 $('#btnAddFile').click(function(){
+	console.log('result 값 : ' + result);
 	// 마지막 파일 입력필드가 비어있다면
 	if ($('#fileDiv input[type="file"]').last().val() === '') {
 		// 모달로 바꾸기
@@ -124,12 +133,12 @@ $('#btnAddFile').click(function(){
 		let displayId = 'attendanceApprovalFileNameDisplay' + result; // 고유한 displayId 생성
 		let removeButtonId = 'removeFileBtn' + result;	// 고유한 removeButtonId 생성 (휴지통 버튼)
 		let errMsg = 'errMsg' + result;	// 고유한 errMsg 생성
-		
+		/*
 		inputIds.push(inputId); // 배열에 추가
 		displayIds.push(displayId);	// 배열에 추가
 		removeButtonIds.push(removeButtonId);	// 배열에 추가
 		errMsgs.push(errMsg);
-		
+		*/
 		let html = `
 			<div id = "fileField${result}">
 				<div class="flex mt-1" >
@@ -202,36 +211,19 @@ $('#btnAddFile').click(function(){
 function removeFileField(fileId) {
 	// 해당 파일 입력폼과 휴지통 버튼을 포함하는 div 제거
 	$('#fileField'+fileId).remove();
+	$('#fileFieldId'+fileId).remove();
+	/*
 	// 삭제된 필드의 ID를 배열에서 제거
 	inputIds = inputIds.filter(inputId => inputId !== 'attendanceApprovalFile' + fileId);
 	displayIds = displayIds.filter(displayId => displayId !== 'attendanceApprovalFileNameDisplay' + fileId);
 	removeButtonIds = removeButtonIds.filter(removeButtonId => removeButtonId !== 'removeFileBtn' + fileId);	
-	errMsgs = errMsgs.filter(errMsg => errMsg !== 'errMsg' + fileId);	
+	errMsgs = errMsgs.filter(errMsg => errMsg !== 'errMsg' + fileId);	*/
 }
 
 // 유효성 검사 
 $('#updateBtn').click(function() {
     let isVal = true;
-    /*
- 	// 신청날짜_시작날짜 검사
-    if ($('#beginDate').val().trim() === '') {
-        $('#beginDate').addClass("errorInput");
-        $('.date-error').show();
-        isVal = false;
-    } else {
-        $('.date-error').hide();
-        $('#beginDate').removeClass("errorInput");
-    }
-	
-	// 신청날짜_종료날짜 검사
-    if ($('#endDate').val().trim() === '') {
-        $('#endDate').addClass("errorInput");
-        $('.date-error').show();
-        isVal = false;
-    } else {
-        $('.date-error').hide();
-        $('#endDate').removeClass("errorInput");
-    }
+   
 	
 	// 결재제목 검사
 	if ($('#attendanceApprovalTitle').val().trim() === '') {
@@ -252,7 +244,7 @@ $('#updateBtn').click(function() {
         $('.attendanceApprovalContent-error').hide();
         $('#attendanceApprovalContent').removeClass("textarea-error");
     }
-	
+	/*
 	// 첨부파일 검사	
 	inputIds.forEach((inputId, index) => {
 		let fileInput = $('#' + inputId)
@@ -268,46 +260,6 @@ $('#updateBtn').click(function() {
 			errMsg.hide();
 		}		
 	});
-	*/
- 	/*
-	$('#timeDiv tr').each(function(index) {
-        // 각 select 요소에 대한 검사
-		console.log($('#timeDiv tr').length);
-        const weekday = $(this).find(`#weekdayId${index}`);
-        const beginTime = $(this).find(`#beginTimeId${index}`);
-        const endTime = $(this).find(`#endTimeId${index}`);
-
-        // 요일 검사
-        if (weekday.val() === '' || weekday.val() === null) {
-            weekday.addClass('errorInput');
-            $(this).find('.weekday-error').show();
-            isVal = false;
-        } else {
-            weekday.removeClass('errorInput');
-            $(this).find('.weekday-error').hide();
-        }
-		console.log("요일" + weekday.val());
-        // 시작시간 검사
-        if (beginTime.val() === '' || beginTime.val() === null) {
-            beginTime.addClass('errorInput');
-            $(this).find('.beginTime-error').show();
-            isVal = false;
-        } else {
-            beginTime.removeClass('errorInput');
-            $(this).find('.beginTime-error').hide();
-        }
-		console.log("시작시간" + beginTime.val());
-        // 종료시간 검사
-        if (endTime.val() === '' || endTime.val() === null) {
-            endTime.addClass('errorInput');
-            $(this).find('.endTime-error').show();
-            isVal = false;
-        } else {
-            endTime.removeClass('errorInput');
-            $(this).find('.endTime-error').hide();
-        }
-		console.log("종료시간" + endTime.val());
-    });
 	
 	// #inputContainer에 input 요소가 하나도 없으면 추가된 항목이 없다고 판단
     if ($('#inputContainer input:not([type="hidden"])').length === 0) {
