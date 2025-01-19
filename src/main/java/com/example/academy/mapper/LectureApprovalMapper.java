@@ -19,6 +19,8 @@ import com.example.academy.vo.LectureWeekday;
 
 @Mapper
 public interface LectureApprovalMapper {
+	// 진수우 : 강의결재 삭제 시 강의결재 테이블에서 사용상태변경
+	Integer updateLectureApprovalUse(Integer lectureApprovalNo);
 	
 	// 진수우 : 강의결재 수정 시 파일테이블에서 삭제할 파일번호 조회
 	Integer selectDeleteFileNo(String fileName);
@@ -76,4 +78,13 @@ public interface LectureApprovalMapper {
 	
 	// 진수우 : 시작시간 선택 시 가능한 시간만 출력
 	List<Common> selectLectureApprovalGetBeginTime(LectureApprovalGetBeginTimeDTO lectureApprovalGetBeginTimeDTO);
+
+	// 진수우 : 종료시간 선택 시 가능한 시간만 출력
+	List<Common> selectLectureApprovalGetEndTime(LectureApprovalGetBeginTimeDTO lectureApprovalGetBeginTimeDTO);
+	
+	// 진수우 : 시작시간 선택 시 가능한 시간만 출력 + 현재 수정 중인 강의시간도 출력
+	List<Common> selectLectureApprovalGetBeginTimeFromModify(LectureApprovalGetBeginTimeDTO lectureApprovalGetBeginTimeDTO);
+	
+	// 진수우 : 종료시간 선택 시 가능한 시간만 출력 + 현재 수정 중인 강의시간도 출력
+	List<Common> selectLectureApprovalGetEndTimeFromModify(LectureApprovalGetBeginTimeDTO lectureApprovalGetBeginTimeDTO);
 }

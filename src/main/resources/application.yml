@@ -18,6 +18,7 @@ logging:
     com:
       example:
         academy:
+          scheduled: debug
           mapper: debug
           controller: debug
           restcontroller: debug

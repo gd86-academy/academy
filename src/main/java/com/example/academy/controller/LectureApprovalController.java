@@ -40,6 +40,13 @@ public class LectureApprovalController {
 	@Autowired ClassroomService classroomService;
 	@Autowired LectureApprovalService lectureApprovalService;
 	
+	// 진수우 : 강의결재 삭제.
+	@GetMapping("/lectureApprovalUpdateUse")
+	public String getMethodName(Integer lectureApprovalNo) {
+		lectureApprovalService.modifyLectureApprovalUse(lectureApprovalNo);
+		return "redirect:/applicationList";
+	}
+	
 	// 진수우 : 강의결재 수정 제출.
 	@PostMapping("/modifyLectureApproval")
 	public String modifyLectureApproval(Model model, LectureApprovalModifyDTO lectureApprovalDTO) {

@@ -155,6 +155,7 @@ if (applyModalButtonAddPeople) applyModalButtonAddPeople.addEventListener('click
 		            </div>
 		        `;
 				
+				
 				$('#alreadyPeople').remove(); // 숨김 처리
 				$('#newPeople').removeAttr('hidden');
 				if (inputs.length == 0) {
@@ -632,12 +633,7 @@ $('#btnAddTime').click(function () {
 		    }
 		});
 		
-		// 시작시간을 수정 시, 종료시간에 선택했던 값은 초기화처리.
-		$(`#${beginTimeId}`).change(function () {
-			if ($(`#${endTimeId}`).val() != '') {
-				$(`#${endTimeId}`).prop('selectedIndex', 0);
-			}
-		});
+		
 			
         // 요일 선택 시, 시간 데이터를 가져오는 이벤트 바인딩
         $(`#${weekdayId}`).change(function () {
@@ -658,10 +654,11 @@ $('#btnAddTime').click(function () {
 
             // 선택된 데이터를 REST API로 전달하여 시간 데이터 요청
             $.ajax({
-                url: `http://localhost/academy/restapi/getBeginLectureTime`,
+                url: `http://localhost/academy/restapi/getBeginLectureTimeFromModify`,
 				contentType: 'application/json', 
                 type: 'POST',
                 data: JSON.stringify({
+					lectureApprovalNo: lectureApprovalNo,
                     weekdayCode: selectedWeekday,
                     beginDate: startDate,
                     endDate: endDate,
@@ -697,10 +694,11 @@ $('#btnAddTime').click(function () {
 	
 	        // 선택된 데이터를 REST API로 전달하여 시간 데이터 요청
 	        $.ajax({
-	            url: `http://localhost/academy/restapi/getEndLectureTime`,
+	            url: `http://localhost/academy/restapi/getEndLectureTimeFromModify`,
 				contentType: 'application/json', 
 	            type: 'POST',
 	            data: JSON.stringify({
+					lectureApprovalNo: lectureApprovalNo,
 	                weekdayCode: selectedWeekday,
 	                beginDate: startDate,
 	                endDate: endDate,
@@ -717,6 +715,11 @@ $('#btnAddTime').click(function () {
 	            }
 	        });
 	    });
+		
+		// 시작시간을 수정 시, 종료시간에 선택했던 값은 초기화처리.
+		$(`#${beginTimeId}`).change(function () {
+			$(`#${endTimeId}`).prop('selectedIndex', 0);
+		});
     }
 	console.log('timeResult : ' + timeResult);
 });
@@ -740,10 +743,11 @@ $('#weekdayId0').on('change', function () {
 
     // 선택된 데이터를 REST API로 전달하여 시간 데이터 요청
     $.ajax({
-        url: `http://localhost/academy/restapi/getBeginLectureTime`,
+        url: `http://localhost/academy/restapi/getBeginLectureTimeFromModify`,
 		contentType: 'application/json', 
         type: 'POST',
         data: JSON.stringify({
+			lectureApprovalNo: lectureApprovalNo,
             weekdayCode: selectedWeekday,
             beginDate: startDate,
             endDate: endDate,
@@ -780,10 +784,11 @@ $('#weekdayId0').on('change', function () {
 
     // 선택된 데이터를 REST API로 전달하여 시간 데이터 요청
     $.ajax({
-        url: `http://localhost/academy/restapi/getEndLectureTime`,
+        url: `http://localhost/academy/restapi/getEndLectureTimeFromModify`,
 		contentType: 'application/json', 
         type: 'POST',
         data: JSON.stringify({
+			lectureApprovalNo: lectureApprovalNo,
             weekdayCode: selectedWeekday,
             beginDate: startDate,
             endDate: endDate,
@@ -1108,8 +1113,6 @@ function alreadyChangeFile() {
 
 // 강의시간에서 시작시간을 선택했을 때 종료시간을 선택할 때 시작시간 이전의 시간은 선택되지 안
 function disableSelectedOption() {
-	
-	console.log('disableSelectedOption 호출됨')
     // 첫 번째 <select> 요소의 값 가져오기
     var getBeginTimeId  = 'beginTimeId' + timeResult;
     var beginTimeId = document.getElementById(getBeginTimeId);
@@ -1129,12 +1132,13 @@ function disableSelectedOption() {
     // 첫 번째 <select>에서 선택된 값과 일치하는 옵션 비활성화
     for (var i = 0; i < endTimeId.options.length; i++) {
         if (endTimeId.options[i].value <= selectedValue1) {
+			console.log('비활성화 Index : ' + i)
             endTimeId.options[i].disabled = true;
         }
     }
 
     // 이전 시간 저장 변수
-    var previousValue = parseInt(selectedValue1); // 시작 시간
+    //var previousValue = parseInt(selectedValue1); // 시작 시간
     var selectedValue = false;
     var selectedIndex = beginTimeId.selectedIndex; // 선택된 값의 인덱스 가져오기
     var previousValue = parseInt(beginTimeId.options[selectedIndex].text); // 선택된 텍스트 값
@@ -1145,7 +1149,11 @@ function disableSelectedOption() {
 		endTimeId.options[i].disabled = false;
         if (selectedValue === true) {
             endTimeId.options[i].disabled = true;
+			
         } else if (optionText > previousValue + 1) {
+			console.log('optionText : ' + optionText)
+			console.log('previousValue : ' + (previousValue + 1))
+			
             endTimeId.options[i].disabled = true;
             selectedValue = true;
         }

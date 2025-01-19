@@ -29,7 +29,7 @@ public class AttendanceApprovalController {
 	@Autowired ApprovalEmployeeService approvalEmployeeService;
 	@Autowired AttendanceApprovalFileService attendanceApprovalFileService;
 	
-	// 김혜린 : 근태 신청서 수정페이지
+	// 김혜린 : 근태 신청서 수정페이지 GET
 	@GetMapping("/modifyAttendanceApproval")
 	public String modifyAttendanceApproval(Model model, Integer attendanceApprovalNo) {
 		// 원래 정보 불러오기
@@ -52,7 +52,8 @@ public class AttendanceApprovalController {
 		
 		return "modifyAttendanceApproval";
 	}
-	// 김혜린 : 근태 신청서 수정페이지
+	
+	// 김혜린 : 근태 신청서 수정페이지 POST
 	@PostMapping("/modifyAttendanceApproval")
 	public String modifyAttendanceApproval(AttendanceApprovalModifyDTO attendanceApprovalModifyDTO) {
 		
@@ -60,6 +61,7 @@ public class AttendanceApprovalController {
 		
 		return "redirect:/attendanceApprovalOne?attendanceApprovalNo=" + attendanceApprovalModifyDTO.getAttendanceApprovalNo();
 	}
+	
 	
 	// 김혜린 : 근태 신청서 상세페이지
 	@GetMapping("/attendanceApprovalOne")

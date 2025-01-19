@@ -255,9 +255,29 @@ public class LectureApprovalService {
 		
 	}
 	
+	// 진수우 : 강의결재 삭제 시 강의결재 테이블에서 사용상태변경
+	public Integer modifyLectureApprovalUse(Integer lectureApprovalNo) {
+		return lectureApprovalMapper.updateLectureApprovalUse(lectureApprovalNo);
+	}
+	
 	// 진수우 : 시작시간 선택 시 가능한 시간만 출력
 	public List<Common> getLectureApprovalGetBeginTime(LectureApprovalGetBeginTimeDTO lectureApprovalGetBeginTimeDTO) {
 		return lectureApprovalMapper.selectLectureApprovalGetBeginTime(lectureApprovalGetBeginTimeDTO);
+	}
+	
+	// 진수우 : 종료시간 선택 시 가능한 시간만 출력
+	public List<Common> getLectureApprovalGetEndTime(LectureApprovalGetBeginTimeDTO lectureApprovalGetBeginTimeDTO) {
+		return lectureApprovalMapper.selectLectureApprovalGetEndTime(lectureApprovalGetBeginTimeDTO);
+	}
+	
+	// 진수우 : 시작시간 선택 시 가능한 시간만 출력 + 현재 수정 중인 강의시간도 출력
+	public List<Common> getLectureApprovalGetBeginTimeFromModify(LectureApprovalGetBeginTimeDTO lectureApprovalGetBeginTimeDTO) {
+		return lectureApprovalMapper.selectLectureApprovalGetBeginTimeFromModify(lectureApprovalGetBeginTimeDTO);
+	}
+	
+	// 진수우 : 종료시간 선택 시 가능한 시간만 출력 + 현재 수정 중인 강의시간도 출력
+	public List<Common> getLectureApprovalGetEndTimeFromModify(LectureApprovalGetBeginTimeDTO lectureApprovalGetBeginTimeDTO) {
+		return lectureApprovalMapper.selectLectureApprovalGetEndTimeFromModify(lectureApprovalGetBeginTimeDTO);
 	}
 	
 	// 진수우 : 강의결재 상세페이지에서 결재자 출력
