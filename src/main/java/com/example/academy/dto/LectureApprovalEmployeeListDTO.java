@@ -9,4 +9,8 @@ public class LectureApprovalEmployeeListDTO {
 	private String approver;
 	private Integer approverNo;
 	private Integer approvalLevel;
+	private String stampFileName;
+	private String stampFileExt;
+	private String approvalEmployeeStatus;
+	private String approvalEmployeeStatusName;
 }

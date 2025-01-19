@@ -255,6 +255,11 @@ public class LectureApprovalService {
 		
 	}
 	
+	// 진수우 : 강의결재 삭제 시 강의결재 테이블에서 사용상태변경
+	public Integer modifyLectureApprovalUse(Integer lectureApprovalNo) {
+		return lectureApprovalMapper.updateLectureApprovalUse(lectureApprovalNo);
+	}
+	
 	// 진수우 : 시작시간 선택 시 가능한 시간만 출력
 	public List<Common> getLectureApprovalGetBeginTime(LectureApprovalGetBeginTimeDTO lectureApprovalGetBeginTimeDTO) {
 		return lectureApprovalMapper.selectLectureApprovalGetBeginTime(lectureApprovalGetBeginTimeDTO);

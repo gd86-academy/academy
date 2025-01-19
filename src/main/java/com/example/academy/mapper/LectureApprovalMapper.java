@@ -19,6 +19,8 @@ import com.example.academy.vo.LectureWeekday;
 
 @Mapper
 public interface LectureApprovalMapper {
+	// 진수우 : 강의결재 삭제 시 강의결재 테이블에서 사용상태변경
+	Integer updateLectureApprovalUse(Integer lectureApprovalNo);
 	
 	// 진수우 : 강의결재 수정 시 파일테이블에서 삭제할 파일번호 조회
 	Integer selectDeleteFileNo(String fileName);

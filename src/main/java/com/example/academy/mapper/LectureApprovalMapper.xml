@@ -2,6 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.LectureApprovalMapper">
 
+	<!-- 진수우 : 강의결재 삭제 시 강의결재 테이블에서 사용상태변경 -->
+	<update id="updateLectureApprovalUse">
+		UPDATE lecture_approval SET use_yn = 0 WHERE lecture_approval_no = #{lectureApprovalNo}
+	</update>
+
 	<!-- 진수우 : 강의결재 수정 시 파일테이블에서 삭제할 파일번호 조회 -->
 	<select id="selectDeleteFileNo">
 		SELECT file_no fileNo
@@ -77,8 +82,14 @@
 			, e.employee_name approver
 			, ae.approver approverNo
 			, ae.approval_level approvalLevel
+			, ae.approval_employee_status approvalEmployeeStatus
+			, c.name approvalEmployeeStatusName
+			, f.file_name stampFileName
+			, f.file_ext stampFileExt
 		FROM approval_employee ae
 		LEFT OUTER JOIN employee e ON ae.approver = e.employee_no
+		LEFT OUTER JOIN file f ON f.file_no = e.stamp_file_no
+		LEFT OUTER JOIN common c ON c.code = ae.approval_employee_status
 		WHERE ae.lecture_approval_no = #{lectureApprovalNo}
 		ORDER BY approval_level ASC
 	</select>
