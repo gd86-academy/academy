@@ -1142,7 +1142,7 @@ function disableSelectedOption() {
     // 선택된 옵션 이후부터 루프 실행
     for (var i = selectedIndex; i < endTimeId.options.length; i++) {
         var optionText = parseInt(endTimeId.options[i].text); // 현재 옵션의 텍스트 값 (숫자로 변환)
-
+		endTimeId.options[i].disabled = false;
         if (selectedValue === true) {
             endTimeId.options[i].disabled = true;
         } else if (optionText > previousValue + 1) {

@@ -247,6 +247,7 @@
 			  AND l.use_yn = 1
 			  AND ((l.lecture_begin_date BETWEEN #{beginDate} AND #{endDate} OR l.lecture_end_date BETWEEN #{beginDate} AND #{endDate})
 			  OR ((#{beginDate} BETWEEN l.lecture_begin_date AND l.lecture_end_date) AND (#{endDate} BETWEEN l.lecture_begin_date AND l.lecture_end_date)))
+			  AND l.lecture_approval_status = 'AS001'
 		) AND c.code LIKE 'TM%'
 		AND c.code != 'TM010'; -- TM010 제외
 	</select>
@@ -285,6 +286,7 @@
 			  AND l.use_yn = 1
 			  AND ((l.lecture_begin_date BETWEEN #{beginDate} AND #{endDate} OR l.lecture_end_date BETWEEN #{beginDate} AND #{endDate})
 			  OR ((#{beginDate} BETWEEN l.lecture_begin_date AND l.lecture_end_date) AND (#{endDate} BETWEEN l.lecture_begin_date AND l.lecture_end_date)))
+			  AND l.lecture_approval_status = 'AS001'
 		) AND c.code LIKE 'TM%'
 		AND c.code != 'TM001'; -- TM001 제외
 	</select>
@@ -323,6 +325,7 @@
 			  AND l.use_yn = 1
 			  AND ((l.lecture_begin_date BETWEEN #{beginDate} AND #{endDate} OR l.lecture_end_date BETWEEN #{beginDate} AND #{endDate})
 			  OR ((#{beginDate} BETWEEN l.lecture_begin_date AND l.lecture_end_date) AND (#{endDate} BETWEEN l.lecture_begin_date AND l.lecture_end_date)))
+			  AND l.lecture_approval_status = 'AS001'
 		) AND c.code LIKE 'TM%'
 		AND c.code != 'TM010' -- TM010 제외
 		UNION
@@ -370,6 +373,7 @@
 			  AND l.use_yn = 1
 			  AND ((l.lecture_begin_date BETWEEN #{beginDate} AND #{endDate} OR l.lecture_end_date BETWEEN #{beginDate} AND #{endDate})
 			  OR ((#{beginDate} BETWEEN l.lecture_begin_date AND l.lecture_end_date) AND (#{endDate} BETWEEN l.lecture_begin_date AND l.lecture_end_date)))
+			  AND l.lecture_approval_status = 'AS001'
 		) AND c.code LIKE 'TM%'
 		AND c.code != 'TM001' -- TM001 제외
 		UNION
