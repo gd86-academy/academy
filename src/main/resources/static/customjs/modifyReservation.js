@@ -202,7 +202,7 @@ document.addEventListener('alpine:init', () => {
 	            // 검색기록 초기화
 	            $('#searchEmployee').val('');
 	            $('#resultEmployee').empty();
-	        }
+    		} 
 	    }
 
 		// 회의실 선택과 수용 인원 정보 가져오기
@@ -230,10 +230,9 @@ document.addEventListener('alpine:init', () => {
 
 	// 삭제 버튼 기능 추가
 	$(document).on('click', '.removeEmployee', function () {
-		let cnt = $('#selectEmployeesContainer .selectedEmployee-box').length;
 	    const parentElement = $(this).closest('.selectedEmployee-box');
-	    const employeeNo = parentElement.find('.selectedEmployee').data('employee-no'); 
-		
+	    const employeeNo = parentElement.find('.selectedEmployee').data('employee-no');
+
 	    // employeeNo 값 확인
 	    if (!employeeNo) {
 	        console.error('employeeNo가 유효하지 않습니다:', employeeNo);
@@ -251,7 +250,19 @@ document.addEventListener('alpine:init', () => {
 	    } else {
 	        console.log('employeeNo가 이미 존재합니다:', employeeNo);
 	    }
-	    parentElement.remove(); // DOM에서 삭제
+
+	    // DOM에서 삭제
+	    parentElement.remove();
+
+	    // 남은 사원들의 cnt 재계산
+	    $('#selectEmployeesContainer .selectedEmployee-box').each(function (index) {
+	        const inputHidden = $(this).find('.selectedEmployeeNo');
+	        const inputText = $(this).find('.selectedEmployee');
+
+	        // cnt 재설정 (index 값 사용)
+	        inputHidden.attr('name', `reservationEmployees[${index}].employeeNo`);
+	        inputText.attr('name', `reservationEmployees[${index}].employeeName`);
+	    });
 	});
 });	
 
