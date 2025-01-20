@@ -31,6 +31,11 @@ public class AttendanceApprovalService {
 	@Autowired FilesMapper filesMapper;
 	@Autowired AttendanceApprovalFileMapper attendanceApprovalFileMapper;
 	
+	// 김혜린 : 근태 신청서 삭제 - 근태신청서 사용상태를 비활성화로 바꿔줌
+	public void removeAttendanceApproval(Integer attendanceApprovalNo) {
+		attendanceApprovalMapper.updateUseAttendanceApproval(attendanceApprovalNo);
+	}
+	
 	// 김혜린 : 근태신청서 수정페이지
 	public void modifyAttendanceApproval(AttendanceApprovalModifyDTO attendanceApprovalModifyDTO) {
 		// 1) 근태신청서 테이블 수정

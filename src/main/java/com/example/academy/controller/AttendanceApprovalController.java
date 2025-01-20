@@ -29,6 +29,14 @@ public class AttendanceApprovalController {
 	@Autowired ApprovalEmployeeService approvalEmployeeService;
 	@Autowired AttendanceApprovalFileService attendanceApprovalFileService;
 	
+	// 김혜린 : 근태 신청서 삭제
+	@GetMapping("/removeAttendanceApproval")
+	public String removeAttendanceApproval(Integer attendanceApprovalNo) {
+		attendanceApprovalService.removeAttendanceApproval(attendanceApprovalNo);
+		
+		return "redirect:/applicationList";
+	}
+	
 	// 김혜린 : 근태 신청서 수정페이지 GET
 	@GetMapping("/modifyAttendanceApproval")
 	public String modifyAttendanceApproval(Model model, Integer attendanceApprovalNo) {

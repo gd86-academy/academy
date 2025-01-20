@@ -12,6 +12,9 @@ import com.example.academy.dto.AttendanceApprovalOneDTO;
 @Mapper
 public interface AttendanceApprovalMapper {
 	
+	// 김혜린 : 근태신청서 삭제 - 근태신청서 사용상태를 비활성화로 바꿔줌
+	Integer updateUseAttendanceApproval(Integer attendanceApprovalNo);
+	
 	// 김혜린 : 근태신청서 수정
 	Integer updateAttendanceApproval(AttendanceApprovalModifyDTO attendanceApprovalModifyDTO);
 	
