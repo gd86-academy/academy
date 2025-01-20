@@ -23,6 +23,22 @@
         <script th:src="@{/js/templete.js}"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script th:src="@{/js/simple-datatables.js}"></script>
+        <style>
+			/* 기본 커서 설정 */
+        table.whitespace-nowrap tbody tr {
+            cursor: pointer; /* 행에 커서 올리면 포인터로 변경 */
+        }
+
+        /* 행을 클릭했을 때 스타일 */
+        table.whitespace-nowrap tbody tr.selected {
+            background-color: #d1ecf1; /* 클릭된 행 색상 */
+        }
+
+        /* 마우스를 올렸을 때 스타일 */
+        table.whitespace-nowrap tbody tr:hover {
+            background-color: #f1f1f1; /* 마우스를 올렸을 때 색상 */
+        }
+		</style>
     </head>
 
     <body

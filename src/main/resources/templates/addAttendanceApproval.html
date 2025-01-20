@@ -125,7 +125,7 @@
 					<h2 class="text-2xl ml-3 mb-5">결재신청</h2>
 					
 					<!-- 신청양식 선택버튼 -->
-					<div class="relative inline-flex" style="margin: 0% 15% 0% 15%;">
+					<div th:if="${userRole == 'management'}" class="relative inline-flex" style="margin: 0% 15% 0% 15%;">
 					    <a type="button" class="btn btn-primary ltr:rounded-r-none rtl:rounded-l-none mb-3">근태신청</a>
 					    <a type="button" class="btn btn-outline-primary ltr:rounded-l-none rtl:rounded-r-none mb-3" th:href="@{/addLectureApproval}">강의신청</a>
 					</div>
