@@ -375,7 +375,7 @@
 						               class="hidden"
 						               multiple
 						               th:onchange="document.getElementById('attendanceApprovalFileNameDisplay[[${stat.index}]]').value = this.files[0] ? this.files[0].name : '';
-            										document.getElementById('fileFieldId[[${stat.index}]]').remove();"/>
+            										document.getElementById('fileFieldId[[${stat.index}]]').remove();"/> <!-- 태그의 값이 바뀌면 input태그 제거 -->
 						           <!-- 파일 이름 표시 -->
 						           <input
 						           	   th:id="'attendanceApprovalFileNameDisplay' + ${stat.index}"

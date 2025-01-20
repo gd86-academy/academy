@@ -22,6 +22,8 @@ public class MeetingRoomService {
 
 	// 하상우) 회의실 수정
 	public Integer modifyMeetingRoom(MeetingRoomAddDTO modifymeetingroom) {
+		String[] inputManager = modifymeetingroom.getMeetingroomManager().split("\\[|\\]");
+		modifymeetingroom.setMeetingroomManager(inputManager[1]); // 사원번호만 추출해서 담당자정보 재정의.
 	    return meetingRoomMapper.modifyMeetingRoom(modifymeetingroom);
 	}
 
@@ -37,9 +39,11 @@ public class MeetingRoomService {
 		return meetingRoomMapper.deleteMeetingRoom(meetingroomNo);
 	}
 	
-	// 하상우) 회의실 추가
 	
+	// 하상우) 회의실 추가
 	public Integer addMeetingRoom(MeetingRoomAddDTO meetingroomaddDTO) {
+		String[] inputManager = meetingroomaddDTO.getMeetingroomManager().split("\\[|\\]");
+		meetingroomaddDTO.setMeetingroomManager(inputManager[1]); // 사원번호만 추출해서 담당자정보 재정의.
 		return meetingRoomMapper.addMeetingRoom(meetingroomaddDTO);
 	}
 	

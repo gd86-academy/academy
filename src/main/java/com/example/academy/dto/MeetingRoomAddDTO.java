@@ -8,7 +8,8 @@ public class MeetingRoomAddDTO {
 	
 	private Integer meetingroomNo;
 	private String meetingroomName; 
-    private Integer meetingroomManager; 
+    private String meetingroomManager; 
+    private String employeeName; 
     private Integer meetingroomCapacity; 
 	private String createDate;
 	private String updateDate;

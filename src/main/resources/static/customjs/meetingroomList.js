@@ -88,16 +88,16 @@ document.addEventListener('alpine:init', () => {
 	            type: 'GET',
 	            dataType: 'json',
 	            success: (data) => {
+					
 					this.datatable = new simpleDatatables.DataTable('#meetingroomTable', {
 					    data: {
-					        headings: ['회의실번호', '회의실명', '담당자', '수용인원수', '수정', '삭제'],
+					        headings: ['회의실번호', '회의실명', '담당자', '수용인원수', ''],
 							data: data.map(item => [
 							    item[0], // 회의실 번호
 							    item[1], // 회의실명
-							    item[2], // 담당자 이름
-							    item[3], // 수용 인원
-							    `<button type="button" class="btn btn-dark" onclick="openModifyModal(${item[0]})">수정</button>`, // 수정 버튼
-							    `<button type="button" class="btn btn-danger" onclick="openDeleteModal(${item[0]})">삭제</button>`  // 삭제 버튼
+								`<div class="flex items-center"><img class="w-9 h-9 rounded-full ltr:mr-2 rtl:ml-2 object-cover" src="./upload/${item[7]}.${item[8]}" /><span>${item[2]}</span>&nbsp;<span style="color: #cccccc;">${item[3]}</span></div>`,
+								`<span>${item[4]}명</span>`, // 수용 인원
+							    `<div class="flex"><button type="button" class="btn btn-dark mr-3" onclick="openModifyModal(${item[0]})">수정</button><button type="button" class="btn btn-danger" onclick="openDeleteModal(${item[0]})">삭제</button></div>`  // 삭제 버튼
 							])
 					    },
 					    searchable: true,
@@ -107,10 +107,7 @@ document.addEventListener('alpine:init', () => {
 					    columns: [
 					        {
 					            select: 4,
-								sortable: false,
-					        },
-					        {
-					            select: 5,
+								width: "15%",
 								sortable: false,
 					        },
 					    ],
@@ -265,6 +262,7 @@ const submitModifyButton = document.getElementById('meetingroomModifyButton');
 
 // 모달 열기
 const openModifyModal = (meetingRoomNo) => {
+	console.log('meetingRoomNo : ' + meetingRoomNo);
   $.ajax({
     url: `http://localhost/academy/modifyMeetingRoom?meetingroomNo=${meetingRoomNo}`,
     type: 'GET',
@@ -275,7 +273,8 @@ const openModifyModal = (meetingRoomNo) => {
       $('#meetingroomNo').val(data.meetingroomNo);
       $('#displayMeetingroomNo').text(data.meetingroomNo);  // 회의실 번호 표시
       $('#modifyMeetingroomName').val(data.meetingroomName);
-      $('#modifyMeetingroomManager').val(data.meetingroomManager);
+	  var manager = data.employeeName + '[' + data.meetingroomManager + ']'
+      $('#modifyMeetingroomManager').val(manager);
       $('#modifyMeetingroomCapacity').val(data.meetingroomCapacity);
 	  
 
@@ -317,7 +316,7 @@ submitModifyButton.addEventListener('click', function(e) {
       processData: false,
       contentType: false,
       success: function(response) {
-        alert('회의실이 성공적으로 수정되었습니다.');
+        // alert('회의실이 성공적으로 수정되었습니다.');
         closeModifyModal();
         // 테이블 새로고침
         if (window.multicolumn && window.multicolumn.datatable) {
@@ -333,6 +332,53 @@ submitModifyButton.addEventListener('click', function(e) {
     });
   }
 });
+
+
+// 회의실추가모달에서 사원추가버튼을 누를 떄 트리 출력
+// 담당자추가 모달 관련 DOM 요소
+const openModalButtonAddPeople = document.getElementById('openModalButtonAddPeople');
+const closeModalButtonAddPeople = document.getElementById('closeModalButtonAddPeople');
+const modalBackgroundAddPeople = document.getElementById('modalBackgroundAddPeople');
+const modalWrapperAddPeople = document.getElementById('modalWrapperAddPeople');
+const applyModalButtonAddPeople = document.getElementById('applyModalButtonAddPeople');
+
+// 회의실 추가모달에서 담당자추가 모달 열기
+openModalButtonAddPeople.addEventListener('click', () => {
+  modalBackgroundAddPeople.classList.remove('hidden');  // 모달 배경 보이기
+  modalBackgroundAddPeople.classList.add('block');     // 모달 배경 보이게 설정
+});
+
+// 담당자추가 모달 닫기
+const closeModalAddPeople = () => {
+  modalBackgroundAddPeople.classList.remove('block');
+  modalBackgroundAddPeople.classList.add('hidden');  // 모달 배경 숨기기
+};
+
+if (closeModalButtonAddPeople) closeModalButtonAddPeople.addEventListener('click', closeModalAddPeople); // 닫기 버튼 클릭 시
+
+
+// 회의실수정모달에서 사원추가버튼을 누를 떄 트리 출력
+// 담당자수정 모달 관련 DOM 요소
+const openModalButtonModifyPeople = document.getElementById('openModalButtonModifyPeople');
+const closeModalButtonModifyPeople = document.getElementById('closeModalButtonModifyPeople');
+const modalBackgroundModifyPeople = document.getElementById('modalBackgroundModifyPeople');
+const modalWrapperModifyPeople = document.getElementById('modalWrapperModifyPeople');
+const applyModalButtonModifyPeople = document.getElementById('applyModalButtonModifyPeople');
+
+// 회의실 수정모달에서 담당자수정 모달 열기
+openModalButtonModifyPeople.addEventListener('click', () => {
+  modalBackgroundModifyPeople.classList.remove('hidden');  // 모달 배경 보이기
+  modalBackgroundModifyPeople.classList.add('block');     // 모달 배경 보이게 설정
+});
+
+// 담당자수정 모달 닫기
+const closeModalModifyPeople = () => {
+  modalBackgroundModifyPeople.classList.remove('block');
+  modalBackgroundModifyPeople.classList.add('hidden');  // 모달 배경 숨기기
+};
+
+if (closeModalButtonModifyPeople) closeModalButtonModifyPeople.addEventListener('click', closeModalModifyPeople); // 닫기 버튼 클릭 시
+
 
 // 폼 유효성 검사 함수
 function validateForm() {
@@ -370,3 +416,200 @@ function validateForm() {
 
   return isValid;
 }
+
+
+// 트리에 팀명이 선택되는 것을 방지하기위해서 팀명 리스트로 받아오기.
+const departmentName = [];
+$.ajax({
+    url: 'http://localhost/academy/restapi/getDepartment',
+    type: 'GET',
+    dataType: 'json',
+    success: (data) => {
+		// name 필드값을 추출해서 리스트로 변환.
+		$.each(data, function(index, item) {
+            departmentName.push(item.name); // departmentName 배열에 name 필드값 추가
+        });
+	},
+	error: (xhr, status, error) => {
+        console.error('Error:', error);
+    }
+});
+
+// 트리에 사원목록 출력.
+$.ajax({
+    url: 'http://localhost/academy/restapi/employeeListNode',
+    type: 'GET',
+    dataType: 'json',
+    success: (data) => {
+			var tree = new tui.Tree('#tree', { // Tree 컴포넌트를 초기화하는 생성자.
+			    data: data, // 데이터를 가져옴.
+			    nodeDefaultState: 'opened' // 모든 노드가 기본적으로 열린 상태.
+			}).enableFeature('Selectable', { // Tree 컴포넌트 추가기능 설정.
+			    selectedClassName: 'tui-tree-selected', // 선택된 노드의 CSS설정.
+			});
+
+			var selectedBtn = document.getElementById('selectedBtn');
+			var deselectedBtn = document.getElementById('deselectedBtn');
+			var rootNodeId = tree.getRootNodeId();
+			var firstChildId = tree.getChildIds(rootNodeId)[0];
+			var selectedValue = document.getElementById('selectedValue');
+			var selectedNode = null; // 선택된 노드를 추적하는 변수
+			
+			// 팀명 선택 방지
+		    tree.on('beforeSelect', function(eventData) {
+		        var nodeData = tree.getNodeData(eventData.nodeId);
+				$.each(departmentName, function(i, department) {
+			        if (nodeData.text.includes(department)) { // 팀명 조건 설정
+						console.log(nodeData.text.includes(department))
+			            console.log('팀명은 선택할 수 없습니다.');
+						eventData.preventDefault(); // 기본 동작 취소 (선택 방지)
+			            return false; // 선택 방지
+			        }
+			    });
+		    });
+
+			// 트리의 루트노드ID를 가져옴.
+			tree.on('select', function(eventData) {
+			    var nodeData = tree.getNodeData(eventData.nodeId);
+				selectedValue.value = 'selected : ' + nodeData.text;
+			    selectedNode = nodeData; // 선택된 노드 정보 저장
+			    console.log('Selected:', selectedNode.text);
+			});
+
+			// 트리에서 선택된 항목을 선택해제함.
+			tree.on('deselect', function(eventData) {
+			    var nodeData = tree.getNodeData(eventData.nodeId);
+			    selectedValue.value = 'deselected : ' + nodeData.text;
+			});
+
+			util.addEventListener(selectedBtn, 'click', function() {
+			    tree.select(firstChildId);
+			});
+
+			util.addEventListener(deselectedBtn, 'click', function() {
+			    tree.deselect();
+			});
+
+			// "추가" 버튼 클릭 이벤트 처리
+			$('#addEmployeeListButton').click(function() {
+			    if (selectedNode && selectedNode.text) { // selectedNode가 정의되고 text가 존재하는지 확인.
+			        var employee = selectedNode.text;
+			        
+			        // #meetingroomManager input 필드에 값 설정
+			        $('#meetingroomManager').val(employee); 
+			    } else {
+			        // alert('트리 항목을 선택하세요!');
+			    }
+				closeModalAddPeople();
+				
+			});
+		},
+    error: (xhr, status, error) => {
+        console.error('Error:', error);
+    }
+});
+
+// 트리에 사원목록 출력.
+$.ajax({
+    url: 'http://localhost/academy/restapi/employeeListNode',
+    type: 'GET',
+    dataType: 'json',
+    success: (data) => {
+			var tree = new tui.Tree('#modifytree', { // Tree 컴포넌트를 초기화하는 생성자.
+			    data: data, // 데이터를 가져옴.
+			    nodeDefaultState: 'opened' // 모든 노드가 기본적으로 열린 상태.
+			}).enableFeature('Selectable', { // Tree 컴포넌트 추가기능 설정.
+			    selectedClassName: 'tui-tree-selected', // 선택된 노드의 CSS설정.
+			});
+
+			var selectedBtn2 = document.getElementById('selectedBtn');
+			var deselectedBtn2 = document.getElementById('deselectedBtn');
+			var rootNodeId2 = tree.getRootNodeId();
+			var firstChildId2 = tree.getChildIds(rootNodeId2)[0];
+			var selectedValue2 = document.getElementById('selectedValue');
+			var selectedNode2 = null; // 선택된 노드를 추적하는 변수
+			
+			// 팀명 선택 방지
+		    tree.on('beforeSelect', function(eventData) {
+		        var nodeData = tree.getNodeData(eventData.nodeId);
+				$.each(departmentName, function(i, department) {
+			        if (nodeData.text.includes(department)) { // 팀명 조건 설정
+						console.log(nodeData.text.includes(department))
+			            console.log('팀명은 선택할 수 없습니다.');
+						eventData.preventDefault(); // 기본 동작 취소 (선택 방지)
+			            return false; // 선택 방지
+			        }
+			    });
+		    });
+
+			// 트리의 루트노드ID를 가져옴.
+			tree.on('select', function(eventData) {
+			    var nodeData = tree.getNodeData(eventData.nodeId);
+				selectedValue2.value = 'selected : ' + nodeData.text;
+			    selectedNode2 = nodeData; // 선택된 노드 정보 저장
+			    console.log('Selected:', selectedNode2.text);
+			});
+
+			// 트리에서 선택된 항목을 선택해제함.
+			tree.on('deselect', function(eventData) {
+			    var nodeData = tree.getNodeData(eventData.nodeId);
+			    selectedValue2.value = 'deselected : ' + nodeData.text;
+			});
+
+			util.addEventListener(selectedBtn2, 'click', function() {
+			    tree.select(firstChildId2);
+			});
+
+			util.addEventListener(deselectedBtn2, 'click', function() {
+			    tree.deselect();
+			});
+			
+			$('#modifyEmployeeListButton').click(function() {
+			    if (selectedNode2 && selectedNode2.text) { // selectedNode가 정의되고 text가 존재하는지 확인.
+			        var employee = selectedNode2.text;
+			        
+			        // #meetingroomManager input 필드에 값 설정
+			        $('#modifyMeetingroomManager').val(employee); 
+			    } else {
+			        // alert('트리 항목을 선택하세요!');
+			    }
+				closeModalModifyPeople();
+				
+			});
+		},
+    error: (xhr, status, error) => {
+        console.error('Error:', error);
+    }
+});
+	
+// 브라우저에 맞는 맞춤형 메서드를 제공.
+var util = {
+    addEventListener: function(element, eventName, handler) {
+        if (element.addEventListener) {
+            element.addEventListener(eventName, handler, false);
+        } else {
+            element.attachEvent('on' + eventName, handler);
+        }
+    }
+};
+
+// DOM이 준비된 후에 실행
+document.addEventListener('DOMContentLoaded', function() {
+    // ID로 요소를 찾습니다.
+    var selectedBtn = document.getElementById('selectedBtn');
+    var deselectedBtn = document.getElementById('deselectedBtn');
+
+    // 버튼이 존재하는지 확인
+    if (selectedBtn && deselectedBtn) {
+        // 버튼에 클릭 이벤트 리스너 추가
+        util.addEventListener(selectedBtn, 'click', function() {
+            tree.select(firstChildId);
+        });
+
+        util.addEventListener(deselectedBtn, 'click', function() {
+            tree.deselect();
+        });
+    } else {
+        console.log("Buttons not found!");
+    }
+});

@@ -10,8 +10,10 @@
 			meetingroom_no meetingroomNo,
 			meetingroom_name meetingroomName,
 			meetingroom_manager meetingroomManager,
+			employee_name employeeName,
 			meetingroom_capacity meetingroomCapacity
 		FROM meetingroom
+		Join employee on meetingroom.meetingroom_manager = employee.employee_no
 		WHERE meetingroom_no = #{meetingroomNo};
 	
 	
@@ -67,8 +69,12 @@
 			meetingroom_no meetingroomNo,
 			meetingroom_name meetingroomName,
 			meetingroom_manager meetingroomManager,
-			meetingroom_capacity meetingroomCapacity
-		FROM meetingroom Join employee on meetingroom.meetingroom_manager = employee.employee_no;
+			employee_name employeeName,
+			meetingroom_capacity meetingroomCapacity,
+			file_name photoFileName,
+			file_ext photoFileExt
+		FROM meetingroom Join employee on meetingroom.meetingroom_manager = employee.employee_no
+						Join file on employee.photo_file_no = file.file_no
 	</select>
 	
 	

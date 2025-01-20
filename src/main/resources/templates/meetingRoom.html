@@ -19,6 +19,7 @@
 		<link rel="stylesheet" th:href="@{/css/nouislider.min.css}" />
 		<link rel="stylesheet" type="text/css" th:href="@{/css/nice-select2.css}" />
 		<link rel="stylesheet" th:href="@{/css/templete.css}" />
+		<link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui-tree/latest/tui-tree.css"/>
 		
 		<!-- Scripts -->
 		<script th:src="@{/js/perfect-scrollbar.min.js}"></script>
@@ -38,7 +39,39 @@
 		<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 		<script defer th:src="@{/js/address.js}"></script>
 		<script th:src="@{/js/nice-select2.js}"></script>
+		<script src="https://uicdn.toast.com/tui-tree/latest/tui-tree.js"></script>
 		<script th:src="@{/js/simple-datatables.js}"></script> <!-- restapi import -->
+		
+		<style>
+			#meetingroomTable {
+			    table-layout: auto;
+			    width: 100%;
+			}
+			
+			#meetingroomTable thead th:nth-child(1),
+			#meetingroomTable tbody td:nth-child(1) {
+			    width: 10%; /* 첫 번째 열 */
+			}
+			
+			#meetingroomTable thead th:nth-child(2),
+			#meetingroomTable tbody td:nth-child(2) {
+			    width: 50%; /* 두 번째 열 */
+			}
+			
+			#meetingroomTable thead th:nth-child(3),
+			#meetingroomTable tbody td:nth-child(3) {
+			    width: 15%; /* 두 번째 열 */
+			}
+			
+			#meetingroomTable thead th:nth-child(4),
+			#meetingroomTable tbody td:nth-child(4) {
+			    width: 15%; /* 두 번째 열 */
+			}
+			#meetingroomTable thead th:nth-child(5),
+			#meetingroomTable tbody td:nth-child(5) {
+			    width: 10%; /* 두 번째 열 */
+			}
+		</style>
     </head>
 	<body
         x-data="main"
@@ -50,18 +83,7 @@
 	
 		<!-- 화면로딩 UI -->
         <div class="screen_loader animate__animated fixed inset-0 z-[60] grid place-content-center bg-[#fafafa] dark:bg-[#060818]">
-            <svg width="64" height="64" viewBox="0 0 135 135" xmlns="http://www.w3.org/2000/svg" fill="#4361ee">
-                <path
-                    d="M67.447 58c5.523 0 10-4.477 10-10s-4.477-10-10-10-10 4.477-10 10 4.477 10 10 10zm9.448 9.447c0 5.523 4.477 10 10 10 5.522 0 10-4.477 10-10s-4.478-10-10-10c-5.523 0-10 4.477-10 10zm-9.448 9.448c-5.523 0-10 4.477-10 10 0 5.522 4.477 10 10 10s10-4.478 10-10c0-5.523-4.477-10-10-10zM58 67.447c0-5.523-4.477-10-10-10s-10 4.477-10 10 4.477 10 10 10 10-4.477 10-10z"
-                >
-                    <animateTransform attributeName="transform" type="rotate" from="0 67 67" to="-360 67 67" dur="2.5s" repeatCount="indefinite" />
-                </path>
-                <path
-                    d="M28.19 40.31c6.627 0 12-5.374 12-12 0-6.628-5.373-12-12-12-6.628 0-12 5.372-12 12 0 6.626 5.372 12 12 12zm30.72-19.825c4.686 4.687 12.284 4.687 16.97 0 4.686-4.686 4.686-12.284 0-16.97-4.686-4.687-12.284-4.687-16.97 0-4.687 4.686-4.687 12.284 0 16.97zm35.74 7.705c0 6.627 5.37 12 12 12 6.626 0 12-5.373 12-12 0-6.628-5.374-12-12-12-6.63 0-12 5.372-12 12zm19.822 30.72c-4.686 4.686-4.686 12.284 0 16.97 4.687 4.686 12.285 4.686 16.97 0 4.687-4.686 4.687-12.284 0-16.97-4.685-4.687-12.283-4.687-16.97 0zm-7.704 35.74c-6.627 0-12 5.37-12 12 0 6.626 5.373 12 12 12s12-5.374 12-12c0-6.63-5.373-12-12-12zm-30.72 19.822c-4.686-4.686-12.284-4.686-16.97 0-4.686 4.687-4.686 12.285 0 16.97 4.686 4.687 12.284 4.687 16.97 0 4.687-4.685 4.687-12.283 0-16.97zm-35.74-7.704c0-6.627-5.372-12-12-12-6.626 0-12 5.373-12 12s5.374 12 12 12c6.628 0 12-5.373 12-12zm-19.823-30.72c4.687-4.686 4.687-12.284 0-16.97-4.686-4.686-12.284-4.686-16.97 0-4.687 4.686-4.687 12.284 0 16.97 4.686 4.687 12.284 4.687 16.97 0z"
-                >
-                    <animateTransform attributeName="transform" type="rotate" from="0 67 67" to="360 67 67" dur="8s" repeatCount="indefinite" />
-                </path>
-            </svg>
+            <span class="w-5 h-5 m-auto mb-10"><span class="animate-ping inline-flex h-full w-full rounded-full bg-info"></span></span>
         </div>
 
         <!-- 최상단 이동 버튼 -->
@@ -166,10 +188,17 @@
 															style="display: none;">회의실이름을 입력해주세요.</span>
 													</div>
 													<!-- 담당자 -->
-													<div>
-														<label for="employeePhone">담당자</label> <input
-															id="meetingroomManager" name="meetingroomManager"
-															type="text" placeholder="담당자" class="form-input" />
+													<label for="employeePhone">담당자</label>
+													<div class="flex">
+														<button id="openModalButtonAddPeople" type="button" 
+													        class="btn btn-primary ltr:rounded-r-none rtl:rounded-l-none" 
+													        style="flex: 1;">
+													        사원검색
+													    </button>
+													    <input id="meetingroomManager" name="meetingroomManager"
+													        type="text" placeholder="담당자" 
+													        class="form-input ltr:rounded-l-none rtl:rounded-r-none flex-grow" 
+													        style="flex: 5;" readonly/>
 													</div>
 													<div class="mt-1 mb-3" style="height: 10px;">
 														<span class="msg meetingroomManager-error error-label"
@@ -210,6 +239,9 @@
 						</div>
 					</div>
 				</div>
+				
+				  
+				</div></div></div>
 
 				<!--회의실 수정 모달 -->
 				<div
@@ -259,9 +291,18 @@
 
 									<!-- 담당자 -->
 									<div>
-										<label for="modifyMeetingroomManager">담당자</label> <input
-											id="modifyMeetingroomManager" name="meetingroomManager" type="text"
-											class="form-input" />
+										<label for="modifyMeetingroomManager">담당자</label> 
+										<div class="flex">
+											<button id="openModalButtonModifyPeople" type="button" 
+										        class="btn btn-primary ltr:rounded-r-none rtl:rounded-l-none" 
+										        style="flex: 1;">
+										        사원검색
+										    </button>
+										    <input id="modifyMeetingroomManager" name="meetingroomManager"
+										        type="text" placeholder="담당자" 
+										        class="form-input ltr:rounded-l-none rtl:rounded-r-none flex-grow" 
+										        style="flex: 5;" readonly/>
+										</div>
 									</div>
 									<div class="mt-1 mb-3" style="height: 10px;">
 										<span class="msg meetingroomManager-error error-label"
@@ -292,13 +333,8 @@
 						</div>
 					</div>
 				</div>
-			</div>
 
-		</div>
-	</div>
-	</div>
-
-	<!-- 회의실 삭제 확인 모달 -->
+				<!-- 회의실 삭제 확인 모달 -->
 				<div class="meetingRoomDelete">
 					<div
 						class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60"
@@ -316,9 +352,9 @@
 										height="24px" viewBox="0 0 24 24" fill="none"
 										stroke="currentColor" stroke-width="1.5"
 										stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
+				                        <line x1="18" y1="6" x2="6" y2="18"></line>
+				                        <line x1="6" y1="6" x2="18" y2="18"></line>
+				                    </svg>
 								</button>
 								<h3
 									class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]">
@@ -326,7 +362,7 @@
 								<div class="p-5">
 									<!-- 회의실 번호 동적 표시 -->
 									<p>
-										<span id="deleteMeetingroomLabel"></span> 번 회의실을 삭제하시겠습니까?
+										<span id="deleteMeetingroomLabel"></span>번 회의실을 삭제하시겠습니까?
 									</p>
 									<div class="mt-8 flex items-center justify-end">
 										<!-- 취소 버튼 -->
@@ -342,15 +378,113 @@
 						</div>
 					</div>
 				</div>
+				
+				<!--  회의실추가 담당자 추가 모달 -->
+				  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundAddPeople">
+				       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperAddPeople">
+				           <div
+							    class="panel my-8 overflow-hidden rounded-lg border-0 p-0 md:w-full"
+							    id="modal"
+							    style="width: 350px; max-width: 90%;"
+							>
+				           
+				               <button
+				                   type="button"
+				                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+				                   id="closeModalButtonAddPeople"
+				               >
+				                   <svg
+				                       xmlns="http://www.w3.org/2000/svg"
+				                       width="24px"
+				                       height="24px"
+				                       viewBox="0 0 24 24"
+				                       fill="none"
+				                       stroke="currentColor"
+				                       stroke-width="1.5"
+				                       stroke-linecap="round"
+				                       stroke-linejoin="round"
+				                       class="h-6 w-6"
+				                   >
+				                       <line x1="18" y1="6" x2="6" y2="18"></line>
+				                       <line x1="6" y1="6" x2="18" y2="18"></line>
+				                   </svg>
+				               </button>
+				               <h3
+				                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
+				               >
+				                   담당자 추가
+				               </h3>
+				               <div class="p-5">
+				               <!-- 모달내용 -->
+				               <div>
+				               	  <input type="hidden" id="selectedBtn">
+	                    		  <input type="hidden" id="deselectedBtn">
+	                    		  <input type="hidden" id="selectedValue">
+	                    		  <input type="hidden" id="approvalRemoveBtn">
+				               	  <div class="p-1 mb-3 font-bold"><span>회의실 담당자로 지정할 사원을 선택해주세요.</span></div>
+					              <div style="border-radius: 10px;" id="tree" class="tui-tree-wrap"></div>
+					              <button id="addEmployeeListButton" style="width:300px;" type="button" class="btn btn-dark mt-3">선택한 사원추가</button>
+				           	   </div>
+				        </div>
+				   </div>
+				</div>
+				</div>
+				
+				<!--  회의실 수정 담당자 수정 모달 -->
+				  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundModifyPeople">
+				       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperModifyPeople">
+				           <div
+							    class="panel my-8 overflow-hidden rounded-lg border-0 p-0 md:w-full"
+							    id="modal"
+							    style="width: 350px; max-width: 90%;"
+							>
+				           
+				               <button
+				                   type="button"
+				                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+				                   id="closeModalButtonModifyPeople"
+				               >
+				                   <svg
+				                       xmlns="http://www.w3.org/2000/svg"
+				                       width="24px"
+				                       height="24px"
+				                       viewBox="0 0 24 24"
+				                       fill="none"
+				                       stroke="currentColor"
+				                       stroke-width="1.5"
+				                       stroke-linecap="round"
+				                       stroke-linejoin="round"
+				                       class="h-6 w-6"
+				                   >
+				                       <line x1="18" y1="6" x2="6" y2="18"></line>
+				                       <line x1="6" y1="6" x2="18" y2="18"></line>
+				                   </svg>
+				               </button>
+				               <h3
+				                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
+				               >
+				                   담당자 수정
+				               </h3>
+				               <div class="p-5">
+				               <!-- 모달내용 -->
+				               <div>
+				               	  <input type="hidden" id="selectedBtn2">
+	                    		  <input type="hidden" id="deselectedBtn2">
+	                    		  <input type="hidden" id="selectedValue2">
+	                    		  <input type="hidden" id="approvalRemoveBtn2">
+				               	  <div class="p-1 mb-3 font-bold"><span>회의실 담당자로 지정할 사원을 선택해주세요.</span></div>
+					              <div style="border-radius: 10px;" id="modifytree" class="tui-tree-wrap"></div>
+					              <button id="modifyEmployeeListButton" style="width:300px;" type="button" class="btn btn-dark mt-3">선택한 사원추가</button>
+				           	   </div>
+				        </div>
+				   </div>
+				</div>
 
-
-
+</div>
 				
 
 				<!--  풋터 파일 연결 -->
 				<div th:replace="fragments/footer :: footer"></div>
-			</div>
-		</div>
         <script th:src="@{/customjs/meetingroomList.js}"></script>
         
 	</body>
