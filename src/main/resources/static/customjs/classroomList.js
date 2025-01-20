@@ -424,7 +424,7 @@ $.ajax({
 
 // 트리에 사원목록 출력.
 $.ajax({
-    url: 'http://localhost/academy/restapi/employeeListNode',
+    url: 'http://localhost/academy/restapi/employeeListNodeShowMe',
     type: 'GET',
     dataType: 'json',
     success: (data) => {
@@ -497,7 +497,7 @@ $.ajax({
 
 // 트리에 사원목록 출력.
 $.ajax({
-    url: 'http://localhost/academy/restapi/employeeListNode',
+    url: 'http://localhost/academy/restapi/employeeListNodeShowMe',
     type: 'GET',
     dataType: 'json',
     success: (data) => {

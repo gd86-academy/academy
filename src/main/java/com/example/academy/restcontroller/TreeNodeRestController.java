@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class TreeNodeRestController {
 	@Autowired TreeNodeService treeNodeService;
 	
-	// 진수우 : 결재선추가에있는 ToastUI Tree API에 사원리스트를 제공.
+	// 진수우 : 결재선추가에있는 ToastUI Tree API에 사원리스트를 제공.(로그인계정 비노출)
 	@GetMapping("/restapi/employeeListNode")
 	public List<TreeNode> employeeListNode() {
 		// 스프링시큐리티에서 계정정보 가져오기.
@@ -27,4 +27,9 @@ public class TreeNodeRestController {
 	    return treeNodeService.getEmployeeTreeNode(Integer.parseInt(userDetails.getUsername()));
 	}
 	
+	// 진수우 : 결재선추가에있는 ToastUI Tree API에 사원리스트를 제공.(로그인계정 노출)
+		@GetMapping("/restapi/employeeListNodeShowMe")
+		public List<TreeNode> employeeListNodeShowMe() {
+		    return treeNodeService.getEmployeeTreeNode(null);
+		}
 }

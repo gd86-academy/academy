@@ -28,9 +28,13 @@ public class TreeNodeService {
 		
 		// 직원목록에서 로그인한 계정의 요소는 삭제.
 		List<EmployeeListDTO> employeeList = new ArrayList<>();
-		for (EmployeeListDTO employee : employeeListOrigin) {
-			if (employee.getEmployeeNo() == loginEmployee) continue;
-			else employeeList.add(employee);
+		if(loginEmployee != null) {
+			for (EmployeeListDTO employee : employeeListOrigin) {
+				if (employee.getEmployeeNo() == loginEmployee) continue;
+				else employeeList.add(employee);
+			}
+		} else {
+			employeeList = employeeListOrigin;
 		}
 		
 		// 부서이름을 차례대로 꺼내서 각각의 노드객체에 넣고, 해당 객체들을 리스트로 만들기.
