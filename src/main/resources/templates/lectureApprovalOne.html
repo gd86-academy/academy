@@ -373,6 +373,15 @@
                                수정
                            </a>
                            <a id="addBtn" type="button" class="btn btn-danger ltr:ml-4 rtl:mr-4" style="width:130px;" th:href="@{/lectureApprovalUpdateUse(lectureApprovalNo=${lectureApprovalOne.lectureApprovalNo})}">
+                           	   결재취소
+                           </a>
+                       </div>
+                       <!-- 결재재신청 버튼 (결재승인한 결재자가 아무도 없을 때만 신청자만 노출) -->
+						<div th:if="${lectureApprovalOne.lectureApprovalStatus.equals('AS001') && userNo == lectureApprovalOne.employeeNo}" class="mt-8 flex items-center justify-end">
+                           <a id="" type="button" class="btn btn-dark" style="width:130px;" th:href="@{/modifyLectureApproval(lectureApprovalNo=${lectureApprovalOne.lectureApprovalNo})}">
+                               수정
+                           </a>
+                           <a id="addBtn" type="button" class="btn btn-danger ltr:ml-4 rtl:mr-4" style="width:130px;" th:href="@{/lectureApprovalUpdateUse(lectureApprovalNo=${lectureApprovalOne.lectureApprovalNo})}">
                            	   삭제
                            </a>
                        </div>
