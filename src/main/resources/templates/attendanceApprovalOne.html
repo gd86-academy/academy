@@ -332,9 +332,16 @@
 							                </td>
 							                <td class="lecutre-text-align">
 							                	<label class="flex items-center cursor-pointer" style="pointer-events: none;">
+										            <input type="radio" name="attendanceApprovalType" class="form-radio" th:value="CT003"
+										            	th:checked="${attendanceApproval.attendanceApprovalType == 'CT003'}"/>
+										            <span class="text-white-dark ml-2">오전 반차</span>
+									        	</label>
+							                </td>
+							                <td class="lecutre-text-align">
+							                	<label class="flex items-center cursor-pointer" style="pointer-events: none;">
 										            <input type="radio" name="attendanceApprovalType" class="form-radio" th:value="CT004"
-										            	th:checked="${attendanceApproval.attendanceApprovalType == 'CT004'}"/>
-										            <span class="text-white-dark ml-2">반차</span>
+										            	th:checked="${attendanceApproval.attendanceApprovalType == 'CT004'}" />
+										            <span class="text-white-dark ml-2">오후 반차</span>
 									        	</label>
 							                </td>
 							                <td class="lecutre-text-align">
@@ -346,16 +353,9 @@
 							                </td>
 							                <td class="lecutre-text-align">
 							                	<label class="flex items-center cursor-pointer" style="pointer-events: none;">
-										            <input type="radio" name="attendanceApprovalType" class="form-radio" th:value="CT003"
-										            	th:checked="${attendanceApproval.attendanceApprovalType == 'CT003'}" />
-										            <span class="text-white-dark ml-2">휴가</span>
-									        	</label>
-							                </td>
-							                <td class="lecutre-text-align">
-							                	<label class="flex items-center cursor-pointer" style="pointer-events: none;">
 										            <input type="radio" name="attendanceApprovalType" class="form-radio" th:value="CT009"
 										            	th:checked="${attendanceApproval.attendanceApprovalType == 'CT009'}" />
-										            <span class="text-white-dark ml-2">경조사</span>
+										            <span class="text-white-dark ml-2">공가</span>
 									        	</label>
 							                </td>					                
 							            </tr>
