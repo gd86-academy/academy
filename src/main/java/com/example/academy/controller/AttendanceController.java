@@ -24,6 +24,34 @@ import lombok.extern.slf4j.Slf4j;
 public class AttendanceController {
 	@Autowired AttendanceService attendanceService;
 	
+	// 퇴근 버튼 클릭시 수정
+	@GetMapping("/modifyCheckout")
+	public String modifyCheckOut(AttendanceDTO attendanceDTO) {
+		
+		// 스프링시큐리티에서 계정정보 가져오기.
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		// 로그인 상태일 때만 model에 정보담기.
+	    if (authentication != null && authentication.isAuthenticated() && !(	authentication instanceof AnonymousAuthenticationToken)) {
+	        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+	        
+	        // 사원 번호
+	        Integer employeeNo = Integer.parseInt(userDetails.getUsername());
+	        
+	        // 현재 날짜 ex) 2025-11-11
+	        String currentDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+	        
+	        // DTO에 추가
+	        attendanceDTO.setEmployeeNo(employeeNo);
+	        attendanceDTO.setCurrentDate(currentDate);
+	        
+	        // 퇴근 수정 메서드 호출
+	        Integer row = attendanceService.modifyCheckOut(attendanceDTO);
+	        log.debug("퇴근 수정 확인---->" + row);
+	    }
+		return "redirect:/main";
+	}
+	
 	// 출근 버튼 클릭시 수정
 	@GetMapping("/modifyCheckin")
 	public String modifyCheckin(AttendanceDTO attendanceDTO) {
@@ -32,7 +60,7 @@ public class AttendanceController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		
 		// 로그인 상태일 때만 model에 정보담기.
-	    if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+	    if (authentication != null && authentication.isAuthenticated() && !(	authentication instanceof AnonymousAuthenticationToken)) {
 	        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 	        
 	        // 사원 번호

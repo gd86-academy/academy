@@ -11,10 +11,22 @@ import com.example.academy.dto.AttendanceListDTO;
 @Mapper
 public interface AttendanceMapper {
 	
+	// 오늘 근태유형 조회
+	String selectContent(AttendanceDTO attendanceDTO);
+	
+	// 근태 유형 변경
+	Integer updateContent(AttendanceDTO attendanceDTO);
+	
+	// 하루 사원의 근무 시간 조회
+	Integer selectWorkTime(AttendanceDTO attendanceDTO);
+	
+	// 퇴근 버튼 클릭 시 수정
+	Integer updateCheckout(AttendanceDTO attendanceDTO);
+	
 	// 지각일 때 출글 버튼 클릭 시 수정 
 	Integer updateCheckinByTardy(AttendanceDTO attendanceDTO);
 	
-	// 출근 버튼 클릭시 수정
+	// 출근 버튼 클릭 시 수정
 	Integer updateCheckin(AttendanceDTO attendanceDTO);
 	
 	// 최근 6개월 월별 근무시간 총합 조회

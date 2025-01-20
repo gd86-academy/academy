@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import org.hibernate.grammars.hql.HqlParser.CurrentTimeFunctionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +28,66 @@ public class AttendanceService {
 	@Autowired AttendanceMapper attendanceMapper;
 	@Autowired AttendanceApprovalMapper attendanceApprovalMapper;
 	
+	// 퇴근 버튼 클릭시 수정
+	public Integer modifyCheckOut(AttendanceDTO attendanceDTO) {
+		log.debug("attendanceDTO ----->" + attendanceDTO);
+		
+		Integer row = attendanceMapper.updateCheckout(attendanceDTO);
+		log.debug("퇴근 ----> " + row);		
+		
+		Integer workTime = attendanceMapper.selectWorkTime(attendanceDTO);
+		log.debug("근무 시간 ----> " + workTime);				
+		
+		String approvalContent = attendanceApprovalMapper.selectContentByDay(attendanceDTO);
+		log.debug("신청서 근태 유형 ----> " + approvalContent);
+	    
+		String content = attendanceMapper.selectContent(attendanceDTO);
+		log.debug("근태 유형 ----> " + content);
+		
+	    if(approvalContent != null && approvalContent.equals("CT004")) { // 오후 반차
+	    	if(workTime >= 240) { // 근무시간이 4시간 이상일 때 
+	    		content = "CT004"; // 오후 반차
+    			attendanceDTO.setAttendanceContent(content);
+	    		Integer row1 = attendanceMapper.updateContent(attendanceDTO); // 근태유형 '오후 반차' 변경
+	    		log.debug("반차 정상 출근 변경 ---->" + row1);	
+	    	} else if(workTime < 240) { // 근무시간이 4시간 미만일 때
+	    		if(content.equals("CT006")) { // 근태 유형이 이미 지각이 있을 시
+	    			content = "CT007"; // 결석
+	    			attendanceDTO.setAttendanceContent(content);
+	    			Integer row2 = attendanceMapper.updateContent(attendanceDTO); // 근태유형 '결석' 변경
+	    			log.debug("반차 결석 변경 ---->" + row2);		    			
+	    		} else {
+	    			content = "CTOO5"; // 조퇴
+	    			attendanceDTO.setAttendanceContent(content);
+	    			Integer row3 = attendanceMapper.updateContent(attendanceDTO); // 근태유형 '조퇴' 변경
+	    			log.debug("반차 조퇴 변경 ---->" + row3);		    			
+	    		}
+	    	}	
+	    } else {
+	    	if(workTime >= 540) { // 근무시간이 9시간 이상일 때
+	    		content = "CT0010"; // 정상 출근
+    			attendanceDTO.setAttendanceContent(content);
+    			Integer row4 = attendanceMapper.updateContent(attendanceDTO); // 근태유형 '정상출근' 변경
+    			log.debug("정상 출근 변경 ---->" + row4);		    			
+	    	} else if (workTime < 240) { // 근무시간이 4시간 미만일 때
+	    		if(content.equals("CT006")) { // 근태 유형이 이미 지각이 있을 시
+	    			content = "CT007"; // 결석
+	    			attendanceDTO.setAttendanceContent(content);
+	    			Integer row5 = attendanceMapper.updateContent(attendanceDTO); // 근태유형 '결석' 변경
+	    			log.debug("결석 변경 ---->" + row5);		    			
+	    		} else {
+	    			content = "CTOO5"; // 조퇴
+	    			attendanceDTO.setAttendanceContent(content);
+	    			Integer row6 = attendanceMapper.updateContent(attendanceDTO); // 근태유형 '조퇴' 변경
+	    			log.debug("조퇴 변경 ---->" + row6);		    			
+	    		}
+    		}
+    	}
+	    
+	    
+		return 1;
+	}
+	
 	// 출근 버튼 클릭시 수정
 	public Integer modifyCheckin(AttendanceDTO attendanceDTO) {
 		
@@ -40,7 +99,7 @@ public class AttendanceService {
 		// DateTimeFormatter를 사용하여 "yyyy-MM-dd HH:mm:ss" 형식으로 파싱
 	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 		
-		if(content.equals("CT003")) { // 오전 반차
+		if(content != null && content.equals("CT003")) { // 오전 반차
 			LocalDateTime currentTime1 = LocalDateTime.parse(currentTimeString, formatter); // LocalDateTime으로 파싱
 			LocalDateTime targetTime1 = currentTime1.toLocalDate().atTime(14, 0); // 오늘 날짜의 14:00 (2시)
 			if(currentTime1.isBefore(targetTime1) || currentTime1.isEqual(targetTime1)) { // 현재 시각이 14시 이전이거나 14시일 때
