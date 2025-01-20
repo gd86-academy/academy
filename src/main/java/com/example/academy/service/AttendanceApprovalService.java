@@ -210,14 +210,13 @@ public class AttendanceApprovalService {
 
 	}
 	
-	// 김혜린 : 근태신청서 상세페이지 - 근태신청서 테이블
+	// 김혜린 : 근태신청서 상세페이지
 	public AttendanceApprovalOneDTO getAttendanceApprovalOne(Integer attendanceApprovalNo) {
 		// 근태신청서 테이블 상세
 		AttendanceApprovalOneDTO attendanceApprovalOne = attendanceApprovalMapper.selectAttendanceApprovalOne(attendanceApprovalNo);
 		
 		return attendanceApprovalOne;
 	}
-	
 	
 	// 김혜린 : 근태신청서 신청
 	public void addAttendanceApproval(AttendanceApprovalAddDTO attendanceApprovalAddDTO) {

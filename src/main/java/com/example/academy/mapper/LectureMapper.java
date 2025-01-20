@@ -1,16 +1,25 @@
 package com.example.academy.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.example.academy.dto.LectureApprovalOneDTO;
 import com.example.academy.dto.LectureListDTO;
 import com.example.academy.dto.LectureModifyDTO;
 import com.example.academy.dto.LectureOneDTO;
 import com.example.academy.dto.LectureOneTimeListDTO;
+import com.example.academy.vo.LectureWeekday;
 
 @Mapper
 public interface LectureMapper {
+	// 진수우 : 강의결재 승인 시 강의/강의시간 추가
+	Integer insertLectureLectureWeekday(Map<String, Integer> resultMap);
+	
+	// 진수우 : 강의결재 승인 시 강의 추가
+	Integer insertLecture(LectureApprovalOneDTO lectureApprovalOneDTO);
+	
 	// 김혜린 : 강의 삭제(사용여부 비활성화)
 	Integer updateUseLecture(Integer lectureNo);
 	

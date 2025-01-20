@@ -366,8 +366,9 @@
                             </button>
 						</div>
 						</div>
-						<!-- 버튼(결재승인한 결재자가 아무도 없을 때만 노출) --> 
-						<div th:if="${lectureApprovalOne.lectureApprovalStep == 1}" class="mt-8 flex items-center justify-end">
+
+						<!-- 수정/삭제 버튼 (결재승인한 결재자가 아무도 없을 때만 신청자만 노출) -->
+						<div th:if="${lectureApprovalOne.lectureApprovalStatus.equals('AS001') && userNo == lectureApprovalOne.employeeNo}" class="mt-8 flex items-center justify-end">
                            <a id="" type="button" class="btn btn-dark" style="width:130px;" th:href="@{/modifyLectureApproval(lectureApprovalNo=${lectureApprovalOne.lectureApprovalNo})}">
                                수정
                            </a>
@@ -375,6 +376,27 @@
                            	   삭제
                            </a>
                        </div>
+                       <!-- 반려/승인 버튼(결재자만 노출) -->
+                       <div th:each="employeeNo : ${lectureApprovalEmployee}">
+                       	<div th:if="${lectureApprovalOne.lectureApprovalStep < 4 && userNo == employeeNo.approverNo && employeeNo.approvalEmployeeStatus.equals('AS001')}" class="mt-8 flex items-center justify-end">
+                       	   <form th:action="@{/returnLectureApproval}" method="post">
+                       	   	   <input type="hidden" name="lectureApprovalNo" th:value="${lectureApprovalOne.lectureApprovalNo}">
+                       	   	   <input type="hidden" name="approver" th:value="${userNo}">
+	                           <button type="submit" class="btn btn-danger" style="width:130px;">
+	                               반려
+	                           </button>
+                           </form>
+                           <form th:action="@{/acceptLectureApproval}" method="post">
+                           	   <input type="hidden" name="lectureApprovalNo" th:value="${lectureApprovalOne.lectureApprovalNo}">
+                       	   	   <input type="hidden" name="approver" th:value="${userNo}">
+	                           <button type="submit" class="btn btn-dark ltr:ml-4 rtl:mr-4" style="width:130px;">
+                           	   	   승인
+                           	   </button>
+                           </form>
+                           
+                        </div>
+                       </div>
+                       
                     </div>
                       
                     </div>

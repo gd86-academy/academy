@@ -73,7 +73,21 @@
 		<!-- 화면로딩 UI -->
 		<div
 			class="screen_loader animate__animated fixed inset-0 z-[60] grid place-content-center bg-[#fafafa] dark:bg-[#060818]">
-			<span class="w-5 h-5 m-auto mb-10"><span class="animate-ping inline-flex h-full w-full rounded-full bg-info"></span></span>
+			<svg width="64" height="64" viewBox="0 0 135 135"
+				xmlns="http://www.w3.org/2000/svg" fill="#4361ee">
+	                <path
+					d="M67.447 58c5.523 0 10-4.477 10-10s-4.477-10-10-10-10 4.477-10 10 4.477 10 10 10zm9.448 9.447c0 5.523 4.477 10 10 10 5.522 0 10-4.477 10-10s-4.478-10-10-10c-5.523 0-10 4.477-10 10zm-9.448 9.448c-5.523 0-10 4.477-10 10 0 5.522 4.477 10 10 10s10-4.478 10-10c0-5.523-4.477-10-10-10zM58 67.447c0-5.523-4.477-10-10-10s-10 4.477-10 10 4.477 10 10 10 10-4.477 10-10z">
+	                    <animateTransform attributeName="transform"
+					type="rotate" from="0 67 67" to="-360 67 67" dur="2.5s"
+					repeatCount="indefinite" />
+	                </path>
+	                <path
+					d="M28.19 40.31c6.627 0 12-5.374 12-12 0-6.628-5.373-12-12-12-6.628 0-12 5.372-12 12 0 6.626 5.372 12 12 12zm30.72-19.825c4.686 4.687 12.284 4.687 16.97 0 4.686-4.686 4.686-12.284 0-16.97-4.686-4.687-12.284-4.687-16.97 0-4.687 4.686-4.687 12.284 0 16.97zm35.74 7.705c0 6.627 5.37 12 12 12 6.626 0 12-5.373 12-12 0-6.628-5.374-12-12-12-6.63 0-12 5.372-12 12zm19.822 30.72c-4.686 4.686-4.686 12.284 0 16.97 4.687 4.686 12.285 4.686 16.97 0 4.687-4.686 4.687-12.284 0-16.97-4.685-4.687-12.283-4.687-16.97 0zm-7.704 35.74c-6.627 0-12 5.37-12 12 0 6.626 5.373 12 12 12s12-5.374 12-12c0-6.63-5.373-12-12-12zm-30.72 19.822c-4.686-4.686-12.284-4.686-16.97 0-4.686 4.687-4.686 12.285 0 16.97 4.686 4.687 12.284 4.687 16.97 0 4.687-4.685 4.687-12.283 0-16.97zm-35.74-7.704c0-6.627-5.372-12-12-12-6.626 0-12 5.373-12 12s5.374 12 12 12c6.628 0 12-5.373 12-12zm-19.823-30.72c4.687-4.686 4.687-12.284 0-16.97-4.686-4.686-12.284-4.686-16.97 0-4.687 4.686-4.687 12.284 0 16.97 4.686 4.687 12.284 4.687 16.97 0z">
+	                    <animateTransform attributeName="transform"
+					type="rotate" from="0 67 67" to="360 67 67" dur="8s"
+					repeatCount="indefinite" />
+	                </path>
+	            </svg>
 		</div>
 	
 		<!-- 최상단 이동 버튼 -->
@@ -108,7 +122,7 @@
 	
 				<!-- 메인화면 -->
 				<div class="animate__animated p-6 white-light" :class="[$store.app.animation]"> <!-- 메인화면 div 시작 -->
-					<h2 class="text-2xl ml-3 mb-5">나의 신청 목록</h2>
+					<h2 class="text-2xl ml-3 mb-5">결재 대기 목록</h2>
 					
 					<div class="panel" style="margin: 0% 15% 0% 15%; padding: 4%; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05); border-radius : 10px;">
 						<div class="p-3">
@@ -512,22 +526,15 @@
 							
 							<!-- 버튼 --> 
 							<!-- 신청서 대기 상태 -->
-							<div th:if="${step == 1 && attendanceApproval.attendanceApprovalStatus == '대기'}" class="mt-8 flex items-center justify-end">
-								<a id="updateBtn" type="button" class="btn btn-dark" style="width:130px;" 
+							<div class="mt-8 flex items-center justify-end">
+								<a id="updateBtn" type="button" class="btn btn-primary" style="width:130px;" 
 									th:href="@{/modifyAttendanceApproval(attendanceApprovalNo=${attendanceApproval.attendanceApprovalNo})}">
-									수정
+									승인
 								</a>
 								<a id="delBtn" type="button" class="btn btn-danger ltr:ml-4 rtl:mr-4" style="width:130px;" >
-									삭제
+									반려
 								</a>
 							</div>
-							<!-- 신청서 반려 상태 -->	<!-- href경로 바꾸기 -->
-							<div th:if="${attendanceApproval.attendanceApprovalStatus == '반려'}" class="mt-8 flex items-center justify-end">
-								<a id="updateBtn" type="button" class="btn btn-dark" style="width:130px;" th:href="@{/modifyAttendanceApproval(attendanceApprovalNo=${attendanceApproval.attendanceApprovalNo})}">
-									수정
-								</a>	
-							</div>
-							
                        </div>
 					</div>
 					
@@ -539,58 +546,9 @@
 	   <div th:replace="fragments/footer :: footer"></div>
 		
 		<!-- 모달관련 -->
-		<!-- 신청서 삭제확인 모달 -->
-        <div class="modal">
-		  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundDelApproval">
-		       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperDelApproval">
-		           <div
-		               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
-		               id="modal"
-		           >
-		               <button
-		                   type="button"
-		                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
-		                   id="closeModalButtonDelApproval"
-		               >
-		                   <svg
-		                       xmlns="http://www.w3.org/2000/svg"
-		                       width="24px"
-		                       height="24px"
-		                       viewBox="0 0 24 24"
-		                       fill="none"
-		                       stroke="currentColor"
-		                       stroke-width="1.5"
-		                       stroke-linecap="round"
-		                       stroke-linejoin="round"
-		                       class="h-6 w-6"
-		                   >
-		                       <line x1="18" y1="6" x2="6" y2="18"></line>
-		                       <line x1="6" y1="6" x2="18" y2="18"></line>
-		                   </svg>
-		               </button>
-		               <h3
-		                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
-		               >
-		                   안내
-		               </h3>
-		               <div class="p-5">
-		                   근태 신청서를 삭제하시겠습니까?
-		                   <div class="mt-8 flex items-center justify-end">
-	                          <button
-	                          	  id="checkDelApproval"
-	                              type="button"
-	                              class="btn btn-primary ltr:ml-4 rtl:mr-4"
-	                          >
-	                              확인
-	                          </button>
-	                      </div>
-		               </div>
-		           </div>
-		       </div>
-		   </div>
-		</div>
+	
 		
-	   <script th:src="@{/customjs/attendanceApprovalOne.js}"> </script>
+	   <script th:src="@{/customjs/waitAttendanceApprovalOne.js}"> </script>
 		
 		
 	</body>

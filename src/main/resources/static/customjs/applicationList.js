@@ -151,7 +151,7 @@ document.addEventListener('alpine:init', () => {
 					    const rowElement = e.target.closest('tr'); // 클릭된 행의 인덱스.
 					    if (rowElement) {
 							const tdElements = rowElement.querySelectorAll('td');
-							const attendanceApprovalNo = tdElements[0].textContent; // 두번째 열 데이터 추출.
+							const attendanceApprovalNo = tdElements[0].textContent; 
 							window.location.href = `/academy/attendanceApprovalOne?attendanceApprovalNo=${attendanceApprovalNo}`;
 					    }
 					});

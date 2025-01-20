@@ -30,6 +30,10 @@ public class AttendanceApprovalController {
 	@Autowired ApprovalEmployeeService approvalEmployeeService;
 	@Autowired AttendanceApprovalFileService attendanceApprovalFileService;
 	
+	// 김혜린 : 근태 신청서 반려 시
+	//@PostMapping("/rejectAttendanceApproval")
+	
+	
 	// 김혜린 : 근태 신청서 삭제
 	@GetMapping("/removeAttendanceApproval")
 	@ResponseBody // AJAX 요청에 적합한 응답 처리
@@ -73,7 +77,7 @@ public class AttendanceApprovalController {
 	}
 	
 	
-	// 김혜린 : 근태 신청서 상세페이지
+	// 김혜린 : 근태 신청서 상세페이지 - 나의 신청 목록
 	@GetMapping("/attendanceApprovalOne")
 	public String attenddanceApprovalOne(Model model, Integer attendanceApprovalNo) {
 		
@@ -95,6 +99,29 @@ public class AttendanceApprovalController {
 		log.debug("파일 목록 : " + files);	//디버깅
 		
 		return "attendanceApprovalOne";
+	}
+	// 김혜린 : 결재대기 근태 신청서 상세페이지 - 결재 대기 목록
+	@GetMapping("/waitAttendanceApprovalOne")
+	public String waitAttendanceApprovalOne(Model model, Integer attendanceApprovalNo) {
+		
+		log.debug("==============attendanceApprovalNo1 : " + attendanceApprovalNo);	//디버깅
+		// 1) 근태신청서 테이블 상세
+		AttendanceApprovalOneDTO attendanceApproval = attendanceApprovalService.getAttendanceApprovalOne(attendanceApprovalNo);
+		model.addAttribute("attendanceApproval", attendanceApproval);
+		// 근태신청서 현재 결재단계
+		model.addAttribute("step",attendanceApproval.getAttendanceApprovalStep());
+		log.debug("근태신청서 상세 : " + attendanceApproval);	//디버깅
+		log.debug("==============attendanceApprovalNo2 : " + attendanceApprovalNo);	//디버깅
+		// 2) 결재자 목록
+		List<AttendanceApprovalOneDTO> approvers  = approvalEmployeeService.getAttendanceApproverList(attendanceApprovalNo);
+		model.addAttribute("approvers", approvers);
+		log.debug("결재자 목록 : " + approvers);	//디버깅
+		// 3) 파일 목록
+		List<Files> files = attendanceApprovalFileService.getAttendanceApprovalFileList(attendanceApprovalNo);
+		model.addAttribute("files", files);
+		log.debug("파일 목록 : " + files);	//디버깅
+		
+		return "waitAttendanceApprovalOne";
 	}
 	
 	// 김혜린 : 근태 신청
