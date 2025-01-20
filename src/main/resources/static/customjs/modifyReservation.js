@@ -254,12 +254,12 @@ document.addEventListener('alpine:init', () => {
 	    // DOM에서 삭제
 	    parentElement.remove();
 
-	    // 남은 사원들의 cnt 재계산
+	    // 남은 사원들의 cnt 재계산 
 	    $('#selectEmployeesContainer .selectedEmployee-box').each(function (index) {
 	        const inputHidden = $(this).find('.selectedEmployeeNo');
 	        const inputText = $(this).find('.selectedEmployee');
 
-	        // cnt 재설정 (index 값 사용)
+	        // cnt 재설정 (index 값 사용 - 삭제버튼 클릭시 재배열) / index는 JavaScript에서 HTML 요소의 순서를 자동으로 제공
 	        inputHidden.attr('name', `reservationEmployees[${index}].employeeNo`);
 	        inputText.attr('name', `reservationEmployees[${index}].employeeName`);
 	    });
@@ -353,17 +353,20 @@ const closeModalButtonDeleteClassroom = document.getElementById('closeModalButto
 const cancelButtonDeleteClassroom = document.getElementById('cancelButtonDeleteReservation'); // 삭제 모달 취소 버튼
 const modalBackgroundDeleteClassroom = document.getElementById('modalBackgroundDeleteReservation');
 const modalWrapperDeleteClassroom = document.getElementById('modalWrapperDeleteReservation');
-const reservationNoLabel = document.getElementById('reservationNoLabel');
+const reservationTitleLabel = document.getElementById('reservationTitleLabel');
 
 // 삭제 모달 열기 함수
 const openDeleteModal = () => {
 	
 	// 예약 번호를 hidden input에서 가져오기
 	const reservationNo = document.getElementById('reservationNo').value;
+	
+	// 예약 취소모달에 쓸 text
+	const reservationTitle = document.getElementById('reservationTitle').value;
 
 	// 모달 텍스트 설정
-	const reservationText = `${reservationNo}번 예약을 취소하시겠습니까?`;
-	reservationNoLabel.innerText = reservationText;
+	const reservationText = `'${reservationTitle}' 회의를 취소하시겠습니까?`;
+	reservationTitleLabel.innerText = reservationText;
 
     // 삭제 확인 버튼 클릭 이벤트 설정
     openModalButtonDeleteReservation.onclick = () => {

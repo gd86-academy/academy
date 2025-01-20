@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.example.academy.dto.ClassroomAddDTO;
 import com.example.academy.dto.ClassroomListDTO;
 
 @Mapper
@@ -15,10 +16,10 @@ public interface ClassroomMapper {
 	ClassroomListDTO classroomOne(Integer classroomNo);
 	
 	// 박시현 : 강의실 수정
-	Integer updateClassroom(ClassroomListDTO classroomListDTO);
+	Integer updateClassroom(ClassroomAddDTO classroomAddDTO);
 	
 	// 박시현 : 강의실 등록 
-	Integer insertClassroom(ClassroomListDTO classroomListDTO);
+	Integer insertClassroom(ClassroomAddDTO classroomAddDTO);
 	
 	// 박시현 : 강의실리스트 출력
 	List<ClassroomListDTO> selectClassroomList();

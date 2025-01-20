@@ -8,8 +8,14 @@ public class ClassroomListDTO {
 	private String classroomName;
 	private Integer classroomManager;
 	private Integer classroomCapacity;
+	private String createDate;
+	private String updateDate;
+	
+	// 담당자
 	private Integer employeeNo;
 	private String employeeName;
+	private String photoFileName;
+	private String photoFileExt;
 	
 	// 데이터를 배열로 반환
 	public Object[] toArray() {
@@ -20,6 +26,8 @@ public class ClassroomListDTO {
 			, this.classroomCapacity 
 			, this.employeeNo
 			, this.employeeName
+			, this.photoFileName
+			, this.photoFileExt
 		};
 	}
 }

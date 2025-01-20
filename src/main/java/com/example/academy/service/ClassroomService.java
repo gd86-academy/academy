@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.academy.dto.ClassroomAddDTO;
 import com.example.academy.dto.ClassroomListDTO;
 import com.example.academy.mapper.ClassroomMapper;
 
@@ -23,13 +24,17 @@ public class ClassroomService {
 	}
 	
 	// 박시현 : 강의실 수정
-	public Integer modifyClassroom(ClassroomListDTO classroomListDTO) {
-		return classroomMapper.updateClassroom(classroomListDTO);
+	public Integer modifyClassroom(ClassroomAddDTO classroomAddDTO) {
+		String[] inputManager = classroomAddDTO.getClassroomManager().split("\\[|\\]");
+		classroomAddDTO.setClassroomManager(inputManager[1]);
+		return classroomMapper.updateClassroom(classroomAddDTO);
 	}
 	
 	// 박시현 : 강의실 등록
-	public Integer addClassroom(ClassroomListDTO classroomListDTO) {
-		return classroomMapper.insertClassroom(classroomListDTO);
+	public Integer addClassroom(ClassroomAddDTO classroomAddDTO) {
+		String[] inputManager = classroomAddDTO.getClassroomManager().split("\\[|\\]");
+		classroomAddDTO.setClassroomManager(inputManager[1]);
+		return classroomMapper.insertClassroom(classroomAddDTO);
 	}
 	
 	// 박시현 : 강의실리스트 조회
