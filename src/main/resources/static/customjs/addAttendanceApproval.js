@@ -286,65 +286,13 @@ $('#addBtn').click(function() {
 		}		
 	});
 	
- 	/*
-	$('#timeDiv tr').each(function(index) {
-        // 각 select 요소에 대한 검사
-		console.log($('#timeDiv tr').length);
-        const weekday = $(this).find(`#weekdayId${index}`);
-        const beginTime = $(this).find(`#beginTimeId${index}`);
-        const endTime = $(this).find(`#endTimeId${index}`);
-
-        // 요일 검사
-        if (weekday.val() === '' || weekday.val() === null) {
-            weekday.addClass('errorInput');
-            $(this).find('.weekday-error').show();
-            isVal = false;
-        } else {
-            weekday.removeClass('errorInput');
-            $(this).find('.weekday-error').hide();
-        }
-		console.log("요일" + weekday.val());
-        // 시작시간 검사
-        if (beginTime.val() === '' || beginTime.val() === null) {
-            beginTime.addClass('errorInput');
-            $(this).find('.beginTime-error').show();
-            isVal = false;
-        } else {
-            beginTime.removeClass('errorInput');
-            $(this).find('.beginTime-error').hide();
-        }
-		console.log("시작시간" + beginTime.val());
-        // 종료시간 검사
-        if (endTime.val() === '' || endTime.val() === null) {
-            endTime.addClass('errorInput');
-            $(this).find('.endTime-error').show();
-            isVal = false;
-        } else {
-            endTime.removeClass('errorInput');
-            $(this).find('.endTime-error').hide();
-        }
-		console.log("종료시간" + endTime.val());
-    });
-	
-	// #inputContainer에 input 요소가 하나도 없으면 추가된 항목이 없다고 판단
-    if ($('#inputContainer input:not([type="hidden"])').length === 0) {
-        isVal = false;
-		console.log('결재선이 비어있습니다.');
+	// 결재자 유효성검사
+	if ($('#people1 input:not([type="hidden"])').length === 0) {
+		modalBackgroundApprovalValidation.classList.toggle('hidden', false);
+		modalBackgroundApprovalValidation.classList.toggle('block', true);
+		isVal = false;
     }
 	
-	
-	$('#inputContainer input:not([type="hidden"])').each(function() {
-		console.log($('#inputContainer input:not([type="hidden"])').length);
-        var value = $(this).val();
-        // readonly 속성이 없고 값이 비어있는 input을 유효하지 않다고 판단
-        if (!$(this).prop('readonly') && value.trim() === '') {
-            isVal = false;
-            $(this).css('border', '1px solid red'); // 값이 비어있는 input에 빨간색 테두리 추가
-        } else {
-            $(this).css('border', ''); // 값이 있는 input은 테두리 제거
-        }
-    });
- 	*/
     // 폼 제출
     if (isVal) {
         console.log("submit 성공");
@@ -705,3 +653,18 @@ const closeModalAddOver = () => {
 
 if (closeModalButtonAddOver) closeModalButtonAddOver.addEventListener('click', closeModalAddOver); // 닫기 버튼 클릭 시
 if (employeeBtnAddAddOver) employeeBtnAddAddOver.addEventListener('click', closeModalAddOver);     // 취소 클릭 시
+
+// 추가초과 모달 관련 DOM 요소
+const closeModalButtonApprovalValidation = document.getElementById('closeModalButtonApprovalValidation');
+const modalBackgroundApprovalValidation = document.getElementById('modalBackgroundApprovalValidation');
+const modalWrapperApprovalValidation = document.getElementById('modalWrapperApprovalValidation');
+const checkApprovalValidation = document.getElementById('checkApprovalValidation');
+
+// 결재선 미입력 경고 모달 닫기
+const closeModalApprovalValidation = () => {
+	  modalBackgroundApprovalValidation.classList.remove('block');
+	  modalBackgroundApprovalValidation.classList.add('hidden');  // 모달 배경 숨기기
+};
+
+if (closeModalButtonApprovalValidation) closeModalButtonApprovalValidation.addEventListener('click', closeModalApprovalValidation); // [x] 버튼 클릭 시
+if (checkApprovalValidation) checkApprovalValidation.addEventListener('click', closeModalApprovalValidation);     // 확인 클릭 시
