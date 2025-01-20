@@ -77,31 +77,40 @@ document.addEventListener('alpine:init', () => {
         },
 	}));
 	
-	
-	// 신청 시작날짜 캘린더
-	Alpine.data("form1", () => ({
-        init() {
-            const defaultDate1 = document.getElementById('beginDate').value;
-			// Flatpickr 초기화
-            flatpickr(document.getElementById('beginDate'), {
-                dateFormat: 'Y-m-d',	// 날짜 형식 설정 (예: 2025-01-08)
-                //defaultDate: defaultDate1, // 기본값 설정 
-            });
-        },
-    }));
-	
-	// 신청 종료날짜 캘린더
-	Alpine.data("form2", () => ({
-        init() {
-            const defaultDate1 = document.getElementById('endDate').value;
-			// Flatpickr 초기화
-            flatpickr(document.getElementById('endDate'), {
-                dateFormat: 'Y-m-d',	// 날짜 형식 설정 (예: 2025-01-08)
-                //defaultDate: defaultDate1, // 기본값 설정 
-            });
-        },
-    }));
-	
+	document.addEventListener('DOMContentLoaded', function () {
+	    const beginDateInput = document.getElementById('beginDate');
+	    const endDateInput = document.getElementById('endDate');
+
+	    // Flatpickr 초기화 - 신청종료날짜
+	    const endDatePicker = flatpickr(endDateInput, {
+	        dateFormat: 'Y-m-d',
+	        clickOpens: false, // 초기에는 비활성화
+	    });
+
+	    // Flatpickr 초기화 - 신청시작날짜
+	    flatpickr(beginDateInput, {
+	        dateFormat: 'Y-m-d',
+	        onChange: (selectedDates) => {
+				
+	            if (selectedDates.length > 0) {
+	                const selectedDate = selectedDates[0];
+
+	                // 신청종료날짜 캘린더 활성화 및 최소 날짜 설정
+	                endDateInput.disabled = false;
+	                endDatePicker.set('minDate', selectedDate); // 최소 날짜 설정
+	                endDatePicker.set('clickOpens', true); // 달력 활성화
+	            } else {
+	                // 신청시작날짜 선택 해제 시 종강일 초기화 및 비활성화
+	                endDatePicker.clear();
+	                endDateInput.disabled = true;
+	                endDatePicker.set('clickOpens', false); // 달력 비활성화
+	            }
+	        },
+	    });
+
+	    // 초기 상태에서 신청종료날짜 비활성화
+	    endDateInput.disabled = true;
+	});
 	
 });
 
@@ -224,6 +233,25 @@ function removeFileField(fileId) {
 $('#updateBtn').click(function() {
     let isVal = true;
    
+	// 신청날짜_시작날짜 검사
+    if ($('#beginDate').val().trim() === '') {
+        $('#beginDate').addClass("errorInput");
+        $('.date-error').show();
+        isVal = false;
+    } else {
+        $('.date-error').hide();
+        $('#beginDate').removeClass("errorInput");
+    }
+	
+	// 신청날짜_종료날짜 검사
+    if ($('#endDate').val().trim() === '') {
+        $('#endDate').addClass("errorInput");
+        $('.date-error').show();
+        isVal = false;
+    } else {
+        $('.date-error').hide();
+        $('#endDate').removeClass("errorInput");
+    }
 	
 	// 결재제목 검사
 	if ($('#attendanceApprovalTitle').val().trim() === '') {

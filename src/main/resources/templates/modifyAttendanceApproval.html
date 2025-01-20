@@ -283,6 +283,9 @@
 									                       			th:value="${attendanceApproval.attendanceApprovalEndDate}" />
 													   	</div>
 													</div>
+													<div class="mt-1">	<!-- 유효성문구 -->
+														<span class="msg date-error error-label" style="display: none;">신청날짜를 선택해주세요.</span>
+													</div>
 												</td>
 								        	</tr>
 								        </tbody>
@@ -418,6 +421,12 @@
 								
 								<!-- 버튼 --> 
 								<div class="mt-8 flex items-center justify-end">
+								   <a					
+		                              type="button" style="width:130px;"
+		                              class="btn btn-outline-danger ltr:mr-4 rtl:ml-4"
+		                              th:href="@{/attendanceApprovalOne(attendanceApprovalNo=${attendanceApproval.attendanceApprovalNo})}">	                          
+		                              취소
+		                           </a>
 		                           <button id="openModalButtonAddPeople" type="button" class="btn btn-dark" style="width:130px;">
 		                               결재선 변경
 		                           </button>
