@@ -404,9 +404,6 @@
 												</svg>
 											</button>
 										</div>
-										<div class="mt-1" >	<!-- 유효성문구 -->
-											<span th:id = "'errMsg' + ${stat.index}" class="msg date-error error-label" style="display: none;">파일을 첨부해주세요.</span>
-										</div>
 							 		</div>
 								 	
 								 	
@@ -620,6 +617,107 @@
 		   </div>
 		</div>
 
+		<!-- 결재선 미입력 경고 모달 -->
+        <div class="modal">
+		  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundApprovalValidation">
+		       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperApprovalValidation">
+		           <div
+		               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
+		               id="modal"
+		           >
+		               <button
+		                   type="button"
+		                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+		                   id="closeModalButtonApprovalValidation"
+		               >
+		                   <svg
+		                       xmlns="http://www.w3.org/2000/svg"
+		                       width="24px"
+		                       height="24px"
+		                       viewBox="0 0 24 24"
+		                       fill="none"
+		                       stroke="currentColor"
+		                       stroke-width="1.5"
+		                       stroke-linecap="round"
+		                       stroke-linejoin="round"
+		                       class="h-6 w-6"
+		                   >
+		                       <line x1="18" y1="6" x2="6" y2="18"></line>
+		                       <line x1="6" y1="6" x2="18" y2="18"></line>
+		                   </svg>
+		               </button>
+		               <h3
+		                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
+		               >
+		                   안내
+		               </h3>
+		               <div class="p-5">
+		                   결재선이 비어있습니다. 결재선을 추가해주세요.
+		                   <div class="mt-8 flex items-center justify-end">
+	                          <button
+	                          	  id="checkApprovalValidation"
+	                              type="button"
+	                              class="btn btn-primary ltr:ml-4 rtl:mr-4"
+	                          >
+	                              확인
+	                          </button>
+	                      </div>
+		               </div>
+		           </div>
+		       </div>
+		   </div>
+		</div>
+		
+		<!-- 파일을 첨부하지 않고 첨부파일추가 버튼을 누를 때 경고 모달 -->
+        <div class="modal">
+		  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundAddFileError">
+		       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperAddFileError">
+		           <div
+		               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
+		               id="modal"
+		           >
+		               <button
+		                   type="button"
+		                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+		                   id="closeModalButtonAddFileError"
+		               >
+		                   <svg
+		                       xmlns="http://www.w3.org/2000/svg"
+		                       width="24px"
+		                       height="24px"
+		                       viewBox="0 0 24 24"
+		                       fill="none"
+		                       stroke="currentColor"
+		                       stroke-width="1.5"
+		                       stroke-linecap="round"
+		                       stroke-linejoin="round"
+		                       class="h-6 w-6"
+		                   >
+		                       <line x1="18" y1="6" x2="6" y2="18"></line>
+		                       <line x1="6" y1="6" x2="18" y2="18"></line>
+		                   </svg>
+		               </button>
+		               <h3
+		                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
+		               >
+		                   안내
+		               </h3>
+		               <div class="p-5">
+		                   이전 항목을 입력하고 추가버튼을 눌러주세요.
+		                   <div class="mt-8 flex items-center justify-end">
+	                          <button
+	                          	  id="employeeBtnAddFileError"
+	                              type="button"
+	                              class="btn btn-primary ltr:ml-4 rtl:mr-4"
+	                          >
+	                              확인
+	                          </button>
+	                      </div>
+		               </div>
+		           </div>
+		       </div>
+		   </div>
+		</div>
 		
 	   <script th:src="@{/customjs/modifyAttendanceApproval.js}"> </script>
 		

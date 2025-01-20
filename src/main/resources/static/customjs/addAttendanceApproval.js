@@ -132,8 +132,8 @@ let errMsgs = [] // 모든 errMsg를 저장
 $('#btnAddFile').click(function(){
 	// 마지막 파일 입력필드가 비어있다면
 	if ($('#fileDiv input[type="file"]').last().val() === '') {
-		// 모달로 바꾸기
-		 alert('첨부되지 않은 파일이 존재합니다.');
+		modalBackgroundAddFileError.classList.toggle('hidden', false);
+		modalBackgroundAddFileError.classList.toggle('block', true);
 	} else {	
 		result++; // result 증가( 파일 입력 필드마다 고유 값이 생성됨)
 		
@@ -654,7 +654,7 @@ const closeModalAddOver = () => {
 if (closeModalButtonAddOver) closeModalButtonAddOver.addEventListener('click', closeModalAddOver); // 닫기 버튼 클릭 시
 if (employeeBtnAddAddOver) employeeBtnAddAddOver.addEventListener('click', closeModalAddOver);     // 취소 클릭 시
 
-// 추가초과 모달 관련 DOM 요소
+// 결재선 미입력 모달 관련 DOM 요소
 const closeModalButtonApprovalValidation = document.getElementById('closeModalButtonApprovalValidation');
 const modalBackgroundApprovalValidation = document.getElementById('modalBackgroundApprovalValidation');
 const modalWrapperApprovalValidation = document.getElementById('modalWrapperApprovalValidation');
@@ -668,3 +668,20 @@ const closeModalApprovalValidation = () => {
 
 if (closeModalButtonApprovalValidation) closeModalButtonApprovalValidation.addEventListener('click', closeModalApprovalValidation); // [x] 버튼 클릭 시
 if (checkApprovalValidation) checkApprovalValidation.addEventListener('click', closeModalApprovalValidation);     // 확인 클릭 시
+
+// 파일 첨부 추가오류 모달 관련 DOM 요소
+const openModalButtonAddFileError = document.getElementById('openModalButtonAddFileError');
+const closeModalButtonAddFileError = document.getElementById('closeModalButtonAddFileError');
+const modalBackgroundAddFileError = document.getElementById('modalBackgroundAddFileError');
+const modalWrapperAddFileError = document.getElementById('modalWrapperAddFileError');
+const employeeBtnAddFileError = document.getElementById('employeeBtnAddFileError');
+
+// 파일 첨부 추가오류 모달 닫기
+const closeModalAddFileError = () => {
+	  modalBackgroundAddFileError.classList.remove('block');
+	  modalBackgroundAddFileError.classList.add('hidden');  // 모달 배경 숨기기
+};
+
+if (closeModalButtonAddFileError) closeModalButtonAddFileError.addEventListener('click', closeModalAddFileError); // 닫기 버튼 클릭 시
+if (employeeBtnAddFileError) employeeBtnAddFileError.addEventListener('click', closeModalAddFileError);     // 취소 버튼 클릭 시
+

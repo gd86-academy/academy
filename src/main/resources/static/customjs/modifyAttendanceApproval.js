@@ -108,12 +108,12 @@ document.addEventListener('alpine:init', () => {
 // 첨부파일 관련
 var element = document.getElementById('fileCount');
 let result = 0;  // 전역 변수로 result 선언
-/*
+// 유효성 문구 노출위해서 필요
 let inputIds = []; // 모든 inputId를 저장
 let displayIds = []; // 모든 displayId를 저장
 let removeButtonIds = []; // 모든 removeButtonId를 저장
 let errMsgs = [] // 모든 errMsg를 저장
-*/
+
 // element가 존재하고 input 태그가 있는 경우
 if(element){
 	var inputs = element.querySelectorAll('input:not([type="hidden"])');	
@@ -124,8 +124,8 @@ $('#btnAddFile').click(function(){
 	console.log('result 값 : ' + result);
 	// 마지막 파일 입력필드가 비어있다면
 	if ($('#fileDiv input[type="file"]').last().val() === '') {
-		// 모달로 바꾸기
-		 alert('첨부되지 않은 파일이 존재합니다.');
+		modalBackgroundAddFileError.classList.toggle('hidden', false);
+		modalBackgroundAddFileError.classList.toggle('block', true);
 	} else {	
 		result++; // result 증가( 파일 입력 필드마다 고유 값이 생성됨)
 		
@@ -133,12 +133,12 @@ $('#btnAddFile').click(function(){
 		let displayId = 'attendanceApprovalFileNameDisplay' + result; // 고유한 displayId 생성
 		let removeButtonId = 'removeFileBtn' + result;	// 고유한 removeButtonId 생성 (휴지통 버튼)
 		let errMsg = 'errMsg' + result;	// 고유한 errMsg 생성
-		/*
+		
 		inputIds.push(inputId); // 배열에 추가
 		displayIds.push(displayId);	// 배열에 추가
 		removeButtonIds.push(removeButtonId);	// 배열에 추가
 		errMsgs.push(errMsg);
-		*/
+		
 		let html = `
 			<div id = "fileField${result}">
 				<div class="flex mt-1" >
@@ -212,12 +212,12 @@ function removeFileField(fileId) {
 	// 해당 파일 입력폼과 휴지통 버튼을 포함하는 div 제거
 	$('#fileField'+fileId).remove();
 	$('#fileFieldId'+fileId).remove();
-	/*
+	
 	// 삭제된 필드의 ID를 배열에서 제거
 	inputIds = inputIds.filter(inputId => inputId !== 'attendanceApprovalFile' + fileId);
 	displayIds = displayIds.filter(displayId => displayId !== 'attendanceApprovalFileNameDisplay' + fileId);
 	removeButtonIds = removeButtonIds.filter(removeButtonId => removeButtonId !== 'removeFileBtn' + fileId);	
-	errMsgs = errMsgs.filter(errMsg => errMsg !== 'errMsg' + fileId);	*/
+	errMsgs = errMsgs.filter(errMsg => errMsg !== 'errMsg' + fileId);	
 }
 
 // 유효성 검사 
@@ -244,7 +244,15 @@ $('#updateBtn').click(function() {
         $('.attendanceApprovalContent-error').hide();
         $('#attendanceApprovalContent').removeClass("textarea-error");
     }
-	/*
+	
+	// #inputContainer에 input 요소가 하나도 없으면 추가된 항목이 없다고 판단
+    if ($('#inputContainer input:not([type="hidden"])').length === 0) {
+        isVal = false;
+		console.log('결재선이 비어있습니다.');
+		modalBackgroundApprovalValidation.classList.toggle('hidden', false);
+		modalBackgroundApprovalValidation.classList.toggle('block', true);
+    }
+	
 	// 첨부파일 검사	
 	inputIds.forEach((inputId, index) => {
 		let fileInput = $('#' + inputId)
@@ -260,26 +268,7 @@ $('#updateBtn').click(function() {
 			errMsg.hide();
 		}		
 	});
-	
-	// #inputContainer에 input 요소가 하나도 없으면 추가된 항목이 없다고 판단
-    if ($('#inputContainer input:not([type="hidden"])').length === 0) {
-        isVal = false;
-		console.log('결재선이 비어있습니다.');
-    }
-	
-	
-	$('#inputContainer input:not([type="hidden"])').each(function() {
-		console.log($('#inputContainer input:not([type="hidden"])').length);
-        var value = $(this).val();
-        // readonly 속성이 없고 값이 비어있는 input을 유효하지 않다고 판단
-        if (!$(this).prop('readonly') && value.trim() === '') {
-            isVal = false;
-            $(this).css('border', '1px solid red'); // 값이 비어있는 input에 빨간색 테두리 추가
-        } else {
-            $(this).css('border', ''); // 값이 있는 input은 테두리 제거
-        }
-    });
- 	*/
+ 	
     // 폼 제출
     if (isVal) {
         console.log("submit 성공");
@@ -371,9 +360,13 @@ if (applyModalButtonAddPeople) applyModalButtonAddPeople.addEventListener('click
             });
         } else {
             console.log('input 태그가 존재하지 않습니다.');
+			
 			$('#people1 .flex').remove();
 			$('#people2 .flex').remove();
 			$('#people3 .flex').remove();
+			
+			$('#alreadyPeople').attr('hidden', true);	// hidden 속성 추가로 화면에서 노출안됨
+			$('#newPeople').removeAttr('hidden'); // #newPeople의 hidden 속성제거
         }
     } else {
         console.log(`id "${elementId}"를 가진 요소를 찾을 수 없습니다.`);
@@ -650,3 +643,35 @@ const closeModalAddOver = () => {
 
 if (closeModalButtonAddOver) closeModalButtonAddOver.addEventListener('click', closeModalAddOver); // 닫기 버튼 클릭 시
 if (employeeBtnAddAddOver) employeeBtnAddAddOver.addEventListener('click', closeModalAddOver);     // 취소
+
+// 결재선 미입력 모달 관련 DOM 요소
+const closeModalButtonApprovalValidation = document.getElementById('closeModalButtonApprovalValidation');
+const modalBackgroundApprovalValidation = document.getElementById('modalBackgroundApprovalValidation');
+const modalWrapperApprovalValidation = document.getElementById('modalWrapperApprovalValidation');
+const checkApprovalValidation = document.getElementById('checkApprovalValidation');
+
+// 결재선 미입력 경고 모달 닫기
+const closeModalApprovalValidation = () => {
+	  modalBackgroundApprovalValidation.classList.remove('block');
+	  modalBackgroundApprovalValidation.classList.add('hidden');  // 모달 배경 숨기기
+};
+
+if (closeModalButtonApprovalValidation) closeModalButtonApprovalValidation.addEventListener('click', closeModalApprovalValidation); // [x] 버튼 클릭 시
+if (checkApprovalValidation) checkApprovalValidation.addEventListener('click', closeModalApprovalValidation);     // 확인 클릭 시
+
+// 파일첨부 추가오류 모달 관련 DOM 요소
+const openModalButtonAddFileError = document.getElementById('openModalButtonAddFileError');
+const closeModalButtonAddFileError = document.getElementById('closeModalButtonAddFileError');
+const modalBackgroundAddFileError = document.getElementById('modalBackgroundAddFileError');
+const modalWrapperAddFileError = document.getElementById('modalWrapperAddFileError');
+const employeeBtnAddFileError = document.getElementById('employeeBtnAddFileError');
+
+// 추가오류 모달 닫기
+const closeModalAddFileError = () => {
+	  modalBackgroundAddFileError.classList.remove('block');
+	  modalBackgroundAddFileError.classList.add('hidden');  // 모달 배경 숨기기
+};
+
+if (closeModalButtonAddFileError) closeModalButtonAddFileError.addEventListener('click', closeModalAddFileError); // 닫기 버튼 클릭 시
+if (employeeBtnAddFileError) employeeBtnAddFileError.addEventListener('click', closeModalAddFileError);     // 취소 버튼 클릭 시
+
