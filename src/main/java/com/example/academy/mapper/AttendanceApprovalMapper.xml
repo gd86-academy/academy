@@ -102,6 +102,7 @@
 		ON aa.attendance_approval_status = c2.code
 		WHERE aa.use_yn = 1
 		AND aa.employee_no = #{employeeNo}
+		ORDER BY aa.update_date DESC
 	</select>
 	
 </mapper>

@@ -96,20 +96,20 @@ document.addEventListener('alpine:init', () => {
 	                const selectedDate = selectedDates[0];
 
 	                // 신청종료날짜 캘린더 활성화 및 최소 날짜 설정
-	                endDateInput.disabled = false;
+	                endDateInput.readonly = false;
 	                endDatePicker.set('minDate', selectedDate); // 최소 날짜 설정
 	                endDatePicker.set('clickOpens', true); // 달력 활성화
 	            } else {
 	                // 신청시작날짜 선택 해제 시 종강일 초기화 및 비활성화
 	                endDatePicker.clear();
-	                endDateInput.disabled = true;
+	                endDateInput.readonly = true;
 	                endDatePicker.set('clickOpens', false); // 달력 비활성화
 	            }
 	        },
 	    });
 
 	    // 초기 상태에서 신청종료날짜 비활성화
-	    endDateInput.disabled = true;
+	    endDateInput.readonly = true;
 	});
 	
 });

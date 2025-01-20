@@ -56,7 +56,7 @@ public class AttendanceApprovalController {
 	// 김혜린 : 근태 신청서 수정페이지 POST
 	@PostMapping("/modifyAttendanceApproval")
 	public String modifyAttendanceApproval(AttendanceApprovalModifyDTO attendanceApprovalModifyDTO) {
-		
+		log.debug("+~+~+~+~+attendanceApprovalModifyDTO 목록 : " + attendanceApprovalModifyDTO);	//디버깅
 		attendanceApprovalService.modifyAttendanceApproval(attendanceApprovalModifyDTO);
 		
 		return "redirect:/attendanceApprovalOne?attendanceApprovalNo=" + attendanceApprovalModifyDTO.getAttendanceApprovalNo();
