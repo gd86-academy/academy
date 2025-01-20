@@ -346,27 +346,27 @@
 									<!-- 기존 파일 노출 -->
 							 		<div th:each="file, stat : ${files}" id= "fileCount">
 							 			<input type="hidden" th:value="${file.fileName}" name="alreadyFiles" th:id="'fileFieldId' + ${stat.index}">
-										<div th:id = "'fileField' + ${stat.count}" class="flex mt-1" >
+										<div th:id = "'fileField' + ${stat.index}" class="flex mt-1" >
 											<!-- 커스텀 버튼 -->
 											<button
 											   type="button" 
 											   class="btn btn-primary ltr:rounded-r-none rtl:rounded-l-none" 
 											   style="width: 150px;"
-											   th:onclick="document.getElementById('attendanceApprovalFiles[[${stat.count}]]').click();">
+											   th:onclick="document.getElementById('attendanceApprovalFiles[[${stat.index}]]').click();">
 											   파일 선택
 											</button>
 											<!-- 숨겨진 파일 입력 -->
 											<input 
-											   th:id="'attendanceApprovalFiles' + ${stat.count}" 
+											   th:id="'attendanceApprovalFiles' + ${stat.index}" 
 											   name="attendanceApprovalFiles"
 											   type="file" 
 											   class="hidden"
 											   multiple
-											   th:onchange="document.getElementById('attendanceApprovalFileNameDisplay[[${stat.count}]]').value = this.files[0] ? this.files[0].name : ''; 
+											   th:onchange="document.getElementById('attendanceApprovalFileNameDisplay[[${stat.index}]]').value = this.files[0] ? this.files[0].name : ''; 
 											   				document.getElementById('fileFieldId[[${stat.index}]]').remove();"/>
 											<!-- 파일 이름 표시 -->
 											<input 
-											   th:id="'attendanceApprovalFileNameDisplay' + ${stat.count}" 
+											   th:id="'attendanceApprovalFileNameDisplay' + ${stat.index}" 
 											   type="text" 
 											   placeholder="첨부된 파일이 없습니다."
 											   th:value="${file.fileOrigin + '.' + file.fileExt}"
@@ -376,8 +376,8 @@
 											<button
 												type="button"
 												class = "btn btn-outline-danger ml-2"
-												th:id = "'removeButtonId' + ${stat.count}"
-												th:onclick="'removeFileField(' + ${stat.count} + ');'">
+												th:id = "'removeButtonId' + ${stat.index}"
+												th:onclick="'removeFileField(' + ${stat.index} + ');'">
 												<!--휴지통 아이콘추가-->
 												<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 													<path
@@ -405,7 +405,7 @@
 											</button>
 										</div>
 										<div class="mt-1" >	<!-- 유효성문구 -->
-											<span th:id = "'errMsg' + ${stat.count}" class="msg date-error error-label" style="display: none;">파일을 첨부해주세요.</span>
+											<span th:id = "'errMsg' + ${stat.index}" class="msg date-error error-label" style="display: none;">파일을 첨부해주세요.</span>
 										</div>
 							 		</div>
 								 	

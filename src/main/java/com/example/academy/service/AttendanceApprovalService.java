@@ -115,9 +115,94 @@ public class AttendanceApprovalService {
 		List<String> alreadyfilesList = attendanceApprovalModifyDTO.getAlreadyFiles();
 		
 		// 데이터베이스에 저장되어있는 파일목록 가져오기
+		List<Files> attendanceApprovalFileList = attendanceApprovalFileMapper.selectAttendanceApprovalFileList(attendanceApprovalModifyDTO.getAttendanceApprovalNo());
 		
-		
-		
+		// 수정하지 않은 파일은 제외하고 데이터베이스 파일정보와 물리적 파일 삭제
+		for(Files files : attendanceApprovalFileList) {
+			if(alreadyfilesList != null) {
+				int fileCount = 0;
+				for(String alreadyfiles : alreadyfilesList) {
+					if(alreadyfiles.equals(files.getFileName())) {
+						break;
+					} else {
+						fileCount++;
+					}
+					if(fileCount == alreadyfilesList.size()) {
+						// 파일 테이블 삭제하기 전 해당 파일번호 가져오기
+						Integer delFileNo = filesMapper.selectDeleteFileNo(files.getFileName());
+
+						// 파일/결재 연결테이블 데이터 삭제
+						attendanceApprovalFileMapper.deleteAttendanceApprovalFile(delFileNo, attendanceApprovalModifyDTO.getAttendanceApprovalNo());
+						
+						// 파일테이블 데이터 삭제
+						filesMapper.deleteFile(files.getFileName());
+						
+						// 서버에 있는 물리적 파일 삭제
+						String fullname = System.getProperty("user.dir") + "/src/main/resources/static/upload/" + files.getFileName() + "." + files.getFileExt();
+						File f = new File(fullname);
+						f.delete();
+					} 
+				}	
+			} else {
+				// 파일 테이블 삭제하기 전 해당 파일번호 가져오기
+				Integer delFileNo = filesMapper.selectDeleteFileNo(files.getFileName());
+
+				// 파일/결재 연결테이블 데이터 삭제
+				attendanceApprovalFileMapper.deleteAttendanceApprovalFile(delFileNo, attendanceApprovalModifyDTO.getAttendanceApprovalNo());
+				
+				// 파일테이블 데이터 삭제
+				filesMapper.deleteFile(files.getFileName());
+				
+				// 서버에 있는 물리적 파일 삭제
+				String fullname = System.getProperty("user.dir") + "/src/main/resources/static/upload/" + files.getFileName() + "." + files.getFileExt();
+				File f = new File(fullname);
+				f.delete();
+			}
+		}
+			
+		// 새로 입력한 파일이 있다면 데이터베이스 파일정보와 물리적 파일 추가
+		if(attendanceApprovalModifyDTO.getAttendanceApprovalFiles() != null) {	// 파일이 첨부된경우(비어있지 않으면)
+			
+			for(MultipartFile mf : attendanceApprovalModifyDTO.getAttendanceApprovalFiles()) {
+				if(mf.isEmpty()) continue;	
+				InputFile inputFile = new InputFile(); // inputFile 인스턴스 생성.
+				inputFile.setOriginFileName(mf.getOriginalFilename());	// 파일 실제 이름 추출 후 inputFile 인스턴스에 set.
+				
+				Files file = new Files();
+				file.setFileName(inputFile.getUUID());		// 서버 파일명
+				file.setFileExt(inputFile.getFileExt());	// 파일 확장자
+				file.setFileOrigin(inputFile.getFileName());	// 기존 파일명
+				file.setFileSize(mf.getSize());		// 파일크기
+				file.setFileType(mf.getContentType());	// 파일 타입
+				file.setFileCategory("FC003");	// 파일 카테고리
+				// file 테이블에 삽입
+				Integer result = filesMapper.insertFile(file);	
+				Integer fileNo = file.getFileNo();	// 데이터베이스에 파일정보 삽입 시 자동으로 생성되는 fileNo값 가져옴
+				log.debug("fileNo = " + fileNo);
+				
+				// 근태신청서-파일 테이블에 삽입할 데이터 set
+				AttendanceApprovalAddDTO addDTO2 = new AttendanceApprovalAddDTO();
+				log.debug("삽입전 확인 attendanceApprovalNo = " + attendanceApprovalModifyDTO.getAttendanceApprovalNo());
+				addDTO2.setAttendanceApprovalNo(attendanceApprovalModifyDTO.getAttendanceApprovalNo());
+				addDTO2.setFileNo(fileNo);
+				// attendance_approval_file 테이블에 삽입
+				attendanceApprovalFileMapper.insertAttendanceApprovalFile(addDTO2);
+				
+				
+				// 모든 db에 잘 삽입되었다면 서버에 물리적 파일 저장
+				if(result == 1) {
+					try {
+						mf.transferTo(new File(System.getProperty("user.dir") + "/src/main/resources/static/upload/" + file.getFileName() + "." + file.getFileExt()));
+					} catch (Exception e) {
+						e.printStackTrace();
+						throw new RuntimeException();
+					} 
+				}
+				
+			}
+			
+		}
+
 	}
 	
 	// 김혜린 : 근태신청서 상세페이지 - 근태신청서 테이블

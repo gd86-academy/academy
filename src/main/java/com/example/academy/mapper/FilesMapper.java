@@ -7,6 +7,11 @@ import com.example.academy.vo.Files;
 
 @Mapper
 public interface FilesMapper {
+	// 김혜린 : 근태신청서 수정 시 파일테이블에서 해당정보 삭제
+	Integer deleteFile(String fileName);
+	
+	// 김혜린 : 근태신청서 수정 시 파일테이블에서 삭제할 파일번호 조회
+	Integer selectDeleteFileNo(String fileName);
 	
 	// 진수우 : 프로필사진파일 삭제.
 	Integer deletePhotoFile(Integer employeeNo);
