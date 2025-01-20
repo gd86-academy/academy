@@ -19,6 +19,28 @@ import com.example.academy.vo.LectureWeekday;
 
 @Mapper
 public interface LectureApprovalMapper {
+	
+	// 진수우 : 강의결재 승인처리 시 결재 테이블에서 해당 결재의 결재상태를 변경
+	Integer updateLectureApprovalStatusAccept(Integer lectureApprovalNo);
+	
+	// 진수우 : 강의결재 승인처리 시 결재자 테이블에서 결재상태가 승인인 항목 개수 조회
+	Integer countApprovalEmployeeStatusAccept(Integer lectureApprovalNo);
+	
+	// 진수우 : 강의결재 승인처리 시 결재자 테이블에서 최고 결재단계를 조회
+	Integer selectApprovalEmployeeMaxLevel(Integer lectureApprovalNo);
+	
+	// 진수우 : 강의결재 승인처리 시 강의결재 테이블에서 해당 결재의 결재단계를 증가
+	Integer updateLectureApprovalStepAccept(Integer lectureApprovalNo);
+	
+	// 진수우 : 강의결재 승인처리 시 결재자 테이블에서 해당 결재자의 결재상태를 변경
+	Integer updateApprovalEmployeeStatusAccept(Integer lectureApprovalNo, Integer approver);
+	
+	// 진수우 : 강의결재 반려처리 시 결재자 테이블에서 해당 결재자의 결재상태변경
+	Integer updateApprovalEmployeeStatusReturn(Integer lectureApprovalNo, Integer approver);
+	
+	// 진수우 : 강의결재 반려처리 시 강의결재 테이블에서 결재상태 변경
+	Integer updateLectureApprovalStatusReturn(Integer lectureApprovalNo);
+	
 	// 진수우 : 강의결재 삭제 시 강의결재 테이블에서 사용상태변경
 	Integer updateLectureApprovalUse(Integer lectureApprovalNo);
 	

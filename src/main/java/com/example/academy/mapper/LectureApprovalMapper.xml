@@ -2,6 +2,49 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.LectureApprovalMapper">
 
+	<!-- 진수우 : 강의결재 승인처리 시 결재 테이블에서 해당 결재의 결재상태를 변경 -->
+	<update id="updateLectureApprovalStatusAccept">
+		UPDATE lecture_approval SET lecture_approval_status = 'AS003' WHERE lecture_approval_no = #{lectureApprovalNo}
+	</update>
+
+	<!-- 진수우 : 강의결재 승인처리 시 결재자 테이블에서 최고 결재단계를 조회 -->
+	<select id="selectApprovalEmployeeMaxLevel">
+		SELECT MAX(approval_level)
+		FROM approval_employee
+		WHERE lecture_approval_no = #{lectureApprovalNo}
+	</select>
+	
+	<!-- 진수우 : 강의결재 승인처리 시 결재자 테이블에서 결재상태가 승인인 항목 개수 조회 -->
+	<select id="countApprovalEmployeeStatusAccept">
+		SELECT COUNT(*)
+		FROM approval_employee
+		WHERE lecture_approval_no = #{lectureApprovalNo} AND approval_employee_status = 'AS003'
+	</select>
+	
+	<!-- 진수우 : 강의결재 승인처리 시 결재자 테이블에서 해당 결재자의 결재상태를 변경 -->
+	<update id="updateApprovalEmployeeStatusAccept">
+		UPDATE approval_employee SET approval_employee_status = 'AS003' WHERE lecture_approval_no = #{lectureApprovalNo} AND approver = #{approver}
+	</update>
+
+	<!-- 진수우 : 강의결재 승인처리 시 강의결재 테이블에서 해당 결재의 결재단계를 증가 -->
+	<update id="updateLectureApprovalStepAccept">
+		UPDATE lecture_approval SET lecture_approval_step = lecture_approval_step + 1
+		WHERE lecture_approval_no = #{lectureApprovalNo}
+	</update>
+	
+	
+	
+	
+	<!-- 진수우 : 강의결재 반려처리 시 결재자 테이블에서 해당 결재자의 결재상태변경 -->
+	<update id="updateApprovalEmployeeStatusReturn">
+		UPDATE approval_employee SET approval_employee_status = 'AS002' WHERE lecture_approval_no = #{lectureApprovalNo} AND approver = #{approver}
+	</update>
+
+	<!-- 진수우 : 강의결재 반려처리 시 강의결재 테이블에서 결재상태 변경 -->
+	<update id="updateLectureApprovalStatusReturn">
+		UPDATE lecture_approval SET lecture_approval_status = 'AS002' WHERE lecture_approval_no = #{lectureApprovalNo}
+	</update>
+
 	<!-- 진수우 : 강의결재 삭제 시 강의결재 테이블에서 사용상태변경 -->
 	<update id="updateLectureApprovalUse">
 		UPDATE lecture_approval SET use_yn = 0 WHERE lecture_approval_no = #{lectureApprovalNo}
@@ -139,6 +182,7 @@
 			, la.lecture_name lectureName
 			, la.lecture_content lectureContent
 			, cl.classroom_name classroomName
+			, la.classroom_no classroomNo
 			, la.lecture_begin_date lectureBeginDate
 			, la.lecture_end_date lectureEndDate
 			, c.name lectureApprovalStatus

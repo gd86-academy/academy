@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.LectureMapper">
+
+	<!-- 진수우 : 강의결재 승인 시 강의/강의시간 추가 -->
+	<insert id="insertLectureLectureWeekday">
+		INSERT INTO lecture_lecture_weekday(lecture_no, lecture_weekday_no) VALUES(#{lectureNo}, #{lectureWeekdayNo})
+	</insert>
+
+	<!-- 진수우 : 강의결재 승인 시 강의 추가 -->
+	<insert id="insertLecture" useGeneratedKeys="true" keyProperty="lectureNo">
+		INSERT INTO lecture(lecture_name, lecture_content, lecturer, lecture_begin_date, lecture_end_date, classroom_no)
+		VALUES(#{lectureName}, #{lectureContent}, #{employeeNo}, #{lectureBeginDate}, #{lectureEndDate}, #{classroomNo})
+	</insert>
 	
 	<!-- 김혜린 : 강의 삭제(사용여부 비활성화) -->
 	<update id="updateUseLecture">

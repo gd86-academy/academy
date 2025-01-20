@@ -40,9 +40,23 @@ public class LectureApprovalController {
 	@Autowired ClassroomService classroomService;
 	@Autowired LectureApprovalService lectureApprovalService;
 	
+	// 진수우 : 강의결재 반려.
+	@PostMapping("/acceptLectureApproval")
+	public String acceptLectureApproval(Integer lectureApprovalNo, Integer approver) {
+		lectureApprovalService.acceptLectureApproval(lectureApprovalNo, approver);
+		return "redirect:/lectureApprovalOne?lectureApprovalNo=" + lectureApprovalNo;
+	}
+		
+	// 진수우 : 강의결재 반려.
+	@PostMapping("/returnLectureApproval")
+	public String returnLectureApproval(Integer lectureApprovalNo, Integer approver) {
+		lectureApprovalService.returnLectureApproval(lectureApprovalNo, approver);
+		return "redirect:/lectureApprovalOne?lectureApprovalNo=" + lectureApprovalNo;
+	}
+	
 	// 진수우 : 강의결재 삭제.
 	@GetMapping("/lectureApprovalUpdateUse")
-	public String getMethodName(Integer lectureApprovalNo) {
+	public String lectureApprovalUpdateUse(Integer lectureApprovalNo) {
 		lectureApprovalService.modifyLectureApprovalUse(lectureApprovalNo);
 		return "redirect:/applicationList";
 	}
