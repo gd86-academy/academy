@@ -1,14 +1,19 @@
 package com.example.academy.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import org.hibernate.grammars.hql.HqlParser.CurrentTimeFunctionContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.academy.dto.AttendanceContentDTO;
+import com.example.academy.dto.AttendanceDTO;
 import com.example.academy.dto.AttendanceListDTO;
+import com.example.academy.mapper.AttendanceApprovalMapper;
 import com.example.academy.mapper.AttendanceMapper;
 import com.example.academy.scheduled.Attendance;
 import com.example.academy.scheduled.AttendanceRepository;
@@ -22,6 +27,43 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional
 public class AttendanceService {
 	@Autowired AttendanceMapper attendanceMapper;
+	@Autowired AttendanceApprovalMapper attendanceApprovalMapper;
+	
+	// 출근 버튼 클릭시 수정
+	public Integer modifyCheckin(AttendanceDTO attendanceDTO) {
+		
+		String content = attendanceApprovalMapper.selectContentByDay(attendanceDTO);
+		log.debug("근태 유형 ----> " + content);
+		String currentTimeString = attendanceDTO.getCurrentDateTime(); // 현재시각 2025-01-20 11:11:11
+		log.debug("현재 시각 ---->" + currentTimeString);
+		
+		// DateTimeFormatter를 사용하여 "yyyy-MM-dd HH:mm:ss" 형식으로 파싱
+	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		
+		if(content.equals("CT003")) { // 오전 반차
+			LocalDateTime currentTime1 = LocalDateTime.parse(currentTimeString, formatter); // LocalDateTime으로 파싱
+			LocalDateTime targetTime1 = currentTime1.toLocalDate().atTime(14, 0); // 오늘 날짜의 14:00 (2시)
+			if(currentTime1.isBefore(targetTime1) || currentTime1.isEqual(targetTime1)) { // 현재 시각이 14시 이전이거나 14시일 때
+				Integer row1 = attendanceMapper.updateCheckin(attendanceDTO); // 정시 출근
+				log.debug("오전 반차 정시 출근 ---->" +row1);
+			} else if(currentTime1.isAfter(targetTime1)) { // 현재 시각이 14시 이후일 때
+				Integer row2 = attendanceMapper.updateCheckinByTardy(attendanceDTO); // 지각 출근
+				log.debug("오전 반차 지각 ---->" +row2);
+			} 
+		} else {
+			LocalDateTime currentTime2 = LocalDateTime.parse(currentTimeString, formatter); // LocalDateTime으로 파싱
+			LocalDateTime targetTime2 = currentTime2.toLocalDate().atTime(9, 0); // 오늘 날짜의 09:00 (09시)
+			if(currentTime2.isBefore(targetTime2) || currentTime2.isEqual(targetTime2)) {
+				Integer row3 = attendanceMapper.updateCheckin(attendanceDTO); // 정시 출근
+				log.debug("정시 출근 ---->" +row3);
+			} else if(currentTime2.isAfter(targetTime2)) {
+				Integer row4 = attendanceMapper.updateCheckinByTardy(attendanceDTO); // 지각 출근
+				log.debug("지각 ---->" +row4);
+			}
+		}
+		
+		return 1;
+	}
 	
 	// 최근 6개월 월별 근무시간 총합 조회
 	public List<Integer> getAttendanceTotalWorkTime(Integer employeeNo) {

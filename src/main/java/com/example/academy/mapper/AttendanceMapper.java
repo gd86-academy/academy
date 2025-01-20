@@ -5,11 +5,18 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.example.academy.dto.AttendanceContentDTO;
+import com.example.academy.dto.AttendanceDTO;
 import com.example.academy.dto.AttendanceListDTO;
 
 @Mapper
 public interface AttendanceMapper {
-
+	
+	// 지각일 때 출글 버튼 클릭 시 수정 
+	Integer updateCheckinByTardy(AttendanceDTO attendanceDTO);
+	
+	// 출근 버튼 클릭시 수정
+	Integer updateCheckin(AttendanceDTO attendanceDTO);
+	
 	// 최근 6개월 월별 근무시간 총합 조회
 	List<Integer> selectWorkTimeByMonth(Integer employeeNo);
 	

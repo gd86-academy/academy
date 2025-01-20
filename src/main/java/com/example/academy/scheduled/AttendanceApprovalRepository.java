@@ -10,8 +10,9 @@ public interface AttendanceApprovalRepository extends JpaRepository<AttendanceAp
 	@Query("SELECT a.attendanceApprovalType "	
 	     + "FROM AttendanceApproval a "
 	     + "WHERE a.employeeNo = :employeeNo "
-	     + "AND a.attendanceApprovalBegindate = :begindate "
+	     + "AND a.attendanceApprovalBegindate <= :today "
+	     + "AND a.attendanceApprovalEnddate >= :today "
 	     + "AND a.attendanceApprovalStatus = :status")
-	String findApprovedAttendanceRequest(Integer employeeNo, LocalDate begindate, String status);
+	String findApprovedAttendanceRequest(Integer employeeNo, LocalDate today, String status);
 	
 }

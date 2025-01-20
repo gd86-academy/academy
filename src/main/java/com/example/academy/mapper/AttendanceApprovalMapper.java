@@ -8,9 +8,13 @@ import com.example.academy.dto.AttendanceApprovalAddDTO;
 import com.example.academy.dto.AttendanceApprovalListDTO;
 import com.example.academy.dto.AttendanceApprovalModifyDTO;
 import com.example.academy.dto.AttendanceApprovalOneDTO;
+import com.example.academy.dto.AttendanceDTO;
 
 @Mapper
 public interface AttendanceApprovalMapper {
+	
+	// 조세영 : 오늘 사원의 근태신청서 근태유형 조회오늘 사원의 근태신청서 근태유형 조회
+	String selectContentByDay(AttendanceDTO attendanceDTO);
 	
 	// 김혜린 : 근태신청서 삭제 - 근태신청서 사용상태를 비활성화로 바꿔줌
 	Integer updateUseAttendanceApproval(Integer attendanceApprovalNo);

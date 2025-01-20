@@ -2,6 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.AttendanceMapper">
 	
+	<!-- 9시 이후에 출근 버튼 클릭시 수정(지각) -->
+	<update id="updateCheckinByTardy" parameterType="com.example.academy.dto.AttendanceDTO">
+		UPDATE attendance a 
+		SET a.attendance_status = 'ST002'
+			, attendance_content = 'CT006' 
+			, a.attendance_checkin = NOW()						
+		WHERE a.employee_no = #{employeeNo}
+			AND a.attendance_date = #{currentDate}
+	</update>
+	
+	<!-- 9시 전에 출근 버튼 클릭시 수정 -->
+	<update id="updateCheckin" parameterType="com.example.academy.dto.AttendanceDTO">
+		UPDATE attendance a 
+		SET a.attendance_status = 'ST002' 
+			, a.attendance_checkin = NOW()						
+		WHERE a.employee_no = #{employeeNo}
+			AND a.attendance_date = #{currentDate}
+	</update>
+	
 	<!-- 최근 6개월 월별 근무시간 총합 조회 -->
 	<select id="selectWorkTimeByMonth" parameterType="Integer"
 									resultType="Integer">

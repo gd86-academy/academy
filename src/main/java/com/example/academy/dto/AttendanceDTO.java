@@ -1,11 +1,10 @@
-
-package com.example.academy.vo;
+package com.example.academy.dto;
 
 import lombok.Data;
 
 @Data
-public class Attendance {
-
+public class AttendanceDTO {
+	
 	private Integer attendanceNo;
 	private Integer employeeNo;
 	private String attendanceCheckIn;
@@ -15,5 +14,8 @@ public class Attendance {
 	private String attendanceDate;
 	private String createDate;
 	private String updateDate;
+
+	private String currentDateTime;
+	private String currentDate;
 	
 }

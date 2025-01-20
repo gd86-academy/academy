@@ -21,6 +21,9 @@ public class AttendanceApproval {
 	@Column(name = "attendance_approval_begindate")
 	private LocalDate attendanceApprovalBegindate;
 	
+	@Column(name = "attendance_approval_Enddate")
+	private LocalDate attendanceApprovalEnddate;
+	
 	@Column(name = "attendance_approval_status")
 	private String attendanceApprovalStatus;
 	
