@@ -73,21 +73,7 @@
 		<!-- 화면로딩 UI -->
 		<div
 			class="screen_loader animate__animated fixed inset-0 z-[60] grid place-content-center bg-[#fafafa] dark:bg-[#060818]">
-			<svg width="64" height="64" viewBox="0 0 135 135"
-				xmlns="http://www.w3.org/2000/svg" fill="#4361ee">
-	                <path
-					d="M67.447 58c5.523 0 10-4.477 10-10s-4.477-10-10-10-10 4.477-10 10 4.477 10 10 10zm9.448 9.447c0 5.523 4.477 10 10 10 5.522 0 10-4.477 10-10s-4.478-10-10-10c-5.523 0-10 4.477-10 10zm-9.448 9.448c-5.523 0-10 4.477-10 10 0 5.522 4.477 10 10 10s10-4.478 10-10c0-5.523-4.477-10-10-10zM58 67.447c0-5.523-4.477-10-10-10s-10 4.477-10 10 4.477 10 10 10 10-4.477 10-10z">
-	                    <animateTransform attributeName="transform"
-					type="rotate" from="0 67 67" to="-360 67 67" dur="2.5s"
-					repeatCount="indefinite" />
-	                </path>
-	                <path
-					d="M28.19 40.31c6.627 0 12-5.374 12-12 0-6.628-5.373-12-12-12-6.628 0-12 5.372-12 12 0 6.626 5.372 12 12 12zm30.72-19.825c4.686 4.687 12.284 4.687 16.97 0 4.686-4.686 4.686-12.284 0-16.97-4.686-4.687-12.284-4.687-16.97 0-4.687 4.686-4.687 12.284 0 16.97zm35.74 7.705c0 6.627 5.37 12 12 12 6.626 0 12-5.373 12-12 0-6.628-5.374-12-12-12-6.63 0-12 5.372-12 12zm19.822 30.72c-4.686 4.686-4.686 12.284 0 16.97 4.687 4.686 12.285 4.686 16.97 0 4.687-4.686 4.687-12.284 0-16.97-4.685-4.687-12.283-4.687-16.97 0zm-7.704 35.74c-6.627 0-12 5.37-12 12 0 6.626 5.373 12 12 12s12-5.374 12-12c0-6.63-5.373-12-12-12zm-30.72 19.822c-4.686-4.686-12.284-4.686-16.97 0-4.686 4.687-4.686 12.285 0 16.97 4.686 4.687 12.284 4.687 16.97 0 4.687-4.685 4.687-12.283 0-16.97zm-35.74-7.704c0-6.627-5.372-12-12-12-6.626 0-12 5.373-12 12s5.374 12 12 12c6.628 0 12-5.373 12-12zm-19.823-30.72c4.687-4.686 4.687-12.284 0-16.97-4.686-4.686-12.284-4.686-16.97 0-4.687 4.686-4.687 12.284 0 16.97 4.686 4.687 12.284 4.687 16.97 0z">
-	                    <animateTransform attributeName="transform"
-					type="rotate" from="0 67 67" to="360 67 67" dur="8s"
-					repeatCount="indefinite" />
-	                </path>
-	            </svg>
+			<span class="w-5 h-5 m-auto mb-10"><span class="animate-ping inline-flex h-full w-full rounded-full bg-info"></span></span>
 		</div>
 	
 		<!-- 최상단 이동 버튼 -->
@@ -214,17 +200,17 @@
 						        		<td class="bg-[#f4f4f4] lecutre-title-align">강의날짜</td>
 										<td colspan="2">
 											<div class="flex justify-between">
-												<div class="w-full mr-3">
-							                       	<input class="form-input" th:value="${lectureApprovalOne.lectureBeginDate}" disabled/>
+												<div class="w-full mr-3 text-center">
+							                       	<span th:text="${lectureApprovalOne.lectureBeginDate}"></span>
 											   	</div>
 												<div class="align-items-center">~</div>
-												<div class="w-full ml-3">
-							                       	<input class="form-input" th:value="${lectureApprovalOne.lectureEndDate}" disabled/>
+												<div class="w-full ml-3 text-center">
+							                       	<span th:text="${lectureApprovalOne.lectureEndDate}"></span>
 											   	</div>
 											</div>
 										</td>
-										<td>
-											<input class="form-input" th:value="${lectureApprovalOne.classroomName}" disabled/>
+										<td class="text-center">
+											<span th:text="${lectureApprovalOne.classroomName}"></span>
 										</td>
 						        	</tr>
 						        </tbody>
@@ -234,21 +220,21 @@
 						<!-- 테이블2 : 강의요일, 강의시간 입력 -->
 						<div class="mt-5">
 						    <table style="table-layout: fixed; width: 100%; border: 1px solid #f0f0f0;">
-						        <tbody id="">
-						            <tr th:each="weekday, stat : ${lectureApprovalWeekday}">
+						        <tbody>
+						            <tr th:each="weekday, stat : ${lectureApprovalWeekday}" style="height: 60px;">
 						            	<td th:if="${stat.index == 0}" class="bg-[#f4f4f4] lecutre-title-align">강의시간</td>
 						        		<td th:if="${stat.index > 0}" class="bg-[#f4f4f4] lecutre-title-align"></td>
 						            	<!-- 요일 선택 -->
-						            	<td>
-											<input class="form-input" th:value="${weekday.weekday}" disabled/>
+						            	<td class="text-center">
+											<span th:text="${weekday.weekday}"></span>
 										</td>
-										<td colspan="2">
-											<div class="flex justify-between">
+										<td colspan="2" class="">
+											<div class="flex justify-center text-center ml-3" style="width:100%;">
 												<!-- 시작시간 -->
-												<input class="form-input mr-3" th:value="${weekday.beginTime}" disabled/>
+												<span style="margin: 0 50px;" class="mr-3" th:text="${weekday.beginTime}"></span>
 												<div>~</div>
 												<!-- 종료시간 -->
-												<input class="form-input ml-3" th:value="${weekday.endTime}" disabled/>
+												<span style="margin: 0 50px;" class="ml-3" th:text="${weekday.endTime}"></span>
 											</div>					
 										</td>
 						            </tr>
@@ -268,13 +254,13 @@
 						<div class="table-responsive" style="table-layout: fixed;">
 						    <table style="table-layout: fixed; width: 100%; height:65px; border: 1px solid #f0f0f0;">
 						        <tbody>
-						            <tr class="border-dark-dark-light ">
+						            <tr class="border-dark-dark-light " style="height: 60px;">
 						                <td class="bg-[#f4f4f4] lecutre-title-align">강의명</td>
-						                <td colspan="3"><input type="text" class="form-input" th:value="${lectureApprovalOne.lectureName}" disabled></td>	                
+						                <td colspan="3"><span class="ml-3" th:text="${lectureApprovalOne.lectureName}"></span></td>	                
 						            </tr>
-						            <tr>
+						            <tr style="height: 400px;">
 						            	<td class="bg-[#f4f4f4] lecutre-title-align">강의내용</td>
-						            	<td colspan="3"><textarea rows="15" cols="205" class="custom-textarea w-full bg-white" th:text="${lectureApprovalOne.lectureContent}" disabled></textarea></td>
+						            	<td colspan="3" style="vertical-align: top;"><span class="w-full bg-white ml-3 mt-3 mr-3 mb-3" th:text="${lectureApprovalOne.lectureContent}" style="display: block; max-height: 370px; overflow-y: auto;"></span></td>
 						            </tr>
 						            <tr>
 						                <td style="border-left: 1px solid #ffffff; border-right: 1px solid #ffffff; border-bottom: 1px solid #ffffff;"></td>
@@ -290,13 +276,13 @@
 						<div class="table-responsive" style="margin-bottom: 20px; table-layout: fixed;">
 						    <table style="table-layout: fixed; width: 100%; height:65px; border: 1px solid #f0f0f0;">
 						        <tbody>
-						            <tr class="border-dark-dark-light ">
+						            <tr class="border-dark-dark-light " style="height: 60px;">
 						                <td class="bg-[#f4f4f4] lecutre-title-align">결재제목</td>
-						                <td colspan="3"><input type="text" class="form-input" th:value="${lectureApprovalOne.lectureApprovalTitle}" disabled></td>					                
+						                <td colspan="3"><span class="ml-3" th:text="${lectureApprovalOne.lectureApprovalTitle}"></span></td>					                
 						            </tr>
-						            <tr>
+						            <tr style="height: 400px;">
 						            	<td class="bg-[#f4f4f4] lecutre-title-align">결재내용</td>
-						            	<td colspan="3"><textarea rows="15" cols="205" class="custom-textarea w-full bg-white" th:text="${lectureApprovalOne.lectureApprovalContent}" disabled></textarea></td>
+						            	<td colspan="3" style="vertical-align: top;"><span class="w-full bg-white ml-3 mt-3 mr-3 mb-3" th:text="${lectureApprovalOne.lectureApprovalContent}" style="display: block; max-height: 370px; overflow-y: auto;"></span></td>
 						            </tr>
 						            <tr>
 						                <td style="border-left: 1px solid #ffffff; border-right: 1px solid #ffffff; border-bottom: 1px solid #ffffff;"></td>
@@ -340,7 +326,7 @@
 							        />
 							    </svg>
 							    <div class="ltr:ml-4 rtl:mr-4">
-							        <p class="text-sm font-semibold text-primary" th:text="${file.fileOrigin}"></p>
+							        <p class="text-sm font-semibold text-primary" th:text="${file.fileOrigin} + '.' + ${file.fileExt}"></p>
 							        <p class="text-[12px] text-gray-400 dark:text-gray-600" x-text="attachment.size"></p>
 							    </div>
 							     <a th:href="@{/upload/{filenames}(filenames=${file.fileName} + '.' + ${file.fileExt})}" th:download="${file.fileOrigin + '.' + file.fileExt}" download>
