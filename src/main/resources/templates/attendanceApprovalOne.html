@@ -297,7 +297,7 @@
 							            <tr class="border-dark-dark-light">
 							                <td class="bg-[#f4f4f4] lecutre-title-align">신청서 번호</td>
 							                <td class="lecutre-text-align">
-							                	<input type="hidden" name="attendanceApprovalNo" th:value="${attendanceApproval.attendanceApprovalNo}">
+							                	<input type="hidden" id="attendanceApprovalNo" name="attendanceApprovalNo" th:value="${attendanceApproval.attendanceApprovalNo}">
 							                	<span th:text="${attendanceApproval.attendanceApprovalNo}"></span>
 							                </td>
 							                <td class="bg-[#f4f4f4] lecutre-title-align">사원 번호</td>
@@ -531,8 +531,7 @@
 									th:href="@{/modifyAttendanceApproval(attendanceApprovalNo=${attendanceApproval.attendanceApprovalNo})}">
 									수정
 								</a>
-								<a id="addBtn" type="button" class="btn btn-danger ltr:ml-4 rtl:mr-4" style="width:130px;"
-									th:href="@{/removeAttendanceApproval(attendanceApprovalNo=${attendanceApproval.attendanceApprovalNo})}">
+								<a id="delBtn" type="button" class="btn btn-danger ltr:ml-4 rtl:mr-4" style="width:130px;" >
 									삭제
 								</a>
 							</div>
@@ -553,7 +552,57 @@
 	   <!--  풋터 파일 연결 -->
 	   <div th:replace="fragments/footer :: footer"></div>
 		
-
+		<!-- 모달관련 -->
+		<!-- 신청서 삭제확인 모달 -->
+        <div class="modal">
+		  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundDelApproval">
+		       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperDelApproval">
+		           <div
+		               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
+		               id="modal"
+		           >
+		               <button
+		                   type="button"
+		                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+		                   id="closeModalButtonDelApproval"
+		               >
+		                   <svg
+		                       xmlns="http://www.w3.org/2000/svg"
+		                       width="24px"
+		                       height="24px"
+		                       viewBox="0 0 24 24"
+		                       fill="none"
+		                       stroke="currentColor"
+		                       stroke-width="1.5"
+		                       stroke-linecap="round"
+		                       stroke-linejoin="round"
+		                       class="h-6 w-6"
+		                   >
+		                       <line x1="18" y1="6" x2="6" y2="18"></line>
+		                       <line x1="6" y1="6" x2="18" y2="18"></line>
+		                   </svg>
+		               </button>
+		               <h3
+		                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
+		               >
+		                   안내
+		               </h3>
+		               <div class="p-5">
+		                   근태 신청서를 삭제하시겠습니까?
+		                   <div class="mt-8 flex items-center justify-end">
+	                          <button
+	                          	  id="checkDelApproval"
+	                              type="button"
+	                              class="btn btn-primary ltr:ml-4 rtl:mr-4"
+	                          >
+	                              확인
+	                          </button>
+	                      </div>
+		               </div>
+		           </div>
+		       </div>
+		   </div>
+		</div>
 		
 	   <script th:src="@{/customjs/attendanceApprovalOne.js}"> </script>
 		

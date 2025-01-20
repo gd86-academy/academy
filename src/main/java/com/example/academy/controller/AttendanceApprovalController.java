@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.academy.dto.AttendanceApprovalAddDTO;
 import com.example.academy.dto.AttendanceApprovalModifyDTO;
@@ -31,10 +32,11 @@ public class AttendanceApprovalController {
 	
 	// 김혜린 : 근태 신청서 삭제
 	@GetMapping("/removeAttendanceApproval")
+	@ResponseBody // AJAX 요청에 적합한 응답 처리
 	public String removeAttendanceApproval(Integer attendanceApprovalNo) {
 		attendanceApprovalService.removeAttendanceApproval(attendanceApprovalNo);
 		
-		return "redirect:/applicationList";
+		return "applicationList";
 	}
 	
 	// 김혜린 : 근태 신청서 수정페이지 GET

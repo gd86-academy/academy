@@ -135,15 +135,55 @@ window.addEventListener('DOMContentLoaded', (event) => {
 	
 });
 
-
-
-
-
-
-// 유효성 검사 
-
-
-
-
 // 밑에부터 모달관련
+// 신청서 삭제확인 모달 관련 DOM 요소
+const closeModalButtonDelApproval = document.getElementById('closeModalButtonDelApproval');
+const modalBackgroundDelApproval = document.getElementById('modalBackgroundDelApproval');
+const modalWrapperDelApproval = document.getElementById('modalWrapperDelApproval');
+const checkDelApproval = document.getElementById('checkDelApproval');
+const delBtn = document.getElementById('delBtn');
+
+// 결재선 미입력 경고 모달 닫기
+const closeModalDelApproval = () => {
+	  modalBackgroundDelApproval.classList.remove('block');
+	  modalBackgroundDelApproval.classList.add('hidden');  // 모달 배경 숨기기
+};
+
+if (closeModalButtonDelApproval) closeModalButtonDelApproval.addEventListener('click', closeModalDelApproval); // [x] 버튼 클릭 시
+
+// attendanceApprovalNo값 받아오기
+const attendanceApprovalNo = document.getElementById('attendanceApprovalNo').value;
+
+// 삭제버튼 클릭시
+delBtn.addEventListener('click', () => {
+	modalBackgroundDelApproval.classList.toggle('hidden', false);
+	modalBackgroundDelApproval.classList.toggle('block', true);
+});
+
+// 삭제 안내 모달 [확인]버튼 클릭시
+if (checkDelApproval) {
+	checkDelApproval.addEventListener('click', () => {
+		// 모달 닫기
+		modalBackgroundDelApproval.classList.remove('block');
+		modalBackgroundDelApproval.classList.add('hidden');  // 모달 배경 숨기기
+		
+		// AJAX 요청 보내기
+		$.ajax({
+			url:'removeAttendanceApproval',	// 매핑주소
+			type: 'GET',	// GET 요청
+			data: {attendanceApprovalNo: attendanceApprovalNo // 서버로 전송할 데이터	
+			},	
+			success: (redirectUrl) => {
+				console.log('컨트롤러 실행 완료'); // 성공 로그
+				// 서버에서 응답으로 전달된 URL로 이동
+				console.log("서버에서 받은 URL:", redirectUrl); // 반환값 확인
+				window.location.href = redirectUrl;
+			},
+			error: (xhr, status, error) => {
+			        console.error('오류 발생:', error); // 실패 로그
+			}
+		});
+	
+	});
+}	
 
