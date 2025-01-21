@@ -105,8 +105,8 @@ public class LectureApprovalController {
 		
 	// 진수우 : 강의결재 반려.
 	@PostMapping("/returnLectureApproval")
-	public String returnLectureApproval(Integer lectureApprovalNo, Integer approver) {
-		lectureApprovalService.returnLectureApproval(lectureApprovalNo, approver);
+	public String returnLectureApproval(Integer lectureApprovalNo, Integer approver, String rejectReason) {
+		lectureApprovalService.returnLectureApproval(lectureApprovalNo, approver, rejectReason);
 		return "redirect:/lectureApprovalOne?lectureApprovalNo=" + lectureApprovalNo;
 	}
 	

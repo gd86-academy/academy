@@ -143,29 +143,21 @@ if (applyModalButtonAddPeople) applyModalButtonAddPeople.addEventListener('click
 	if (element) {
         // 요소 내의 모든 input 태그들을 찾음
         var inputs = element.querySelectorAll('input:not([type="hidden"])');
-        
-        if (inputs.length > 0) {
+        if (inputs.length >= 0) {
+			console.log(inputs.length);
+			$('#alreadyPeople').remove(); // 숨김 처리
+			$('#newPeople').removeAttr('hidden');
+			$('#people1 .flex').remove();
+			$('#people2 .flex').remove();
+			$('#people3 .flex').remove();
             // 각 input 태그의 value 값을 출력
             inputs.forEach(function(input, index) {
-                console.log(`Input ${index + 1}:`, input.value);
-				console.log(inputs.length);
 				let html = `
 		            <div class="flex w-full mb-1">
 		                <input class="text-center w-full bg-white" value="${input.value}" disabled></input>
 		            </div>
 		        `;
-				
-				
-				$('#alreadyPeople').remove(); // 숨김 처리
-				$('#newPeople').removeAttr('hidden');
-				if (inputs.length == 0) {
-					
-					$('#people1 .flex').remove();
-					$('#people2 .flex').remove();
-					$('#people3 .flex').remove();
-				} else if (inputs.length == 1) { // 값이 1개라면
-					// cnfrk
-					
+				if (inputs.length == 1) { // 값이 1개라면
 					$('#people1 .flex').remove();
 					$('#people1').append(html);  // HTML 추가
 					$('#people2 .flex').remove();

@@ -19,6 +19,7 @@
 			th:href="@{/css/animate.css}" />
 		<link rel="stylesheet" th:href="@{/css/flatpickr.min.css}" />
 		<link rel="stylesheet" type="text/css" th:href="@{/css/nice-select2.css}" />
+		<link rel="stylesheet" th:href="@{/css/templete.css}" />
 		<script th:src="@{/js/perfect-scrollbar.min.js}"></script>
 		<script defer th:src="@{/js/popper.min.js}"></script>
 		<script th:src="@{/js/alpine-collaspe.min.js}"></script>
@@ -284,6 +285,10 @@
 						            	<td class="bg-[#f4f4f4] lecutre-title-align">결재내용</td>
 						            	<td colspan="3" style="vertical-align: top;"><span class="w-full bg-white ml-3 mt-3 mr-3 mb-3" th:text="${lectureApprovalOne.lectureApprovalContent}" style="display: block; max-height: 370px; overflow-y: auto;"></span></td>
 						            </tr>
+						            <tr th:if="${lectureApprovalOne.lectureApprovalStatusCode.equals('AS002')}" class="border-dark-dark-light " style="height: 60px;">
+						                <td class="bg-[#f4f4f4] lecutre-title-align">반려사유</td>
+						                <td colspan="3"><span class="ml-3 text-danger" th:text="${lectureApprovalOne.rejectReason}"></span></td>					                
+						            </tr>
 						            <tr>
 						                <td style="border-left: 1px solid #ffffff; border-right: 1px solid #ffffff; border-bottom: 1px solid #ffffff;"></td>
 						                <td style="border-left: 1px solid #ffffff; border-right: 1px solid #ffffff; border-bottom: 1px solid #ffffff;"></td>
@@ -385,12 +390,72 @@
                        <!-- 반려/승인 버튼(결재자만 노출) -->
                        <div th:each="employeeNo : ${lectureApprovalEmployee}">
                        	<div th:if="${lectureApprovalOne.lectureApprovalStep < 4 && userNo == employeeNo.approverNo && employeeNo.approvalEmployeeStatus.equals('AS001')}" class="mt-8 flex items-center justify-end">
-                       	   <form th:action="@{/returnLectureApproval}" method="post">
+                       	   <form th:action="@{/returnLectureApproval}" method="post" id="addRejectForm">
                        	   	   <input type="hidden" name="lectureApprovalNo" th:value="${lectureApprovalOne.lectureApprovalNo}">
                        	   	   <input type="hidden" name="approver" th:value="${userNo}">
-	                           <button type="submit" class="btn btn-danger" style="width:130px;">
+	                           <button id="openModalRejectReason" type="button" class="btn btn-danger" style="width:130px;">
 	                               반려
 	                           </button>
+	                           
+	                           <div class="modal">
+								  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundRejectReason">
+								       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperRejectReason">
+								           <div
+								               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
+								               id="modal"
+								           >
+								               <button
+								                   type="button"
+								                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+								                   id="closeModalButtonRejectReason"
+								               >
+								                   <svg
+								                       xmlns="http://www.w3.org/2000/svg"
+								                       width="24px"
+								                       height="24px"
+								                       viewBox="0 0 24 24"
+								                       fill="none"
+								                       stroke="currentColor"
+								                       stroke-width="1.5"
+								                       stroke-linecap="round"
+								                       stroke-linejoin="round"
+								                       class="h-6 w-6"
+								                   >
+								                       <line x1="18" y1="6" x2="6" y2="18"></line>
+								                       <line x1="6" y1="6" x2="18" y2="18"></line>
+								                   </svg>
+								               </button>
+								               <h3
+								                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
+								               >
+								                   반려
+								               </h3>
+								               	 <div class="p-5">
+														<div>
+															<label for="rejectReason">반려 사유</label>
+															<textarea id="rejectReason" name="rejectReason" rows="5" cols="170"
+																		class="custom-textarea" placeholder="반려 사유를 입력해주세요."></textarea>
+														</div>
+														<div class="mt-1">	<!-- 유효성문구 -->
+															<span class="msg rejectReason-error error-label" style="display: none;">반려 사유를 입력해주세요.</span>
+														</div>
+														<div class="mt-8 flex items-center justify-end">
+								                           <button type="button" class="btn btn-outline-dark" id="cancelButton">
+								                               취소
+								                           </button>
+								                           <button
+								                           	   id="checkRejectReason"
+								                               type="button"
+								                               class="btn btn-danger ltr:ml-4 rtl:mr-4"
+								                           >
+								                               반려
+								                           </button>
+								                       </div>
+												</div>
+								           </div>
+								       </div>
+								   </div>
+								</div>
                            </form>
                            <form th:action="@{/acceptLectureApproval}" method="post">
                            	   <input type="hidden" name="lectureApprovalNo" th:value="${lectureApprovalOne.lectureApprovalNo}">
@@ -413,7 +478,7 @@
 					
 				</div> <!-- 메인화면 div 끝 -->
 			</div>
-	   <script th:src="@{/customjs/addLectureApproval.js}"> </script>
+	   <script th:src="@{/customjs/lectureApprovalOne.js}"> </script>
 	   
 	</body>
 

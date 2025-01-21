@@ -231,9 +231,9 @@ public class LectureApprovalService {
 	}
 	
 	// 진수우 : 강의결재 반려수행.
-	public void returnLectureApproval(Integer lectureApprovalNo, Integer approver) {
+	public void returnLectureApproval(Integer lectureApprovalNo, Integer approver, String rejectReason) {
 		// 강의결재 테이블에서 해당 결재의 결재상태를 반려로 변경.
-		lectureApprovalMapper.updateLectureApprovalStatusReturn(lectureApprovalNo);
+		lectureApprovalMapper.updateLectureApprovalStatusReturn(lectureApprovalNo, rejectReason);
 		
 		// 결재자 테이블에 결재자의 결재상태를 반려로 변경.
 		lectureApprovalMapper.updateApprovalEmployeeStatusReturn(lectureApprovalNo, approver);
