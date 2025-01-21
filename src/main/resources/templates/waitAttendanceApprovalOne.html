@@ -123,7 +123,6 @@
 				<!-- 메인화면 -->
 				<div class="animate__animated p-6 white-light" :class="[$store.app.animation]"> <!-- 메인화면 div 시작 -->
 					<h2 class="text-2xl ml-3 mb-5">결재 대기 목록</h2>
-					
 					<div class="panel" style="margin: 0% 15% 0% 15%; padding: 4%; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05); border-radius : 10px;">
 						<div class="p-3">
 							<div class="flex items-center justify-between" style="margin-bottom: 20px; margin-top: 20px;">
@@ -155,7 +154,6 @@
 												</td>			
 											</tr> 
 											<!-- 2행 : 도장사진 및 대기 출력 -->
-											<!-- 구현중 /........미완성 -->
 											<tr style="height: 50px;">
 												<!-- 1열 : 결재단계1 -->
 								                <td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0;">
@@ -527,13 +525,20 @@
 							<!-- 버튼 --> 
 							<!-- 신청서 대기 상태 -->
 							<div class="mt-8 flex items-center justify-end">
-								<a id="updateBtn" type="button" class="btn btn-primary" style="width:130px;" 
-									th:href="@{/modifyAttendanceApproval(attendanceApprovalNo=${attendanceApproval.attendanceApprovalNo})}">
-									승인
-								</a>
-								<a id="delBtn" type="button" class="btn btn-danger ltr:ml-4 rtl:mr-4" style="width:130px;" >
-									반려
-								</a>
+								<form method="post" th:action="@{/agreeAttendanceApproval}">
+									<input type="hidden" name="attendanceApprovalNo" th:value="${attendanceApproval.attendanceApprovalNo}">
+									<input type="hidden" name="approver" th:value="${userNo}">
+									<button type="submit" class="btn btn-primary" style="width:130px;">
+										승인
+									</button>
+								</form>
+								<form method="post" th:action="@{/rejectAttendanceApproval}">
+									<input type="hidden" name="attendanceApprovalNo" th:value="${attendanceApproval.attendanceApprovalNo}">
+									<input type="hidden" name="approver" th:value="${userNo}">
+									<button type="submit" class="btn btn-danger ltr:ml-4 rtl:mr-4" style="width:130px;">
+										반려
+									</button>
+								</form>
 							</div>
                        </div>
 					</div>
