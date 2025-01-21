@@ -107,14 +107,16 @@
 							</div>
 							<div style="width: 160px;"></div>
 							<div class="w-full">
-								<a type="button" class="btn btn-outline-info mb-1"
-									style="background-color: #ffffff; width: 100%;" 
-									th:href="@{/modifyCheckin}"
-									onclick="this.disabled=true; this.innerHTML='처리중...';">출근</a>
-								<a type="button" class="btn btn-outline-info"
-									style="background-color: #ffffff; width: 100%;" 
-									th:href="@{/modifyCheckout}"
-									onclick="this.disabled=true; this.innerHTML='처리중...';">퇴근</a>
+								<div th:if="${checkinNo == 0}">
+									<a type="button" class="btn btn-outline-info mb-1"
+										style="background-color: #ffffff; width: 100%;" 
+										th:href="@{/modifyCheckin}">출근</a>
+								</div>
+								<div th:if="${checkoutNo == 0}">
+									<a type="button" class="btn btn-outline-info"
+										style="background-color: #ffffff; width: 100%;" 
+										th:href="@{/modifyCheckout}">퇴근</a>
+								</div>
 							</div>
 						</div>
 					</div>
