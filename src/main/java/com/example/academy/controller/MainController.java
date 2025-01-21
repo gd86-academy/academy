@@ -1,5 +1,7 @@
 package com.example.academy.controller;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.example.academy.dto.AttendanceContentDTO;
+import com.example.academy.dto.AttendanceDTO;
 import com.example.academy.dto.BoardListByMainDTO;
 import com.example.academy.security.CustomUserDetails;
 import com.example.academy.service.AnnualLeaveService;
@@ -54,8 +57,23 @@ public class MainController {
 	        
 	        // 메모 조회.
 	        String memoContent = memoService.getMemo(Integer.parseInt(userDetails.getUsername()));
-	        	        
-	        model.addAttribute("boardList", boardList); // 최근 공지사항 3개 조회
+	        
+	        // 현재 날짜 ex) 2025-11-11
+	        String currentDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+	        
+	        AttendanceDTO attendanceDTO = new AttendanceDTO();
+	        attendanceDTO.setCurrentDate(currentDate);
+	        attendanceDTO.setEmployeeNo(Integer.parseInt(userDetails.getUsername()));
+	        
+	        // 오늘 출근 활성화 확인
+	        Integer checkinNo = attendanceService.getSelectCheckin(attendanceDTO);
+	        
+	        // 오늘 퇴근 활성화 확인
+	        Integer checkoutNo = attendanceService.getSelectCheckout(attendanceDTO);
+	        
+	        model.addAttribute("checkinNo", checkinNo); // 오늘 출근 활성화
+	        model.addAttribute("checkoutNo", checkoutNo); // 오늘 퇴근 활성화
+	        model.addAttribute("boardList", boardList); // 최근 공지사항 5개 조회
 	        model.addAttribute("count", annualLeaveCount); // 이번 달 연차 사용 갯수
 	        model.addAttribute("totalWorkTimeList", totalWorkTime); // 최근 6개월 월별 근무시간 총합 리스트
 	        model.addAttribute("absence", content.getAbsence()); // 결근

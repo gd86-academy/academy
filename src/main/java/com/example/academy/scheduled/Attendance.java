@@ -36,7 +36,13 @@ public class Attendance {
 	
 	@Column(name = "attendance_content")
     private String attendanceContent;  // NULL 허용
-    
+	
+	@Column(name = "attendance_late")
+	private Integer attendanceLate;
+	
+	@Column(name = "attendance_early_leave")
+	private Integer attendanceEarlyLeave;
+	
 	@Column(name = "create_date", insertable = false, updatable = false) // 해당 컬럼은 INSERT나 UPDATE 시에 값이 자동으로 설정되며, 수동으로 변경할 수 없다는 설정
     private LocalDateTime createDate;
 

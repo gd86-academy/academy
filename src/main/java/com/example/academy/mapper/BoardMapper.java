@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.example.academy.dto.BoardDTO;
 import com.example.academy.dto.BoardListByMainDTO;
 import com.example.academy.dto.BoardListDTO;
+import com.example.academy.dto.BoardModifyDTO;
 
 @Mapper
 public interface BoardMapper {
@@ -21,7 +22,7 @@ public interface BoardMapper {
 	Integer updateBoardCount(Integer boardNo);
 	
 	// 공지사항 수정
-	Integer updateBoard(BoardDTO boardDTO);
+	Integer updateBoard(BoardModifyDTO boardModifyDTO);
 	
 	// 공지사항 추가
 	Integer insertBoard(BoardDTO boardDTO); 

@@ -13,6 +13,9 @@ import com.example.academy.dto.AttendanceDTO;
 @Mapper
 public interface AttendanceApprovalMapper {
 	
+	// 김혜린 : 결재 완료 목록 - 근태신청서 리스트 조회
+	List<AttendanceApprovalListDTO> selectCompleteAttendanceAprrovalList(Integer employeeNo);		
+	
 	// 김혜린 : 근태신청서 현재 결재 단계step 구하기
 	Integer selectAttendanceApprovalStep(AttendanceApprovalOneDTO attendanceApprovalOneDTO);
 	

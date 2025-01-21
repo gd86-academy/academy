@@ -1,8 +1,7 @@
 package com.example.academy.service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,63 +27,108 @@ public class AttendanceService {
 	@Autowired AttendanceMapper attendanceMapper;
 	@Autowired AttendanceApprovalMapper attendanceApprovalMapper;
 	
+	// 오늘 퇴근 활성화 확인
+	public Integer getSelectCheckout(AttendanceDTO attendanceDTO) {
+		return attendanceMapper.selectCheckout(attendanceDTO);
+	}
+	
+	// 오늘 출근 활성화 확인
+	public Integer getSelectCheckin(AttendanceDTO attendanceDTO) {
+		return attendanceMapper.selectCheckin(attendanceDTO);
+	}
+	
 	// 퇴근 버튼 클릭시 수정
 	public Integer modifyCheckOut(AttendanceDTO attendanceDTO) {
 		log.debug("attendanceDTO ----->" + attendanceDTO);
 		
 		Integer row = attendanceMapper.updateCheckout(attendanceDTO);
 		log.debug("퇴근 ----> " + row);		
-		
-		Integer workTime = attendanceMapper.selectWorkTime(attendanceDTO);
-		log.debug("근무 시간 ----> " + workTime);				
-		
+						
 		String approvalContent = attendanceApprovalMapper.selectContentByDay(attendanceDTO);
 		log.debug("신청서 근태 유형 ----> " + approvalContent);
 	    
-		String content = attendanceMapper.selectContent(attendanceDTO);
-		log.debug("근태 유형 ----> " + content);
+		// AttendanceDTO 객체에서 출퇴근 시간 가져오기
+		AttendanceDTO checkTime = attendanceMapper.selectCheckTime(attendanceDTO);
 		
-	    if(approvalContent != null && approvalContent.equals("CT004")) { // 오후 반차
-	    	if(workTime >= 240) { // 근무시간이 4시간 이상일 때 
-	    		content = "CT004"; // 오후 반차
-    			attendanceDTO.setAttendanceContent(content);
-	    		Integer row1 = attendanceMapper.updateContent(attendanceDTO); // 근태유형 '오후 반차' 변경
-	    		log.debug("반차 정상 출근 변경 ---->" + row1);	
-	    	} else if(workTime < 240) { // 근무시간이 4시간 미만일 때
-	    		if(content.equals("CT006")) { // 근태 유형이 이미 지각이 있을 시
-	    			content = "CT007"; // 결석
-	    			attendanceDTO.setAttendanceContent(content);
-	    			Integer row2 = attendanceMapper.updateContent(attendanceDTO); // 근태유형 '결석' 변경
-	    			log.debug("반차 결석 변경 ---->" + row2);		    			
-	    		} else {
-	    			content = "CTOO5"; // 조퇴
-	    			attendanceDTO.setAttendanceContent(content);
-	    			Integer row3 = attendanceMapper.updateContent(attendanceDTO); // 근태유형 '조퇴' 변경
-	    			log.debug("반차 조퇴 변경 ---->" + row3);		    			
-	    		}
-	    	}	
-	    } else {
-	    	if(workTime >= 540) { // 근무시간이 9시간 이상일 때
-	    		content = "CT0010"; // 정상 출근
-    			attendanceDTO.setAttendanceContent(content);
-    			Integer row4 = attendanceMapper.updateContent(attendanceDTO); // 근태유형 '정상출근' 변경
-    			log.debug("정상 출근 변경 ---->" + row4);		    			
-	    	} else if (workTime < 240) { // 근무시간이 4시간 미만일 때
-	    		if(content.equals("CT006")) { // 근태 유형이 이미 지각이 있을 시
-	    			content = "CT007"; // 결석
-	    			attendanceDTO.setAttendanceContent(content);
-	    			Integer row5 = attendanceMapper.updateContent(attendanceDTO); // 근태유형 '결석' 변경
-	    			log.debug("결석 변경 ---->" + row5);		    			
-	    		} else {
-	    			content = "CTOO5"; // 조퇴
-	    			attendanceDTO.setAttendanceContent(content);
-	    			Integer row6 = attendanceMapper.updateContent(attendanceDTO); // 근태유형 '조퇴' 변경
-	    			log.debug("조퇴 변경 ---->" + row6);		    			
-	    		}
-    		}
-    	}
-	    
-	    
+		// 출근 시간 및 퇴근 시간 추출
+		String checkIn = checkTime.getAttendanceCheckIn(); // 2015-11-11 11:11:11
+		String checkOut = checkTime.getAttendanceCheckOut();
+		
+		// 시간을 LocalTime으로 변환 (시간만 필요하므로 split을 사용하여 시간 부분만 추출)
+		LocalTime checkInTime = LocalTime.parse(checkIn.split(" ")[1]); // 11::11:11
+		LocalTime checkOutTime = LocalTime.parse(checkOut.split(" ")[1]);
+		
+		// 시간 로그 출력
+		log.debug("출근 시간 확인 ----> " + checkInTime);
+		log.debug("퇴근 시간 확인 ----> " + checkOutTime);
+		
+		LocalTime nineAM = LocalTime.of(9, 0);   // 09:00:00
+		LocalTime noon = LocalTime.of(13, 0); // "13:00:00"
+		LocalTime twoPM = LocalTime.of(14, 0);   // 14:00:00
+		LocalTime evening = LocalTime.of(18, 0); // "18:00:00"
+		
+		// 출퇴근 시간에 따라 지각/조퇴 활성화 및 근무 유형 변경
+		if(approvalContent == null) { // 근무유형이 NULL일 때
+			if((checkInTime.isBefore(nineAM) || checkInTime.equals(nineAM)) 
+					&& (checkOutTime.isAfter(evening) || checkOutTime.equals(evening))) { // 09:00 >= 출근시간 && 퇴근시간 >= 18:00 -> 정상출근
+					attendanceDTO.setAttendanceContent("CT010"); // CT010 = 정상출근 
+					attendanceMapper.updateContent(attendanceDTO); // 근태유형 정상출근으로 변경
+			} else if(checkInTime.isAfter(nineAM)
+					&& (checkOutTime.isAfter(evening) || checkOutTime.equals(evening))) { // 09:00 < 출근시간 && 퇴근시간 >= 18:00 -> 지각
+					attendanceMapper.updateLate(attendanceDTO); // 지각 활성화
+			} else if((checkInTime.isBefore(nineAM) || checkInTime.equals(nineAM)) // 09:00 >= 출근시간 && 퇴근시간 < 18:00 -> 조퇴 
+					&& checkOutTime.isBefore(evening)) { 
+					attendanceMapper.updateEarlyLeave(attendanceDTO); // 조퇴 활성화
+			} else { // 9 < 출근시간 && 퇴근시간 < 18
+					attendanceMapper.updateLate(attendanceDTO); // 지각 활성화
+					attendanceMapper.updateEarlyLeave(attendanceDTO); // 조퇴 활성화
+			}
+		} else if(approvalContent.equals("CT003")) { // 근태유형 == '오전반차'
+			if((checkInTime.isBefore(twoPM) || checkInTime.equals(twoPM)) 
+					&& (checkOutTime.isAfter(evening) || checkOutTime.equals(evening))) { // 근태유형 == '오전반차' && 14:00 >= 출근시간 && 퇴근시간 >= 18:00 -> 오전반차
+					attendanceDTO.setAttendanceContent("CT010"); // CT010 = 정상출근 
+					attendanceMapper.updateContent(attendanceDTO); // 근태유형 정상출근으로 변경
+			} else if(checkInTime.isAfter(twoPM)
+					&& (checkOutTime.isAfter(evening) || checkOutTime.equals(evening))) { // 근태유형 == '오전반차' && 14:00 < 출근시간 && 퇴근시간 >= 18:00 -> (오전반차)지각 CT006 
+					attendanceMapper.updateLate(attendanceDTO); // 지각 활성화
+			} else if((checkInTime.isBefore(twoPM) || checkInTime.equals(twoPM)) //근태유형 == '오전반차' && 14:00 >= 출근시간 && 퇴근시간 < 18:00 -> (오전반차)조퇴 CT005
+					&& checkOutTime.isBefore(evening)) { 
+					attendanceMapper.updateEarlyLeave(attendanceDTO); // 조퇴 활성화
+			} else { // 14 < 출근시간 && 퇴근시간 < 18
+					attendanceMapper.updateLate(attendanceDTO); // 지각 활성화
+					attendanceMapper.updateEarlyLeave(attendanceDTO); // 조퇴 활성화
+			}
+		} else if(approvalContent.equals("CT004")) {	// 근태유형 == '오후반차'
+			if((checkInTime.isBefore(nineAM) || checkInTime.equals(nineAM)) 
+					&& (checkOutTime.isAfter(noon) || checkOutTime.equals(noon))) { // 09:00 >= 출근시간 && 퇴근시간 >= 13:00 -> 오후반차 CT004'
+					attendanceDTO.setAttendanceContent("CT010"); // CT010 = 정상출근 
+					attendanceMapper.updateContent(attendanceDTO); // 근태유형 정상출근으로 변경
+			} else if(checkInTime.isAfter(nineAM)
+					&& (checkOutTime.isAfter(noon) || checkOutTime.equals(noon))) { // 09:00 < 출근시간 && 퇴근시간 >= 13:00 -> (오후반차)지각
+					attendanceMapper.updateLate(attendanceDTO); // 지각 활성화
+			} else if((checkInTime.isBefore(nineAM) || checkInTime.equals(nineAM)) // 09:00 >= 출근시간 && 퇴근시간 < 13:00 -> (오후반차)조퇴
+					&& checkOutTime.isBefore(noon)) {
+					attendanceMapper.updateEarlyLeave(attendanceDTO); // 조퇴 활성화
+ 			} else { // 9 < 출근시간 && 퇴근시간 < 13
+	 				attendanceMapper.updateLate(attendanceDTO); // 지각 활성화
+					attendanceMapper.updateEarlyLeave(attendanceDTO); // 조퇴 활성화
+ 			}
+		} else  { // 근무유형이 NULL이 아니거나 다른 근무 유형일때
+			if((checkInTime.isBefore(nineAM) || checkInTime.equals(nineAM)) 
+					&& (checkOutTime.isAfter(evening) || checkOutTime.equals(evening))) { // 09:00 >= 출근시간 && 퇴근시간 >= 18:00 -> 정상출근
+					attendanceDTO.setAttendanceContent("CT010"); // CT010 = 정상출근 
+					attendanceMapper.updateContent(attendanceDTO); // 근태유형 정상출근으로 변경
+			} else if(checkInTime.isAfter(nineAM)
+					&& (checkOutTime.isAfter(evening) || checkOutTime.equals(evening))) { // 09:00 < 출근시간 && 퇴근시간 >= 18:00 -> 지각
+					attendanceMapper.updateLate(attendanceDTO); // 지각 활성화
+			} else if((checkInTime.isBefore(nineAM) || checkInTime.equals(nineAM)) // 09:00 >= 출근시간 && 퇴근시간 < 18:00 -> 조퇴 
+					&& checkOutTime.isBefore(evening)) { 
+					attendanceMapper.updateEarlyLeave(attendanceDTO); // 조퇴 활성화
+			} else { // 9 < 출근시간 && 퇴근시간 < 18
+	 				attendanceMapper.updateLate(attendanceDTO); // 지각 활성화
+					attendanceMapper.updateEarlyLeave(attendanceDTO); // 조퇴 활성화
+			}
+		}	
 		return 1;
 	}
 	
@@ -93,35 +137,10 @@ public class AttendanceService {
 		
 		String content = attendanceApprovalMapper.selectContentByDay(attendanceDTO);
 		log.debug("근태 유형 ----> " + content);
-		String currentTimeString = attendanceDTO.getCurrentDateTime(); // 현재시각 2025-01-20 11:11:11
-		log.debug("현재 시각 ---->" + currentTimeString);
+		String currentDate = attendanceDTO.getCurrentDate(); // 현재 날짜 2025-01-20
+		log.debug("현재 날짜 ---->" + currentDate);
 		
-		// DateTimeFormatter를 사용하여 "yyyy-MM-dd HH:mm:ss" 형식으로 파싱
-	    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		
-		if(content != null && content.equals("CT003")) { // 오전 반차
-			LocalDateTime currentTime1 = LocalDateTime.parse(currentTimeString, formatter); // LocalDateTime으로 파싱
-			LocalDateTime targetTime1 = currentTime1.toLocalDate().atTime(14, 0); // 오늘 날짜의 14:00 (2시)
-			if(currentTime1.isBefore(targetTime1) || currentTime1.isEqual(targetTime1)) { // 현재 시각이 14시 이전이거나 14시일 때
-				Integer row1 = attendanceMapper.updateCheckin(attendanceDTO); // 정시 출근
-				log.debug("오전 반차 정시 출근 ---->" +row1);
-			} else if(currentTime1.isAfter(targetTime1)) { // 현재 시각이 14시 이후일 때
-				Integer row2 = attendanceMapper.updateCheckinByTardy(attendanceDTO); // 지각 출근
-				log.debug("오전 반차 지각 ---->" +row2);
-			} 
-		} else {
-			LocalDateTime currentTime2 = LocalDateTime.parse(currentTimeString, formatter); // LocalDateTime으로 파싱
-			LocalDateTime targetTime2 = currentTime2.toLocalDate().atTime(9, 0); // 오늘 날짜의 09:00 (09시)
-			if(currentTime2.isBefore(targetTime2) || currentTime2.isEqual(targetTime2)) {
-				Integer row3 = attendanceMapper.updateCheckin(attendanceDTO); // 정시 출근
-				log.debug("정시 출근 ---->" +row3);
-			} else if(currentTime2.isAfter(targetTime2)) {
-				Integer row4 = attendanceMapper.updateCheckinByTardy(attendanceDTO); // 지각 출근
-				log.debug("지각 ---->" +row4);
-			}
-		}
-		
-		return 1;
+		return attendanceMapper.updateCheckin(attendanceDTO);
 	}
 	
 	// 최근 6개월 월별 근무시간 총합 조회
@@ -177,7 +196,9 @@ public class AttendanceService {
 	    attendance.setEmployeeNo(employee.getEmployeeNo());  // 사원 정보 설정
 	    attendance.setAttendanceDate(today);  // 날짜 설정
 	    attendance.setAttendanceStatus("ST001");  // 기본 근태 상태
-
+	    attendance.setAttendanceLate(0);
+	    attendance.setAttendanceEarlyLeave(0);
+	    
 	    // checkin, checkout, attendanceContent는 NULL로 설정
 	    attendance.setCheckinTime(null);  // NULL
 	    attendance.setCheckoutTime(null);  // NULL

@@ -32,7 +32,7 @@
 	</update>
 	
 	<!-- 공지사항 수정 -->
-	<update id="updateBoard" parameterType="com.example.academy.dto.BoardDTO">
+	<update id="updateBoard" parameterType="com.example.academy.dto.BoardModifyDTO">
 			UPDATE board b
 			SET 
 			    b.board_title = #{boardTitle}

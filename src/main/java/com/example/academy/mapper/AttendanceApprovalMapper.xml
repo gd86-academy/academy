@@ -2,6 +2,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.AttendanceApprovalMapper">
 	
+	<!-- 김혜린 : 결재 완료 목록 - 근태신청서 조회 -->
+	<select id="selectCompleteAttendanceAprrovalList" parameterType="Integer" resultType="com.example.academy.dto.AttendanceApprovalListDTO">
+		SELECT 
+			aa.attendance_approval_no attendanceApprovalNo
+			, aa.attendance_approval_title attendanceApprovalTitle
+			, aa.attendance_approval_type attendanceApprovalTypeCode
+			, c1.`name` attendanceApprovalType
+			, aa.employee_no employeeNo
+			, e.employee_name employeeName
+			, aa.attendance_approval_status attendanceApprovalStatusCode
+			, c2.`name` attendanceApprovalStatus
+			, ae.approver approver
+		FROM attendance_approval aa LEFT OUTER JOIN employee e
+			ON aa.employee_no = e.employee_no
+		LEFT OUTER JOIN approval_employee ae
+			ON aa.attendance_approval_no = ae.attendance_approval_no
+		LEFT OUTER JOIN common c1
+			ON aa.attendance_approval_type = c1.`code`
+		LEFT OUTER JOIN common c2
+			ON aa.attendance_approval_status = c2.`code`
+		WHERE aa.use_yn = 1
+			AND ae.approver = #{employeeNo}
+			AND ae.approval_employee_status NOT IN ('AS001')
+		ORDER BY aa.create_date DESC
+	</select>
+	
 	<!-- 김혜린 : 근태신청서 현재 결재 단계step 구하기 -->
 	<select id="selectAttendanceApprovalStep" parameterType="com.example.academy.dto.AttendanceApprovalOneDTO" resultType="Integer">
 		SELECT

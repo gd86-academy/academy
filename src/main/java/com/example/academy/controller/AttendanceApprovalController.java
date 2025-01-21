@@ -30,14 +30,14 @@ public class AttendanceApprovalController {
 	@Autowired ApprovalEmployeeService approvalEmployeeService;
 	@Autowired AttendanceApprovalFileService attendanceApprovalFileService;
 	
-	// 김혜린 : 근태 신청서 승인 시
+	// 김혜린 : 근태 신청서 승인 시 
 	@PostMapping("/agreeAttendanceApproval")
 	public String agreeAttendanceApproval(Model model, AttendanceApprovalOneDTO attendanceApprovalOneDTO) {
 		
 		log.debug("승인전 데이터 확인 : " + attendanceApprovalOneDTO);	//디버깅
 		attendanceApprovalService.agreeAttendanceApproval(attendanceApprovalOneDTO);
 		
-		return "redirect:/applicationList";	// 결재 완료 목록으로 return 수정하기
+		return "redirect:/completeApprovalList";
 	}
 	
 	// 김혜린 : 근태 신청서 반려 시
@@ -47,7 +47,7 @@ public class AttendanceApprovalController {
 		log.debug("반려전 데이터 확인 : " + attendanceApprovalOneDTO);	//디버깅
 	    attendanceApprovalService.rejectAttendanceApproval(attendanceApprovalOneDTO);
 	   
-		return "redirect:/applicationList";	// 결재 완료 목록으로 return 수정하기
+		return "redirect:/completeApprovalList";
 	}
 	
 	// 김혜린 : 근태 신청서 삭제

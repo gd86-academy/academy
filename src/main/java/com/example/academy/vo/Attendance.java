@@ -11,6 +11,8 @@ public class Attendance {
 	private String attendanceCheckIn;
 	private String attendanceCheckOut;
 	private String attendanceStatus;
+	private Integer attendanceLate;
+	private Integer attendanceEarlyLeave;
 	private String attendanceContent;
 	private String attendanceDate;
 	private String createDate;

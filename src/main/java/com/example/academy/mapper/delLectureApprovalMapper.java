@@ -11,6 +11,9 @@ import com.example.academy.dto.LectureApprovalListDTO;
 @Mapper
 public interface delLectureApprovalMapper {
 
+	// 김혜린 : 결재 완료 목록 - 강의신청서 리스트 조회
+	List<LectureApprovalListDTO> selectCompleteLectureApprovalList(Integer employeeNo);
+	
 	// 김혜린 : 결재 대기 목록 - 강의신청서 리스트 조회
 	List<LectureApprovalListDTO> selectWaitLectureApprovalList(Integer employeeNo);
 	

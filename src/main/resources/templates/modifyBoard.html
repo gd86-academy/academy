@@ -112,59 +112,90 @@
 	                        <br>
 	
 	                        <!-- 첨부파일 -->
-	                        <div>
-	                            <div class="flex items-center space-x-3">
-	                            	<label for="boardFile">첨부파일</label>
-	                                <!-- +버튼 -->
-	                                <button
-	                                    type="button"
-	                                    id="btnAddFile"
-	                                    class="btn btn-primary text-center" style="width: 30px; height: 30px;">
-	                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2">
-	                                        <line x1="12" y1="5" x2="12" y2="19"></line>
-	                                        <line x1="5" y1="12" x2="19" y2="12"></line>
-	                                    </svg>
-	                                </button>
-	                                <!-- -버튼 -->
-	                                <button
-	                                    type="button"
-	                                    id="btnRemoveFile"
-	                                    class="btn btn-danger text-center" style="width: 30px; height: 30px;">
-	                                    <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 shrink-0 ltr:mr-2 rtl:ml-2">
-	                                        <line x1="5" y1="12" x2="19" y2="12"></line>
-	                                    </svg>
-	                                </button>
-	                            </div>
-	                            <div th:each="bf : ${boardFileList}">
-		                            <div id="fileDiv">
-								       <div class="flex mt-1">
-								           <button 
-								               type="button" 
-								               class="btn btn-primary ltr:rounded-r-none rtl:rounded-l-none" 
-								               style="width: 150px;"
-								               onclick="document.getElementById('boardFiles').click();">
-								               파일 선택
-								           </button>
-								           <input 
-								               id="boardFiles" 
-								               name="boardFiles"
-								               type="file" 
-								               class="hidden"
-								               multiple
-								               onchange="document.getElementById('boardFilesNameDisplay').value = this.files[0] ? this.files[0].name : '';" />
-								           <input 
-								               id="boardFilesNameDisplay" 
-								               type="text" 
-								               placeholder="첨부된 파일이 없습니다."
-								               class="form-input ltr:rounded-l-none rtl:rounded-r-none flex-grow"
-								               th:value="${bf.fileOrigin + '.' + bf.fileExt}" 
-								               readonly />
-								       </div>
-							       </div>
-							   </div>
-	                        </div>
+							<div>
+								<!-- 타이틀, 파일추가 버튼 -->
+								<div class="flex justify-between space-x-3">
+									<div>
+										<label class="text-lg">첨부파일</label>
+									</div>
+									<div>
+										<a type="button" id="btnAddFile" class="btn btn-outline-primary ">+ 첨부파일 추가</a>
+									</div>
+								</div>
+								<!-- 파일선택 폼 -->
+								<!-- 기존 파일 노출 -->
+						 		<div th:each="file, stat : ${boardFileList}" id= "fileCount">
+						 			<input type="hidden" th:value="${file.fileName}" name="alreadyFiles" th:id="'fileFieldId' + ${stat.index}">
+									<div th:id = "'fileField' + ${stat.index}" class="flex mt-1" >
+										<!-- 커스텀 버튼 -->
+										<button
+										   type="button" 
+										   class="btn btn-primary ltr:rounded-r-none rtl:rounded-l-none" 
+										   style="width: 150px;"
+										   th:onclick="document.getElementById('boardFiles[[${stat.index}]]').click();">
+										   파일 선택
+										</button>
+										<!-- 숨겨진 파일 입력 -->
+										<input 
+										   th:id="'boardFiles' + ${stat.index}" 
+										   name="boardFiles"
+										   type="file" 
+										   class="hidden"
+										   multiple
+										   th:onchange="document.getElementById('boardFileNameDisplay[[${stat.index}]]').value = this.files[0] ? this.files[0].name : ''; 
+										   				document.getElementById('fileFieldId[[${stat.index}]]').remove();"/>
+										<!-- 파일 이름 표시 -->
+										<input 
+										   th:id="'boardFileNameDisplay' + ${stat.index}" 
+										   type="text" 
+										   placeholder="첨부된 파일이 없습니다."
+										   th:value="${file.fileOrigin + '.' + file.fileExt}"
+										   class="form-input ltr:rounded-l-none rtl:rounded-r-none flex-grow" 
+										   readonly />
+										<!-- 휴지통 버튼 -->
+										<button
+											type="button"
+											class = "btn btn-outline-danger ml-2"
+											th:id = "'removeButtonId' + ${stat.index}"
+											th:onclick="'removeFileField(' + ${stat.index} + ');'">
+											<!--휴지통 아이콘추가-->
+											<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+												<path
+													opacity="0.5"
+													d="M11.5956 22.0001H12.4044C15.1871 22.0001 16.5785 22.0001 17.4831 21.1142C18.3878 20.2283 18.4803 18.7751 18.6654 15.8686L18.9321 11.6807C19.0326 10.1037 19.0828 9.31524 18.6289 8.81558C18.1751 8.31592 17.4087 8.31592 15.876 8.31592H8.12405C6.59127 8.31592 5.82488 8.31592 5.37105 8.81558C4.91722 9.31524 4.96744 10.1037 5.06788 11.6807L5.33459 15.8686C5.5197 18.7751 5.61225 20.2283 6.51689 21.1142C7.42153 22.0001 8.81289 22.0001 11.5956 22.0001Z"
+													fill="currentColor"
+												/>
+												<path
+													d="M3 6.38597C3 5.90152 3.34538 5.50879 3.77143 5.50879L6.43567 5.50832C6.96502 5.49306 7.43202 5.11033 7.61214 4.54412C7.61688 4.52923 7.62232 4.51087 7.64185 4.44424L7.75665 4.05256C7.8269 3.81241 7.8881 3.60318 7.97375 3.41617C8.31209 2.67736 8.93808 2.16432 9.66147 2.03297C9.84457 1.99972 10.0385 1.99986 10.2611 2.00002H13.7391C13.9617 1.99986 14.1556 1.99972 14.3387 2.03297C15.0621 2.16432 15.6881 2.67736 16.0264 3.41617C16.1121 3.60318 16.1733 3.81241 16.2435 4.05256L16.3583 4.44424C16.3778 4.51087 16.3833 4.52923 16.388 4.54412C16.5682 5.11033 17.1278 5.49353 17.6571 5.50879H20.2286C20.6546 5.50879 21 5.90152 21 6.38597C21 6.87043 20.6546 7.26316 20.2286 7.26316H3.77143C3.34538 7.26316 3 6.87043 3 6.38597Z"
+													fill="currentColor"
+												/>
+												<path
+													fill-rule="evenodd"
+													clip-rule="evenodd"
+													d="M9.42543 11.4815C9.83759 11.4381 10.2051 11.7547 10.2463 12.1885L10.7463 17.4517C10.7875 17.8855 10.4868 18.2724 10.0747 18.3158C9.66253 18.3592 9.29499 18.0426 9.25378 17.6088L8.75378 12.3456C8.71256 11.9118 9.01327 11.5249 9.42543 11.4815Z"
+													fill="currentColor"
+												/>
+												<path
+													fill-rule="evenodd"
+													clip-rule="evenodd"
+													d="M14.5747 11.4815C14.9868 11.5249 15.2875 11.9118 15.2463 12.3456L14.7463 17.6088C14.7051 18.0426 14.3376 18.3592 13.9254 18.3158C13.5133 18.2724 13.2126 17.8855 13.2538 17.4517L13.7538 12.1885C13.795 11.7547 14.1625 11.4381 14.5747 11.4815Z"
+													fill="currentColor"
+												/>
+											</svg>
+										</button>
+									</div>
+						 		</div>
+							 	
+							  	<!-- 새로추가되는 첨부파일 -->
+								<div id="fileDiv">
+							    	<div class="flex mt-1">
+							       		<!-- 첨부파일 추가 버튼 클릭시 폼추가되는 자리 -->
+							       	</div>
+							   	</div>
+							</div>
+	                        
 	                        <div class="flex justify-end mt-3">
-	                        	<button type="button" id="submitButton" class="btn btn-primary" style="width: 130px;">등록</button>
+	                        	<button type="button" id="submitButton" class="btn btn-primary" style="width: 130px;">수정</button>
 	                        </div>
 	                    </div>
 	
@@ -175,133 +206,6 @@
 	       <!--  풋터 파일 연결 -->
                 <div th:replace="fragments/footer :: footer"></div>
 	    </div>
- 
- 	<!-- JavaScript 코드 -->
-	<script>
-	var quill = new Quill('#editor', {
-	    theme: 'snow'
-	});
-
-	// 전송 버튼 클릭 이벤트
-	$('#submitButton').on('click', function() {
-	    // Quill 에디터의 내용을 HTML로 추출
-	    var boardContent = quill.root.innerHTML;
-
-	    // 다른 input 필드의 값들 추출
-	    var boardTitle = $('#boardTitle').val();
-	    var updateEmployeeNo = parseInt($('#updateEmployeeNo').val(), 10);
-	    var boardNo = parseInt($('#boardNo').val(), 10);
-	 	// 동적으로 추가된 파일 입력 필드의 파일을 모두 가져오기
-	    var boardFiles = [];
-	    $('#fileDiv input[type="file"]').each(function() {
-	        var fileInput = $(this)[0];
-	        if (fileInput.files.length > 0) {
-	            boardFiles.push(fileInput.files[0]);
-	        }
-	    });
-
-	    // 제목 입력 여부 확인
-	    if (!boardTitle.trim()) {
-	        alert("제목을 입력해주세요.");
-	        return;
-	    }
-
-	    // 내용 입력 여부 확인
-	    if (!boardContent.trim() || boardContent === '<p><br></p>') {
-	        alert("내용을 입력해주세요.");
-	        return;
-	    }
-
-	    // POST 요청을 위해 FormData 객체 생성
-	    var formData = new FormData();
-	    formData.append('boardTitle', boardTitle); // 제목
-	    formData.append('boardContent', boardContent); // Quill 에디터 내용
-	    formData.append('updateEmployeeNo', updateEmployeeNo); // 수정자
-	    formData.append('boardNo', boardNo); // 게시판 번호
-		// 파일이 있다면 추가
-	    boardFiles.forEach(function(file) {
-	        formData.append('boardFiles[]', file);  // 여러 파일 처리
-	    });
-
-	    // jQuery AJAX 요청
-	    $.ajax({
-	        url: 'http://localhost/academy/modifyBoard',
-	        type: 'POST',
-	        data: formData,
-	        processData: false, // FormData 사용 시 false로 설정
-	        contentType: false, // FormData 사용 시 false로 설정
-	        success: function(response) {
-	            console.log('Success:', response);
-	            alert("게시글이 성공적으로 등록되었습니다.");
-	            // 성공 후 페이지 이동
-	           window.location.href = '/academy/boardList'; // 게시판 목록 페이지로 이동
-	        },
-	        error: function(xhr, status, error) {
-	            console.error('Error:', error);
-	            alert("게시글 등록 중 오류가 발생했습니다. 다시 시도해주세요.");
-	        }
-	    });
-	});
-	
-	let result = 0;  // 전역 변수로 result 선언
-
-	// 파일 입력 필드 추가
-	$('#btnAddFile').click(function() {
-	    // 마지막 파일 입력 필드가 비어 있지 않다면
-	    if ($('#fileDiv input[type="file"]').last().val() === '') {
-	        alert('첨부하지 않은 파일이 이미 존재합니다.');
-	    } else {
-	        result++;  // result 증가 (파일 입력 필드마다 고유 값이 생성됨)
-	        
-	        let inputId = 'boardFiles' + result;  // 고유 input ID 생성
-	        let displayId = 'boardFilesNameDisplay' + result;  // 고유 display ID 생성
-	        
-	        let html = `
-	        	<div class="flex mt-1">
-		           <button 
-		               type="button" 
-		               class="btn btn-primary ltr:rounded-r-none rtl:rounded-l-none" 
-		               style="width: 150px;"
-		               onclick="document.getElementById('${inputId}').click();">
-		               파일 선택
-		           </button>
-		           <input 
-		               id="${inputId}" 
-		               name="boardFiles[]"
-		               type="file" 
-		               class="hidden" 
-		               onchange="document.getElementById('${displayId}').value = this.files[0] ? this.files[0].name : '';" />
-		           <input 
-		               id="${displayId}" 
-		               type="text" 
-		               placeholder="첨부된 파일이 없습니다."
-		               class="form-input ltr:rounded-l-none rtl:rounded-r-none flex-grow" 
-		               readonly />
-		       </div>
-	        `;
-	        $('#fileDiv').append(html); // 파일 입력 필드 추가
-	    }
-	});
-
-
-	// 파일 입력 필드 삭제
-	$('#btnRemoveFile').click(function() {
-		// 파일 입력 필드가 하나 이상 존재하는지 확인
-	    if ($('#fileDiv .flex').length === 0) { // .flex 클래스가 있는 요소가 없다면
-	        alert('삭제할 파일 입력 필드가 없습니다.');
-	    } else {
-	    	// 마지막 입력 필드를 삭제
-	        let lastInputId = 'boardFiles' + result; // 마지막으로 추가된 파일 입력 필드의 ID
-	        let lastDisplayId = 'boardFilesNameDisplay' + result; // 마지막으로 추가된 파일 이름 표시 필드의 ID
-	        
-	     	// 파일 입력 필드와 파일 이름 표시 필드 삭제
-	        $('#' + lastInputId).closest('.flex').remove();  // 마지막 .flex 요소 (파일 입력 필드 전체) 삭제
-	        $('#' + lastDisplayId).remove();  // 해당 파일 이름 표시 필드 삭제
-	        
-	        result--;  // result 감소
-	    }
-	});
-	</script>
- 
+	    <script th:src="@{/customjs/modifyBoard.js}"> </script>
     </body>
 </html>

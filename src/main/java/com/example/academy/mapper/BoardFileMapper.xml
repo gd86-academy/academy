@@ -2,6 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.BoardFileMapper">
 
+	<!-- 게시판 수정 시 게시판/파일 연결테이블 해당 정보 삭제 -->
+	<delete id="deleteBoardFile">
+		DELETE FROM attendance_approval_file
+		WHERE board_no = #{boardNo}
+		AND file_no = #{fileNo}
+	</delete>
+
 	<!-- boardNo에 해당하는 게시판 파일 리스트 조회 -->
 	<select id="selectBoardFileList" resultType="com.example.academy.dto.BoardFileDTO" parameterType="Integer">
 		SELECT
