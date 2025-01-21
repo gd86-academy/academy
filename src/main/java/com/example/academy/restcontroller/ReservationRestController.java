@@ -35,6 +35,22 @@ import lombok.extern.slf4j.Slf4j;
 public class ReservationRestController {
 	@Autowired ReservationService reservationService;
 	
+	// 박시현 : 회의실 예약수정 시 가능한 종료시간만 출력 + 현재 수정 중인 예약 시간도 출력
+	@PostMapping("/restapi/modifyReservationByEndTime")
+	public List<Common> modifyReservationByEndTime(@RequestBody AddReservationDTO addReservationDTO) {
+		System.out.println("쿼리 실행 전 MeetingRoomNo: " + addReservationDTO.getMeetingroomNo());
+		System.out.println("쿼리 실행 전 ReservationDate: " + addReservationDTO.getReservationDate());
+		return reservationService.modifyReservationByEndTime(addReservationDTO);
+	}
+	
+	// 박시현 : 회의실 예약수정 시 가능한 시작시간만 출력 + 현재 수정 중인 예약 시간도 출력
+	@PostMapping("/restapi/modifyReservationByBeginTime")
+	public List<Common> modifyReservationByBeginTime(@RequestBody AddReservationDTO addReservationDTO) {
+		System.out.println("쿼리 실행 전 MeetingRoomNo: " + addReservationDTO.getMeetingroomNo());
+		System.out.println("쿼리 실행 전 ReservationDate: " + addReservationDTO.getReservationDate());
+		return reservationService.modifyReservationByEndTime(addReservationDTO);
+	}
+	
 	// 박시현 : 예약 신청 시 가능한 종료시간 출력
 	@PostMapping("/restapi/getReservationByEndTime")
 	public List<Common> getReservationByEndTime(@RequestBody AddReservationDTO addReservationDTO) {

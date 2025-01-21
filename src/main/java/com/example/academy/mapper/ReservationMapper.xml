@@ -1,6 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.ReservationMapper">
+	<!-- 박시현 : 회의실 예약수정 시 가능한 종료시간만 출력 + 현재 수정 중인 예약 시간도 출력 -->
+	<select id="updateReservationByEndTime" parameterType="com.example.academy.dto.AddReservationDTO">
+		SELECT 
+			c.code code
+			, c.name name
+		FROM common c
+		WHERE c.refer1 NOT IN (
+			SELECT 
+				c_inner.refer1
+			FROM common c_inner
+			INNER JOIN reservation r ON c_inner.code BETWEEN r.begin_time_code AND r.end_time_code
+			INNER JOIN common com1 ON r.begin_time_code = com1.code
+			INNER JOIN common com2 ON r.end_time_code = com2.code
+			WHERE c_inner.code LIKE 'TM%'
+				AND c_inner.refer1 BETWEEN (com1.refer1 + 1) AND com2.refer1
+				AND r.meetingroom_no = #{meetingroomNo}
+				AND r.reservation_date = #{reservationDate}
+			UNION
+			SELECT c_inner.refer1
+			FROM common c_inner
+			INNER JOIN reservation r ON c_inner.code BETWEEN r.begin_time_code AND r.end_time_code
+			INNER JOIN common com1 ON r.begin_time_code = com1.code
+			INNER JOIN common com2 ON r.end_time_code = com2.code
+			WHERE c_inner.code LIKE 'TM%'
+				AND c_inner.refer1 BETWEEN (com1.refer1 + 1) AND com2.refer1
+				AND r.meetingroom_no = #{meetingroomNo}
+				AND r.reservation_date = #{reservationDate}
+		) AND c.code LIKE 'TM%'
+		AND c.code != 'TM001'
+		UNION
+		SELECT com2.code, com2.name
+		FROM reservation r
+		LEFT OUTER JOIN common com2 ON com2.code = r.begin_time_code
+		LEFT OUTER JOIN common com3 ON com3.code = r.end_time_code
+		WHERE r.reservation_no = #{reservationNo}
+		ORDER BY code
+	</select>
+	<!-- 박시현 : 박시현 : 회의실 예약수정 시 가능한 시작시간만 출력 + 현재 수정 중인 예약 시간도 출력 -->
+	<select id="updateReservationByBeginTime">
+		SELECT 
+			c.code code
+			, c.name name
+		FROM common c
+		WHERE c.refer1 NOT IN (
+			SELECT 
+				c_inner.refer1
+			FROM common c_inner
+			INNER JOIN reservation r ON c_inner.code BETWEEN r.begin_time_code AND r.end_time_code
+			INNER JOIN common com1 ON r.begin_time_code = com1.code
+			INNER JOIN common com2 ON r.end_time_code = com2.code
+			WHERE c_inner.code LIKE 'TM%'
+				AND c_inner.refer1 BETWEEN com1.refer1 AND (com2.refer1 - 1)
+				AND r.meetingroom_no = #{meetingroomNo}
+				AND r.reservation_date = #{reservationDate}
+			UNION
+			SELECT c_inner.refer1
+			FROM common c_inner
+			INNER JOIN reservation r ON c_inner.code BETWEEN r.begin_time_code AND r.end_time_code
+			INNER JOIN common com1 ON r.begin_time_code = com1.code
+			INNER JOIN common com2 ON r.end_time_code = com2.code
+			WHERE c_inner.code LIKE 'TM%'
+				AND c_inner.refer1 BETWEEN com1.refer1 AND (com2.refer1 - 1)
+				AND r.meetingroom_no = #{meetingroomNo}
+				AND r.reservation_date = #{reservationDate}
+		) AND c.code LIKE 'TM%'
+		AND c.code != 'TM010'
+		UNION
+		SELECT com2.code, com2.name
+		FROM reservation r
+		LEFT OUTER JOIN common com2 ON com2.code = r.begin_time_code
+		LEFT OUTER JOIN common com3 ON com3.code = r.end_time_code
+		WHERE r.reservation_no = #{reservationNo} 
+		ORDER BY code
+	</select>
+	
 	<!-- 박시현 : 회의실 예약신청 시 가능한 종료 시간만 출력 -->
 	<select id="selectReservationByEndTime" parameterType="com.example.academy.dto.AddReservationDTO">
 		SELECT 

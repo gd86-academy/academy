@@ -110,6 +110,9 @@ document.addEventListener('alpine:init', () => {
 	            alert('시간 데이터를 가져오는 중 오류가 발생했습니다.');
 	        }
 		})
+		$('#beginTimeCode').change(function() {
+			$('#endTimeCode').val('');
+		})
 	});
 	
 	// 종료시간 데이터
