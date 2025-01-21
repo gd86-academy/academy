@@ -24,10 +24,12 @@
 		WHERE attendance_approval_no = #{attendanceApprovalNo}
 	</update>
 	
-	<!-- 김혜린 : 근태신청서 결재 반려시 - 근태신청서 상태 업데이트 -->
+	<!-- 김혜린 : 근태신청서 결재 반려시 - 근태신청서 상태 및 반려사유 업데이트 -->
 	<update id="updateAttendanceApprovalStatusReject" parameterType="com.example.academy.dto.AttendanceApprovalOneDTO">
 		UPDATE attendance_approval
-		SET attendance_approval_status = 'AS002'
+		SET 
+			attendance_approval_status = 'AS002'
+			, reject_reason = #{rejectReason}
 		WHERE attendance_approval_no = #{attendanceApprovalNo}
 	</update>
 	
@@ -75,6 +77,7 @@
 			, ap.attendance_approval_content attendanceApprovalContent
 			, ap.attendance_approval_step attendanceApprovalStep
 			, c1.`name` attendanceApprovalStatus
+			, ap.reject_reason rejectReason
 		FROM attendance_approval ap LEFT OUTER JOIN employee e
 		ON ap.employee_no = e.employee_no
 		LEFT OUTER JOIN common c1

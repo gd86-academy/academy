@@ -412,6 +412,15 @@
 											   	</div>
 											</td>
 							        	</tr>
+							        	<!-- 반려된 경우 반려사유 노출 -->
+							        	<tr th:if="${attendanceApproval.rejectReason != null}">
+							        		<td class="bg-[#f4f4f4] lecutre-title-align">반려 사유</td>
+											<td colspan="3">
+												<div x-data="form" class="w-full mr-3">
+							                    	<span style="color: red;" th:text="${attendanceApproval.rejectReason}"></span>
+											   	</div>
+											</td>
+							        	</tr>
 							        </tbody>
 							    </table>
 							</div>
@@ -518,6 +527,7 @@
 										</button>
 									</div>
 								</div>
+								
 							</div>
 							
 							<!-- 버튼 --> 

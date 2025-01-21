@@ -57,7 +57,7 @@ public class AttendanceApprovalService {
 		// 1) 결재자(approval_employee) 테이블에서 반려로 상태 업데이트
 		approvalEmployeeMapper.updateApprovalStatusReject(attendanceApprovalOneDTO);
 		
-		// 2) 근태신청서(attendance_approval) 테이블에서 반려로 상태 업데이트
+		// 2) 근태신청서(attendance_approval) 테이블에서 반려로 상태 및 반려 사유 업데이트
 		attendanceApprovalMapper.updateAttendanceApprovalStatusReject(attendanceApprovalOneDTO);
 	}
 	
