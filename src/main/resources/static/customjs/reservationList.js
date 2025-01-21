@@ -109,7 +109,11 @@ document.addEventListener('alpine:init', () => {
 		            this.events = data.map(event => ({
 		                id: event.reservationNo,
 		                title: event.reservationTitle,
-		                start: event.reservationDate, // 서버에서 전달받은 날짜 형식으로 처리
+						start: `${event.reservationDate}T${event.beginTimeCode}:00`, // 시작 시간 변환
+						end: `${event.reservationDate}T${event.endTimeCode}:00`, // 종료 시간 변환
+					    backgroundColor: 'rgba(33, 150, 243, 0.5)',
+					    borderColor: 'rgba(33, 150, 243, 0.8)',
+					    textColor: '#fff', 
 		                extendedProps: {
 							reservationPerson: event.reservationPerson, // 예약자
 		                    meetingroomName: event.meetingroomName || '회의실 없음', // 회의실 명
@@ -120,7 +124,7 @@ document.addEventListener('alpine:init', () => {
 		                }
 		            }));
 
-		            var calendarEl = document.getElementById('calendar');
+		            var calendarEl = document.getElementById('ReservationCalendar');
 					const handleDayCellContent = (arg) => {
 					    // 숫자 부분만 추출
 					    const dayNumber = arg.dayNumberText.replace("일", ""); 
@@ -141,6 +145,7 @@ document.addEventListener('alpine:init', () => {
 						    day: '일간',            // "Day"
 						    list: '목록'            // "List" 
 						},
+						eventDisplay: 'block',
 		                editable: true,
 		                dayMaxEvents: true,
 		                selectable: true,

@@ -103,6 +103,23 @@ document.addEventListener('alpine:init', () => {
 	        });
 	    }
 	});
+	
+	// 예약 날짜
+	document.addEventListener('DOMContentLoaded', function () {
+	    const reservationDate = document.getElementById('reservationDate');
+
+	    // Flatpickr 초기화 - 개강일
+	    flatpickr(reservationDate, {
+	        dateFormat: 'Y-m-d',
+	        onChange: (selectedDates) => {
+	            if (selectedDates.length > 0) {
+	                const selectedDate = selectedDates[0];
+	                // 선택된 날짜를 처리하는 로직을 여기에 추가
+	                console.log(selectedDate); // 선택된 날짜 출력
+	            }
+	        },
+	    });
+	});
 
 	// 사원검색
 	function searchEmployee() {
@@ -276,6 +293,7 @@ $(document).ready(function () {
             $('#modalBackgroundMeetingroomCheck').show();
             $('#modalWrapperMeetingroomCheck').show();
 			$('#beginTimeCode, #endTimeCode').val('');
+			$('.flatpickr-calendar').css('z-index', 0);
         }
     });
 

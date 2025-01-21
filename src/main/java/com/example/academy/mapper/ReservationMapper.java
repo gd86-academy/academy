@@ -9,10 +9,17 @@ import com.example.academy.dto.MeetingRoomListDTO;
 import com.example.academy.dto.MeetingroomEmployeeDTO;
 import com.example.academy.dto.ReservationEmployeeDTO;
 import com.example.academy.dto.ReservationListDTO;
+import com.example.academy.vo.Common;
 import com.example.academy.vo.Employee;
 
 @Mapper
 public interface ReservationMapper {
+	
+	// 박시현 : 회의실 예약 시 가능한 종료 시간만 출력
+	List<Common> selectReservationByEndTime(AddReservationDTO addReservationListDTO);
+	
+	// 박시현 : 회의실 예약 시 가능한 시작 시간만 출력
+	List<Common> selectReservationByBeginTime(AddReservationDTO addReservationListDTO);
 	
 	// 박시현 : 예약 취소
 	Integer deleteReservation(Integer reservationNo);

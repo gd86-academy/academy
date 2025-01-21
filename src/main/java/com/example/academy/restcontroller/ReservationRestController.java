@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.academy.dto.AddReservationDTO;
 import com.example.academy.dto.MeetingRoomListDTO;
 import com.example.academy.dto.MeetingroomEmployeeDTO;
 import com.example.academy.dto.ReservationEmployeeDTO;
@@ -24,6 +25,7 @@ import com.example.academy.dto.ReservationListDTO;
 import com.example.academy.mapper.ReservationMapper;
 import com.example.academy.security.CustomUserDetails;
 import com.example.academy.service.ReservationService;
+import com.example.academy.vo.Common;
 import com.example.academy.vo.Employee;
 
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +34,22 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 public class ReservationRestController {
 	@Autowired ReservationService reservationService;
+	
+	// 박시현 : 예약 신청 시 가능한 종료시간 출력
+	@PostMapping("/restapi/getReservationByEndTime")
+	public List<Common> getReservationByEndTime(@RequestBody AddReservationDTO addReservationDTO) {
+		System.out.println("쿼리 실행 전 MeetingRoomNo: " + addReservationDTO.getMeetingroomNo());
+	    System.out.println("쿼리 실행 전 ReservationDate: " + addReservationDTO.getReservationDate());
+		return reservationService.getReservationByEndTime(addReservationDTO);
+	}
+	
+	// 박시현 : 예약 신청 시 가능한 시작시간 출력
+	@PostMapping("/restapi/getReservationByBeginTime")
+	public List<Common> getReservationByBeginTime(@RequestBody AddReservationDTO addReservationDTO) {
+		System.out.println("쿼리 실행 전 MeetingRoomNo: " + addReservationDTO.getMeetingroomNo());
+	    System.out.println("쿼리 실행 전 ReservationDate: " + addReservationDTO.getReservationDate());
+		return reservationService.getReservationByBeginTime(addReservationDTO);
+	}
 
 	// 박시현 : 수정페이지 - 이미 등록되있던 예약 참여자 보여주기
 	@GetMapping("/restapi/getReservationEmployeeOne") 
