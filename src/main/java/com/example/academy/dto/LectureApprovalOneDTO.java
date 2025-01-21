@@ -17,7 +17,9 @@ public class LectureApprovalOneDTO {
 	private String lectureBeginDate;
 	private String lectureEndDate;
 	private String lectureApprovalStatus;
+	private String lectureApprovalStatusCode;
 	private Integer lectureApprovalStep;
+	private String rejectReason;
 	private String createDate;
 	private String updateDate;
 	private Integer useYn;

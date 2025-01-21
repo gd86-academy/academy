@@ -65,6 +65,82 @@ document.addEventListener('alpine:init', () => {
         ],
     }));
 	
+	// 예약 날짜
+	document.addEventListener('DOMContentLoaded', function () {
+	    const reservationDate = document.getElementById('reservationDate');
+
+	    // Flatpickr 초기화 - 개강일
+	    flatpickr(reservationDate, {
+	        dateFormat: 'Y-m-d',
+	        onChange: (selectedDates) => {
+	            if (selectedDates.length > 0) {
+	                const selectedDate = selectedDates[0];
+	                // 선택된 날짜를 처리하는 로직을 여기에 추가
+	                console.log(selectedDate); // 선택된 날짜 출력
+	            }
+	        },
+	    });
+	});
+	
+	
+	// 시작시간 데이터
+	$('#reservationDate').change(function() {
+		let meetingroomNo = $('#selectMeetingroom option:selected').val();
+		let reservationDate = $('#reservationDate').val();		
+		console.log(meetingroomNo);
+		console.log(reservationDate);
+		
+		$('#beginTimeCode').empty().append('<option value="" disabled selected>시작 시간</option>');
+		
+		
+		$.ajax({
+			url: 'http://localhost/academy/restapi/getReservationByBeginTime',
+			contentType: 'application/json', 
+			type: 'POST',
+			data: JSON.stringify({
+				meetingroomNo : meetingroomNo,
+				reservationDate : reservationDate
+            }),
+			success: function (data) {
+                data.forEach(time => {
+                    $('#beginTimeCode').append(`<option value="${time.code}">${time.name}</option>`);
+                });
+            },
+			error: function () {
+	            alert('시간 데이터를 가져오는 중 오류가 발생했습니다.');
+	        }
+		})
+		$('#beginTimeCode').change(function() {
+			$('#endTimeCode').val('');
+		})
+	});
+	
+	// 종료시간 데이터
+	$('#reservationDate').change(function() {
+		let meetingroomNo = $('#selectMeetingroom option:selected').val();
+		let reservationDate = $('#reservationDate').val();		
+		
+		$('#endTimeCode').empty().append('<option value="" disabled selected>종료 시간</option>');
+		
+		$.ajax({
+			url: 'http://localhost/academy/restapi/getReservationByEndTime',
+			contentType: 'application/json', 
+			type: 'POST',
+			data: JSON.stringify({
+				meetingroomNo : meetingroomNo,
+				reservationDate : reservationDate
+            }),
+			success: function (data) {
+                data.forEach(time => {
+                    $('#endTimeCode').append(`<option value="${time.code}">${time.name}</option>`);
+                });
+            },
+			error: function () {
+	            alert('시간 데이터를 가져오는 중 오류가 발생했습니다.');
+	        }
+		})
+	});
+	
 	// 사원검색
 	function searchEmployee() {
 	    let searchValue = $('#searchEmployee').val().trim();
@@ -220,6 +296,57 @@ document.addEventListener('alpine:init', () => {
 	
 });
 
+// 시작시간을 선택했을 때 종료시간을 선택할 때 시작시간 이전의 시간은 선택되지 X
+function disableSelectedOption() {
+	
+	console.log('disableSelectedOption 호출됨')
+    var beginTimeCode = document.getElementById('beginTimeCode');
+    var selectedValue1 = beginTimeCode.value;
+	
+    // 두 번째 <select> 요소 가져오기
+    var endTimeCode = document.getElementById('endTimeCode');
+
+    // 종료시간을 비활성화 처리
+    if (selectedValue1 !== '') {
+        endTimeCode.disabled = false; // 시작시간이 선택되었으면 종료시간 활성화
+    } else {
+        endTimeCode.disabled = true; // 시작시간이 선택되지 않으면 종료시간 비활성화
+    }
+
+    // 첫 번째 <select>에서 선택된 값과 일치하는 옵션 비활성화
+    for (var i = 0; i < endTimeCode.options.length; i++) {
+        if (endTimeCode.options[i].value <= selectedValue1) {
+            endTimeCode.options[i].disabled = true;
+        }
+    }
+
+    // 이전 시간 저장 변수
+    var previousValue = parseInt(selectedValue1); // 시작 시간
+    var selectedValue = false;
+    var selectedIndex = beginTimeCode.selectedIndex; // 선택된 값의 인덱스 가져오기
+    var previousValue = parseInt(beginTimeCode.options[selectedIndex].text); // 선택된 텍스트 값
+
+    // 선택된 옵션 이후부터 루프 실행
+    for (var i = selectedIndex; i < endTimeCode.options.length; i++) {
+        var optionText = parseInt(endTimeCode.options[i].text); // 현재 옵션의 텍스트 값 (숫자로 변환)
+		endTimeCode.options[i].disabled = false;
+        if (selectedValue === true) {
+            endTimeCode.options[i].disabled = true;
+        } else if (optionText > previousValue + 1) {
+            endTimeCode.options[i].disabled = true;
+            selectedValue = true;
+        }
+
+        // 이전 값을 갱신
+        previousValue = optionText;
+    }
+};
+
+$(document).on('change', '#selectMeetingroom', function () {
+	$('#beginTimeCode').prop('disabled', false).val('');
+	$('#endTimeCode').prop('disabled', true).val('');
+});
+
 // 회의실 미선택 유효성
 $(document).ready(function () {
     $('#beginTimeCode, #endTimeCode, #reservationTitle, #reservationDate, #reservationContent, #searchEmployee').on('click', function () {
@@ -230,6 +357,7 @@ $(document).ready(function () {
             $('#modalBackgroundMeetingroomCheck').show();
             $('#modalWrapperMeetingroomCheck').show();
 			$('#beginTimeCode, #endTimeCode').val('');
+			$('.flatpickr-calendar').css('z-index', 0);
         }
     });
 

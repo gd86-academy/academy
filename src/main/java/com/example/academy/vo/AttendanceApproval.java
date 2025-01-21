@@ -14,6 +14,7 @@ public class AttendanceApproval {
     private String attendanceApprovalType;
     private Integer attendanceApprovalStep;
     private String attendanceApprovalStatus;
+    private String rejectReason;
     private String updateDate;
     private String createDate;
 	

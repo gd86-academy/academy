@@ -13,6 +13,7 @@ import com.example.academy.dto.ReservationEmployeeDTO;
 import com.example.academy.dto.ReservationListDTO;
 import com.example.academy.mapper.MeetingRoomMapper;
 import com.example.academy.mapper.ReservationMapper;
+import com.example.academy.vo.Common;
 import com.example.academy.vo.Employee;
 
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +24,26 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class ReservationService {
 	@Autowired ReservationMapper reservationMapper;
+	
+	// 박시현 : 회의실 예약수정 시 가능한 종료시간만 출력 + 현재 수정 중인 예약 시간도 출력
+	public List<Common> modifyReservationByEndTime(AddReservationDTO addReservationDTO) {
+		return reservationMapper.updateReservationByEndTime(addReservationDTO);
+	}
+	
+	// 박시현 : 회의실 예약수정 시 가능한 시작시간만 출력 + 현재 수정 중인 예약 시간도 출력
+	public List<Common> modifyReservationByBeginTime(AddReservationDTO addReservationDTO) {
+		return reservationMapper.updateReservationByBeginTime(addReservationDTO);
+	}
+	
+	// 박시현 : 회의실 예약 시 가능한 종료 시간만 출력
+	public List<Common> getReservationByEndTime(AddReservationDTO addReservationDTO) {
+		return reservationMapper.selectReservationByEndTime(addReservationDTO);
+	}
+	
+	// 박시현 : 회의실 예약 시 가능한 시작 시간만 출력
+	public List<Common> getReservationByBeginTime(AddReservationDTO addReservationDTO) {
+		return reservationMapper.selectReservationByBeginTime(addReservationDTO);
+	}
 	
 	// 박시현 : 예약 취소
 	public Integer removeReservation(Integer reservationNo) {

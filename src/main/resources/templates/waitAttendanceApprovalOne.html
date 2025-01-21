@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<title>근태신청서 상세페이지</title>
+		<title>결재대기 상세페이지</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/x-icon" th:href="@{/favicon.png}" />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -123,7 +123,6 @@
 				<!-- 메인화면 -->
 				<div class="animate__animated p-6 white-light" :class="[$store.app.animation]"> <!-- 메인화면 div 시작 -->
 					<h2 class="text-2xl ml-3 mb-5">결재 대기 목록</h2>
-					
 					<div class="panel" style="margin: 0% 15% 0% 15%; padding: 4%; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05); border-radius : 10px;">
 						<div class="p-3">
 							<div class="flex items-center justify-between" style="margin-bottom: 20px; margin-top: 20px;">
@@ -155,7 +154,6 @@
 												</td>			
 											</tr> 
 											<!-- 2행 : 도장사진 및 대기 출력 -->
-											<!-- 구현중 /........미완성 -->
 											<tr style="height: 50px;">
 												<!-- 1열 : 결재단계1 -->
 								                <td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0;">
@@ -412,7 +410,7 @@
 											<td colspan="3">
 												<div x-data="form" class="w-full mr-3">
 							                       	<input name="todayDate" id="todayDate" class="form-input lecutre-text-align" 
-							                       			th:value="${attendanceApproval.updateDate}" disabled />
+							                       			th:value="${attendanceApproval.createDate}" disabled />
 											   	</div>
 											</td>
 							        	</tr>
@@ -527,13 +525,16 @@
 							<!-- 버튼 --> 
 							<!-- 신청서 대기 상태 -->
 							<div class="mt-8 flex items-center justify-end">
-								<a id="updateBtn" type="button" class="btn btn-primary" style="width:130px;" 
-									th:href="@{/modifyAttendanceApproval(attendanceApprovalNo=${attendanceApproval.attendanceApprovalNo})}">
-									승인
-								</a>
-								<a id="delBtn" type="button" class="btn btn-danger ltr:ml-4 rtl:mr-4" style="width:130px;" >
+								<form method="post" th:action="@{/agreeAttendanceApproval}">
+									<input type="hidden" name="attendanceApprovalNo" th:value="${attendanceApproval.attendanceApprovalNo}">
+									<input type="hidden" name="approver" th:value="${userNo}">
+									<button type="submit" class="btn btn-primary" style="width:130px;">
+										승인
+									</button>
+								</form>
+								<button id="openModalRejectReason" type="button" class="btn btn-danger ltr:ml-4 rtl:mr-4" style="width:130px;">
 									반려
-								</a>
+								</button>
 							</div>
                        </div>
 					</div>
@@ -546,7 +547,71 @@
 	   <div th:replace="fragments/footer :: footer"></div>
 		
 		<!-- 모달관련 -->
-	
+		<!-- 반려 사유 모달 -->
+        <div class="modal">
+		  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundRejectReason">
+		       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperRejectReason">
+		           <div
+		               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
+		               id="modal"
+		           >
+		               <button
+		                   type="button"
+		                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+		                   id="closeModalButtonRejectReason"
+		               >
+		                   <svg
+		                       xmlns="http://www.w3.org/2000/svg"
+		                       width="24px"
+		                       height="24px"
+		                       viewBox="0 0 24 24"
+		                       fill="none"
+		                       stroke="currentColor"
+		                       stroke-width="1.5"
+		                       stroke-linecap="round"
+		                       stroke-linejoin="round"
+		                       class="h-6 w-6"
+		                   >
+		                       <line x1="18" y1="6" x2="6" y2="18"></line>
+		                       <line x1="6" y1="6" x2="18" y2="18"></line>
+		                   </svg>
+		               </button>
+		               <h3
+		                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
+		               >
+		                   반려
+		               </h3>
+		               <div class="p-5">
+							<form id="addRejectForm" method="post" th:action="@{/rejectAttendanceApproval}">
+								<input type="hidden" name="attendanceApprovalNo" th:value="${attendanceApproval.attendanceApprovalNo}">
+								<input type="hidden" name="approver" th:value="${userNo}">
+								<div>
+									<label for="rejectReason">반려 사유</label>
+									<textarea id="rejectReason" name="rejectReason" rows="5" cols="170"
+												class="custom-textarea" placeholder="반려 사유를 입력해주세요."></textarea>
+								</div>
+								<div class="mt-1">	<!-- 유효성문구 -->
+									<span class="msg rejectReason-error error-label" style="display: none;">반려 사유를 입력해주세요.</span>
+								</div>
+								<div class="mt-8 flex items-center justify-end">
+		                           <button type="button" class="btn btn-outline-dark" id="cancelButton">
+		                               취소
+		                           </button>
+		                           <button
+		                           	   id="checkRejectReason"
+		                               type="button"
+		                               class="btn btn-danger ltr:ml-4 rtl:mr-4"
+		                           >
+		                               반려
+		                           </button>
+		                       </div>
+							</form>
+						</div>
+						
+		           </div>
+		       </div>
+		   </div>
+		</div>
 		
 	   <script th:src="@{/customjs/waitAttendanceApprovalOne.js}"> </script>
 		

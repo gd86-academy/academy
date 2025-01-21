@@ -31,6 +31,36 @@ public class AttendanceApprovalService {
 	@Autowired FilesMapper filesMapper;
 	@Autowired AttendanceApprovalFileMapper attendanceApprovalFileMapper;
 	
+	// 김혜린 : 근태신청서 결재 승인 시
+	public void agreeAttendanceApproval(AttendanceApprovalOneDTO attendanceApprovalOneDTO) {
+		// 1) 결재자(approval_employee) 테이블에서 승인으로 상태 업데이트
+		approvalEmployeeMapper.updateApprovalStatusAgree(attendanceApprovalOneDTO);
+		
+		// 2) 근태신청서(attendance_approval) 테이블에서 step + 1
+		attendanceApprovalMapper.updateAttendanceApprovalStepPlus(attendanceApprovalOneDTO);
+		
+		// 근태 신청서 총 결재자 수
+		Integer totalApprover = approvalEmployeeMapper.selectTotalApprover(attendanceApprovalOneDTO);
+		
+		// 근태신청서 현재 결재단계step 구하기
+		Integer step = attendanceApprovalMapper.selectAttendanceApprovalStep(attendanceApprovalOneDTO);
+		
+		// 마지막 결재자라면 근태신청서(attendance_approval) 테이블에서 승인으로 상태 업데이트
+		if(step == (totalApprover+1)) {
+			attendanceApprovalMapper.updateAttendanceApprovalStatusAgree(attendanceApprovalOneDTO);
+		}
+		
+	}
+	
+	// 김혜린 : 근태신청서 결재 반려 시
+	public void rejectAttendanceApproval(AttendanceApprovalOneDTO attendanceApprovalOneDTO) {
+		// 1) 결재자(approval_employee) 테이블에서 반려로 상태 업데이트
+		approvalEmployeeMapper.updateApprovalStatusReject(attendanceApprovalOneDTO);
+		
+		// 2) 근태신청서(attendance_approval) 테이블에서 반려로 상태 및 반려 사유 업데이트
+		attendanceApprovalMapper.updateAttendanceApprovalStatusReject(attendanceApprovalOneDTO);
+	}
+	
 	// 김혜린 : 근태 신청서 삭제 - 근태신청서 사용상태를 비활성화로 바꿔줌
 	public void removeAttendanceApproval(Integer attendanceApprovalNo) {
 		attendanceApprovalMapper.updateUseAttendanceApproval(attendanceApprovalNo);

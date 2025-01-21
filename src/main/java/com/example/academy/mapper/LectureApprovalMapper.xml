@@ -42,7 +42,7 @@
 
 	<!-- 진수우 : 강의결재 반려처리 시 강의결재 테이블에서 결재상태 변경 -->
 	<update id="updateLectureApprovalStatusReturn">
-		UPDATE lecture_approval SET lecture_approval_status = 'AS002' WHERE lecture_approval_no = #{lectureApprovalNo}
+		UPDATE lecture_approval SET lecture_approval_status = 'AS002', reject_reason = #{rejectReason} WHERE lecture_approval_no = #{lectureApprovalNo}
 	</update>
 
 	<!-- 진수우 : 강의결재 삭제 시 강의결재 테이블에서 사용상태변경 -->
@@ -162,6 +162,9 @@
 			, cw.name weekday
 			, cb.name beginTime
 			, ce.name endTime
+			, cw.code weekdayCode
+			, cb.code beginTimeCode
+			, ce.code endTimeCode
 		FROM lecture_weekday lw
 		LEFT OUTER JOIN lecture_approval_lecture_weekday lalw ON lw.lecture_weekday_no = lalw.lecture_weekday_no
 		LEFT OUTER JOIN lecture_approval la ON lalw.lecture_approval_no = la.lecture_approval_no
@@ -185,8 +188,10 @@
 			, la.classroom_no classroomNo
 			, la.lecture_begin_date lectureBeginDate
 			, la.lecture_end_date lectureEndDate
+			, la.lecture_approval_status lectureApprovalStatusCode
 			, c.name lectureApprovalStatus
 			, la.lecture_approval_step lectureApprovalStep
+			, la.reject_reason rejectReason
 			, la.create_date createDate
 			, la.update_date updateDate
 			, la.use_yn useYn

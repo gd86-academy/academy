@@ -149,7 +149,7 @@ document.addEventListener('alpine:init', () => {
 							{
 					            select: 5,
 					            render: (data, cell, row) => {
-					                return `<a type="button" class="btn btn-outline-dark mx-auto d-block" style="width:100px;" href="/academy/chat?employeeNo=${data}">
+					                return `<a type="button" class="btn btn-outline-dark mx-auto d-block" style="width:100px;" href="/academy/">
 					                    <img class="h-4 w-4" src="/academy/images/icon/Dialog.png" alt="image">
 					                    &nbsp;메신저
 					                </a>`;

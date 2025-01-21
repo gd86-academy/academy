@@ -141,7 +141,6 @@
 												</td>			
 											</tr> 
 											<!-- 2행 : 도장사진 및 대기 출력 -->
-											<!-- 구현중 /........미완성 -->
 											<tr style="height: 50px;">
 												<!-- 1열 : 결재단계1 -->
 								                <td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0;">
@@ -271,6 +270,17 @@
 								            	<td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0; padding: 5px 10px;">2</td>
 								            	<td class="lecutre-text-align" style="padding: 5px 10px;">3</td>
 								            </tr>						            
+								            <!-- 4행 -->
+								            <tr class="bg-[#f4f4f4] border-dark-dark-light" style="height: 15px;">
+								          		<td class="lecutre-text-align" colspan="3" style="padding: 5px 10px;">
+								                	<span th:if="${attendanceApproval.attendanceApprovalStatus == '대기'}" style="color: gray;" 
+								                		th:text="${attendanceApproval.attendanceApprovalStatus}"></span>
+								                	<span th:if="${attendanceApproval.attendanceApprovalStatus == '반려'}" style="color: red;" 
+								                		th:text="${attendanceApproval.attendanceApprovalStatus}"></span>
+								                	<span th:if="${attendanceApproval.attendanceApprovalStatus == '승인'}" style="color: blue;" 
+								                		th:text="${attendanceApproval.attendanceApprovalStatus}"></span>
+								                </td>				                
+								            </tr>					            
 								        </tbody>
 								    </table>
 								</div>
@@ -374,7 +384,7 @@
 							
 							<div style="height: 15px;"></div>
 							
-							<!-- 테이블4 : 결재제목, 결재내용 출력 -->
+							<!-- 테이블4 : 결재제목, 결재내용, 작성날짜 출력 -->
 							<div class="table-responsive" style="margin-bottom: 20px;">
 							    <table style="table-layout: fixed; width: 100%; height:65px; border: 1px solid #f0f0f0;">
 							        <tbody>
@@ -398,7 +408,16 @@
 											<td colspan="3">
 												<div x-data="form" class="w-full mr-3">
 							                       	<input name="todayDate" id="todayDate" class="form-input lecutre-text-align" 
-							                       			th:value="${attendanceApproval.updateDate}" disabled />
+							                       			th:value="${attendanceApproval.createDate}" disabled />
+											   	</div>
+											</td>
+							        	</tr>
+							        	<!-- 반려된 경우 반려사유 노출 -->
+							        	<tr th:if="${attendanceApproval.rejectReason != null}">
+							        		<td class="bg-[#f4f4f4] lecutre-title-align">반려 사유</td>
+											<td colspan="3">
+												<div x-data="form" class="w-full mr-3">
+							                    	<span style="color: red;" th:text="${attendanceApproval.rejectReason}"></span>
 											   	</div>
 											</td>
 							        	</tr>
@@ -508,6 +527,7 @@
 										</button>
 									</div>
 								</div>
+								
 							</div>
 							
 							<!-- 버튼 --> 
@@ -524,7 +544,7 @@
 							<!-- 신청서 반려 상태 -->	<!-- href경로 바꾸기 -->
 							<div th:if="${attendanceApproval.attendanceApprovalStatus == '반려'}" class="mt-8 flex items-center justify-end">
 								<a id="updateBtn" type="button" class="btn btn-dark" style="width:130px;" th:href="@{/modifyAttendanceApproval(attendanceApprovalNo=${attendanceApproval.attendanceApprovalNo})}">
-									수정
+									결재 재신청
 								</a>	
 							</div>
 							

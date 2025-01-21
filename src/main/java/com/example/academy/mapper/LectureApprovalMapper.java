@@ -39,7 +39,7 @@ public interface LectureApprovalMapper {
 	Integer updateApprovalEmployeeStatusReturn(Integer lectureApprovalNo, Integer approver);
 	
 	// 진수우 : 강의결재 반려처리 시 강의결재 테이블에서 결재상태 변경
-	Integer updateLectureApprovalStatusReturn(Integer lectureApprovalNo);
+	Integer updateLectureApprovalStatusReturn(Integer lectureApprovalNo, String rejectReason);
 	
 	// 진수우 : 강의결재 삭제 시 강의결재 테이블에서 사용상태변경
 	Integer updateLectureApprovalUse(Integer lectureApprovalNo);

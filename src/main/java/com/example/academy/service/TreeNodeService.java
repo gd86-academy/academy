@@ -19,12 +19,23 @@ public class TreeNodeService {
 	@Autowired CommonMapper commonMapper;
 	@Autowired EmployeeMapper employeeMapper;
 	
-	public List<TreeNode> getEmployeeTreeNode() {
+	public List<TreeNode> getEmployeeTreeNode(Integer loginEmployee) {
 		// 데이터베이스에서 부서목록 가져오기.
 		List<Common> departmentList = commonMapper.selectDepartmentCategory();
 		
 		// 데이터베이스에서 직원목록 가져오기.
-		List<EmployeeListDTO> employeeList = employeeMapper.selectEmployeeList();
+		List<EmployeeListDTO> employeeListOrigin = employeeMapper.selectEmployeeList();
+		
+		// 직원목록에서 로그인한 계정의 요소는 삭제.
+		List<EmployeeListDTO> employeeList = new ArrayList<>();
+		if(loginEmployee != null) {
+			for (EmployeeListDTO employee : employeeListOrigin) {
+				if (employee.getEmployeeNo() == loginEmployee) continue;
+				else employeeList.add(employee);
+			}
+		} else {
+			employeeList = employeeListOrigin;
+		}
 		
 		// 부서이름을 차례대로 꺼내서 각각의 노드객체에 넣고, 해당 객체들을 리스트로 만들기.
 		List<TreeNode> departmentNodeList = new ArrayList<>();

@@ -30,9 +30,25 @@ public class AttendanceApprovalController {
 	@Autowired ApprovalEmployeeService approvalEmployeeService;
 	@Autowired AttendanceApprovalFileService attendanceApprovalFileService;
 	
-	// 김혜린 : 근태 신청서 반려 시
-	//@PostMapping("/rejectAttendanceApproval")
+	// 김혜린 : 근태 신청서 승인 시
+	@PostMapping("/agreeAttendanceApproval")
+	public String agreeAttendanceApproval(Model model, AttendanceApprovalOneDTO attendanceApprovalOneDTO) {
+		
+		log.debug("승인전 데이터 확인 : " + attendanceApprovalOneDTO);	//디버깅
+		attendanceApprovalService.agreeAttendanceApproval(attendanceApprovalOneDTO);
+		
+		return "redirect:/applicationList";	// 결재 완료 목록으로 return 수정하기
+	}
 	
+	// 김혜린 : 근태 신청서 반려 시
+	@PostMapping("/rejectAttendanceApproval")
+	public String rejectAttendanceApproval(Model model, AttendanceApprovalOneDTO attendanceApprovalOneDTO) {
+	    
+		log.debug("반려전 데이터 확인 : " + attendanceApprovalOneDTO);	//디버깅
+	    attendanceApprovalService.rejectAttendanceApproval(attendanceApprovalOneDTO);
+	   
+		return "redirect:/applicationList";	// 결재 완료 목록으로 return 수정하기
+	}
 	
 	// 김혜린 : 근태 신청서 삭제
 	@GetMapping("/removeAttendanceApproval")
@@ -103,6 +119,19 @@ public class AttendanceApprovalController {
 	// 김혜린 : 결재대기 근태 신청서 상세페이지 - 결재 대기 목록
 	@GetMapping("/waitAttendanceApprovalOne")
 	public String waitAttendanceApprovalOne(Model model, Integer attendanceApprovalNo) {
+		// 스프링시큐리티에서 계정정보 가져오기.
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		// 로그인 상태일 때만 model에 정보담기.
+	    if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+	        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+	        model.addAttribute("userNo", Integer.parseInt(userDetails.getUsername()));
+	        model.addAttribute("userName", userDetails.getUserRealName());
+	        model.addAttribute("userMail", userDetails.getUserMail());
+	        model.addAttribute("userRole", userDetails.getUserRole());
+	        model.addAttribute("userPhotoFileName", userDetails.getUserPhotoFileName());
+	        model.addAttribute("userPhotoFileExt", userDetails.getUserPhotoFileExt());
+	    }
 		
 		log.debug("==============attendanceApprovalNo1 : " + attendanceApprovalNo);	//디버깅
 		// 1) 근태신청서 테이블 상세

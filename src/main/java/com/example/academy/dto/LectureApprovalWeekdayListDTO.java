@@ -8,4 +8,8 @@ public class LectureApprovalWeekdayListDTO {
 	private String weekday;
 	private String beginTime;
 	private String endTime;
+	private String weekdayCode;
+	private String beginTimeCode;
+	private String endTimeCode;
+	
 }

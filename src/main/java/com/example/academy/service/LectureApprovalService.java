@@ -1,6 +1,9 @@
 package com.example.academy.service;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +39,159 @@ public class LectureApprovalService {
 	@Autowired FilesMapper filesMapper;
 	@Autowired LectureMapper lectureMapper;
 	
+	// 진수우 : 강의결재 재신청 시 폼에 입력한 내용 데이터베이스에 저장.
+	public void retryLectureApproval(LectureApprovalAddDTO lectureApprovalAddDTO, Integer lectureApprovalOriginNo) {
+		
+		// 강의결재테이블에 입력한 내용 insert.
+		lectureApprovalMapper.insertLectureApproval(lectureApprovalAddDTO);
+		Integer lectureApprovalNo = lectureApprovalAddDTO.getLectureApprovalNo(); // insert할 때 생성된 결재번호 가져옴.
+		
+		// 강의시간테이블에 입력한 내용 insert.
+		if (lectureApprovalAddDTO.getLectureWeekday() != null) {
+			List<Integer> lectureWeekdayNoList = new ArrayList<>(); // 생성된 강의시간번호 리스트.
+			for (LectureWeekday lectureWeekday : lectureApprovalAddDTO.getLectureWeekday()) {
+				lectureApprovalMapper.insertLectureWeekday(lectureWeekday);
+				lectureWeekdayNoList.add(lectureWeekday.getLectureWeekdayNo()); // insert할 때 생성된 강의시간번호 가져옴.
+			}
+			
+			// 강의결재/강의시간 연결테이블에 내용 insert.
+			for (Integer lectureWeekday : lectureWeekdayNoList) {
+				Map<String,Integer> resultMap = new HashMap<>();
+				resultMap.put("lectureApprovalNo", lectureApprovalNo);
+				resultMap.put("lectureWeekdayNo", lectureWeekday);
+				lectureApprovalMapper.insertLectureApprovalLectureWeekday(resultMap);
+			}
+		} else {
+			System.out.println("강의시간 추가 실행.");
+			// 강의시간 테이블에서 반려된 결재의 강의시간 정보 조회.
+			List<LectureApprovalWeekdayListDTO> lectureApprovalTime = lectureApprovalMapper.selectLectureApprovalWeekday(lectureApprovalOriginNo);
+			
+			// LectureApprovalWeekdayListDTO를 LectureWeekday으로 변환.
+			List<LectureWeekday> lectureWeekdayList = new ArrayList<>();
+			for (LectureApprovalWeekdayListDTO lectureApprovalWeekdayListDTO : lectureApprovalTime) {
+				LectureWeekday lectureWeekday = new LectureWeekday();
+				lectureWeekday.setBeginTimeCode(lectureApprovalWeekdayListDTO.getBeginTimeCode());
+				lectureWeekday.setEndTimeCode(lectureApprovalWeekdayListDTO.getEndTimeCode());
+				lectureWeekday.setWeekdayCode(lectureApprovalWeekdayListDTO.getWeekdayCode());
+				lectureWeekdayList.add(lectureWeekday);
+			}
+			
+			// 강의시간테이블에 기존 강의시간 insert.
+			List<Integer> lectureWeekdayNoList = new ArrayList<>(); // 생성된 강의시간번호 리스트.
+			for (LectureWeekday lectureWeekday : lectureWeekdayList) {
+				lectureApprovalMapper.insertLectureWeekday(lectureWeekday);
+				lectureWeekdayNoList.add(lectureWeekday.getLectureWeekdayNo()); // insert할 때 생성된 강의시간번호 가져옴.
+			}
+			
+			// 강의결재/강의시간 연결테이블에 삽입.
+			for (Integer lectureWeekdayNo : lectureWeekdayNoList) {
+				Map<String,Integer> resultMap = new HashMap<>();
+				resultMap.put("lectureApprovalNo", lectureApprovalAddDTO.getLectureApprovalNo());
+				resultMap.put("lectureWeekdayNo", lectureWeekdayNo);
+				lectureApprovalMapper.insertLectureApprovalLectureWeekday(resultMap);
+			}
+		}
+		
+		// 결재자테이블에 입력한 내용 insert.
+		int approvalLevel = 0;
+		for (String approval : lectureApprovalAddDTO.getApproval()) {
+			// 결재순서를 정하기 위한 증가연산자.
+			approvalLevel++;
+			// 대괄호를 기준으로 문자열 나누어 사원이름과 번호를 분리.
+	        String[] parts = approval.split("\\[|\\]"); // '[' 또는 ']'로 분리
+			ApprovalAddDTO approvalAddDTO = new ApprovalAddDTO();
+			approvalAddDTO.setApprover(Integer.parseInt(parts[1])); // 사원번호
+			approvalAddDTO.setLectureApprovalNo(lectureApprovalNo); // 결재번호
+			approvalAddDTO.setApprovalLevel(approvalLevel); // 결재순서
+			lectureApprovalMapper.insertApprovalEmployee(approvalAddDTO);
+		}
+		
+		// 수정하지 않은 파일목록 가져오기.
+		List<String> alreadyfilesList = lectureApprovalAddDTO.getAlreadyFiles();
+		
+		// 데이터베이스에 저장되어있는 파일목록 가져오기.
+		List<Files> lectureApprovalFileList = lectureApprovalMapper.selectLectureApprovalFile(lectureApprovalAddDTO.getLectureApprovalNo());
+		
+		// 수정하지 않은 파일은 제외하고 데이터베이스 파일정보와 물리적 파일 삭제.
+		for (Files files : lectureApprovalFileList) {
+			if (alreadyfilesList != null) {
+				for (String alreadyfiles : alreadyfilesList) {
+					if (alreadyfiles.equals(files.getFileName())) {
+						// 파일 데이터베이스에서 복사할 파일의 정보조회.
+						Files copyFile = filesMapper.selectCopyFile(alreadyfiles);
+						
+						// 저장 경로 설정
+					    String uploadDir = System.getProperty("user.dir") + "/src/main/resources/static/upload/";
+
+					    // 새로운 UUID를 부여하여 저장할 파일 객체를 생성.
+					    InputFile inputFile = new InputFile();
+					    File newFile = new File(uploadDir + inputFile.getUUID() + "." + copyFile.getFileExt());
+
+					    // 기존 파일 정보를 가져와 복사할 파일 객체를 생성.
+					    File existingFile = new File(uploadDir + copyFile.getFileName() + "." + copyFile.getFileExt()); // 기존 파일 이름과 확장자 수정
+					    
+					    try {
+				            // 기존 파일 복사
+				            if (existingFile.exists()) {
+				            	java.nio.file.Files.copy(existingFile.toPath(), newFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+				            } else {
+				                System.out.println("기존 파일이 존재하지 않습니다: " + existingFile.getAbsolutePath());
+				            }
+				        } catch (IOException e) {
+				            // 복사 중 예외 처리
+				            e.printStackTrace();
+				            System.out.println("파일 복사 중 오류가 발생했습니다.");
+				        }
+					    
+					    // 파일 테이블에 해당파일정보 삽입.
+					    copyFile.setFileName(newFile.getName()); // 서버에서 관리되는 파일이름.
+						filesMapper.insertFile(copyFile); // 파일정보 삽입.
+						Integer fileNo = files.getFileNo(); // 데이터베이스에 파일정보 삽입 시 자동으로 생성되는 fileNo값 가져옴
+						
+						// 강의결재/파일 연결테이블에 해당 정보 삽입.
+						Map<String,Integer> resultMap = new HashMap<>();
+						resultMap.put("fileNo", fileNo); // 파일번호
+						resultMap.put("lectureApprovalNo", lectureApprovalAddDTO.getLectureApprovalNo()); // 결재번호
+						lectureApprovalMapper.insertLectureApprovalFile(resultMap);
+					}
+				}
+			}
+		}
+		
+		// 새로 입력한 파일이 있다면 데이터베이스 파일정보와 물리적 파일 추가.
+		if (lectureApprovalAddDTO.getLectureApprovalFile() != null) {
+			for (MultipartFile getFiles : lectureApprovalAddDTO.getLectureApprovalFile()) {
+				if(getFiles.isEmpty()) continue;
+				InputFile inputFile = new InputFile(); // inputFile 인스턴스 생성.
+				inputFile.setOriginFileName(getFiles.getOriginalFilename()); // 파일의 실제이름을 추출해서 inputFile 인스턴스에 set.
+				Files files = new Files();
+				files.setFileName(inputFile.getUUID()); // 서버에서 관리되는 파일이름.
+				files.setFileOrigin(inputFile.getFileName()); // 실제 파일이름.
+				files.setFileExt(inputFile.getFileExt()); // 파일 확장자.
+				files.setFileSize(getFiles.getSize()); // 파일 크기.
+				files.setFileType(getFiles.getContentType()); // 파일 타입.
+				files.setFileCategory("FC003"); // 파일 카테고리.
+				Integer result = filesMapper.insertFile(files); // 파일정보 삽입.
+				Integer fileNo = files.getFileNo(); // 데이터베이스에 파일정보 삽입 시 자동으로 생성되는 fileNo값 가져옴.
+				// 서버에 물리적 파일 저장.
+				if (result == 1) {
+					try {
+						getFiles.transferTo(new File(System.getProperty("user.dir") + "/src/main/resources/static/upload/" + files.getFileName() + "." + files.getFileExt()));
+					} catch (Exception e) {
+						e.printStackTrace();
+						throw new RuntimeException();
+					}
+				}
+			
+				// 강의결재/파일 연결테이블에 내용 insert.
+				Map<String,Integer> resultMap = new HashMap<>();
+				resultMap.put("fileNo", fileNo); // 파일번호
+				resultMap.put("lectureApprovalNo", lectureApprovalAddDTO.getLectureApprovalNo()); // 결재번호
+				lectureApprovalMapper.insertLectureApprovalFile(resultMap);
+			}
+		}
+	}
+
 	// 진수우 : 강의결재 승인수행.
 	public void acceptLectureApproval(Integer lectureApprovalNo, Integer approver) {
 		// 결재자 테이블에서 해당 결재자의 결재상태를 승인으로 변경.
@@ -75,9 +231,9 @@ public class LectureApprovalService {
 	}
 	
 	// 진수우 : 강의결재 반려수행.
-	public void returnLectureApproval(Integer lectureApprovalNo, Integer approver) {
+	public void returnLectureApproval(Integer lectureApprovalNo, Integer approver, String rejectReason) {
 		// 강의결재 테이블에서 해당 결재의 결재상태를 반려로 변경.
-		lectureApprovalMapper.updateLectureApprovalStatusReturn(lectureApprovalNo);
+		lectureApprovalMapper.updateLectureApprovalStatusReturn(lectureApprovalNo, rejectReason);
 		
 		// 결재자 테이블에 결재자의 결재상태를 반려로 변경.
 		lectureApprovalMapper.updateApprovalEmployeeStatusReturn(lectureApprovalNo, approver);
@@ -304,9 +460,6 @@ public class LectureApprovalService {
 				lectureApprovalMapper.insertLectureApprovalFile(resultMap);
 			}
 		}
-		
-		
-		
 	}
 	
 	// 진수우 : 강의결재 삭제 시 강의결재 테이블에서 사용상태변경
