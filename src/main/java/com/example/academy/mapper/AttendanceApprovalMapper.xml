@@ -128,6 +128,7 @@
 		AND ae.approver = #{employeeNo}
 		AND aa.attendance_approval_status = 'AS001'
 		AND aa.attendance_approval_step = ae.approval_level
+		ORDER BY aa.create_date DESC
 	</select>
 	
 	<!-- 김혜린 : 나의 신청 목록 - 근태신청서리스트 조회 -->
@@ -149,7 +150,7 @@
 		ON aa.attendance_approval_status = c2.code
 		WHERE aa.use_yn = 1
 		AND aa.employee_no = #{employeeNo}
-		ORDER BY aa.update_date DESC
+		ORDER BY aa.create_date DESC
 	</select>
 	
 </mapper>

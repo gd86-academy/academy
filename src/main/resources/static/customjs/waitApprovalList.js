@@ -123,7 +123,6 @@ document.addEventListener('alpine:init', () => {
 								    }
 								},
 								
-								sortable: false,
 							}
 					    ],
 					
@@ -234,8 +233,6 @@ $('#lectureApprovalBtn').click(function() {
 						            return `<span>${data}</span>`;
 						    }
 						},
-						
-						sortable: false,
 					}
 			    ],
 			
@@ -334,8 +331,6 @@ $('#attendanceApprovalBtn').click(function() {
 						            return `<span>${data}</span>`;
 						    }
 						},
-						
-						sortable: false,
 					}
 			    ],
 				
