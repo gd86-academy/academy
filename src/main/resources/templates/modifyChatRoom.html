@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Modify Chat Room</title>
+</head>
+<body>
+    <h1>Modify Chat Room</h1>
+    <form th:action="@{/chat/modifyRoom}" method="post">
+        <input type="hidden" name="roomId" th:value="${room.roomId}">
+        <input type="text" name="roomName" th:value="${room.roomName}" placeholder="Room Name" required>
+        <button type="submit">수정</button>
+    </form>
+
+    <script th:inline="javascript">
+    function modifyRoom() {
+    	var roomId = '[[${room.roomId}]]';
+        var newRoomName = document.getElementsByName("roomName")[0].value;
+        
+        if (confirm("채팅방 이름을 수정하시겠습니까?")) {
+            $.ajax({
+                url: '/chat/modifyRoom',
+                type: 'POST',
+                data: { roomId: roomId, roomName: newRoomName },
+                success: function(result) {
+                    alert("채팅방이 성공적으로 수정되었습니다.");
+                    window.location.reload();
+                },
+                error: function(xhr, status, error) {
+                    alert("채팅방 수정 중 오류가 발생했습니다: " + error);
+                }
+            });
+        }
+    }
+    </script>
+</body>
+</html>

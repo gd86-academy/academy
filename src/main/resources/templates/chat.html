@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat Rooms</title>
+</head>
+<body>
+    <h1>Chat Rooms</h1>
+    
+    <div th:if="${error}">
+        <p th:text="${error}"></p>
+    </div>
+
+    
+    <div th:if="${not #lists.isEmpty(list)}">
+        <ul>
+            <li th:each="room : ${list}">
+                <a th:href="@{/chat/room(roomId=${room.roomId})}" th:text="${room.roomName}"></a>
+            </li>
+        </ul>
+    </div>
+    <form th:action="@{/chat/createroom}" method="post"> 
+        <input type="text" name="name" placeholder="Room Name" required>
+        <input type="text" name="memberId" placeholder="MemberId" required>
+        <button type="submit">Create Room</button>
+    </form>
+    
+    
+</body>
+
+
+
+<!--<script src="/js/socket.js"></script>  -->
+</html>
