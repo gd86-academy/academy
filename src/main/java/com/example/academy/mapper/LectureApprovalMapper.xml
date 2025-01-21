@@ -185,6 +185,7 @@
 			, la.classroom_no classroomNo
 			, la.lecture_begin_date lectureBeginDate
 			, la.lecture_end_date lectureEndDate
+			, la.lecture_approval_status lectureApprovalStatusCode
 			, c.name lectureApprovalStatus
 			, la.lecture_approval_step lectureApprovalStep
 			, la.create_date createDate
