@@ -40,6 +40,14 @@ public class LectureApprovalController {
 	@Autowired ClassroomService classroomService;
 	@Autowired LectureApprovalService lectureApprovalService;
 	
+	// 진수우 : 강의결재 수정 제출.
+	@PostMapping("/retryLectureApproval")
+	public String retryLectureApproval(LectureApprovalAddDTO lectureApprovalDTO, Integer lectureApprovalNo) {
+		// 강의결재 재신청 수행.
+		lectureApprovalService.retryLectureApproval(lectureApprovalDTO, lectureApprovalNo);
+		return "redirect:/applicationList";
+	}
+	
 	// 진수우 : 강의결재 재신청폼 호출.
 	@GetMapping("/retryLectureApproval")
 	public String retryLectureApproval(Model model, Integer lectureApprovalNo) {

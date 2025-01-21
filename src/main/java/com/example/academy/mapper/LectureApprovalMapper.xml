@@ -162,6 +162,9 @@
 			, cw.name weekday
 			, cb.name beginTime
 			, ce.name endTime
+			, cw.code weekdayCode
+			, cb.code beginTimeCode
+			, ce.code endTimeCode
 		FROM lecture_weekday lw
 		LEFT OUTER JOIN lecture_approval_lecture_weekday lalw ON lw.lecture_weekday_no = lalw.lecture_weekday_no
 		LEFT OUTER JOIN lecture_approval la ON lalw.lecture_approval_no = la.lecture_approval_no

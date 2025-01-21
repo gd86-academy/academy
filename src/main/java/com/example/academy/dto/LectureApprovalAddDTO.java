@@ -31,6 +31,7 @@ public class LectureApprovalAddDTO {
 
     // 결재 파일
     private List<MultipartFile> lectureApprovalFile; // 파일
+    private List<String> alreadyFiles; // 기존에 파일 영역
     
     public Integer getLecturer() {
     	return Integer.parseInt(lecturer);

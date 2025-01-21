@@ -7,6 +7,9 @@ import com.example.academy.vo.Files;
 
 @Mapper
 public interface FilesMapper {
+	// 진수우 : 강의결재 재신청 시 파일테이블에서 복사할 파일 정보조회
+	Files selectCopyFile(String fileName);
+	
 	// 김혜린 : 근태신청서 수정 시 파일테이블에서 해당정보 삭제
 	Integer deleteFile(String fileName);
 	

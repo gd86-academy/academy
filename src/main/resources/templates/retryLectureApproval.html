@@ -110,7 +110,7 @@
 				<div class="animate__animated p-6 white-light" :class="[$store.app.animation]"> <!-- 메인화면 div 시작 -->
 					<h2 class="text-2xl ml-3 mb-5">나의 신청 목록</h2>
 					<div class="panel" style="margin: 0% 15% 0% 15%; padding: 4%; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05); border-radius : 10px;">
-						<form id="addForm" method="post" th:action="@{/modifyLectureApproval}" enctype="multipart/form-data">
+						<form id="addForm" method="post" th:action="@{/retryLectureApproval}" enctype="multipart/form-data">
 						<input type="hidden" name="lectureApprovalNo" th:value="${lectureApprovalOne.lectureApprovalNo}">
 						<div class="p-5">
 						<div class="flex items-center justify-between" style="margin-bottom: 20px; margin-top: 20px;">
@@ -419,7 +419,7 @@
                                결재선 변경
                            </button>
                            <a id="addBtn" type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4" style="width:130px;">
-                           	   수정
+                           	   결재 재신청
                            </a>
                        </div>
                        </div>
@@ -768,7 +768,7 @@
 		<script th:inline="javascript">
         	var lectureApprovalNo = [[${lectureApprovalOne.lectureApprovalNo}]]
         </script>
-	   <script th:src="@{/customjs/modifyLectureApproval.js}"> </script>
+	   <script th:src="@{/customjs/retryLectureApproval.js}"> </script>
 	   
 	</body>
 
