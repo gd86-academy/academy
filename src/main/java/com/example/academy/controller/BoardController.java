@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 
 import com.example.academy.dto.BoardDTO;
 import com.example.academy.dto.BoardFileDTO;
+import com.example.academy.dto.BoardModifyDTO;
 import com.example.academy.security.CustomUserDetails;
 import com.example.academy.service.BoardFileService;
 import com.example.academy.service.BoardService;
@@ -43,13 +44,13 @@ public class BoardController {
 	
 	// 공지사항 수정
 	@PostMapping("/modifyBoard")
-	public String modifyBoard(@ModelAttribute BoardDTO boardDTO) {
+	public String modifyBoard(@ModelAttribute BoardModifyDTO boardModifyDTO) {
 		
-		log.debug("---------------------------------------" + boardDTO);
+		log.debug("---------------------------------------" + boardModifyDTO);
 		
-		boardService.updateBoard(boardDTO);
+		boardService.updateBoard(boardModifyDTO);
 		
-		return "redirect:/boardOne?boardNo=" + boardDTO.getBoardNo();
+		return "redirect:/boardOne?boardNo=" + boardModifyDTO.getBoardNo();
 	}
 	
 	// 공지사항 수정 폼 호출

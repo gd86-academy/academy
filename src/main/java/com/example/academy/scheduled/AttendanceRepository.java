@@ -23,4 +23,13 @@ public interface AttendanceRepository extends JpaRepository<Attendance, Integer>
     	    								, @Param("employeeNo") Integer employeeNo
     	    								, @Param("today") LocalDate today);
 	
+	@Query("SELECT a FROM Attendance a "
+			+ "WHERE a.employeeNo = :employeeNo " 
+				+ "AND a.attendanceDate = :attendanceDate " 
+				+ "AND a.checkinTime IS NULL " 
+				+ "AND a.checkoutTime IS NULL " 
+				+ "AND a.attendanceContent IS NULL")
+	    Attendance findAttendanceByEmployeeAndDate(@Param("employeeNo") Integer employeeNo,
+	                                               @Param("attendanceDate") LocalDate attendanceDate);
+	
 }

@@ -107,6 +107,7 @@ $('#submitButton').on('click', function() {
     formData.append('boardContent', boardContent); // Quill 에디터 내용
     formData.append('createEmployeeNo', createEmployeeNo); // 작성자
     formData.append('updateEmployeeNo', updateEmployeeNo); // 수정자
+	formData.append('boardNo', boardNo); // 게시판 번호
 	
     // 파일이 있다면 추가
     boardFiles.forEach(function(file) {
@@ -115,7 +116,7 @@ $('#submitButton').on('click', function() {
 
     // jQuery AJAX 요청
     $.ajax({
-        url: 'http://localhost/academy/addBoard',
+        url: 'http://localhost/academy/modifyBoard',
         type: 'POST',
         data: formData,
         processData: false, // FormData 사용 시 false로 설정
@@ -133,23 +134,32 @@ $('#submitButton').on('click', function() {
     });
 });
 
+// 첨부파일 관련
+var element = document.getElementById('fileCount');
 let result = 0;  // 전역 변수로 result 선언
+// 유효성 문구 노출위해서 필요
 let inputIds = []; // 모든 inputId를 저장
 let displayIds = []; // 모든 displayId를 저장
 let removeButtonIds = []; // 모든 removeButtonId를 저장
 let errMsgs = [] // 모든 errMsg를 저장
 
+// element가 존재하고 input 태그가 있는 경우
+if(element){
+	var inputs = element.querySelectorAll('input:not([type="hidden"])');	
+	result = inputs ? inputs.length : 0;	// inputs가 null 또는 undefined일 경우 0로 설정
+}
 // 첨부파일 폼 추가버튼 클릭 시
 $('#btnAddFile').click(function(){
+	console.log('result 값 : ' + result);
 	// 마지막 파일 입력필드가 비어있다면
 	if ($('#fileDiv input[type="file"]').last().val() === '') {
-		// 모달로 바꾸기
-		 alert('첨부되지 않은 파일이 존재합니다.');
+		modalBackgroundAddFileError.classList.toggle('hidden', false);
+		modalBackgroundAddFileError.classList.toggle('block', true);
 	} else {	
 		result++; // result 증가( 파일 입력 필드마다 고유 값이 생성됨)
 		
-		let inputId = 'attendanceApprovalFile' + result; // 고유한 inputId 생성
-		let displayId = 'attendanceApprovalFileNameDisplay' + result; // 고유한 displayId 생성
+		let inputId = 'boardFile' + result; // 고유한 inputId 생성
+		let displayId = 'boardFileNameDisplay' + result; // 고유한 displayId 생성
 		let removeButtonId = 'removeFileBtn' + result;	// 고유한 removeButtonId 생성 (휴지통 버튼)
 		let errMsg = 'errMsg' + result;	// 고유한 errMsg 생성
 		
@@ -230,6 +240,8 @@ $('#btnAddFile').click(function(){
 function removeFileField(fileId) {
 	// 해당 파일 입력폼과 휴지통 버튼을 포함하는 div 제거
 	$('#fileField'+fileId).remove();
+	$('#fileFieldId'+fileId).remove();
+	
 	// 삭제된 필드의 ID를 배열에서 제거
 	inputIds = inputIds.filter(inputId => inputId !== 'boardFile' + fileId);
 	displayIds = displayIds.filter(displayId => displayId !== 'boardFileNameDisplay' + fileId);

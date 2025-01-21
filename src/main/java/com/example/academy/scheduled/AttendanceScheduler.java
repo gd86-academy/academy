@@ -26,7 +26,7 @@ public class AttendanceScheduler {
 	LocalDate today = LocalDate.now();
 	
 	// 매일 00시 00분에 실행
-    @Scheduled(cron = "0 13 14 * * ?")// cron 표현식: 매일 00시 00분
+    @Scheduled(cron = "0 18 17 * * ?")// cron 표현식: 매일 00시 00분
     public void generateAttendanceData() { 
         
     	//isWeekday(today) - 토요일(6)과 일요일(7)을 제외한 평일에만 실행
@@ -43,7 +43,29 @@ public class AttendanceScheduler {
         DayOfWeek dayOfWeek = date.getDayOfWeek();
         return dayOfWeek != DayOfWeek.SATURDAY && dayOfWeek != DayOfWeek.SUNDAY;
     }
-
+    
+    // 매일 11시 59분에 실행해서 출퇴근이 NULL이고 근무유형이 NULL인 데이터는 결석 처리 
+    @Scheduled(cron = "0 02 21 * * ?")
+    public void attendanceByAbsence() {
+    	
+    	// 1. 모든 사원 조회
+        List<Employee> employees = employeeRepository.findAll();
+    	
+     	// 2. 각 사원에 대해 근태 조회 및 데이터 수정
+        for (Employee employee : employees) {
+        	
+        	// 출퇴근이 NULL이고 근무유형이 NULL인 근태만 조회
+        	Attendance attendance = attendanceRepository.findAttendanceByEmployeeAndDate(employee.getEmployeeNo(), today);
+        
+            if (attendance != null) {
+                // 출퇴근이 NULL이고 근무유형이 NULL인 경우 결석 처리
+                attendance.setAttendanceContent("CT007");
+                attendanceRepository.save(attendance);
+            }
+        }
+           
+    }
+    
     // 근태 데이터 생성 로직
     private void createAttendanceData() {
         // 근태 데이터 생성 로직을 여기에 작성

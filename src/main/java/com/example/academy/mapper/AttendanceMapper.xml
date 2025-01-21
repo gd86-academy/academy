@@ -2,10 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.AttendanceMapper">
 	
-	<!-- 오늘 근태유형 조회 -->
-	<select id="selectContent" parameterType="com.example.academy.dto.AttendanceDTO">
+	<!-- 오늘 근태 조퇴 활성화 -->
+	<update id="updateEarlyLeave" parameterType="com.example.academy.dto.AttendanceDTO">
+		UPDATE attendance
+		SET attendance_early_leave = 1					
+		WHERE employee_no = #{employeeNo}
+			AND attendance_date = #{currentDate}
+	</update>
+	
+	<!-- 오늘 근태 지각 활성화 -->
+	<update id="updateLate" parameterType="com.example.academy.dto.AttendanceDTO">
+		UPDATE attendance
+		SET attendance_late = 1						
+		WHERE employee_no = #{employeeNo}
+			AND attendance_date = #{currentDate}
+	</update>
+	
+	<!-- 오늘 출퇴근 시간 조회 -->
+	<select id="selectCheckTime" parameterType="com.example.academy.dto.AttendanceDTO"
+							resultType="com.example.academy.dto.AttendanceDTO">
 		SELECT 
-		    attendance_content attendanceContent
+		    attendance_checkin attendanceCheckIn
+		    , attendance_checkout attendanceCheckOut
 		FROM attendance
 		WHERE employee_no = #{employeeNo}
 		  AND attendance_date = #{currentDate}

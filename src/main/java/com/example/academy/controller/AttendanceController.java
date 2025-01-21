@@ -65,9 +65,6 @@ public class AttendanceController {
 	        
 	        // 사원 번호
 	        Integer employeeNo = Integer.parseInt(userDetails.getUsername());
-	        
-	        // 현재 날짜와 시간 ex) 2025-11-11 11:11:11 
-	        String currentDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 	    
 	        // 현재 날짜 ex) 2025-11-11
 	        String currentDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
@@ -75,7 +72,6 @@ public class AttendanceController {
 	        // DTO에 추가
 	        attendanceDTO.setEmployeeNo(employeeNo);
 	        attendanceDTO.setCurrentDate(currentDate);
-	        attendanceDTO.setCurrentDateTime(currentDateTime);
 	        
 	        // 출근 수정 메서드 호출
 	        Integer row = attendanceService.modifyCheckin(attendanceDTO);
