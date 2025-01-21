@@ -323,6 +323,11 @@ public class AttendanceApprovalService {
 		}
 	}
 	
+	// 김혜린 : 결재완료목록 - 근태신청서리스트 조회
+	public List<AttendanceApprovalListDTO> getCompleteAttendanceApprovalList(Integer employeeNo) {
+		return attendanceApprovalMapper.selectCompleteAttendanceAprrovalList(employeeNo);
+	}
+	
 	// 김혜린 : 결재대기목록 - 근태신청서리스트 조회
 	public List<AttendanceApprovalListDTO> getWaitAttendanceApprovalList(Integer employeeNo) {
 		return attendanceApprovalMapper.selectWaitAttendanceAprrovalList(employeeNo);

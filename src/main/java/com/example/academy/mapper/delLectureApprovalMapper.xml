@@ -1,7 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper
-	namespace="com.example.academy.mapper.delLectureApprovalMapper">
+<mapper namespace="com.example.academy.mapper.delLectureApprovalMapper">
+	
+	<!-- 추후 LectureApprovalMapper 합치고 삭제예정 -->
+	<!-- 김혜린 : 결재 완료 목록 - 강의신청서 리스트 조회 -->
+	<select id="selectCompleteLectureApprovalList" parameterType="Integer" resultType="com.example.academy.dto.LectureApprovalListDTO">
+		SELECT 
+			la.lecture_approval_no lectureApprovalNo
+			, la.lecture_approval_title lectureApprovalTitle
+			, la.lecturer lecturer
+			, e.employee_name employeeName
+			, la.lecture_approval_status lectureApprovalStatusCode
+			, c1.`name` lectureApprovalStatus
+			, ae.approver approver
+		FROM lecture_approval la LEFT OUTER JOIN employee e
+			ON la.lecturer = e.employee_no
+		LEFT OUTER JOIN common c1
+			ON la.lecture_approval_status = c1.`code`
+		LEFT OUTER JOIN approval_employee ae
+			ON ae.lecture_approval_no = la.lecture_approval_no
+		WHERE la.use_yn = 1
+			AND ae.approver = #{employeeNo}
+			AND ae.approval_employee_status NOT IN ('AS001')
+		ORDER BY la.create_date DESC
+	</select>
 	
 	<!-- 추후 LectureApprovalMapper 합치고 삭제예정 -->
 	<!-- 김혜린 : 결재 대기 목록 - 강의신청서 리스트 조회 -->
