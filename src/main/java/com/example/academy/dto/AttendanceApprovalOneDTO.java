@@ -13,7 +13,7 @@ public class AttendanceApprovalOneDTO {
 	    private Integer employeeNo;
 	    private String employeeName;
 	    private String attendanceApprovalType;	// 신청 종류
-	    private String updateDate;		// 작성날짜
+	    private String createDate;		// 작성날짜
 	    private String attendanceApprovalTitle;		// 신청제목
 	    private String attendanceApprovalContent;	// 신청내용
 	    private String attendanceApprovalBeginDate;	// 시작날짜
