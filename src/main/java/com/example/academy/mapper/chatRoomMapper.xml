@@ -29,11 +29,10 @@
 		새로운 사용자(employeeNo)가 채팅방에 참여할 때 호출
 	-->
 	<insert id="addUserToRoom">
+	
+	
 	INSERT INTO roommember (room_id, employee_no, create_date)
-	SELECT #{roomId}, e.employee_no, NOW()
-	FROM employee e
-	WHERE e.employee_no = #{employeeNo}
-	AND e.employee_name = #{employeeName};
+	VALUES (#{roomId}, #{employeeNo}, NOW());
 </insert>
 	
 
