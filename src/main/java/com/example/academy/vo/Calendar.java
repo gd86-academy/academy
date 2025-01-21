@@ -11,6 +11,7 @@ public class Calendar {
     private String calendarTitle;
     private String calendarStart;
     private String calendarEnd;
+    private String calendarDate;
     private String calendarClassName;
     private String calendarDescription;
     private String createDate;

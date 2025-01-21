@@ -120,12 +120,17 @@ document.addEventListener('alpine:init', () => {
 	            dataType: 'json',
 	            success: (data) => {
 					this.events = data.map(event => ({
-			            id: event.calendarNo, // 이벤트 ID
 			            title: event.calendarTitle, // 이벤트 제목
-			            start: event.calendarStart, // 시작 날짜 (서버에서 'startDate' 형식으로 반환된다고 가정)
-			            end: event.calendarEnd, // 종료 날짜 (서버에서 'endDate' 형식으로 반환된다고 가정)
+						start: `${event.calendarDate}T${event.calendarStart}:00`, // 시작 시간 변환
+						end: `${event.calendarDate}T${event.calendarEnd}:00`, // 종료 시간 변환
 			            className: event.calendarClassName || 'default-class', // className (없으면 기본값 'default-class')
-			            description: event.calendarDescription || 'No description available' // 설명 (없으면 기본값)
+			            description: event.calendarDescription || '상세내용 없음', // 설명 (없으면 기본값)
+						extendedProps: {
+							title: event.calendarTitle,
+							beginTimeCode : event.calendarStart,
+							endTimeCode : event.calendarEnd,
+		                    description: event.calendarDescription || '상세내용 없음',
+		                }
 			        }));
 					
 					
@@ -162,6 +167,54 @@ document.addEventListener('alpine:init', () => {
 		                    this.editDate(event);
 		                },
 		                events: this.events,
+						// 툴팁 설정
+						eventMouseEnter: function (info) {
+						    const event = info.event;
+
+						    // 툴팁 html
+						    const tooltipContent = `
+						        <div>
+									<strong>제목:</strong> ${event.extendedProps.title || '제목 없음'}<br>
+									<strong>상세내용:</strong> ${event.extendedProps.description || '상세 내용 없음'}<br>
+						            <strong>시간:</strong> ${event.extendedProps.beginTimeCode} ~ ${event.extendedProps.endTimeCode }
+						        </div>
+						    `;
+
+						    // 툴팁 요소 생성
+						    const tooltip = document.createElement('div');
+						    tooltip.className = 'custom-tooltip';
+						    tooltip.innerHTML = tooltipContent;
+
+						    // 툴팁 스타일
+						    tooltip.style.position = 'absolute';
+						    tooltip.style.zIndex = 1000;
+						    tooltip.style.backgroundColor = '#f9f9f9';
+						    tooltip.style.border = '1px solid #ccc';
+						    tooltip.style.padding = '10px';
+						    tooltip.style.borderRadius = '4px';
+						    tooltip.style.boxShadow = '0px 4px 6px rgba(0,0,0,0.1)';
+						    tooltip.style.color = '#333';
+						    tooltip.style.whiteSpace = 'nowrap';
+
+						    // 툴팁 위치
+						    const rect = info.el.getBoundingClientRect();
+						    tooltip.style.top = `${rect.top + window.scrollY - 10}px`;
+						    tooltip.style.left = `${rect.left + window.scrollX + rect.width / 2}px`;
+
+						    // 툴팁 추가
+						    document.body.appendChild(tooltip);
+
+						    // 이벤트에 툴팁 참조 저장
+						    info.el._tooltip = tooltip;
+						},
+
+						eventMouseLeave: function (info) {
+						    // 툴팁 제거
+						    if (info.el._tooltip) {
+						        document.body.removeChild(info.el._tooltip);
+						        delete info.el._tooltip;
+						    }
+						},
 		            });
 		            this.calendar.render();
 		
