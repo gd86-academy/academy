@@ -27,6 +27,16 @@ public class AttendanceService {
 	@Autowired AttendanceMapper attendanceMapper;
 	@Autowired AttendanceApprovalMapper attendanceApprovalMapper;
 	
+	// 오늘 퇴근 활성화 확인
+	public Integer getSelectCheckout(AttendanceDTO attendanceDTO) {
+		return attendanceMapper.selectCheckout(attendanceDTO);
+	}
+	
+	// 오늘 출근 활성화 확인
+	public Integer getSelectCheckin(AttendanceDTO attendanceDTO) {
+		return attendanceMapper.selectCheckin(attendanceDTO);
+	}
+	
 	// 퇴근 버튼 클릭시 수정
 	public Integer modifyCheckOut(AttendanceDTO attendanceDTO) {
 		log.debug("attendanceDTO ----->" + attendanceDTO);
