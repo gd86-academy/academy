@@ -30,7 +30,7 @@ public class AttendanceApprovalController {
 	@Autowired ApprovalEmployeeService approvalEmployeeService;
 	@Autowired AttendanceApprovalFileService attendanceApprovalFileService;
 	
-	// 김혜린 : 근태 신청서 승인 시
+	// 김혜린 : 근태 신청서 승인 시 
 	@PostMapping("/agreeAttendanceApproval")
 	public String agreeAttendanceApproval(Model model, AttendanceApprovalOneDTO attendanceApprovalOneDTO) {
 		
