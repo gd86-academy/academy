@@ -16,20 +16,28 @@
 	    <link rel="stylesheet" type="text/css" th:href="@{/css/nice-select2.css}" />
 	    <link th:href="@{/css/templete.css}" rel="stylesheet" />
 	    <link rel="stylesheet" th:href="@{/css/flatpickr.min.css}" />
-	    <script th:src="@{/js/perfect-scrollbar.min.js}"></script>
-	    <script defer th:src="@{/js/popper.min.js}"></script>
-	    <script th:src="@{/js/alpine-collaspe.min.js}"></script>
-        <script th:src="@{/js/alpine-persist.min.js}"></script>
-        <script defer th:src="@{/js/alpine-ui.min.js}"></script>
-        <script defer th:src="@{/js/alpine-focus.min.js}"></script>
-        <script defer th:src="@{/js/alpine.min.js}"></script>
-        <script th:src="@{/js/flatpickr.js}"></script>
-        <script th:src="@{/js/custom.js}"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-        <script th:src="@{/js/fullcalendar.min.js}"></script>
-        <script th:src="@{/js/nice-select2.js}"></script>
-        <script defer th:src="@{/js/address.js}"></script>
-        <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	  	
+		<script src='https://cdn.jsdelivr.net/npm/rrule@2.6.4/dist/es5/rrule.min.js'></script>
+		<!-- fullcalendar bundle -->
+		<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
+		<!-- the rrule-to-fullcalendar connector. must go AFTER the rrule lib -->
+		<script src='https://cdn.jsdelivr.net/npm/@fullcalendar/rrule@6.1.15/index.global.min.js'></script>
+		
+		<!-- 프로젝트 관련 스크립트 -->
+		<script th:src="@{/js/perfect-scrollbar.min.js}"></script>
+		<script defer th:src="@{/js/popper.min.js}"></script>
+		<script th:src="@{/js/alpine-collaspe.min.js}"></script>
+		<script th:src="@{/js/alpine-persist.min.js}"></script>
+		<script defer th:src="@{/js/alpine-ui.min.js}"></script>
+		<script defer th:src="@{/js/alpine-focus.min.js}"></script>
+		<script defer th:src="@{/js/alpine.min.js}"></script>
+		<script th:src="@{/js/flatpickr.js}"></script>
+		<script th:src="@{/js/custom.js}"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+		
+		<script th:src="@{/js/nice-select2.js}"></script>
+		<script defer th:src="@{/js/address.js}"></script>
+		<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
         
         <style>
         	.employee-detail-title {

@@ -118,20 +118,53 @@ document.addEventListener('alpine:init', () => {
 	            url: `http://localhost/academy/restapi/calendarList/${employeeNo}`,
 	            type: 'GET',
 	            dataType: 'json',
-	            success: (data) => {
-					this.events = data.map(event => ({
-			            title: event.calendarTitle, // 이벤트 제목
-						start: `${event.calendarDate}T${event.calendarStart}:00`, // 시작 시간 변환
-						end: `${event.calendarDate}T${event.calendarEnd}:00`, // 종료 시간 변환
-			            className: event.calendarClassName || 'default-class', // className (없으면 기본값 'default-class')
-			            description: event.calendarDescription || '상세내용 없음', // 설명 (없으면 기본값)
-						extendedProps: {
-							title: event.calendarTitle,
-							beginTimeCode : event.calendarStart,
-							endTimeCode : event.calendarEnd,
-		                    description: event.calendarDescription || '상세내용 없음',
-		                }
-			        }));
+				success: (data) => {
+					this.events = data.map(event => {
+							//console.log(event.calendarClassName)
+					        if (event.calendarClassName === 'success') {
+					            return {
+									start: `${event.rrule.dtstart}T${event.rrule.byweekday[0]?.startTime}`,  // 시작 시간
+									end: `${event.rrule.until}T${event.rrule.byweekday[0]?.endTime}`,  // 종료 시간
+									title: event.calendarTitle,
+									className: event.calendarClassName || 'default-class',
+									description: event.calendarDescription || '상세내용 없음',
+									rrule: {
+									    freq: event.rrule.freq || 'weekly',  // 주기 설정 (기본값: weekly)
+									    interval: event.rrule.interval || 1,  // 반복 간격 (기본값: 1)
+									    byweekday: event.rrule.byweekday.map(dayInfo => dayInfo.day) || [],  // 요일 정보
+									    dtstart: `${event.rrule.dtstart}T${event.rrule.byweekday[0]?.startTime}`, // 시작 날짜와 시간
+									    until: `${event.rrule.until}T${event.rrule.byweekday[0]?.endTime}`,  // 종료 날짜와 시간
+									},
+									extendedProps: {
+										title: event.calendarTitle,
+										beginTimeCode : event.rrule.byweekday[0]?.startTime,
+										endTimeCode : event.rrule.byweekday[0]?.endTime,
+					                    description: event.calendarDescription || '상세내용 없음',
+									},
+					            };
+					        } else if (event.calendarClassName === 'primary') {
+					            return {
+					                title: event.calendarTitle,
+					                start: `${event.calendarDate}T${event.calendarStart}:00`,  // 시작 시간
+					                end: `${event.calendarDate}T${event.calendarEnd}:00`,  // 종료 시간
+					                className: event.calendarClassName || 'default-class',
+					                description: event.calendarDescription || '상세내용 없음',
+									extendedProps: {
+										title: event.calendarTitle,
+										beginTimeCode : event.calendarStart,
+										endTimeCode : event.calendarEnd,
+					                    description: event.calendarDescription || '상세내용 없음',
+					                }
+					            };
+					        } else {
+								return {
+					                title: event.calendarTitle,
+					                start: `${event.calendarBeginDate}T00:00:00`,  // 시작 시간
+					                end: `${event.calendarEndDate}T00:00:00`,  // 종료 시간
+					                className: event.calendarClassName || 'default-class',
+					            };
+							}
+					    });
 					
 					
 		            var calendarEl = document.getElementById('calendar');
@@ -176,7 +209,7 @@ document.addEventListener('alpine:init', () => {
 						        <div>
 									<strong>제목:</strong> ${event.extendedProps.title || '제목 없음'}<br>
 									<strong>상세내용:</strong> ${event.extendedProps.description || '상세 내용 없음'}<br>
-						            <strong>시간:</strong> ${event.extendedProps.beginTimeCode} ~ ${event.extendedProps.endTimeCode }
+						            <strong>시간:</strong> ${event.extendedProps.beginTimeCode || '시간정보없음'} ~ ${event.extendedProps.endTimeCode || '시간정보없음'}
 						        </div>
 						    `;
 
