@@ -188,9 +188,9 @@ document.addEventListener('alpine:init', () => {
 						    day: '일간',            // "Day"
 						    list: '목록'            // "List" 
 						},
-		                editable: true,
-		                dayMaxEvents: true,
-		                selectable: true,
+		                editable: false,
+		                dayMaxEvents: false,
+		                selectable: false,
 		                droppable: true,
 						dayCellContent: handleDayCellContent,
 		                eventClick: (event) => {

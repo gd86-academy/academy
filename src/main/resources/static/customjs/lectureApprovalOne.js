@@ -156,3 +156,33 @@ $('#checkRejectReason').click(function() {
 		$('#addRejectForm').submit();
 	}
 });
+
+// 승인버튼 클릭시
+$('#agreeBtn').click(function() {
+	
+	const stampFileVal = $('.stampFile').val();
+	console.log('stampFileVal : ', stampFileVal);  // 크기 출력 로그
+	
+	if(!stampFileVal){	// 값이 없다면 (null, undefined, "")
+		// 도장 없는 경우 모달 열기
+		modalBackgroundNonStamp.classList.remove('hidden');	// 모달 배경 보이기
+		modalBackgroundNonStamp.classList.add('block');		// 모달 배경 보이게 설정
+	} else{ // 값이 있다면
+		$('#agreeForm').submit();	// 폼제출
+	}
+	
+});
+
+// 승인 시 도장이 없는 경우 모달 관련 DOM 요소
+const closeModalButtonNonStamp = document.getElementById('closeModalButtonNonStamp');
+const modalBackgroundNonStamp = document.getElementById('modalBackgroundNonStamp');
+const modalWrapperNonStamp = document.getElementById('modalWrapperNonStamp');
+const checkNonStamp = document.getElementById('checkNonStamp');
+// 모달 닫기
+const closeModalNonStamp = () => {
+	  modalBackgroundNonStamp.classList.remove('block');
+	  modalBackgroundNonStamp.classList.add('hidden');  // 모달 배경 숨기기
+};
+if (closeModalButtonNonStamp) closeModalButtonNonStamp.addEventListener('click', closeModalNonStamp); // 닫기 버튼 클릭 시
+if (checkNonStamp) checkNonStamp.addEventListener('click', closeModalNonStamp);     // 확인 버튼 클릭 시
+

@@ -60,6 +60,14 @@
 		    .table-height tr {
 			    height: 58px; /* 원하는 높이로 설정 */
 			}
+			.my-page-link { /* 기본 상태 */
+		    	color: blue;
+			    text-decoration: none; /* 밑줄 제거 (선택 사항) */
+		    }
+		    .my-page-link:hover{
+		    	color: red; /* 원하는 색상으로 변경 */
+			    text-decoration: underline; /* 밑줄 추가 (선택 사항) */
+		    }
 	    </style>	
 	</head>
 	
@@ -457,18 +465,73 @@
 								   </div>
 								</div>
                            </form>
-                           <form th:action="@{/acceptLectureApproval}" method="post">
+                            <!-- 결재자 도장 사진 유무 확인 - 유효성 체크-->
+	           				<div th:each="a : ${lectureApprovalEmployee}">
+								<div th:if="${a.approverNo == userNo}">
+									<input type="hidden" class="stampFile" th:value="${a.stampFileName}" />
+								</div>
+							</div>
+                           <form id="agreeForm" th:action="@{/acceptLectureApproval}" method="post">
                            	   <input type="hidden" name="lectureApprovalNo" th:value="${lectureApprovalOne.lectureApprovalNo}">
                        	   	   <input type="hidden" name="approver" th:value="${userNo}">
-	                           <button type="submit" class="btn btn-dark ltr:ml-4 rtl:mr-4" style="width:130px;">
+	                           <button id="agreeBtn" type="button" class="btn btn-dark ltr:ml-4 rtl:mr-4" style="width:130px;">
                            	   	   승인
                            	   </button>
                            </form>
-                           
                         </div>
                        </div>
-                       
                     </div>
+                    <!-- 도장 없는 경우 경고 모달 -->
+			        <div class="modal">
+					  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundNonStamp">
+					       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperNonStamp">
+					           <div
+					               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
+					               id="modal"
+					           >
+					               <button
+					                   type="button"
+					                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+					                   id="closeModalButtonNonStamp"
+					               >
+					                   <svg
+					                       xmlns="http://www.w3.org/2000/svg"
+					                       width="24px"
+					                       height="24px"
+					                       viewBox="0 0 24 24"
+					                       fill="none"
+					                       stroke="currentColor"
+					                       stroke-width="1.5"
+					                       stroke-linecap="round"
+					                       stroke-linejoin="round"
+					                       class="h-6 w-6"
+					                   >
+					                       <line x1="18" y1="6" x2="6" y2="18"></line>
+					                       <line x1="6" y1="6" x2="18" y2="18"></line>
+					                   </svg>
+					               </button>
+					               <h3
+					                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
+					               >
+					                   안내
+					               </h3>
+					               <div class="p-5">
+					                   결재 도장이 없습니다.<br>  
+					                   <a th:href="@{/employeeOne(employeeNo=${userNo})}" class="my-page-link">마이 페이지</a>에서 도장을 먼저 추가해주세요.
+					                   <div class="mt-8 flex items-center justify-end">
+				                          <button
+				                          	  id="checkNonStamp"
+				                              type="button"
+				                              class="btn btn-primary ltr:ml-4 rtl:mr-4"
+				                          >
+				                              확인
+				                          </button>
+				                      </div>
+					               </div>
+					           </div>
+					       </div>
+					   </div>
+					</div>
                       
                     </div>
                     <!--  풋터 파일 연결 -->
