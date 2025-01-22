@@ -147,11 +147,20 @@ document.addEventListener('alpine:init', () => {
 					// 행 클릭 이벤트
 					document.querySelector('#myTable tbody').addEventListener('click', (e) => {
 					    const rowElement = e.target.closest('tr'); // 클릭된 행의 인덱스.
-					    if (rowElement) {
+						
+						if (rowElement) {
 							const tdElements = rowElement.querySelectorAll('td');
-							const attendanceApprovalNo = tdElements[0].textContent; 
+							
+							const attendanceApprovalNo = tdElements[0]?.textContent.trim();
+							        
+					        if (!attendanceApprovalNo || attendanceApprovalNo === '항목이 없습니다.') {
+					            // 항목이 없으면 클릭 동작 차단
+					            console.warn('유효하지 않은 행 클릭');
+					            return;
+					        } 
 							window.location.href = `/academy/attendanceApprovalOne?attendanceApprovalNo=${attendanceApprovalNo}`;
 					    }
+						
 					});
 	            },
 	            error: (xhr, status, error) => {
@@ -261,11 +270,20 @@ $('#lectureApprovalBtn').click(function() {
 			// 행 클릭 이벤트
 			document.querySelector('#myTable tbody').addEventListener('click', (e) => {
 				const rowElement = e.target.closest('tr'); // 클릭된 행의 인덱스.
+				
 				if (rowElement) {
 					const tdElements = rowElement.querySelectorAll('td');
-					const lectureApprovalNo = tdElements[0].textContent; // 두번째 열 데이터 추출.
+					
+					const lectureApprovalNo = tdElements[0]?.textContent.trim();
+					        
+			        if (!lectureApprovalNo || lectureApprovalNo === '항목이 없습니다.') {
+			            // 항목이 없으면 클릭 동작 차단
+			            console.warn('유효하지 않은 행 클릭');
+			            return;
+			        } 
 					window.location.href = `/academy/lectureApprovalOne?lectureApprovalNo=${lectureApprovalNo}`;
-				}
+			    }
+				
 			});
 		},
 		error: (xhr, status, error) => {
@@ -360,9 +378,17 @@ $('#attendanceApprovalBtn').click(function() {
 		   // 행 클릭 이벤트
 			document.querySelector('#myTable tbody').addEventListener('click', (e) => {
 			    const rowElement = e.target.closest('tr'); // 클릭된 행의 인덱스.
-			    if (rowElement) {
+
+				if (rowElement) {
 					const tdElements = rowElement.querySelectorAll('td');
-					const attendanceApprovalNo = tdElements[0].textContent; // 두번째 열 데이터 추출.
+					
+					const attendanceApprovalNo = tdElements[0]?.textContent.trim();
+					        
+			        if (!attendanceApprovalNo || attendanceApprovalNo === '항목이 없습니다.') {
+			            // 항목이 없으면 클릭 동작 차단
+			            console.warn('유효하지 않은 행 클릭');
+			            return;
+			        } 
 					window.location.href = `/academy/attendanceApprovalOne?attendanceApprovalNo=${attendanceApprovalNo}`;
 			    }
 			});
