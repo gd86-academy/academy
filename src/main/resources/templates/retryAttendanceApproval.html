@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<title>근태신청서 수정</title>
+		<title>근태 재신청</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/x-icon" th:href="@{/favicon.png}" />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -108,10 +108,10 @@
 	
 				<!-- 메인화면 -->
 				<div class="animate__animated p-6 white-light" :class="[$store.app.animation]"> <!-- 메인화면 div 시작 -->
-					<h2 class="text-2xl ml-3 mb-5">근태신청서 수정</h2>
+					<h2 class="text-2xl ml-3 mb-5">근태신청서 재신청</h2>
 					
 					<div class="panel" style="margin: 0% 15% 0% 15%; padding: 4%; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05); border-radius : 10px;">
-						<form id="updateForm" method="post" th:action="@{/modifyAttendanceApproval}" enctype="multipart/form-data">
+						<form id="retryForm" method="post" th:action="@{/retryAttendanceApproval}" enctype="multipart/form-data">
 							<div class="p-3">
 								<div class="flex items-center justify-between" style="margin-bottom: 20px; margin-top: 20px;">
 									<div class="text-3xl font-semibold uppercase m-3" style="white-space: nowrap;">근태 신청서</div>
@@ -416,8 +416,8 @@
 		                           <button id="openModalButtonAddPeople" type="button" class="btn btn-dark" style="width:130px;">
 		                               결재선 변경
 		                           </button>
-		                           <button type="button" id="updateBtn" class="btn btn-primary ltr:ml-4 rtl:mr-4" style="width:130px;">
-		                           		수정
+		                           <button type="button" id="retryBtn" class="btn btn-primary ltr:ml-4 rtl:mr-4" style="width:130px;">
+		                           		결재 재신청
 		                           </button>
 		                       </div>
 	                       </div>
@@ -714,7 +714,7 @@
 		   </div>
 		</div>
 		
-	   <script th:src="@{/customjs/modifyAttendanceApproval.js}"> </script>
+	   <script th:src="@{/customjs/retryAttendanceApproval.js}"> </script>
 		
 		
 	</body>

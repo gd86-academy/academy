@@ -138,6 +138,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
 // 밑에부터 모달관련
 // 신청서 삭제확인 모달 관련 DOM 요소
 const closeModalButtonDelApproval = document.getElementById('closeModalButtonDelApproval');
+const cancelButtonDelApproval = document.getElementById('cancelButtonDelApproval');
 const modalBackgroundDelApproval = document.getElementById('modalBackgroundDelApproval');
 const modalWrapperDelApproval = document.getElementById('modalWrapperDelApproval');
 const checkDelApproval = document.getElementById('checkDelApproval');
@@ -150,6 +151,7 @@ const closeModalDelApproval = () => {
 };
 
 if (closeModalButtonDelApproval) closeModalButtonDelApproval.addEventListener('click', closeModalDelApproval); // [x] 버튼 클릭 시
+if (cancelButtonDelApproval) cancelButtonDelApproval.addEventListener('click', closeModalDelApproval); // [x] 버튼 클릭 시
 
 // attendanceApprovalNo값 받아오기
 const attendanceApprovalNo = document.getElementById('attendanceApprovalNo').value;

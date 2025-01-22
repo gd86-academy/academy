@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.example.academy.dto.AttendanceApprovalAddDTO;
 import com.example.academy.dto.AttendanceApprovalModifyDTO;
@@ -29,6 +30,39 @@ public class AttendanceApprovalController {
 	@Autowired AttendanceApprovalService attendanceApprovalService;
 	@Autowired ApprovalEmployeeService approvalEmployeeService;
 	@Autowired AttendanceApprovalFileService attendanceApprovalFileService;
+	
+	// 김혜린 : 근태 신청서 재신청페이지 GET
+	@GetMapping("/retryAttendanceApproval")
+	public String retryAttendanceApproval(Model model, Integer attendanceApprovalNo) {
+		// 원래 정보 불러오기
+		// 1) 근태신청서 테이블 정보
+		AttendanceApprovalOneDTO attendanceApproval = attendanceApprovalService.getAttendanceApprovalOne(attendanceApprovalNo);
+		model.addAttribute("attendanceApproval", attendanceApproval);
+		// 근태신청서 현재 결재단계
+		model.addAttribute("step",attendanceApproval.getAttendanceApprovalStep());
+		
+		log.debug("근태신청서 상세 : " + attendanceApproval);	//디버깅
+		log.debug("==============attendanceApprovalNo2 : " + attendanceApprovalNo);	//디버깅
+		// 2) 결재자 목록
+		List<AttendanceApprovalOneDTO> approvers  = approvalEmployeeService.getAttendanceApproverList(attendanceApprovalNo);
+		model.addAttribute("approvers", approvers);
+		log.debug("결재자 목록 : " + approvers);	//디버깅
+		// 3) 파일 목록
+		List<Files> files = attendanceApprovalFileService.getAttendanceApprovalFileList(attendanceApprovalNo);
+		model.addAttribute("files", files);
+		log.debug("파일 목록 : " + files);	//디버깅
+		
+		return "retryAttendanceApproval";
+	}
+	
+	// 김혜린 : 근태 신청서 재신청페이지 POST
+	@PostMapping("/retryAttendanceApproval")
+	public String retryAttendanceApproval(AttendanceApprovalAddDTO attendanceApprovalAddDTO) {
+		log.debug("+~+~+~+~+attendanceApprovalAddDTO 목록 : " + attendanceApprovalAddDTO);	//디버깅
+		attendanceApprovalService.retryAttendanceApproval(attendanceApprovalAddDTO);
+		
+		return "redirect:/applicationList";
+	}
 	
 	// 김혜린 : 근태 신청서 승인 시 
 	@PostMapping("/agreeAttendanceApproval")

@@ -5,7 +5,7 @@
 	<!-- 진수우 : 강의결재 재신청 시 파일테이블에서 복사할 파일 정보조회 -->
 	<select id="selectCopyFile">
 		SELECT 
-			, file_origin fileOrigin
+			file_origin fileOrigin
 			, file_name fileName
 			, file_ext fileExt
 			, file_type fileType

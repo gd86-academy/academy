@@ -538,12 +538,12 @@
 									수정
 								</a>
 								<a id="delBtn" type="button" class="btn btn-danger ltr:ml-4 rtl:mr-4" style="width:130px;" >
-									삭제
+									결재 취소
 								</a>
 							</div>
-							<!-- 신청서 반려 상태 -->	<!-- href경로 바꾸기 -->
+							<!-- 신청서 반려 상태 -->
 							<div th:if="${attendanceApproval.attendanceApprovalStatus == '반려'}" class="mt-8 flex items-center justify-end">
-								<a id="updateBtn" type="button" class="btn btn-dark" style="width:130px;" th:href="@{/modifyAttendanceApproval(attendanceApprovalNo=${attendanceApproval.attendanceApprovalNo})}">
+								<a id="updateBtn" type="button" class="btn btn-dark" style="width:130px;" th:href="@{/retryAttendanceApproval(attendanceApprovalNo=${attendanceApproval.attendanceApprovalNo})}">
 									결재 재신청
 								</a>	
 							</div>
@@ -594,8 +594,15 @@
 		                   안내
 		               </h3>
 		               <div class="p-5">
-		                   근태 신청서를 삭제하시겠습니까?
+		                   결재 취소하시겠습니까?
 		                   <div class="mt-8 flex items-center justify-end">
+	                          <button
+	                          	  id="cancelButtonDelApproval"
+	                              type="button"
+	                              class="btn btn-outline-danger ltr:ml-4 rtl:mr-4"
+	                          >
+	                              취소
+	                          </button>
 	                          <button
 	                          	  id="checkDelApproval"
 	                              type="button"

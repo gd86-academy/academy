@@ -19,6 +19,7 @@ public class AttendanceApprovalAddDTO {
     
     // approval_employee (결재자) 테이블
     private List<String> approvers;	// 결재자 배열로 받기
+    private List<String> alreadyApprovers;	// 변경전 결재자 배열로 받기
     private Integer approvalEmployeeNo;	// PK 결재자 번호
     private Integer approver;	// FK 결재자(employee_no)
     private Integer approvalLevel;	// 결재순위
@@ -27,6 +28,7 @@ public class AttendanceApprovalAddDTO {
     
     // file (파일) 테이블
     private List<MultipartFile> attendanceApprovalFiles;
+    private List<String> alreadyFiles;	// 기존 파일
     
     private Integer fileNo;	// 파일번호	pk
     private String fileName;	// 서버파일명
