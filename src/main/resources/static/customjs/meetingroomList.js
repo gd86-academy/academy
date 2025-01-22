@@ -66,15 +66,15 @@ document.addEventListener('alpine:init', () => {
     }));
 	
 	Alpine.data('contacts', () => ({
-		editUser(user) {
-            this.params = this.defaultParams;
-            if (user) {
-                this.params = JSON.parse(JSON.stringify(user));
-            }
+			editUser(user) {
+	            this.params = this.defaultParams;
+	            if (user) {
+	                this.params = JSON.parse(JSON.stringify(user));
+	            }
 
-            this.addContactModal = true;
-        },
-	}));
+	            this.addContactModal = true;
+	        },
+		}));
 	
 	
 
