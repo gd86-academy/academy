@@ -181,7 +181,7 @@ document.addEventListener('alpine:init', () => {
 	    },
 	}));
 
-	// 연차 통계 차트
+	// 출근 통계 차트
 	Alpine.data('analytics', () => ({
 	    init() {
 	        setTimeout(() => {
@@ -195,7 +195,7 @@ document.addEventListener('alpine:init', () => {
 	        return {
 	            series: [
 	                {
-	                    data: totalWorkTimeList,  // 서버에서 받은 연차 데이터 사용
+	                    data: totalWorkTimeList,  // 서버에서 받은 출근 데이터 사용
 	                },
 	            ],
 	            chart: {

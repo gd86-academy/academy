@@ -96,12 +96,10 @@
 	<select id="selectWorkTimeByMonth" parameterType="Integer"
 									resultType="Integer">
 		SELECT
-		    SUM(TIMESTAMPDIFF(MINUTE, <!-- 근무시간 총합 -->
-		        GREATEST(attendance_checkin, CONCAT(DATE(attendance_checkin), ' 09:00:00')),  <!-- 출근시간이 09:00 이전이면 09:00을 기준으로 계산 -->
-		        attendance_checkout  <!-- 퇴근시간 -->
-		    )) AS total_work_time
+			<!-- 월별 근무시간 총합 -->
+		    SUM(TIMESTAMPDIFF(MINUTE, attendance_checkin, attendance_checkout)) AS total_work_time
 		FROM attendance 
-		WHERE employee_no = 33
+		WHERE employee_no = #{employeeNo}
 		      AND attendance_checkin >= CURDATE() - INTERVAL 6 MONTH  <!-- 최근 6개월간 데이터 -->
 		GROUP BY DATE_FORMAT(attendance_checkin, '%Y-%m')  <!-- 월별로 그룹화 -->
 		ORDER BY DATE_FORMAT(attendance_checkin, '%Y-%m')
@@ -111,58 +109,43 @@
 	<select id="selectAttendanceContent" parameterType="Integer" 
 										resultType="com.example.academy.dto.AttendanceContentDTO">
 		SELECT
-		    COUNT(CASE WHEN c.name = '조퇴' THEN 1 END) AS earlyLeave, <!-- 조퇴 -->
-		    COUNT(CASE WHEN c.name = '지각' THEN 1 END) AS tardy, <!-- 지각 -->
+		    COUNT(CASE WHEN a.attendance_late = 1 THEN 1 END) AS late, <!-- 지각 -->
+		    COUNT(CASE WHEN a.attendance_early_leave = 1 THEN 1 END) AS earlyLeave,<!-- 조퇴 -->
 		    COUNT(CASE WHEN c.name = '결근' THEN 1 END) AS absence <!-- 결근 -->
 		FROM attendance a
-		INNER JOIN common c ON c.code = a.attendance_content
+		LEFT OUTER JOIN common c ON c.code = a.attendance_content
 		WHERE a.employee_no = #{employeeNo} 
-			  AND DATE_FORMAT(a.attendance_date, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-%m');
+			  AND DATE_FORMAT(a.attendance_date, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-%m')
 	</select>
 	
 	<!-- 출근 관리 리스트 조회 -->
 	<select id="selectAttendanceList" parameterType="com.example.academy.dto.AttendanceListDTO" 
 									resultType="com.example.academy.dto.AttendanceListDTO">
 		SELECT 
-			DATE_FORMAT(a.attendance_date, '%d') AS date
-			, c.name
-			, a.attendance_checkin AS checkin
-			, a.attendance_checkout AS checkout
-			, CONCAT( <!-- 근무 시간을 시:분 형식으로 계산 (기준은 오전 9시 또는 출근 시간) -->
-		        FLOOR(TIMESTAMPDIFF(MINUTE, <!-- TIMESTAMPDIFF(MINUTE, ...)로 계산된 근무 시간 분 단위 값을 FLOOR(... / 60)으로 시간으로 변환 -->
-		            GREATEST(attendance_checkin, CONCAT(DATE(attendance_checkin), ' 09:00:00')), 
-		            attendance_checkout) / 60), 
-		        ':', 
-		        LPAD(MOD(TIMESTAMPDIFF(MINUTE, <!-- 나머지 분은 MOD(..., 60)으로 구한 뒤, LPAD(..., 2, '0')을 사용하여 두 자릿수로 표시 -->
-		            GREATEST(attendance_checkin, CONCAT(DATE(attendance_checkin), ' 09:00:00')), 
-		            attendance_checkout), 60), 2, '0')
-		    ) AS workTime
-			, CONCAT( <!-- 초과 근무 시간은 시:분 형식으로 계산 -->
-		        FLOOR(CASE
-		            WHEN TIMESTAMPDIFF(MINUTE, 
-		                GREATEST(attendance_checkin, CONCAT(DATE(attendance_checkin), ' 09:00:00')), 
-		                attendance_checkout) > 550
-		            THEN TIMESTAMPDIFF(MINUTE, 
-		                GREATEST(attendance_checkin, CONCAT(DATE(attendance_checkin), ' 09:00:00')), 
-		                attendance_checkout) - 550
-		            ELSE 0
-		        END / 60), 
-		        ':', 
-		        LPAD(MOD(CASE
-		            WHEN TIMESTAMPDIFF(MINUTE, 
-		                GREATEST(attendance_checkin, CONCAT(DATE(attendance_checkin), ' 09:00:00')), 
-		                attendance_checkout) > 540
-		            THEN TIMESTAMPDIFF(MINUTE, 
-		                GREATEST(attendance_checkin, CONCAT(DATE(attendance_checkin), ' 09:00:00')), 
-		                attendance_checkout) - 540
-		            ELSE 0
-		        END, 60), 2, '0')
-		    ) AS overtimeTime
+		    DATE_FORMAT(a.attendance_date, '%d') AS date,
+		    c.name,
+		    a.attendance_checkin AS checkin,
+		    a.attendance_checkout AS checkout,
+		    <!-- 근무 시간 계산 (퇴근시간 - 출근시간) -->
+		    IFNULL(
+		        DATE_FORMAT(
+		            SEC_TO_TIME(TIMESTAMPDIFF(SECOND, a.attendance_checkin, a.attendance_checkout)), 
+		            '%H:%i'
+		        ), '00:00') AS workTime,
+		    <!-- 근무 초과 시간 계산 (근무시간이 9시간을 초과하면 초과 시간을 계산) -->
+		    IFNULL(
+		        DATE_FORMAT(
+		            SEC_TO_TIME(
+		                GREATEST(TIMESTAMPDIFF(SECOND, a.attendance_checkin, a.attendance_checkout) - 32400, 0)
+		            ),
+		            '%H:%i'
+		        ), '00:00') AS overTime
+		    
 		FROM attendance a
-		INNER JOIN common c ON c.code = a.attendance_content
-		WHERE DATE_FORMAT(a.attendance_date, '%Y-%m') = #{month}
-				AND a.attendance_date &lt;= NOW() <!-- 오늘보다 작거나 같은 날짜 -->
-				AND c.name IS NOT NULL <!-- name이 NULL이 아닌 것만 -->
-		ORDER BY date
+		LEFT OUTER JOIN common c ON c.code = a.attendance_content
+		WHERE a.employee_no = #{employeeNo} 
+		    AND DATE_FORMAT(a.attendance_date, '%Y-%m') = #{month}
+		    AND a.attendance_date &lt;= NOW()
+		ORDER BY date DESC
 	</select>
 </mapper>

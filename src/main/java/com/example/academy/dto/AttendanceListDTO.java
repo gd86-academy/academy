@@ -10,7 +10,7 @@ public class AttendanceListDTO {
 	private String checkin;
 	private String checkout;
 	private String workTime;
-	private String overtimeTime;
+	private String overTime;
 
 	private Integer employeeNo;
 	private String month;
@@ -23,7 +23,7 @@ public class AttendanceListDTO {
     			, this.checkin
     			, this.checkout
     			, this.workTime
-    			, this.overtimeTime
+    			, this.overTime	
     	};
     }
 }

@@ -78,7 +78,7 @@ public class MainController {
 	        model.addAttribute("totalWorkTimeList", totalWorkTime); // 최근 6개월 월별 근무시간 총합 리스트
 	        model.addAttribute("absence", content.getAbsence()); // 결근
 	        model.addAttribute("earlyLeave", content.getEarlyLeave()); // 조퇴
-	        model.addAttribute("tardy", content.getTardy()); // 지각
+	        model.addAttribute("late", content.getLate()); // 지각
 	        model.addAttribute("userNo", userDetails.getUsername());
 	        model.addAttribute("userName", userDetails.getUserRealName());
 	        model.addAttribute("userMail", userDetails.getUserMail());

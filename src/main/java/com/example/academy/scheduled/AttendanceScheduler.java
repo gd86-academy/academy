@@ -26,7 +26,7 @@ public class AttendanceScheduler {
 	LocalDate today = LocalDate.now();
 	
 	// 매일 00시 00분에 실행
-    @Scheduled(cron = "0 58 21 * * ?")// cron 표현식: 매일 00시 00분
+    @Scheduled(cron = "0 20 17 * * ?")// cron 표현식: 매일 00시 00분
     public void generateAttendanceData() { 
         
     	//isWeekday(today) - 토요일(6)과 일요일(7)을 제외한 평일에만 실행
@@ -44,8 +44,8 @@ public class AttendanceScheduler {
         return dayOfWeek != DayOfWeek.SATURDAY && dayOfWeek != DayOfWeek.SUNDAY;
     }
     
-    // 매일 11시 59분에 실행해서 출퇴근이 NULL이고 근무유형이 NULL인 데이터는 결석 처리 
-    @Scheduled(cron = "0 02 21 * * ?")
+    // 매일 23시 59분에 실행해서 출퇴근이 NULL이고 근무유형이 NULL인 데이터는 결석 처리 
+    @Scheduled(cron = "0 59 23 * * ?")
     public void attendanceByAbsence() {
     	
     	// 1. 모든 사원 조회

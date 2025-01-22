@@ -6,7 +6,7 @@ import lombok.Data;
 public class AttendanceContentDTO {
 	
 	private Integer earlyLeave;
-	private Integer tardy;
+	private Integer late;
 	private Integer absence;
 
 }

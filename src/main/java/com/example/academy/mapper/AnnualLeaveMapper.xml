@@ -63,7 +63,7 @@
 	<!-- 년별 사용연차 개수 조회 -->
 	<select id="annualLeaveCount" parameterType="Integer"
 								  resultType="Double">
-		WITH RECURSIVE date_range AS ( <!-- 근태 승인 기간을 계산 CTE -->
+		WITH RECURSIVE date_range AS (
 		    SELECT 
 		        attendance_approval_no,
 		        attendance_approval_begindate AS date,
@@ -71,7 +71,6 @@
 		    FROM attendance_approval
 		    WHERE use_yn = 1
 		      AND DATE_FORMAT(attendance_approval_begindate, '%Y') = YEAR(NOW())
-		      AND attendance_approval_begindate &lt; NOW()
 		    UNION ALL
 		    SELECT 
 		        attendance_approval_no,
@@ -81,28 +80,26 @@
 		    WHERE DATE_ADD(date, INTERVAL 1 DAY) &lt;= attendance_approval_enddate
 		)
 		SELECT
-		    SUM(CASE 
-		        WHEN name.name = '연차' THEN (
-		            SELECT COUNT(*) <!-- 평일 날짜 개수만 계산 -->
+		   	IFNULL(SUM(CASE 
+					WHEN name.name = '연차' THEN (
+		            SELECT COUNT(*)
 		            FROM date_range dr
 		            WHERE dr.attendance_approval_no = ap.attendance_approval_no
 		              AND DAYOFWEEK(dr.date) NOT IN (1, 7) 
 		        )
-		        WHEN name.name = '오전반차' THEN 0.5  <!-- 오전반차 -->
-		        WHEN name.name = '오후반차' THEN 0.5  <!-- 오후반차 -->
+		        WHEN name.name = '오전반차' THEN 0.5 
+		        WHEN name.name = '오후반차' THEN 0.5
 		        ELSE 0
-		    END) AS count
+		    END), 0) AS count
 		FROM attendance_approval ap
-		INNER JOIN employee e ON e.employee_no = ap.employee_no
-		INNER JOIN common name ON name.code = ap.attendance_approval_type
-		INNER JOIN common status ON status.code = ap.attendance_approval_status
+		LEFT OUTER JOIN employee e ON e.employee_no = ap.employee_no
+		LEFT OUTER JOIN common name ON name.code = ap.attendance_approval_type
+		LEFT OUTER JOIN common status ON status.code = ap.attendance_approval_status
 		WHERE ap.use_yn = 1
-		    AND e.employee_no = #{employeeNo}
-		    AND DATE_FORMAT(ap.attendance_approval_begindate, '%Y') = YEAR(NOW())
-		    AND (status.name = '승인' OR status.name = '대기')
-		    AND (name.name = '연차' OR name.name = '오전반차' OR name.name = '오후반차')  <!-- '연차', '오전반차', '오후반차'를 구분 -->
-		    AND ap.attendance_approval_begindate &lt; NOW()
-		GROUP BY e.employee_no;
+		  AND e.employee_no = 32
+		  AND DATE_FORMAT(ap.attendance_approval_begindate, '%Y') = YEAR(NOW())
+		  AND (status.name = '승인' OR status.name = '대기')
+		  AND (name.name IN ('연차', '오전반차', '오후반차'))  
 	</select>
 	
 	<!-- 월별 연차리스트 -->
