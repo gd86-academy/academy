@@ -202,14 +202,18 @@
 			, r.reservation_person reservationPerson
 			, r.reservation_title reservationTitle
 			, r.reservation_content reservationContent
-			, r.begin_time_code beginTimeCode
-			, r.end_time_code endTimeCode
+			, com1.`name` beginTimeCode
+			, com2.`name` endTimeCode
 			, m.meetingroom_name meetingroomName
 			, e.employee_name employeeName
 			, re.reservation_no reservationNo
 			, GROUP_CONCAT(re.employee_no) AS employeeNos
 		FROM reservation r	LEFT OUTER JOIN meetingroom m
 		ON r.meetingroom_no = m.meetingroom_no
+		LEFT OUTER JOIN common com1
+		ON r.begin_time_code = com1.code
+		LEFT OUTER JOIN common com2
+		ON r.end_time_code = com2.code
 		LEFT OUTER JOIN employee e
 		ON r.reservation_person = e.employee_no
 		LEFT OUTER JOIN reservation_employee re

@@ -84,7 +84,7 @@ document.addEventListener('alpine:init', () => {
 	
 	
 	// 시작시간 데이터
-	$('#reservationDate').change(function() {
+	$('#reservationDate, #selectMeetingroom').change(function() {
 		let meetingroomNo = $('#selectMeetingroom option:selected').val();
 		let reservationDate = $('#reservationDate').val();		
 		console.log(meetingroomNo);
@@ -116,7 +116,7 @@ document.addEventListener('alpine:init', () => {
 	});
 	
 	// 종료시간 데이터
-	$('#reservationDate').change(function() {
+	$('#reservationDate, #selectMeetingroom').change(function() {
 		let meetingroomNo = $('#selectMeetingroom option:selected').val();
 		let reservationDate = $('#reservationDate').val();		
 		
@@ -202,8 +202,6 @@ document.addEventListener('alpine:init', () => {
 	});
 	
 	// 사원추가
-	let cnt = 0;
-
 	$('#addResultEmployee').click(function () {
 	    const selectedOption = $('#resultEmployee option:selected'); // 선택된 옵션 가져오기
 	    const employeeNo = selectedOption.val();
@@ -221,16 +219,18 @@ document.addEventListener('alpine:init', () => {
 	        });
 
 	        if (!exists) {
+				const cnt = $('#selectEmployeesContainer .selectedEmployee-box').length;
+				
 	            // 선택된 사원을 추가
 	            const newEmployee = `
 	                <div class="d-flex w-100 items-center justify-between mt-2 selectedEmployee-box">
-	                    <input type="hidden" value="${employeeNo}" name="reservationEmployees[` + (cnt) + `].employeeNo">
+	                    <input class="selectedEmployeeNo" type="hidden" value="${employeeNo}" name="reservationEmployees[${cnt}].employeeNo">
 	                    <input 
 	                        class="form-input selectedEmployee"
 	                        type="text"
 	                        value="${employeeName}" 
 	                        data-employee-no="${employeeNo}" 
-	                        name="reservationEmployees[` + (cnt++) + `].employeeName"
+	                        name="reservationEmployees[${cnt}].employeeName"
 	                        readonly>
 	                    <button type="button" class="btn btn-danger ms-3 removeEmployee" style="word-break:keep-all;">삭제</button>
 	                </div>
@@ -292,9 +292,18 @@ document.addEventListener('alpine:init', () => {
 	    // DOM에서 삭제
 	    parentElement.remove();
 
+	    // 남은 사원들의 cnt 재계산 
+	    $('#selectEmployeesContainer .selectedEmployee-box').each(function (index) {
+	        const inputHidden = $(this).find('.selectedEmployeeNo');
+	        const inputText = $(this).find('.selectedEmployee');
+
+	        // cnt 재설정 (index 값 사용 - 삭제버튼 클릭시 재배열) / index는 JavaScript에서 HTML 요소의 순서를 자동으로 제공
+	        inputHidden.attr('name', `reservationEmployees[${index}].employeeNo`);
+	        inputText.attr('name', `reservationEmployees[${index}].employeeName`);
+	    });
 	});
-	
-});
+});	
+
 
 // 시작시간을 선택했을 때 종료시간을 선택할 때 시작시간 이전의 시간은 선택되지 X
 function disableSelectedOption() {
@@ -305,12 +314,18 @@ function disableSelectedOption() {
 	
     // 두 번째 <select> 요소 가져오기
     var endTimeCode = document.getElementById('endTimeCode');
-
+	var selectedEndValue = endTimeCode.value; 
+	
     // 종료시간을 비활성화 처리
     if (selectedValue1 !== '') {
         endTimeCode.disabled = false; // 시작시간이 선택되었으면 종료시간 활성화
     } else {
         endTimeCode.disabled = true; // 시작시간이 선택되지 않으면 종료시간 비활성화
+    }
+	
+	// 만약 시간시간을 다시 종료시간보다 뒤로 바꿧을때 종료시간 초기화
+	if (selectedEndValue <= selectedValue1) {
+        endTimeCode.value = ""; // 종료 시간 초기화
     }
 
     // 첫 번째 <select>에서 선택된 값과 일치하는 옵션 비활성화
@@ -341,11 +356,6 @@ function disableSelectedOption() {
         previousValue = optionText;
     }
 };
-
-$(document).on('change', '#selectMeetingroom', function () {
-	$('#beginTimeCode').prop('disabled', false).val('');
-	$('#endTimeCode').prop('disabled', true).val('');
-});
 
 // 회의실 미선택 유효성
 $(document).ready(function () {

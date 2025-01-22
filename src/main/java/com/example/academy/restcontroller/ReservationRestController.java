@@ -48,7 +48,7 @@ public class ReservationRestController {
 	public List<Common> modifyReservationByBeginTime(@RequestBody AddReservationDTO addReservationDTO) {
 		System.out.println("쿼리 실행 전 MeetingRoomNo: " + addReservationDTO.getMeetingroomNo());
 		System.out.println("쿼리 실행 전 ReservationDate: " + addReservationDTO.getReservationDate());
-		return reservationService.modifyReservationByEndTime(addReservationDTO);
+		return reservationService.modifyReservationByBeginTime(addReservationDTO);
 	}
 	
 	// 박시현 : 예약 신청 시 가능한 종료시간 출력

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.academy.dto.AddReservationDTO;
+import com.example.academy.dto.AnnualLeaveListDTO;
 import com.example.academy.dto.MeetingRoomListDTO;
 import com.example.academy.dto.ReservationEmployeeDTO;
 import com.example.academy.dto.ReservationListDTO;
@@ -63,7 +64,7 @@ public class ReservationController {
 		
 	// 박시현 : 수정하기 전 input에 정보 출력
 	@GetMapping("/modifyReservation")
-	public String modifyReservation(Model model, @RequestParam("reservationNo") Integer reservationNo) {
+	public String modifyReservation(Model model, @RequestParam("reservationNo") Integer reservationNo, @ModelAttribute AddReservationDTO addReservationDTO) {
 		// 스프링시큐리티에서 계정정보 가져오기.
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		
@@ -80,12 +81,12 @@ public class ReservationController {
 	        }
 	        log.debug("reservationList : " + reservation);
 	        model.addAttribute("reservation",reservation);
-
-	        // 시간 조회
-	        List<Common> time = commonService.getTime(); 
-	        model.addAttribute("time",time);
 	        
+	        // 시간 조회 
+	        List<Common> time = commonService.getTime();	        
+	        model.addAttribute("time",time);	        
 	        // 회의실 조회
+	        
 	        List<MeetingRoomListDTO> meetingroom = meetingroomService.getMeetingRoomList(); 
 	        model.addAttribute("meetingroom",meetingroom);
 	        
