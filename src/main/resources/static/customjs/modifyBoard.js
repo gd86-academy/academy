@@ -79,6 +79,7 @@ $('#submitButton').on('click', function() {
     var boardTitle = $('#boardTitle').val();
     var createEmployeeNo = parseInt($('#createEmployeeNo').val(), 10);
     var updateEmployeeNo = parseInt($('#updateEmployeeNo').val(), 10);
+	var boardNo = $('#boardNo').val();  // boardNo 값이 input에 있을 경우 추가
  	
     // 동적으로 추가된 파일 입력 필드의 파일을 모두 가져오기
     var boardFiles = [];
@@ -105,14 +106,29 @@ $('#submitButton').on('click', function() {
     var formData = new FormData();
     formData.append('boardTitle', boardTitle); // 제목
     formData.append('boardContent', boardContent); // Quill 에디터 내용
-    formData.append('createEmployeeNo', createEmployeeNo); // 작성자
     formData.append('updateEmployeeNo', updateEmployeeNo); // 수정자
 	formData.append('boardNo', boardNo); // 게시판 번호
+	console.log('boardTitle : ' + boardTitle);
+	console.log('boardContent : ' + boardContent);
+	console.log('updateEmployeeNo : ' + updateEmployeeNo);
+	console.log('boardNo : ' + boardNo);
+	
+	if (!boardNo) {
+	    alert("게시판 번호가 없습니다.");
+	    return;
+	}
+	
+	if (boardFiles.length === 0) {
+	    alert("파일을 첨부해주세요.");
+	    return;
+	}
 	
     // 파일이 있다면 추가
     boardFiles.forEach(function(file) {
         formData.append('boardFiles[]', file);  // 여러 파일 처리
     });
+	
+	console.log('boardFiles[]' + boardFiles);
 
     // jQuery AJAX 요청
     $.ajax({
@@ -148,6 +164,7 @@ if(element){
 	var inputs = element.querySelectorAll('input:not([type="hidden"])');	
 	result = inputs ? inputs.length : 0;	// inputs가 null 또는 undefined일 경우 0로 설정
 }
+
 // 첨부파일 폼 추가버튼 클릭 시
 $('#btnAddFile').click(function(){
 	console.log('result 값 : ' + result);

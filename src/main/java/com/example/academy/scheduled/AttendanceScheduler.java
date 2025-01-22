@@ -26,7 +26,7 @@ public class AttendanceScheduler {
 	LocalDate today = LocalDate.now();
 	
 	// 매일 00시 00분에 실행
-    @Scheduled(cron = "0 20 17 * * ?")// cron 표현식: 매일 00시 00분
+    @Scheduled(cron = "0 00 17 * * ?")// cron 표현식: 매일 00시 00분
     public void generateAttendanceData() { 
         
     	//isWeekday(today) - 토요일(6)과 일요일(7)을 제외한 평일에만 실행
