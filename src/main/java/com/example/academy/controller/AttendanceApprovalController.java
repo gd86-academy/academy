@@ -71,7 +71,7 @@ public class AttendanceApprovalController {
 		log.debug("승인전 데이터 확인 : " + attendanceApprovalOneDTO);	//디버깅
 		attendanceApprovalService.agreeAttendanceApproval(attendanceApprovalOneDTO);
 		
-		return "redirect:/completeApprovalList";
+		return "redirect:/completeAttendanceApprovalOne?attendanceApprovalNo=" + attendanceApprovalOneDTO.getAttendanceApprovalNo();
 	}
 	
 	// 김혜린 : 근태 신청서 반려 시
@@ -81,7 +81,7 @@ public class AttendanceApprovalController {
 		log.debug("반려전 데이터 확인 : " + attendanceApprovalOneDTO);	//디버깅
 	    attendanceApprovalService.rejectAttendanceApproval(attendanceApprovalOneDTO);
 	   
-		return "redirect:/completeApprovalList";
+	    return "redirect:/completeAttendanceApprovalOne?attendanceApprovalNo=" + attendanceApprovalOneDTO.getAttendanceApprovalNo();
 	}
 	
 	// 김혜린 : 근태 신청서 삭제
@@ -185,6 +185,43 @@ public class AttendanceApprovalController {
 		log.debug("파일 목록 : " + files);	//디버깅
 		
 		return "waitAttendanceApprovalOne";
+	}
+	
+	// 김혜린 : 결재완료 근태 신청서 상세페이지 - 결재 완료 목록
+	@GetMapping("/completeAttendanceApprovalOne")
+	public String completeAttendanceApprovalOne(Model model, Integer attendanceApprovalNo) {
+		// 스프링시큐리티에서 계정정보 가져오기.
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		// 로그인 상태일 때만 model에 정보담기.
+		if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+			CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+			model.addAttribute("userNo", Integer.parseInt(userDetails.getUsername()));
+			model.addAttribute("userName", userDetails.getUserRealName());
+			model.addAttribute("userMail", userDetails.getUserMail());
+			model.addAttribute("userRole", userDetails.getUserRole());
+			model.addAttribute("userPhotoFileName", userDetails.getUserPhotoFileName());
+			model.addAttribute("userPhotoFileExt", userDetails.getUserPhotoFileExt());
+		}
+		
+		log.debug("==============attendanceApprovalNo1 : " + attendanceApprovalNo);	//디버깅
+		// 1) 근태신청서 테이블 상세
+		AttendanceApprovalOneDTO attendanceApproval = attendanceApprovalService.getAttendanceApprovalOne(attendanceApprovalNo);
+		model.addAttribute("attendanceApproval", attendanceApproval);
+		// 근태신청서 현재 결재단계
+		model.addAttribute("step",attendanceApproval.getAttendanceApprovalStep());
+		log.debug("근태신청서 상세 : " + attendanceApproval);	//디버깅
+		log.debug("==============attendanceApprovalNo2 : " + attendanceApprovalNo);	//디버깅
+		// 2) 결재자 목록
+		List<AttendanceApprovalOneDTO> approvers  = approvalEmployeeService.getAttendanceApproverList(attendanceApprovalNo);
+		model.addAttribute("approvers", approvers);
+		log.debug("결재자 목록 : " + approvers);	//디버깅
+		// 3) 파일 목록
+		List<Files> files = attendanceApprovalFileService.getAttendanceApprovalFileList(attendanceApprovalNo);
+		model.addAttribute("files", files);
+		log.debug("파일 목록 : " + files);	//디버깅
+		
+		return "completeAttendanceApprovalOne";
 	}
 	
 	// 김혜린 : 근태 신청
