@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.example.academy.dto.AttendanceContentDTO;
 import com.example.academy.dto.AttendanceDTO;
 import com.example.academy.dto.BoardListByMainDTO;
+import com.example.academy.dto.WaitApprovalListDTO;
 import com.example.academy.security.CustomUserDetails;
 import com.example.academy.service.AnnualLeaveService;
 import com.example.academy.service.AttendanceService;
@@ -23,6 +24,7 @@ import com.example.academy.service.AuthService;
 import com.example.academy.service.BoardService;
 import com.example.academy.service.EmployeeService;
 import com.example.academy.service.MemoService;
+import com.example.academy.service.WaitApprovalService;
 import com.example.academy.vo.Memo;
 
 @Controller
@@ -32,6 +34,7 @@ public class MainController {
 	@Autowired AttendanceService attendanceService;
 	@Autowired BoardService boardService;
 	@Autowired MemoService memoService;
+	@Autowired WaitApprovalService waitApprovalService;
 	
 	// 진수우 : 메인페이지 호출.
 	@GetMapping("/main")
@@ -71,6 +74,9 @@ public class MainController {
 	        // 오늘 퇴근 활성화 확인
 	        Integer checkoutNo = attendanceService.getSelectCheckout(attendanceDTO);
 	        
+	        // 미결재 리스트
+	        List<WaitApprovalListDTO> waitApprovalList = waitApprovalService.getWaitApprovalList(); 
+	        
 	        model.addAttribute("checkinNo", checkinNo); // 오늘 출근 활성화
 	        model.addAttribute("checkoutNo", checkoutNo); // 오늘 퇴근 활성화
 	        model.addAttribute("boardList", boardList); // 최근 공지사항 5개 조회
@@ -86,6 +92,7 @@ public class MainController {
 	        model.addAttribute("userPhotoFileExt", userDetails.getUserPhotoFileExt());
 	        model.addAttribute("memoContent", memoContent);
 	        model.addAttribute("writer", Integer.parseInt(userDetails.getUsername()));
+	        model.addAttribute("waitApprovalList", waitApprovalList);
 	    }
 		return "main";
 	}
