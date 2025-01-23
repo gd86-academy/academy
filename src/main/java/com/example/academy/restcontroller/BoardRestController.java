@@ -6,13 +6,15 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.academy.dto.BoardListByMainDTO;
 import com.example.academy.dto.BoardListDTO;
 import com.example.academy.service.BoardService;
+
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
+@Slf4j
 public class BoardRestController {
 	@Autowired BoardService boardService;
 	

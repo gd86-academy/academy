@@ -27,11 +27,6 @@ public class BoardController {
 	@Autowired BoardService boardService;
 	@Autowired BoardFileService boardFileService;
 	
-	@GetMapping("/sample")
-	public String sample() {
-		return "sample";
-	}
-	
 	// 공지사항yn 수정
 	@GetMapping("/deleteBoard")
 	public String modifyBoardYN(Integer boardNo) {
@@ -128,6 +123,7 @@ public class BoardController {
 	        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 	        model.addAttribute("userNo", userDetails.getUsername());
 	        model.addAttribute("userName", userDetails.getUserRealName());
+	        model.addAttribute("userMail", userDetails.getUserMail());
 	        model.addAttribute("userPhotoFileName", userDetails.getUserPhotoFileName());
 	        model.addAttribute("userPhotoFileExt", userDetails.getUserPhotoFileExt());
 	        model.addAttribute("userDepartment", userDetails.getUserDepartment());

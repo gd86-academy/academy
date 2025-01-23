@@ -67,7 +67,20 @@ document.addEventListener('alpine:init', () => {
 });
 
 var quill = new Quill('#editor', {
-    theme: 'snow'
+    theme: 'snow',
+    placeholder: '내용을 입력하세요.',  // Placeholder 텍스트 설정
+    modules: {
+        toolbar: [
+            [{ 'font': [] }],  // 글자 크기
+            ['bold', 'italic', 'underline', 'strike'],  // 굵게, 기울임, 밑줄, 취소선
+            [{ 'header': '1' }, { 'header': '2' }, 'blockquote'],  // 헤더1, 헤더2, 블록 인용
+            [{ 'list': 'ordered' }, { 'list': 'bullet' }],  // 번호 매기기, 글머리 기호
+            [{ 'align': [] }],  // 정렬
+            ['link'],  // 링크, 이미지 삽입
+            [{ 'color': [] }, { 'background': [] }],  // 글자 색상, 배경 색상
+            ['clean'],  // 서식 초기화
+        ]
+    }
 });
 
 // 전송 버튼 클릭 이벤트
