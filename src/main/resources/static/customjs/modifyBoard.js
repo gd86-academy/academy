@@ -109,14 +109,9 @@ $('#submitButton').on('click', function() {
 	    });
 
     // 제목 입력 여부 확인
-    if (!boardTitle.trim()) {
-        alert("제목을 입력해주세요.");
-        return;
-    }
-
-    // 내용 입력 여부 확인
-    if (!boardContent.trim() || boardContent === '<p><br></p>') {
-        alert("내용을 입력해주세요.");
+	if (!boardContent.trim() || boardContent === '<p><br></p>' || !boardTitle.trim()) {
+		modalBackgroundBoardDelete.classList.remove('hidden');  // 모달 배경 보이기
+		modalBackgroundBoardDelete.classList.add('block');     // 모달 배경 보이게 설정
         return;
     }
 
@@ -157,7 +152,7 @@ $('#submitButton').on('click', function() {
         contentType: false, // FormData 사용 시 false로 설정
         success: function(response) {
             console.log('Success:', response);
-            alert("게시글이 성공적으로 등록되었습니다.");
+            //alert("게시글이 성공적으로 등록되었습니다.");
             // 성공 후 페이지 이동
            window.location.href = '/academy/boardList'; // 게시판 목록 페이지로 이동
         },
@@ -283,3 +278,26 @@ function removeFileField(fileId) {
 	removeButtonIds = removeButtonIds.filter(removeButtonId => removeButtonId !== 'removeFileBtn' + fileId);	
 	errMsgs = errMsgs.filter(errMsg => errMsg !== 'errMsg' + fileId);	
 }
+
+
+// 사원삭제 모달 관련 DOM 요소
+const openModalButtonBoardDelete = document.getElementById('openModalButtonBoardDelete');
+const closeModalButtonBoardDelete = document.getElementById('closeModalButtonBoardDelete');
+const modalBackgroundBoardDelete = document.getElementById('modalBackgroundBoardDelete');
+const modalWrapperBoardDelete = document.getElementById('modalWrapperBoardDelete');
+const cancelButtonBoardDelete = document.getElementById('cancelButtonBoardDelete');
+
+// 사원삭제 모달 닫기
+const closeModalBoardDelete = () => {
+	modalBackgroundBoardDelete.classList.remove('block');
+	modalBackgroundBoardDelete.classList.add('hidden');  // 모달 배경 숨기기
+  // 모달 내부의 모든 입력 필드를 초기화
+  const formBoardDelete = document.getElementById('boardFormBoardDelete');
+  formBoardDelete.reset(); // 모든 입력 필드와 라디오 버튼 초기화
+  $('input').removeClass('errorInput');
+  // 모든 에러 라벨 숨기기
+  $('.error-label').hide();
+};
+
+if (closeModalButtonBoardDelete) closeModalButtonBoardDelete.addEventListener('click', closeModalBoardDelete); // 닫기 버튼 클릭 시
+if (cancelButtonBoardDelete) cancelButtonBoardDelete.addEventListener('click', closeModalBoardDelete);     // 취소 버튼 클릭 시

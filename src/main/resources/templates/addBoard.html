@@ -26,8 +26,6 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <!-- Quill JS -->
         <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
-		
-		
 		<style>
 			.ql-editor{ 
 			  min-height: 500px !important;
@@ -136,6 +134,57 @@
 	                </div>
 	            </div>
 	        </div>
+	        
+	        <!-- 입력 확인 모달 -->
+			<div class="BoardDelete">
+			  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundBoardDelete">
+			       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperBoardDelete">
+			           <div
+			               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
+			               id="modal"
+			           >
+			               <button
+			                   type="button"
+			                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+			                   id="closeModalButtonBoardDelete"
+			               >
+			                   <svg
+			                       xmlns="http://www.w3.org/2000/svg"
+			                       width="24px"
+			                       height="24px"
+			                       viewBox="0 0 24 24"
+			                       fill="none"
+			                       stroke="currentColor"
+			                       stroke-width="1.5"
+			                       stroke-linecap="round"
+			                       stroke-linejoin="round"
+			                       class="h-6 w-6"
+			                   >
+			                       <line x1="18" y1="6" x2="6" y2="18"></line>
+			                       <line x1="6" y1="6" x2="18" y2="18"></line>
+			                   </svg>
+			               </button>
+			               <h3
+			                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
+			               >
+			                   안내
+			               </h3>
+			               <div class="p-5">
+			                   입력하지 않은 항목이 있습니다.
+			                   <div class="mt-8 flex items-center justify-end">
+		                          <button
+		                          	  id="cancelButtonBoardDelete"
+		                              type="button"
+		                              class="btn btn btn-primary ltr:ml-4 rtl:mr-4"
+		                          >
+		                              확인
+		                          </button>
+		                      </div>
+			               </div>
+			           </div>
+			       </div>
+			   </div>		
+			</div>
 	        
 	       <!--  풋터 파일 연결 -->
                 <div th:replace="fragments/footer :: footer"></div>
