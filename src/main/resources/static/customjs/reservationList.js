@@ -146,7 +146,7 @@ document.addEventListener('alpine:init', () => {
 						    list: '목록'            // "List" 
 						},
 						eventDisplay: 'block',
-		                editable: true,
+		                editable: false,
 		                dayMaxEvents: true,
 		                selectable: true,
 		                droppable: true,
