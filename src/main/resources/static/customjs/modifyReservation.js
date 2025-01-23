@@ -69,10 +69,11 @@ document.addEventListener('alpine:init', () => {
 	$(document).ready(function() {
 	    const reservationNo = $('#reservationNo').val(); // 예약 번호 가져오기
 	    let cnt = $('#selectEmployeesContainer .selectedEmployee-box').length;
-	    
+
+	    // 참여자 목록을 가져오는 API
 	    if (reservationNo) {
 	        $.ajax({
-	            url: 'http://localhost/academy/restapi/getReservationEmployeeOne?reservationNo=' + reservationNo, // 참여자 목록을 가져오는 API
+	            url: 'http://localhost/academy/restapi/getReservationEmployeeOne?reservationNo=' + reservationNo,
 	            type: 'GET',
 	            data: { reservationNo: reservationNo },
 	            dataType: 'json',
@@ -81,44 +82,14 @@ document.addEventListener('alpine:init', () => {
 	                    data.forEach(employee => {
 	                        const existingEmployee = `
 	                            <div class="d-flex w-100 items-center justify-between mt-2 selectedEmployee-box">
-	                                <input type="hidden"  class="selectedEmployeeNo" value="${employee.employeeNo}" name="reservationEmployees[${cnt}].employeeNo">
-	                                <input 
-	                                    class="form-input selectedEmployee"
-	                                    type="text"
-	                                    value="${employee.employeeName}" 
-	                                    data-employee-no="${employee.employeeNo}" 
-	                                    name="reservationEmployees[${cnt}].employeeName"
-	                                    readonly>
+	                                <input type="hidden" class="selectedEmployeeNo" value="${employee.employeeNo}" name="reservationEmployees[${cnt}].employeeNo">
+	                                <input class="form-input selectedEmployee" type="text" value="${employee.employeeName}" data-employee-no="${employee.employeeNo}" name="reservationEmployees[${cnt}].employeeName" readonly>
 	                                <button type="button" class="btn btn-danger ms-3 removeEmployee" style="word-break:keep-all;">삭제</button>
 	                            </div>
 	                        `;
 	                        $('#selectEmployeesContainer').append(existingEmployee);
-							cnt++; 
+	                        cnt++;
 	                    });
-	                }
-					// 시작시간 데이터 처리
-	                if (data.beginTimeCodes && data.beginTimeCodes.length > 0) {
-	                    $('#beginTimeCode').empty().append('<option value="" disabled selected>시작 시간</option>');
-	                    data.beginTimeCodes.forEach(time => {
-	                        // 예약된 시작시간이 있을 경우 그 값을 selected로 처리
-	                        $('#beginTimeCode').append(`
-	                            <option value="${time.code}" selected="${time.code == data.reservation.beginTimeCode}" >${time.name}</option>
-	                        `);
-	                    });
-	                }
-
-	                // 종료시간 데이터 처리
-	                if (data.endTimeCodes && data.endTimeCodes.length > 0) {
-	                    $('#endTimeCode').empty().append('<option value="" disabled selected>종료 시간</option>');
-	                    data.endTimeCodes.forEach(time => {
-	                        // 예약된 종료시간이 있을 경우 그 값을 selected로 처리
-	                        $('#endTimeCode').append(`
-	                            <option value="${time.code}" selected="${time.code == data.reservation.endTimeCode}" >${time.name}</option>
-	                        `);
-	                    });
-
-	                    // 종료시간 비활성화 처리
-	                    disableEndTimeOptions();
 	                }
 	            },
 	            error: function(xhr, status, error) {
@@ -126,44 +97,126 @@ document.addEventListener('alpine:init', () => {
 	            }
 	        });
 	    }
-		
-		// 시작시간 데이터와 종료시간 데이터를 가져오는 요청
-       let meetingroomNo = $('#selectMeetingroom option:selected').val();
-       let reservationDate = $('#reservationDate').val();
 
-       // 시작시간
-       $.ajax({
-           url: 'http://localhost/academy/restapi/modifyReservationByBeginTime',
-           contentType: 'application/json',
-           type: 'POST',
-           data: JSON.stringify({ meetingroomNo: meetingroomNo, reservationDate: reservationDate }),
-           success: function(data) {
-               data.forEach(time => {
-                   $('#beginTimeCode').append(`<option value="${time.code}">${time.name}</option>`);
-               });
-           },
-           error: function() {
-               alert('시간 데이터를 가져오는 중 오류가 발생했습니다.');
-           }
-       });
+	    // 시간 데이터를 가져오는 API (시작 및 종료 시간)
+		$.ajax({
+		    url: 'http://localhost/academy/restapi/getReservationTime?reservationNo=' + reservationNo,
+		    type: 'GET',
+		    data: { reservationNo: reservationNo },
+		    success: function(data) {
+		        // 시작 시간 처리
+		        if (data.beginTimeCode) {
+		            $('#beginTimeCode').empty().append('<option value="" disabled selected>시작 시간</option>');
+		        }
 
-       // 종료시간
-       $.ajax({
-           url: 'http://localhost/academy/restapi/modifyReservationByEndTime',
-           contentType: 'application/json',
-           type: 'POST',
-           data: JSON.stringify({ meetingroomNo: meetingroomNo, reservationDate: reservationDate }),
-           success: function(data) {
-               data.forEach(time => {
-                   $('#endTimeCode').append(`<option value="${time.code}">${time.name}</option>`);
-               });
-               // 종료시간 비활성화 처리
-               disableEndTimeOptions();
-           },
-           error: function() {
-               alert('시간 데이터를 가져오는 중 오류가 발생했습니다.');
-           }
-       });
+		        // 종료 시간 처리
+		        if (data.endTimeCode) {
+		            $('#endTimeCode').empty().append('<option value="" disabled selected>종료 시간</option>');
+		        }
+
+		        // 시작 및 종료 시간 데이터가 존재하면, 해당 시간대에 맞는 시간 데이터를 가져옴
+		        let meetingroomNo = $('#selectMeetingroom option:selected').val();
+		        let reservationDate = $('#reservationDate').val();
+
+		        // 시작시간 데이터 가져오기
+		        $.ajax({
+		            url: 'http://localhost/academy/restapi/modifyReservationByBeginTime',
+		            contentType: 'application/json',
+		            type: 'POST',
+		            data: JSON.stringify({
+		                reservationNo: reservationNo,
+		                meetingroomNo: meetingroomNo,
+		                reservationDate: reservationDate
+		            }),
+		            success: function(beginTimeData) {
+		                // 시작시간 데이터가 배열이 아닐 경우를 대비해 확인
+		                let beginTimes = Array.isArray(beginTimeData) ? beginTimeData : [beginTimeData];
+		                let currentBeginTimeCode = data.beginTimeCode || null; // 현재 선택된 시작시간 코드
+
+		                // 시작시간 옵션 처리
+		                beginTimes.forEach(time => {
+		                    let selected = time.code === currentBeginTimeCode ? 'selected' : '';
+		                    $('#beginTimeCode').append(`
+		                        <option value="${time.code}" ${selected}>${time.name}</option>
+		                    `);
+		                });
+
+		                // 시작시간 선택 시 종료시간 초기화
+		                $('#beginTimeCode').change(function() {
+		                    $('#endTimeCode').val(''); // 종료시간 초기화
+		                    disableSelectedOption(); // 종료시간 옵션 비활성화 및 설정
+		                });
+		            },
+		            error: function() {
+		                alert('시간 데이터를 가져오는 중 오류가 발생했습니다.');
+		            }
+		        });
+				
+				// 종료시간 데이터 가져오기
+                $.ajax({
+                    url: 'http://localhost/academy/restapi/modifyReservationByEndTime',
+                    contentType: 'application/json',
+                    type: 'POST',
+                    data: JSON.stringify({
+                        reservationNo: reservationNo,
+                        meetingroomNo: meetingroomNo,
+                        reservationDate: reservationDate
+                    }),
+                    success: function(endTimeData) {
+                        // 종료시간 데이터가 배열이 아닐 경우를 대비해 확인
+                        let endTimes = Array.isArray(endTimeData) ? endTimeData : [endTimeData];
+                        let currentEndTimeCode = data.endTimeCode || null; // 현재 선택된 종료시간 코드
+
+                        // 종료시간 옵션 처리
+                        endTimes.forEach(time => {
+                            let selected = time.code === currentEndTimeCode ? 'selected' : '';
+                            $('#endTimeCode').append(`
+                                <option value="${time.code}" ${selected}>${time.name}</option>
+                            `);
+                        });
+
+                        // 종료시간 비활성화 처리
+                        disableEndTimeOptions();
+                    },
+                    error: function() {
+                        alert('시간 데이터를 가져오는 중 오류가 발생했습니다.');
+                    }
+                });
+		    },
+		    error: function(xhr, status, error) {
+		        console.error('Error fetching reservation times:', error);
+		    }
+		});
+
+		// 시작시간을 선택했을 때 종료시간을 선택할 때 시작시간 이전의 시간은 선택되지 않도록 설정
+		function disableSelectedOption() {
+		    var beginTimeCode = document.getElementById('beginTimeCode');
+		    var selectedValue1 = beginTimeCode.value;
+
+		    var endTimeCode = document.getElementById('endTimeCode');
+		    var selectedEndValue = endTimeCode.value;
+
+		    // 종료시간을 비활성화 처리
+		    if (selectedValue1 !== '') {
+		        endTimeCode.disabled = false; // 시작시간이 선택되었으면 종료시간 활성화
+		    } else {
+		        endTimeCode.disabled = true; // 시작시간이 선택되지 않으면 종료시간 비활성화
+		    }
+
+		    // 만약 종료시간이 시작시간 이전으로 선택되어 있다면, 종료시간 초기화
+		    if (selectedEndValue && selectedEndValue <= selectedValue1) {
+		        endTimeCode.value = ""; // 종료 시간 초기화
+		    }
+
+		    // 첫 번째 <select>에서 선택된 값과 일치하는 옵션 비활성화
+		    for (var i = 0; i < endTimeCode.options.length; i++) {
+		        if (endTimeCode.options[i].value <= selectedValue1) {
+		            endTimeCode.options[i].disabled = true;
+		        } else {
+		            endTimeCode.options[i].disabled = false;
+		        }
+		    }
+		}
 	});
 	
 	// 예약 날짜
@@ -183,19 +236,23 @@ document.addEventListener('alpine:init', () => {
 	    });
 	});
 	
-	// 시작시간 데이터
-	$('#reservationDate, #selectMeetingroom').change(function() {
-	    let meetingroomNo = $('#selectMeetingroom option:selected').val();
-	    let reservationDate = $('#reservationDate').val();		
-	    console.log(meetingroomNo);
-	    console.log(reservationDate);
-	    
-	    $('#beginTimeCode').empty().append('<option value="" disabled selected>시작 시간</option>');
+	// 시작시간 및 종료시간 데이터 가져오는 공통 함수
+	function loadTimeData() {
+	    let meetingroomNo = $('#selectMeetingroom').val();
+	    let reservationDate = $('#reservationDate').val();
 
-	    // AJAX 요청
+	    // 유효성 검사: 회의실 번호와 예약 날짜가 모두 선택되었는지 확인
+	    if (!meetingroomNo || !reservationDate) {
+	        $('#beginTimeCode').empty().append('<option value="" disabled selected>시작 시간</option>').prop('disabled', true);
+	        $('#endTimeCode').empty().append('<option value="" disabled selected>종료 시간</option>').prop('disabled', true);
+	        return;
+	    }
+
+	    // 시작 시간 데이터 가져오기
+	    $('#beginTimeCode').empty().append('<option value="" disabled selected>시작 시간</option>').prop('disabled', false);
 	    $.ajax({
-	        url: 'http://localhost/academy/restapi/modifyReservationByBeginTime',
-	        contentType: 'application/json', 
+	        url: 'http://localhost/academy/restapi/getReservationByBeginTime',
+	        contentType: 'application/json',
 	        type: 'POST',
 	        data: JSON.stringify({
 	            meetingroomNo: meetingroomNo,
@@ -207,22 +264,15 @@ document.addEventListener('alpine:init', () => {
 	            });
 	        },
 	        error: function () {
-	            alert('시간 데이터를 가져오는 중 오류가 발생했습니다.');
+	            alert('시작 시간 데이터를 가져오는 중 오류가 발생했습니다.');
 	        }
-	    })
-	});
+	    });
 
-	// 종료시간 데이터
-	$('#reservationDate, #selectMeetingroom').change(function() {
-	    let meetingroomNo = $('#selectMeetingroom option:selected').val();
-	    let reservationDate = $('#reservationDate').val();		
-
-	    $('#endTimeCode').empty().append('<option value="" disabled selected>종료 시간</option>');
-
-	    // AJAX 요청
+	    // 종료 시간 데이터 가져오기
+	    $('#endTimeCode').empty().append('<option value="" disabled selected>종료 시간</option>').prop('disabled', false);
 	    $.ajax({
-	        url: 'http://localhost/academy/restapi/modifyReservationByEndTime',
-	        contentType: 'application/json', 
+	        url: 'http://localhost/academy/restapi/getReservationByEndTime',
+	        contentType: 'application/json',
 	        type: 'POST',
 	        data: JSON.stringify({
 	            meetingroomNo: meetingroomNo,
@@ -232,85 +282,31 @@ document.addEventListener('alpine:init', () => {
 	            data.forEach(time => {
 	                $('#endTimeCode').append(`<option value="${time.code}">${time.name}</option>`);
 	            });
-
-	            // 시작시간 선택 후 종료시간의 옵션 비활성화 처리
-	            disableEndTimeOptions();
 	        },
 	        error: function () {
-	            alert('시간 데이터를 가져오는 중 오류가 발생했습니다.');
+	            alert('종료 시간 데이터를 가져오는 중 오류가 발생했습니다.');
 	        }
-	    })
+	    });
+	}
+
+	// 예약 날짜 변경 시
+	$('#reservationDate').change(function () {
+	    loadTimeData();
 	});
 
-	// 시작시간에 따라 종료시간 옵션을 비활성화하는 함수
-	function disableEndTimeOptions() {
-	    var beginTimeCode = $('#beginTimeCode').val();
-	    var endTimeCode = $('#endTimeCode');
-	    
-	    if (beginTimeCode) {
-	        endTimeCode.find('option').each(function() {
-	            var optionValue = $(this).val();
-	            if (optionValue <= beginTimeCode) {
-	                $(this).prop('disabled', true); // 비활성화
-	            } else {
-	                $(this).prop('disabled', false); // 활성화
-	            }
-	        });
-	    }
-	}
+	// 회의실 변경 시
+	$('#selectMeetingroom').change(function () {
+	    // 시간 선택 초기화 및 AJAX 호출
+	    $('#beginTimeCode').val('').prop('disabled', false);
+	    $('#endTimeCode').val('').prop('disabled', true);
+
+	    loadTimeData(); // 시간 데이터 다시 로드
+	});
 	
-	// 시작시간을 선택했을 때 종료시간을 선택할 때 시작시간 이전의 시간은 선택되지 X
-	function disableSelectedOption() {
-		
-		console.log('disableSelectedOption 호출됨')
-	    var beginTimeCode = document.getElementById('beginTimeCode');
-	    var selectedValue1 = beginTimeCode.value;
-		
-	    // 두 번째 <select> 요소 가져오기
-	    var endTimeCode = document.getElementById('endTimeCode');
-		var selectedEndValue = endTimeCode.value; 
-		
-	    // 종료시간을 비활성화 처리
-	    if (selectedValue1 !== '') {
-	        endTimeCode.disabled = false; // 시작시간이 선택되었으면 종료시간 활성화
-	    } else {
-	        endTimeCode.disabled = true; // 시작시간이 선택되지 않으면 종료시간 비활성화
-	    }
-		
-		// 만약 시간시간을 다시 종료시간보다 뒤로 바꿧을때 종료시간 초기화
-		if (selectedEndValue <= selectedValue1) {
-	        endTimeCode.value = ""; // 종료 시간 초기화
-	    }
-
-	    // 첫 번째 <select>에서 선택된 값과 일치하는 옵션 비활성화
-	    for (var i = 0; i < endTimeCode.options.length; i++) {
-	        if (endTimeCode.options[i].value <= selectedValue1) {
-	            endTimeCode.options[i].disabled = true;
-	        }
-	    }
-
-	    // 이전 시간 저장 변수
-	    var previousValue = parseInt(selectedValue1); // 시작 시간
-	    var selectedValue = false;
-	    var selectedIndex = beginTimeCode.selectedIndex; // 선택된 값의 인덱스 가져오기
-	    var previousValue = parseInt(beginTimeCode.options[selectedIndex].text); // 선택된 텍스트 값
-
-	    // 선택된 옵션 이후부터 루프 실행
-	    for (var i = selectedIndex; i < endTimeCode.options.length; i++) {
-	        var optionText = parseInt(endTimeCode.options[i].text); // 현재 옵션의 텍스트 값 (숫자로 변환)
-			endTimeCode.options[i].disabled = false;
-	        if (selectedValue === true) {
-	            endTimeCode.options[i].disabled = true;
-	        } else if (optionText > previousValue + 1) {
-	            endTimeCode.options[i].disabled = true;
-	            selectedValue = true;
-	        }
-
-	        // 이전 값을 갱신
-	        previousValue = optionText;
-	    }
-	};
-
+	$(document).on('change', '#selectMeetingroom', function () {
+		$('#beginTimeCode').prop('disabled', false).val('');
+		$('#endTimeCode').prop('disabled', true).val('');
+	});
 
 	// 사원검색
 	function searchEmployee() {

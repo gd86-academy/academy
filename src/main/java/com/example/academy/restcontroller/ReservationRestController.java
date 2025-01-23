@@ -38,6 +38,7 @@ public class ReservationRestController {
 	// 박시현 : 회의실 예약수정 시 가능한 종료시간만 출력 + 현재 수정 중인 예약 시간도 출력
 	@PostMapping("/restapi/modifyReservationByEndTime")
 	public List<Common> modifyReservationByEndTime(@RequestBody AddReservationDTO addReservationDTO) {
+		System.out.println("쿼리 실행 전 ReservationNo: " + addReservationDTO.getReservationNo());
 		System.out.println("쿼리 실행 전 MeetingRoomNo: " + addReservationDTO.getMeetingroomNo());
 		System.out.println("쿼리 실행 전 ReservationDate: " + addReservationDTO.getReservationDate());
 		return reservationService.modifyReservationByEndTime(addReservationDTO);
@@ -46,6 +47,7 @@ public class ReservationRestController {
 	// 박시현 : 회의실 예약수정 시 가능한 시작시간만 출력 + 현재 수정 중인 예약 시간도 출력
 	@PostMapping("/restapi/modifyReservationByBeginTime")
 	public List<Common> modifyReservationByBeginTime(@RequestBody AddReservationDTO addReservationDTO) {
+		System.out.println("쿼리 실행 전 ReservationNo: " + addReservationDTO.getReservationNo());
 		System.out.println("쿼리 실행 전 MeetingRoomNo: " + addReservationDTO.getMeetingroomNo());
 		System.out.println("쿼리 실행 전 ReservationDate: " + addReservationDTO.getReservationDate());
 		return reservationService.modifyReservationByBeginTime(addReservationDTO);
@@ -66,8 +68,14 @@ public class ReservationRestController {
 	    System.out.println("쿼리 실행 전 ReservationDate: " + addReservationDTO.getReservationDate());
 		return reservationService.getReservationByBeginTime(addReservationDTO);
 	}
-
-	// 박시현 : 수정페이지 - 이미 등록되있던 예약 참여자 보여주기
+	
+	// 박시현 : 수정페이지 - 이미 등록했던 시간 출력
+	@GetMapping("/restapi/getReservationTime")
+	public ReservationListDTO getReservationTime(Integer reservationNo) {
+		return reservationService.getReservationOne(reservationNo);
+	}
+	
+	// 박시현 : 수정페이지 - 이미 등록되있던 예약 참여자 출력
 	@GetMapping("/restapi/getReservationEmployeeOne") 
 	public ResponseEntity<List<ReservationEmployeeDTO>> getReservationEmployeeOne( Integer reservationNo) {
 		List<ReservationEmployeeDTO> employees = reservationService.getReservationEmployee(reservationNo);
