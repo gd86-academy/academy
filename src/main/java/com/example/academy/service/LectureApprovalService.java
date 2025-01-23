@@ -18,6 +18,7 @@ import com.example.academy.dto.ApprovalAddDTO;
 import com.example.academy.dto.LectureApprovalAddDTO;
 import com.example.academy.dto.LectureApprovalEmployeeListDTO;
 import com.example.academy.dto.LectureApprovalGetBeginTimeDTO;
+import com.example.academy.dto.LectureApprovalListDTO;
 import com.example.academy.dto.LectureApprovalModifyDTO;
 import com.example.academy.dto.LectureApprovalOneDTO;
 import com.example.academy.dto.LectureApprovalWeekdayListDTO;
@@ -38,6 +39,21 @@ public class LectureApprovalService {
 	@Autowired LectureApprovalMapper lectureApprovalMapper;
 	@Autowired FilesMapper filesMapper;
 	@Autowired LectureMapper lectureMapper;
+	
+	// 김혜린 : 결재 완료 목록 - 강의신청서 리스트 조회
+	public List<LectureApprovalListDTO> getCompleteLectureApprovalList(Integer employeeNo){
+		return lectureApprovalMapper.selectCompleteLectureApprovalList(employeeNo);
+	}
+	
+	// 김혜린 : 결재 대기 목록 - 강의신청서 리스트 조회
+	public List<LectureApprovalListDTO> getWaitLectureApprovalList(Integer employeeNo){
+		return lectureApprovalMapper.selectWaitLectureApprovalList(employeeNo);
+	}
+	
+	// 김혜린 : 나의 신청목록 - 강의신청서 리스트 조회
+	public List<LectureApprovalListDTO> getLectureApprovalList(Integer employeeNo){
+		return lectureApprovalMapper.selectLectureApprovalList(employeeNo);
+	}
 	
 	// 진수우 : 강의결재 재신청 시 폼에 입력한 내용 데이터베이스에 저장.
 	public void retryLectureApproval(LectureApprovalAddDTO lectureApprovalAddDTO, Integer lectureApprovalOriginNo) {

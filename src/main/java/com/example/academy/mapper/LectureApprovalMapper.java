@@ -9,6 +9,7 @@ import com.example.academy.dto.ApprovalAddDTO;
 import com.example.academy.dto.LectureApprovalAddDTO;
 import com.example.academy.dto.LectureApprovalEmployeeListDTO;
 import com.example.academy.dto.LectureApprovalGetBeginTimeDTO;
+import com.example.academy.dto.LectureApprovalListDTO;
 import com.example.academy.dto.LectureApprovalModifyDTO;
 import com.example.academy.dto.LectureApprovalOneDTO;
 import com.example.academy.dto.LectureApprovalWeekdayListDTO;
@@ -19,6 +20,15 @@ import com.example.academy.vo.LectureWeekday;
 
 @Mapper
 public interface LectureApprovalMapper {
+	
+	// 김혜린 : 결재 완료 목록 - 강의신청서 리스트 조회
+	List<LectureApprovalListDTO> selectCompleteLectureApprovalList(Integer employeeNo);
+		
+	// 김혜린 : 결재 대기 목록 - 강의신청서 리스트 조회
+	List<LectureApprovalListDTO> selectWaitLectureApprovalList(Integer employeeNo);
+	
+	// 김혜린 : 나의 신청 목록 - 강의신청서 리스트 조회
+	List<LectureApprovalListDTO> selectLectureApprovalList(Integer employeeNo);
 	
 	// 진수우 : 강의결재 승인처리 시 결재 테이블에서 해당 결재의 결재상태를 변경
 	Integer updateLectureApprovalStatusAccept(Integer lectureApprovalNo);

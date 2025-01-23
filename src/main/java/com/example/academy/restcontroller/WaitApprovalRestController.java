@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.academy.dto.AttendanceApprovalListDTO;
 import com.example.academy.dto.LectureApprovalListDTO;
 import com.example.academy.service.AttendanceApprovalService;
-import com.example.academy.service.delLectureApprovalService;
+import com.example.academy.service.LectureApprovalService;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestController
 public class WaitApprovalRestController {
 	@Autowired AttendanceApprovalService attendanceApprovalService;
-	@Autowired delLectureApprovalService delLectureApprovalService; // 추후 파일 변경후 수정
+	@Autowired LectureApprovalService lectureApprovalService; // 추후 파일 변경후 수정
 	
 	// 김혜린 : 결재 대기 목록 출력 - 근태신청서
 	@GetMapping("/restapi/waitAttendanceApprovalList")
@@ -38,7 +38,7 @@ public class WaitApprovalRestController {
 	// 김혜린 : 결재 대기 목록 출력 - 강의신청서
 	@GetMapping("/restapi/waitLectureApprovalList")
 	public List<Object[]> waitLectureApprovalList(Integer employeeNo){
-		List<LectureApprovalListDTO> waitLectureApprovalList = delLectureApprovalService.getWaitLectureApprovalList(employeeNo);
+		List<LectureApprovalListDTO> waitLectureApprovalList = lectureApprovalService.getWaitLectureApprovalList(employeeNo);
 		List<Object[]> result = new ArrayList<>();
 		
 		log.debug("employeeNo: " + employeeNo);	// 디버깅
