@@ -97,6 +97,8 @@ public class AttendanceService {
 			} else { // 14 < 출근시간 && 퇴근시간 < 18
 					attendanceMapper.updateLate(attendanceDTO); // 지각 활성화
 					attendanceMapper.updateEarlyLeave(attendanceDTO); // 조퇴 활성화
+					attendanceDTO.setAttendanceContent("CT006"); // CT006 = 지각
+					attendanceMapper.updateContent(attendanceDTO); // 근태유형 지각으로 변경
 			}
 		} else if(approvalContent.equals("CT004")) {	// 근태유형 == '오후반차'
 			if((checkInTime.isBefore(nineAM) || checkInTime.equals(nineAM)) 
@@ -127,6 +129,8 @@ public class AttendanceService {
 			} else { // 9 < 출근시간 && 퇴근시간 < 18
 	 				attendanceMapper.updateLate(attendanceDTO); // 지각 활성화
 					attendanceMapper.updateEarlyLeave(attendanceDTO); // 조퇴 활성화
+					attendanceDTO.setAttendanceContent("CT006"); // CT006 = 지각
+					attendanceMapper.updateContent(attendanceDTO); // 근태유형 지각으로 변경
 			}
 		}	
 		return 1;

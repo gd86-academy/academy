@@ -26,7 +26,7 @@ public class AttendanceScheduler {
 	LocalDate today = LocalDate.now();
 	
 	// 매일 00시 00분에 실행
-    @Scheduled(cron = "0 00 17 * * ?")// cron 표현식: 매일 00시 00분
+    @Scheduled(cron = "0 00 00 * * ?")// cron 표현식: 매일 00시 00분
     public void generateAttendanceData() { 
         
     	//isWeekday(today) - 토요일(6)과 일요일(7)을 제외한 평일에만 실행
@@ -82,7 +82,7 @@ public class AttendanceScheduler {
             String attendanceApprovalType = findAttendanceApproval(today, employee.getEmployeeNo());
             	System.out.println("attendanceApprovalType---->"+ attendanceApprovalType);
             // 4. 근태 신청서가 승인된 경우, 근태 데이터를 수정
-            if (attendanceApprovalType != null && (attendanceApprovalType.equals("CT003") || attendanceApprovalType.equals("CT004") || attendanceApprovalType.equals("CT001"))) { // 근태유형이 병가, 오전반차, 오후반차일 시 근태유형만 변경
+            if (attendanceApprovalType != null && (attendanceApprovalType.equals("CT003") || attendanceApprovalType.equals("CT004"))) { // 근태유형이 병가, 오전반차, 오후반차일 시 근태유형만 변경
                 modifyAttendanceByApproval1(today, employee);
             } else if(attendanceApprovalType != null && !attendanceApprovalType.isEmpty()) { // 근태유형이 NULL이 아니거나 값이 있으면 근태유형, 출근, 퇴근 시간 변경 
             	modifyAttendanceByApproval2(today, employee);                

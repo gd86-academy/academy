@@ -55,9 +55,11 @@ public class BoardService {
 	    // 2) 파일 수정
  		// 수정하지 않은 파일 목록 가져오기
  		List<String> alreadyfilesList = boardModifyDTO.getAlreadyFiles();
+ 		System.out.println("alreadyfilesList-----------------> " + alreadyfilesList);
  		
  		// 데이터베이스에 저장되어있는 파일목록 가져오기
  		List<BoardFileDTO> boardFileList = boardFileMapper.selectBoardFileList(boardModifyDTO.getBoardNo());
+ 		log.debug("boardFileList-----------------> " + boardFileList);
  		
  		// 수정하지 않은 파일은 제외하고 데이터베이스 파일정보와 물리적 파일 삭제
  		for(BoardFileDTO files : boardFileList) {
@@ -134,6 +136,7 @@ public class BoardService {
  				if(result == 1) {
  					try {
  						mf.transferTo(new File(System.getProperty("user.dir") + "/src/main/resources/static/upload/" + file.getFileName() + "." + file.getFileExt()));
+ 						
  					} catch (Exception e) {
  						e.printStackTrace();
  						throw new RuntimeException();

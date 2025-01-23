@@ -90,6 +90,7 @@
 		FROM board b
 		LEFT OUTER JOIN employee e ON e.employee_no = b.update_employee_no
 		WHERE b.use_yn = 1
+		ORDER BY createDate DESC
 	</select>
 
 </mapper>

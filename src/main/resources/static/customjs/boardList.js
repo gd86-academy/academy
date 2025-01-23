@@ -84,7 +84,7 @@ document.addEventListener('alpine:init', () => {
 	            success: (data) => {
 					this.datatable = new simpleDatatables.DataTable('#myTable', {
 					    data: {
-					        headings: ['번호', '제목', '작성자', '작성일', '조회수'],
+					        headings: ['번호', '제목', '작성자', '조회수', '작성일'],
 					        data: data.map(item => [
 								item[0], // 번호
 					            item[1], // 제목

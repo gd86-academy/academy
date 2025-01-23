@@ -4,7 +4,7 @@
 
 	<!-- 게시판 수정 시 게시판/파일 연결테이블 해당 정보 삭제 -->
 	<delete id="deleteBoardFile">
-		DELETE FROM attendance_approval_file
+		DELETE FROM board_file
 		WHERE board_no = #{boardNo}
 		AND file_no = #{fileNo}
 	</delete>
