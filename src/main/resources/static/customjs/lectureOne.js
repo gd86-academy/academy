@@ -101,4 +101,4 @@ const closeModalLectureDelete = () => {
 };
 
 closeModalButtonLectureDelete.addEventListener('click', closeModalLectureDelete); // [x]버튼 클릭 시
-cancelButtonLectureDelete.addEventListener('click', closeModalLectureDelete);     // 취소 버튼 클릭 시
+cancelButtonLectureDelete.addEventListener('click', closeModalLectureDelete);     // 취소 버튼 클릭 
