@@ -21,4 +21,9 @@ public class WaitApprovalListDTO {
     private Integer employeeNo;
     private String employeeName;
     private String attendanceApprovalTitle;
+    
+    // 제목
+    private String title;
+    // 작성자
+    private String writer;
 }

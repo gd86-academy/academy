@@ -75,7 +75,7 @@ public class MainController {
 	        Integer checkoutNo = attendanceService.getSelectCheckout(attendanceDTO);
 	        
 	        // 미결재 리스트
-	        List<WaitApprovalListDTO> waitApprovalList = waitApprovalService.getWaitApprovalList(); 
+	        List<WaitApprovalListDTO> waitApprovalList = waitApprovalService.getWaitApprovalList(Integer.parseInt(userDetails.getUsername())); 
 	        
 	        model.addAttribute("checkinNo", checkinNo); // 오늘 출근 활성화
 	        model.addAttribute("checkoutNo", checkoutNo); // 오늘 퇴근 활성화
@@ -85,6 +85,7 @@ public class MainController {
 	        model.addAttribute("absence", content.getAbsence()); // 결근
 	        model.addAttribute("earlyLeave", content.getEarlyLeave()); // 조퇴
 	        model.addAttribute("late", content.getLate()); // 지각
+	        model.addAttribute("waitApprovalList", waitApprovalList); // 미결재 리스트
 	        model.addAttribute("userNo", userDetails.getUsername());
 	        model.addAttribute("userName", userDetails.getUserRealName());
 	        model.addAttribute("userMail", userDetails.getUserMail());
@@ -92,7 +93,6 @@ public class MainController {
 	        model.addAttribute("userPhotoFileExt", userDetails.getUserPhotoFileExt());
 	        model.addAttribute("memoContent", memoContent);
 	        model.addAttribute("writer", Integer.parseInt(userDetails.getUsername()));
-	        model.addAttribute("waitApprovalList", waitApprovalList);
 	    }
 		return "main";
 	}

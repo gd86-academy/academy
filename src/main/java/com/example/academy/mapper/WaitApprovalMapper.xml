@@ -4,21 +4,37 @@
 	<!-- 박시현 : 메인페이지 - 미결재리스트 출력 -->
 	<select id="selectWaitApprovalList">
 		SELECT 
-		    re.approval_employee_no,
-		    re.attendance_approval_no,
-		    re.lecture_approval_no,
-		    re.approval_employee_status,
-		    la.lecture_approval_title,
-		    la.create_date AS lecture_create_date,
-		    aa.attendance_approval_title,
-		    aa.create_date AS attendance_create_date,
-		    e.employee_name
-		FROM approval_employee re  
-		LEFT OUTER JOIN lecture_approval la ON la.lecture_approval_no = re.lecture_approval_no
-		LEFT OUTER JOIN attendance_approval aa ON aa.attendance_approval_no = re.attendance_approval_no
-		LEFT OUTER JOIN employee e ON e.employee_no = re.approver
-		WHERE re.approver = #{employeeNo}
-		  AND re.approval_employee_status = 'AS001'
-		LIMIT 5;
+		    la.lecture_approval_no approvalEmployeeNo
+		    , la.lecture_approval_title title
+		    , e.employee_name writer
+		    , la.create_date createDate
+		FROM lecture_approval la 
+		LEFT OUTER JOIN employee e ON la.lecturer = e.employee_no
+		LEFT OUTER JOIN common c1 ON la.lecture_approval_status = c1.`code`
+		LEFT OUTER JOIN approval_employee ae ON ae.lecture_approval_no = la.lecture_approval_no
+		WHERE la.use_yn = 1
+		  AND ae.approver = #{employeeNo}
+		  AND la.lecture_approval_status = 'AS001'
+		  AND la.lecture_approval_step = ae.approval_level
+		
+		UNION ALL
+		
+		SELECT 
+		    aa.attendance_approval_no approvalEmployeeNo
+		    , aa.attendance_approval_title title
+		    , e.employee_name writer
+		    , aa.create_date createDate
+		FROM attendance_approval aa
+		LEFT OUTER JOIN employee e ON aa.employee_no = e.employee_no
+		LEFT OUTER JOIN common c1 ON aa.attendance_approval_type = c1.`code`
+		LEFT OUTER JOIN common c2 ON aa.attendance_approval_status = c2.`code`
+		LEFT OUTER JOIN approval_employee ae ON ae.attendance_approval_no = aa.attendance_approval_no
+		WHERE aa.use_yn = 1
+		  AND ae.approver = #{employeeNo}
+		  AND aa.attendance_approval_status = 'AS001'
+		  AND aa.attendance_approval_step = ae.approval_level
+		
+		ORDER BY createDate DESC
+		LIMIT 5
 	</select>
 </mapper>

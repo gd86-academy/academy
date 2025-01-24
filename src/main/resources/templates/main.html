@@ -329,19 +329,16 @@
 									<tr>
 										<th class="text-center">결재번호</th>
 										<th class="text-center">제목</th>
-										<th class="text-center">작성자</th>
+										<th class="text-center">작성자</th>							
 										<th class="text-center">작성일</th>
 									</tr>
 								</thead>
 								<tbody>
-									<tr>
-										
-									</tr>
-									<tr>
-										
-									</tr>
-									<tr>
-										
+									<tr th:each="list :${ waitApprovalList}">
+										<td class="text-center" th:text="${list.approvalEmployeeNo}"></td>
+										<td class="text-center" th:text="${list.title}"></td>
+										<td class="text-center" th:text="${list.writer}"></td>
+										<td class="text-center" th:text="${list.createDate}"></td>
 									</tr>
 								</tbody>
 							</table>

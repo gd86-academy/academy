@@ -16,7 +16,7 @@ public class WaitApprovalService {
 	@Autowired WaitApprovalMapper waitApprovalMapper;
 	
 	// 박시현 : 메인페이지 - 미결재 리스트
-	public List<WaitApprovalListDTO> getWaitApprovalList() {
-		return waitApprovalMapper.selectWaitApprovalList();	
+	public List<WaitApprovalListDTO> getWaitApprovalList(Integer employeeNo) {
+		return waitApprovalMapper.selectWaitApprovalList(employeeNo);	
 	}
 }
