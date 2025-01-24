@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.example.academy.dto.ClassroomListDTO;
 import com.example.academy.dto.LectureModifyDTO;
 import com.example.academy.dto.LectureOneDTO;
 import com.example.academy.dto.LectureOneTimeListDTO;
 import com.example.academy.security.CustomUserDetails;
+import com.example.academy.service.ClassroomService;
 import com.example.academy.service.CommonService;
 import com.example.academy.service.LectureService;
 import com.example.academy.vo.Common;
@@ -28,6 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 public class LectureController {
 	@Autowired LectureService lectureService;
 	@Autowired CommonService commonService;
+	@Autowired ClassroomService classroomService;
 	
 	// 김혜린 : 강의 삭제(사용여부 비활성화)
 	@GetMapping("/removeLecture")
@@ -60,6 +63,10 @@ public class LectureController {
 		model.addAttribute("commonTime", commonTime);
 		log.debug("----시간 리스트 : " + commonTime);	//디버깅
 		
+		// 3) 강의실 조회(셀렉박스)
+  		List<ClassroomListDTO> classroomList = classroomService.getClassroomList();
+ 	 	model.addAttribute("classroomList", classroomList);
+ 	 	
 		return "modifyLecture";
 	}
 	// 김혜린 : 강의 수정페이지

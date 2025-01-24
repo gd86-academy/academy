@@ -3,7 +3,7 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<title>강의수정페이지</title>
+		<title>강의상세</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/x-icon" th:href="@{/favicon.png}" />
 		<link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -18,8 +18,7 @@
 		<link defer rel="stylesheet" type="text/css" media="screen"
 			th:href="@{/css/animate.css}" />
 		<link rel="stylesheet" th:href="@{/css/flatpickr.min.css}" />
-		<link th:href="@{/css/templete.css}" rel="stylesheet" />
-		<script th:src="@{/js/flatpickr.js}"></script>
+		<link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui-tree/latest/tui-tree.css"/>
 		<script th:src="@{/js/perfect-scrollbar.min.js}"></script>
 		<script defer th:src="@{/js/popper.min.js}"></script>
 		<script th:src="@{/js/alpine-collaspe.min.js}"></script>
@@ -29,8 +28,13 @@
 		<script defer th:src="@{/js/alpine.min.js}"></script>
 		<script th:src="@{/js/custom.js}"></script>
 		<script th:src="@{/js/templete.js}"></script>
+		<script th:src="@{/js/flatpickr.js}"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-			
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+		<script src="https://uicdn.toast.com/tui-tree/latest/tui-tree.js"></script>
+		
 		<style>
 	       	.lecutre-title-align {
 	        	font-weight: bold;
@@ -41,7 +45,6 @@
 	       	}
 	       	.lecutre-text-align {
 	        	text-align: center;
-	        	font-weight: normal; /* bold 해제 */
 	       	}
 	       	 .custom-textarea {
 	       	 	margin-top: 15px;
@@ -53,9 +56,6 @@
 		        border-radius: 10px;
 		        font-size: 14px;
 		        width: 100%; /* 화면 크기에 맞게 크기 조정 */    			
-		    }
-		    .textarea-error {	/*textarea 유효성 검사시 빨간테두리 설정 */
-		        border: 1px solid red;
 		    }
 	    </style>	
 	</head>
@@ -106,157 +106,190 @@
 	
 				<!-- 메인화면 -->
 				<div class="animate__animated p-6" :class="[$store.app.animation]"> <!-- 메인화면 div 시작 -->
-					<div class="panel">
-						<div class="flex flex-wrap justify-between gap-4 px-4" style="margin-bottom: 30px;">
-							<div class="text-2xl font-semibold uppercase">강의 수정</div>
+				<div class="flex justify-between mb-5">
+					<h2 class="text-2xl ml-3 mb-5">강의목록</h2>
+				</div>
+				 
+					
+				
+					<div id="capture_area" class="panel" style="margin: 0% 15% 1% 15%; padding: 4%; ">
+						<div class="flex flex-wrap justify-between gap-4 px-4" style="margin-top: 20px;">
+							<div class="text-2xl font-semibold uppercase">&nbsp;&nbsp;강의 소개서</div>
 						</div>
-						
-						<!-- 수정폼 -->
-						<form id="lectureModifyForm" method="post" th:action="@{/modifyLecture}">
-							 <input type="hidden" name="lectureNo" th:value="${lecture.lectureNo}">
-							<!-- 테이블1 : 강의번호, 강사명 출력 -->
-							<div class="table-responsive">
-							    <table style="table-layout: fixed; width: 100%;">
-							        <tbody>
-							            <tr class="border-dark-dark-light">
-							                <td class="bg-[#f4f4f4] lecutre-title-align">강의 번호</td>
-							                <td class="lecutre-text-align" th:text="${lecture.lectureNo}"></td>
-							                <td class="bg-[#f4f4f4] lecutre-title-align">강사명</td>
-							                <td class="lecutre-text-align" th:text="${lecture.employeeName}"></td>					                
-							            </tr>
-							        </tbody>
-							    </table>
-							</div>
-							<hr class="my-6 border-[#e0e6ed] dark:border-[#1b2e4b]" />
-							<!-- 테이블2 : 강의날짜 출력 -->
-							<div class="table-responsive">
-							    <table style="width: 100%;">
-							        <tbody>
-							            <tr class="border-dark-dark-light">
-							                <td class="lecutre-title">강의날짜</td>
-							                <!-- 개강일 -->
-							                <td>
-							                	<div x-data="form1">
-							                       	<input name="lectureBeginDate" id="beginDate" class="form-input" 
-							                       			th:value="${lecture.lectureBeginDate}"/>
+						<div class="p-5">
+						<br>
+						<!-- 테이블2 : 강의날짜, 강의시간 출력 -->
+						<div class="table-responsive">
+						    <table style="width: 100%; table-layout: fixed;">
+						        <tbody>
+						       	    <tr class="bg-gray-100">
+						        		<td colspan="5" class="text-center font-semibold">강의정보</td>
+						        	</tr>
+						        	<tr>
+						        		<td><div class="lecutre-title">강의번호</div></td>
+										<td colspan="4">
+											<div class="flex" >
+												<span th:text="${lecture.lectureNo}"></span>
+											</div>
+										</td>
+						        	</tr>
+						        	<tr>
+						        		<td><div class="lecutre-title">강사명</div></td>
+										<td colspan="4">
+											<div class="flex">
+												<button id="openModalButtonModifyPeople" type="button" 
+											        class="btn btn-primary ltr:rounded-r-none rtl:rounded-l-none" 
+											        style="flex: 1;">
+											        사원검색
+											    </button>
+											    <input id="employeeNo" name="employeeNo"
+											        type="text"
+											        class="form-input ltr:rounded-l-none rtl:rounded-r-none flex-grow" 
+											        style="flex: 5;" th:value="${lecture.employeeName}" readonly/>
+											</div>
+										</td>
+						        	</tr>
+						        	<tr>
+						        		<td><div class="lecutre-title">강의실</div></td>
+										<td colspan="4">
+											<div class="flex">
+												<select id="classroomList" class="form-select" name="classroomNo">
+												<option value="" disabled selected>강의실</option>
+											    <option th:each="cr : ${classroomList}" th:selected="${cr.classroomName == lecture.classroomName}" th:text="${cr.classroomName}" th:value="${cr.classroomNo}"></option>
+											</select>
+											</div>
+										</td>
+						        	</tr>
+						            <tr>
+						        		<td><div class="lecutre-title">강의제목</div></td>
+										<td colspan="4">
+											<div class="flex" >
+												<input type="text" class="form-input" th:value="${lecture.lectureName}">
+											</div>
+										</td>
+						        	</tr>
+						        	<tr>
+						        		<td><div class="lecutre-title">강의내용</div></td>
+										<td colspan="4">
+											<div class="flex">
+												<textarea id="lectureApprovalContent" name="lectureApprovalContent" rows="15" cols="205" class="form-textarea w-full" placeholder="강의내용을 입력해주세요." th:text="${lecture.lectureContent}"></textarea>
+											</div>
+										</td>
+						        	</tr>
+						        	<tr>
+						        		<td></td>
+						        	</tr>
+						        	<tr class="bg-gray-100">
+						        		<td colspan="5" class="text-center font-semibold">강의시간대</td>
+						        	</tr>
+						        	<tr>
+						        		<td><div class="lecutre-title">강의날짜</div></td>
+										<td colspan="4">
+											<div class="flex justify-between">
+												<div x-data="form1" class="w-full mr-3">
+							                       	<input name="lectureBeginDate" id="beginDate" class="form-input" placeholder="시작날짜" th:value="${lecture.lectureBeginDate}"/>
 											   	</div>
-							                </td>
-											<td class="lecutre-title-align" colspan="2">~</td>
-							                <!-- 종강일 -->
-							                <td>
-							                	<div x-data="form2">
-							                       	<input name="lectureEndDate" id="endDate" class="form-input" 
-							                       			th:value="${lecture.lectureEndDate}"/>
+												<div class="align-items-center">~</div>
+												<div x-data="form2" class="w-full ml-3">
+							                       	<input name="lectureEndDate" id="endDate" class="form-input form-input disabled:pointer-events-none disabled:bg-[#eee] dark:disabled:bg-[#1b2e4b] cursor-not-allowed" placeholder="종료날짜" th:value="${lecture.lectureEndDate}"/>
 											   	</div>
-							                </td>				                
-							            </tr>
-							        </tbody>
-							    </table>
-							</div>
-							
-							<!-- 테이블3 : 강의시간 출력 -->
-							<div class="table-responsive">
-							    <table style="width: 100%;">
-							    	 <colgroup>	<!-- 열 너비 지정 -->
-								        <col style="width: 15%;"> <!-- 첫 번째 열 -->
-								        <col style="width: 26%;"> <!-- 두 번째 열 -->
-								        <col style="width: 27%;"> <!-- 세 번째 열 -->
-								        <col style="width: 5%;"> <!-- 네 번째 열 -->
-								        <col style="width: 27%;"> <!-- 다섯 번째 열 -->
-								    </colgroup>
-							        <tbody>
-							            <tr th:each="t : ${timeList}">
-							            	<td class="lecutre-title">강의시간</td>
-							            	<input type="hidden" name="timeList" th:value="${t.lectureWeekdayNo}"><!-- 강의시간번호 -->
-							            	<!-- 요일선택 -->
-							            	<td>
-												<select id="weekday" class="form-select " name="timeList">
-												    <option th:each="cwk : ${commonWeekday}" th:value="${cwk.code}"
-												    		th:selected="${t.weekdayCode == cwk.code}"
-												    		th:text="${cwk.name}">
-												    </option>
-												</select>
-											</td>
-											<!-- 시작시간 선택 -->
-							            	<td>
-												<select id="beginTime" class="form-select " name="timeList">
-												    <option th:each="ct : ${commonTime}" th:value="${ct.code}"
-												    		th:selected="${t.beginTimeCode == ct.code}"
-												    		th:text="${ct.name}">
-												    </option>
-												</select>
-											</td>
-											<td class="lecutre-title-align">~</td>
-											<!-- 종료시간 선택 -->
-							            	<td>
-												<select id="endTime" class="form-select " name="timeList">
-												    <option th:each="ct : ${commonTime}" th:value="${ct.code}"
-												    		th:selected="${t.endTimeCode == ct.code}"
-												    		th:text="${ct.name}">
-												    </option>
-												</select>
-											</td>
-							            </tr>
-							        </tbody>
-							    </table>
-							</div>
-							
-							<hr class="my-6 border-[#e0e6ed] dark:border-[#1b2e4b]" />
-							
-							<!-- 테이블4 : 강의명, 강의실 출력 -->
-							<div class="table-responsive" style="margin-bottom: 20px;">
-							    <table style="table-layout: fixed; width: 100%;">
-							        <tbody>
-							            <tr class="border-dark-dark-light">
-							                <td class="bg-[#f4f4f4] lecutre-title-align">강의명</td>
-							                <td>
-												<input id="lectureName" name="lectureName" type="text"
-													 class="form-input lecutre-text-align" th:value="${lecture.lectureName}" />										
-											</td>	
-							                <td class="bg-[#f4f4f4] lecutre-title-align">강의실</td>
-							                <td class="lecutre-text-align" th:text="${lecture.classroomName}"></td>					                
-							            </tr>
-							        </tbody>
-							    </table>
-							    <div class="mt-1 mb-3" style="height: 10px;"><span class="msg lectureName-error error-label" style="display: none;">강의명을 입력해주세요.</span></div>
-							</div>
-							
-							<div style="margin-top: 30px;">
-								<label class="lecutre-Content" for="lectureContent">강의내용</label>
-								<textarea id="lectureContent" name="lectureContent" rows="15" cols="205" class="custom-textarea"
-									th:text="${lecture.lectureContent}">
-								</textarea>
-							</div>
-							<div class="mt-1 mb-3" style="height: 10px;"><span class="msg lectureContent-error error-label" style="display: none;">강의내용을 입력해주세요.</span></div>
-							
-							<!-- 취소/수정 버튼 -->					 
+											</div>
+										</td>
+						        	</tr>
+						            <tr th:each="t, stat : ${timeList}">
+						            	<td th:if="${stat.index == 0}" class="lecutre-title">강의시간</td>
+						            	<td th:if="${stat.index != 0}" class="lecutre-title"></td>
+						            	<td colspan="4">
+										<div class="flex w-full">
+											<input type="text" class="form-input mr-3 disabled:bg-[#eee]" th:value="${t.weekday}" disabled>
+											<input type="text" class="form-input mr-3 disabled:bg-[#eee]" th:value="${t.beginTime}" disabled>
+											<span>~</span>
+											<input type="text" class="form-input ml-3 disabled:bg-[#eee]" th:value="${t.endTime}" disabled>
+										</div>
+										</td>								
+						            </tr>
+						            <tr>
+						            	<td></td>
+						            	<td colspan="4">
+						            		<div class="flex justify-end w-full" id="modifyLectureTimediv">
+											    <button type="button" id="modifyLectureTime" class="btn btn-outline-primary w-full">강의시간 재선택</button>
+											</div>
+						            	</td>
+						            </tr>
+						        </tbody>
+						    </table>
+						    <!-- 버튼 --> 
 							<div class="mt-8 flex items-center justify-end">
-	                           <a
-	                              type="button"
-	                              class="btn btn-outline-danger"
+							   <a					
+	                              type="button" style="width:130px;"
+	                              class="btn btn-outline-danger ltr:mr-4 rtl:ml-4"
 	                              th:href="@{/lectureOne(lectureNo=${lecture.lectureNo})}">	                          
 	                              취소
-	                          </a>
-	                           <button id="lectureModifyBtn" type="button" class="btn btn-primary ltr:ml-4 rtl:mr-4">
-	                               수정
-	                           </button>
+	                           </a>
+	                           <a id="addBtn" type="button" class="btn btn-primary" style="width:130px;">
+	                           	   수정
+	                           </a>
 	                       </div>
-                       </form>
-                       
+						</div>
+                       </div>                       
 					</div>
 					
-				</div> <!-- 메인화면 div 끝 -->
-				
-				
-			</div>
-	
-	
-			<!--  풋터 파일 연결 -->
+					<!--  담당자 수정 모달 -->
+					<div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundModifyPeople">
+				       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperModifyPeople">
+				           <div
+							    class="panel my-8 overflow-hidden rounded-lg border-0 p-0 md:w-full"
+							    id="modal"
+						    style="width: 350px; max-width: 90%;"
+							>
+					           
+				               <button
+				                   type="button"
+				                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+				                   id="closeModalButtonModifyPeople"
+				               >
+				                   <svg
+				                       xmlns="http://www.w3.org/2000/svg"
+				                       width="24px"
+				                       height="24px"
+				                       viewBox="0 0 24 24"
+				                       fill="none"
+				                       stroke="currentColor"
+				                       stroke-width="1.5"
+				                       stroke-linecap="round"
+				                       stroke-linejoin="round"
+				                       class="h-6 w-6"
+				                   >
+				                       <line x1="18" y1="6" x2="6" y2="18"></line>
+				                       <line x1="6" y1="6" x2="18" y2="18"></line>
+				                   </svg>
+				               </button>
+				               <h3
+				                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
+				               >
+				                   강사 수정
+				               </h3>
+				               <div class="p-5">
+				               <!-- 모달내용 -->
+				               <div>
+				               	  <input type="hidden" id="selectedBtn">
+	                    		  <input type="hidden" id="deselectedBtn">
+	                    		  <input type="hidden" id="selectedValue">
+	                    		  <input type="hidden" id="approvalRemoveBtn">
+				               	  <div class="p-1 mb-3 font-bold"><span>변경할 강사를 선택해주세요.</span></div>
+					              <div style="border-radius: 10px;" id="tree" class="tui-tree-wrap"></div>
+					              <button id="modifyEmployeeButton" style="width:300px;" type="button" class="btn btn-dark mt-3">선택한 강사로 수정</button>
+				           	   </div>
+					        </div>
+					   </div>
+                           </div> 
+                       </div>
+					<!--  풋터 파일 연결 -->
 			<div th:replace="fragments/footer :: footer"></div>
+				</div> <!-- 메인화면 div 끝 -->
+			</div>
 		</div>
-		
-		
-		<script th:src="@{/customjs/modifyLecture.js}"> </script>
+		<script th:src="@{/customjs/modifyLecture.js}"></script>
 	</body>
 
 </html>

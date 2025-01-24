@@ -24,12 +24,18 @@ public class TreeNodeRestController {
 		// 스프링시큐리티에서 계정정보 가져오기.
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-	    return treeNodeService.getEmployeeTreeNode(Integer.parseInt(userDetails.getUsername()));
+	    return treeNodeService.getEmployeeTreeNode(Integer.parseInt(userDetails.getUsername()), null);
 	}
 	
 	// 진수우 : 결재선추가에있는 ToastUI Tree API에 사원리스트를 제공.(로그인계정 노출)
-		@GetMapping("/restapi/employeeListNodeShowMe")
-		public List<TreeNode> employeeListNodeShowMe() {
-		    return treeNodeService.getEmployeeTreeNode(null);
-		}
+	@GetMapping("/restapi/employeeListNodeShowMe")
+	public List<TreeNode> employeeListNodeShowMe() {
+	    return treeNodeService.getEmployeeTreeNode(null, null);
+	}
+	
+	// 진수우 : 결재선추가에있는 ToastUI Tree API에 사원리스트를 제공.(운영팀만 노출)
+	@GetMapping("/restapi/employeeListNodeManagement")
+	public List<TreeNode> employeeListNodeManagement() {
+	    return treeNodeService.getEmployeeTreeNode(null, "management");
+	}
 }
