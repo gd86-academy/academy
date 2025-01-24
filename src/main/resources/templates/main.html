@@ -334,12 +334,15 @@
 									</tr>
 								</thead>
 								<tbody>
-									<tr th:each="list :${ waitApprovalList}">
-										<td class="text-center" th:text="${list.approvalEmployeeNo}"></td>
-										<td class="text-center" th:text="${list.title}"></td>
-										<td class="text-center" th:text="${list.writer}"></td>
-										<td class="text-center" th:text="${list.createDate}"></td>
-									</tr>
+								    <tr th:each="list : ${waitApprovalList}" 
+								        th:onclick="|location.href='@{${#strings.isEmpty(list.attendanceApprovalNo) 
+											? '/lectureApprovalOne?lectureApprovalNo=' + list.lectureApprovalNo 
+											: '/waitAttendanceApprovalOne?attendanceApprovalNo=' + list.attendanceApprovalNo}}'|">
+								        <td class="text-center" th:text="${list.approvalEmployeeNo}"></td>
+								        <td class="text-center" th:text="${list.title}"></td>
+								        <td class="text-center" th:text="${list.writer}"></td>
+								        <td class="text-center" th:text="${list.createDate}"></td>
+								    </tr>
 								</tbody>
 							</table>
 						</div>
