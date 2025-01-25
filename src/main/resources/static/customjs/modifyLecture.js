@@ -256,6 +256,179 @@ $.ajax({
     }
 });
 
+// 요일 선택 시, 시작시간 데이터를 가져오는 이벤트 바인딩
+$('#weekdayId0').on('change', function () {
+    const selectedWeekday = $(this).val(); // 선택된 요일 값
+	const startDate = $('#beginDate').val();
+	const endDate = $('#endDate').val();
+	const roomId = $('#classroomList').val();
+	
+    if (!startDate || !endDate || !roomId) {
+		 $('select').prop('disabled', true);
+		modalBackgroundNoLectureDate.classList.toggle('hidden', false);
+		modalBackgroundNoLectureDate.classList.toggle('block', true);
+        return;
+    }
+
+    // 이전 시간 데이터 초기화
+    $('#beginTimeId0').empty().append('<option value="" disabled selected>시작시간</option>');
+
+    // 선택된 데이터를 REST API로 전달하여 시간 데이터 요청
+    $.ajax({
+        url: `http://localhost/academy/restapi/getBeginLectureTimeFromModify`,
+		contentType: 'application/json', 
+        type: 'POST',
+        data: JSON.stringify({
+			lectureApprovalNo: lectureNo,
+            weekdayCode: selectedWeekday,
+            beginDate: startDate,
+            endDate: endDate,
+            classroomNo: roomId
+        }),
+        success: function (data) {
+			
+            data.forEach(ct => {
+                $('#beginTimeId0').append(`<option value="${ct.code}">${ct.name}</option>`);
+            });
+        },
+        error: function () {
+            alert('시간 데이터를 가져오는 중 오류가 발생했습니다.');
+        }
+    });
+});
+
+// 시작시간 변경 시, 종료시간 초기화.
+$('#beginTimeId0').change(function () {
+	if ($('#endTimeId0').val() != '') {
+		$('#endTimeId0').prop('selectedIndex', 0);
+	}
+});
+
+// 시작시간 선택 시, 종료시간 데이터를 가져오는 이벤트 바인딩
+$('#weekdayId0').on('change', function () {
+    const selectedWeekday = $(this).val(); // 선택된 요일 값
+	const startDate = $('#beginDate').val();
+	const endDate = $('#endDate').val();
+	const roomId = $('#classroomList').val();
+	
+    if (!startDate || !endDate || !roomId) {
+		 $('select').prop('disabled', true);
+		modalBackgroundNoLectureDate.classList.toggle('hidden', false);
+		modalBackgroundNoLectureDate.classList.toggle('block', true);
+        return;
+    }
+
+    // 이전 시간 데이터 초기화
+    $('#endTimeId0').empty().append('<option value="" disabled selected>종료시간</option>');
+
+    // 선택된 데이터를 REST API로 전달하여 시간 데이터 요청
+    $.ajax({
+        url: `http://localhost/academy/restapi/getEndLectureTimeFromModify`,
+		contentType: 'application/json', 
+        type: 'POST',
+        data: JSON.stringify({
+			lectureApprovalNo: lectureNo,
+            weekdayCode: selectedWeekday,
+            beginDate: startDate,
+            endDate: endDate,
+            classroomNo: roomId
+        }),
+        success: function (data) {
+			
+            data.forEach(ct => {
+                $('#endTimeId0').append(`<option value="${ct.code}">${ct.name}</option>`);
+            });
+        },
+        error: function () {
+            alert('시간 데이터를 가져오는 중 오류가 발생했습니다.');
+        }
+    });
+});
+
+// 강의시간 입력 필드 삭제
+$('#BtnEndTime').click(function() {
+    // #timeDiv 내에 tr 요소가 하나 이상 존재하는지 확인
+    if ($('#timeDiv tr').length <= 1) { // 첫 번째 tr은 기본 요소이므로 1개 이상이어야 삭제 가능
+        // alert('삭제할 항목이 없습니다.');
+    } else {
+        // 마지막으로 추가된 tr의 ID
+        let lastTimeResult = timeResult;  // 현재 timeResult 값 (마지막 추가된 항목)
+
+        // 동적으로 생성된 필드들의 ID를 기반으로 삭제
+        let lastRowId = 'weekday' + lastTimeResult;
+
+        // 마지막 tr 삭제
+        $('#' + lastRowId).closest('tr').remove();  // 해당 tr 삭제
+
+        timeResult--;  // timeResult 감소
+		
+		let weekdayId = 'weekdayId' + timeResult;
+        let beginTimeId = 'beginTimeId' + timeResult;
+        let endTimeId = 'endTimeId' + timeResult;
+		$(`#${weekdayId}`).prop('disabled', false);
+		$(`#${beginTimeId}`).prop('disabled', false);
+		$(`#${endTimeId}`).prop('disabled', false);
+    }
+});
+
+// 강의시간에서 시작시간을 선택했을 때 종료시간을 선택할 때 시작시간 이전의 시간은 선택되지 안
+function disableSelectedOption() {
+    // 첫 번째 <select> 요소의 값 가져오기
+    var getBeginTimeId  = 'beginTimeId' + timeResult;
+    var beginTimeId = document.getElementById(getBeginTimeId);
+    var selectedValue1 = beginTimeId.value;
+	
+    // 두 번째 <select> 요소 가져오기
+    var getEndTimeId  = 'endTimeId' + timeResult;
+    var endTimeId = document.getElementById(getEndTimeId);
+
+    // 종료시간을 비활성화 처리
+    if (selectedValue1 !== '') {
+        endTimeId.disabled = false; // 시작시간이 선택되었으면 종료시간 활성화
+    } else {
+        endTimeId.disabled = true; // 시작시간이 선택되지 않으면 종료시간 비활성화
+    }
+
+    // 첫 번째 <select>에서 선택된 값과 일치하는 옵션 비활성화
+    for (var i = 0; i < endTimeId.options.length; i++) {
+        if (endTimeId.options[i].value <= selectedValue1) {
+			console.log('비활성화 Index : ' + i)
+            endTimeId.options[i].disabled = true;
+        }
+    }
+
+    // 이전 시간 저장 변수
+    //var previousValue = parseInt(selectedValue1); // 시작 시간
+    var selectedValue = false;
+    var selectedIndex = beginTimeId.selectedIndex; // 선택된 값의 인덱스 가져오기
+    var previousValue = parseInt(beginTimeId.options[selectedIndex].text); // 선택된 텍스트 값
+
+    // 선택된 옵션 이후부터 루프 실행
+    for (var i = selectedIndex; i < endTimeId.options.length; i++) {
+        var optionText = parseInt(endTimeId.options[i].text); // 현재 옵션의 텍스트 값 (숫자로 변환)
+		endTimeId.options[i].disabled = false;
+        if (selectedValue === true) {
+            endTimeId.options[i].disabled = true;
+			
+        } else if (optionText > previousValue + 1) {
+			console.log('optionText : ' + optionText)
+			console.log('previousValue : ' + (previousValue + 1))
+			
+            endTimeId.options[i].disabled = true;
+            selectedValue = true;
+        }
+
+        // 이전 값을 갱신
+        previousValue = optionText;
+    }
+}
+
+// 강의수정페이지에서 강의시간 재선택 버튼을 누르면 기존 강의시간 숨김처리 후 새로운 입력창 출력.
+$('#modifyLectureTime').click(function () {
+    $('#alreadyLectureTime').remove();; // 숨김 처리
+    $('#newLectureTime').removeAttr('hidden');     // 숨김 해제
+});
+
 // 강의수정페이지에서 강의날짜 항목을 하나라도 변경하면 기존 강의시간 숨김처리 후 새로운 입력창 출력.
 $(document).on('change', '#classroomList', function () {
 	$('#alreadyLectureTime').remove();; // 숨김 처리
@@ -293,3 +466,268 @@ $(document).on('change', '#endDate', function () {
 	$('#endTimeId0 option:not(:first)').remove();
 	$('#newLectureTime').removeAttr('hidden');     // 숨김 해제
 });
+
+// 강의시간 추가 버튼 누를시
+var timeResult= 0;
+$('#btnAddTime').click(function () {
+    let isEmpty = false;
+
+    // 모든 <select> 필드 검사
+    $('#timeDiv select').each(function () {
+        const selectedValue = $(this).val();
+
+        if (selectedValue === '' || selectedValue === null) {
+            isEmpty = true;
+            return false; // 루프 중단
+        }
+    });
+	timeResult++; // 고유 ID 증가
+    if (isEmpty) {
+        modalBackgroundAddFileError.classList.toggle('hidden', false);
+        modalBackgroundAddFileError.classList.toggle('block', true);
+		timeResult--;
+    } else if (timeResult > 4) {
+        modalBackgroundAddOver.classList.toggle('hidden', false);
+        modalBackgroundAddOver.classList.toggle('block', true);
+		timeResult--;
+    } else {
+
+        let weekdayId = 'weekdayId' + timeResult;
+        let beginTimeId = 'beginTimeId' + timeResult;
+        let endTimeId = 'endTimeId' + timeResult;
+		
+		// 이전 강의시간은 수정하지 못함.
+		let backWeekdayId = 'weekdayId' + (timeResult - 1);
+		let backbeginTimeId = 'beginTimeId' + (timeResult - 1);
+		let backendTimeId = 'endTimeId' + (timeResult - 1);
+		$(`#${backWeekdayId}`).prop('disabled', true);
+		$(`#${backbeginTimeId}`).prop('disabled', true);
+		$(`#${backendTimeId}`).prop('disabled', true);
+		
+		$('#classroomList').change(function () {
+			$('#alreadyLectureTime').attr('hidden', true); // 숨김 처리
+			$(`#${weekdayId}`).prop('selectedIndex', 0);
+			$(`#${beginTimeId}`).prop('selectedIndex', 0);
+			$(`#${endTimeId}`).prop('selectedIndex', 0);
+			$('#weekdayId0').prop('selectedIndex', 0);
+			$('#beginTimeId0').prop('selectedIndex', 0);
+			$('#endTimeId0').prop('selectedIndex', 0);
+			$('#weekdayId0').prop('disabled', false);
+			$('#beginTimeId0').prop('disabled', false);
+			$('#beginTimeId0 option:not(:first)').remove();
+			$('#endTimeId0 option:not(:first)').remove();
+								
+			
+			// timeResult 값만큼 반복적으로 항목 삭제
+			while (timeResult > 0) {
+			    let lastTimeResult = timeResult;  // 현재 timeResult 값
+			    let lastRowId = 'weekday' + lastTimeResult;  // 동적으로 생성된 ID 생성
+
+			    // 해당 ID를 가진 tr 삭제
+			    $('#' + lastRowId).closest('tr').remove();
+
+			    timeResult--;  // timeResult 감소
+			}
+		});
+		
+		$('#beginDate').change(function () {
+			$(`#${weekdayId}`).prop('selectedIndex', 0);
+			$(`#${beginTimeId}`).prop('selectedIndex', 0);
+			$(`#${endTimeId}`).prop('selectedIndex', 0);
+			$('#weekdayId0').prop('selectedIndex', 0);
+			$('#beginTimeId0').prop('selectedIndex', 0);
+			$('#endTimeId0').prop('selectedIndex', 0);
+			$('#weekdayId0').prop('disabled', false);
+			$('#beginTimeId0').prop('disabled', false);
+			$('#beginTimeId0 option:not(:first)').remove();
+			$('#endTimeId0 option:not(:first)').remove();
+			
+			// timeResult 값만큼 반복적으로 항목 삭제
+			while (timeResult > 0) {
+			    let lastTimeResult = timeResult;  // 현재 timeResult 값
+			    let lastRowId = 'weekday' + lastTimeResult;  // 동적으로 생성된 ID 생성
+
+			    // 해당 ID를 가진 tr 삭제
+			    $('#' + lastRowId).closest('tr').remove();
+
+			    timeResult--;  // timeResult 감소
+			}
+		});
+		
+		$('#endDate').change(function () {
+			$(`#${weekdayId}`).prop('selectedIndex', 0);
+			$(`#${beginTimeId}`).prop('selectedIndex', 0);
+			$(`#${endTimeId}`).prop('selectedIndex', 0);
+			$('#weekdayId0').prop('selectedIndex', 0);
+			$('#beginTimeId0').prop('selectedIndex', 0);
+			$('#endTimeId0').prop('selectedIndex', 0);
+			$('#weekdayId0').prop('disabled', false);
+			$('#beginTimeId0').prop('disabled', false);
+			$('#beginTimeId0 option:not(:first)').remove();
+			$('#endTimeId0 option:not(:first)').remove();
+			
+			// timeResult 값만큼 반복적으로 항목 삭제
+			while (timeResult > 0) {
+			    let lastTimeResult = timeResult;  // 현재 timeResult 값
+			    let lastRowId = 'weekday' + lastTimeResult;  // 동적으로 생성된 ID 생성
+
+			    // 해당 ID를 가진 tr 삭제
+			    $('#' + lastRowId).closest('tr').remove();
+
+			    timeResult--;  // timeResult 감소
+			}
+		});
+		
+
+        let html = `
+            <tr id="weekday${timeResult}">
+                <td></td>
+                <td colspan="4">
+                    <div class="flex justify-between">
+						<select id="${weekdayId}" class="form-select weekday-select form-input disabled:pointer-events-none disabled:bg-[#eee] dark:disabled:bg-[#1b2e4b] cursor-not-allowed mr-3" name="lectureWeekday[${timeResult}].weekdayCode">
+	                        <option value="" disabled selected>요일</option>
+	                    </select>
+                        <select id="${beginTimeId}" class=" mr-3 form-input disabled:pointer-events-none disabled:bg-[#eee] dark:disabled:bg-[#1b2e4b] cursor-not-allowed" name="lectureWeekday[${timeResult}].beginTimeCode" onchange="disableSelectedOption()">
+                            <option value="" disabled selected>시작시간</option>
+                        </select>
+                        <div>~</div>
+                        <select id="${endTimeId}" class=" ml-3 form-input disabled:pointer-events-none disabled:bg-[#eee] dark:disabled:bg-[#1b2e4b] cursor-not-allowed" name="lectureWeekday[${timeResult}].endTimeCode" disabled>
+                            <option value="" disabled selected>종료시간</option>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        $('#timeDiv').append(html);
+
+        // 요일 데이터 가져오기 및 옵션 추가
+        $.get('http://localhost/academy/restapi/getWeekday', function (data) {
+            data.forEach(cwk => {
+                $(`#${weekdayId}`).append(`<option value="${cwk.code}">${cwk.name}</option>`);
+            });
+        });
+
+		$(`#${weekdayId}`).click(function () {
+			// 이전 요일박스에 선택되어있는 요일은 선택할 수 없게 하기 위함.
+		    for (let i = 0; i < timeResult; i++) {
+		        let previousWeekdayId = `weekdayId${i}`;
+		        let previousValue = $(`#${previousWeekdayId}`).val(); // 이전 요일 선택 박스의 선택된 값
+
+		        if (previousValue) {
+		            // 이전 요일 값이 선택되어 있으면, 현재 요일 박스에서 해당 값을 비활성화
+		            $(`#${weekdayId} option`).each(function () {
+		                if ($(this).val() === previousValue) {
+		                    $(this).prop('disabled', true); // 이전에 선택된 요일을 비활성화
+		                }
+		            });
+		        }
+		    }
+		});
+		
+		
+			
+        // 요일 선택 시, 시간 데이터를 가져오는 이벤트 바인딩
+        $(`#${weekdayId}`).change(function () {
+            const selectedWeekday = $(this).val(); // 선택된 요일 값
+			const startDate = $('#beginDate').val();
+			const endDate = $('#endDate').val();
+			const roomId = $('#classroomList').val();
+			
+            if (!startDate || !endDate || !roomId) {
+				$('select').css('visibility', 'hidden');
+				modalBackgroundNoLectureDate.classList.toggle('hidden', false);
+				modalBackgroundNoLectureDate.classList.toggle('block', true);
+                return;
+            }
+
+            // 이전 시간 데이터 초기화
+            $(`#${beginTimeId}`).empty().append('<option value="" disabled selected>시작시간</option>');
+
+            // 선택된 데이터를 REST API로 전달하여 시간 데이터 요청
+            $.ajax({
+                url: `http://localhost/academy/restapi/getBeginLectureTimeFromModify`,
+				contentType: 'application/json', 
+                type: 'POST',
+                data: JSON.stringify({
+					lectureApprovalNo: lectureNo,
+                    weekdayCode: selectedWeekday,
+                    beginDate: startDate,
+                    endDate: endDate,
+                    classroomNo: roomId
+                }),
+                success: function (data) {
+					
+                    data.forEach(ct => {
+                        $(`#${beginTimeId}`).append(`<option value="${ct.code}">${ct.name}</option>`);
+                    });
+                },
+                error: function () {
+                    alert('시간 데이터를 가져오는 중 오류가 발생했습니다.');
+                }
+            });
+        });
+		
+		$(`#${weekdayId}`).on('change', function () {
+	        const selectedWeekday = $(`#${weekdayId}`).val(); // 선택된 요일 값
+			const startDate = $('#beginDate').val();
+			const endDate = $('#endDate').val();
+			const roomId = $('#classroomList').val();
+			
+	        if (!startDate || !endDate || !roomId) {
+				$('select').css('visibility', 'hidden');
+				modalBackgroundNoLectureDate.classList.toggle('hidden', false);
+				modalBackgroundNoLectureDate.classList.toggle('block', true);
+	            return;
+	        }
+	
+	        // 이전 시간 데이터 초기화
+	        $(`#${endTimeId}`).empty().append('<option value="" disabled selected>종료시간</option>');
+	
+	        // 선택된 데이터를 REST API로 전달하여 시간 데이터 요청
+	        $.ajax({
+	            url: `http://localhost/academy/restapi/getEndLectureTimeFromModify`,
+				contentType: 'application/json', 
+	            type: 'POST',
+	            data: JSON.stringify({
+					lectureApprovalNo: lectureNo,
+	                weekdayCode: selectedWeekday,
+	                beginDate: startDate,
+	                endDate: endDate,
+	                classroomNo: roomId
+	            }),
+	            success: function (data) {
+					console.log(data);
+	                data.forEach(ct => {
+	                    $(`#${endTimeId}`).append(`<option value="${ct.code}">${ct.name}</option>`);
+	                });
+	            },
+	            error: function () {
+	                alert('시간 데이터를 가져오는 중 오류가 발생했습니다.');
+	            }
+	        });
+	    });
+		
+		// 시작시간을 수정 시, 종료시간에 선택했던 값은 초기화처리.
+		$(`#${beginTimeId}`).change(function () {
+			$(`#${endTimeId}`).prop('selectedIndex', 0);
+		});
+    }
+	console.log('timeResult : ' + timeResult);
+});
+
+// 추가오류 모달 관련 DOM 요소
+const openModalButtonAddFileError = document.getElementById('openModalButtonAddFileError');
+const closeModalButtonAddFileError = document.getElementById('closeModalButtonAddFileError');
+const modalBackgroundAddFileError = document.getElementById('modalBackgroundAddFileError');
+const modalWrapperAddFileError = document.getElementById('modalWrapperAddFileError');
+const employeeBtnAddFileError = document.getElementById('employeeBtnAddFileError');
+
+// 추가오류 모달 닫기
+const closeModalAddFileError = () => {
+	  modalBackgroundAddFileError.classList.remove('block');
+	  modalBackgroundAddFileError.classList.add('hidden');  // 모달 배경 숨기기
+};
+
+if (closeModalButtonAddFileError) closeModalButtonAddFileError.addEventListener('click', closeModalAddFileError); // 닫기 버튼 클릭 시
+if (employeeBtnAddFileError) employeeBtnAddFileError.addEventListener('click', closeModalAddFileError);     // 취소 버튼 클릭 시

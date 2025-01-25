@@ -145,7 +145,7 @@
 											    <input id="employeeNo" name="employeeNo"
 											        type="text"
 											        class="form-input ltr:rounded-l-none rtl:rounded-r-none flex-grow" 
-											        style="flex: 5;" th:value="${lecture.employeeName}" readonly/>
+											        style="flex: 5;" th:value="${lecture.employeeName} + '[' + ${lecture.lecturer} + ']'" readonly/>
 											</div>
 										</td>
 						        	</tr>
@@ -196,6 +196,10 @@
 											</div>
 										</td>
 						        	</tr>
+						        	</tbody>
+						        </table>
+						        <table id="alreadyLectureTime" style="width: 100%; table-layout: fixed;">
+						        <tbody>
 						            <tr th:each="t, stat : ${timeList}">
 						            	<td th:if="${stat.index == 0}" class="lecutre-title">강의시간</td>
 						            	<td th:if="${stat.index != 0}" class="lecutre-title"></td>
@@ -213,6 +217,38 @@
 						            	<td colspan="4">
 						            		<div class="flex justify-end w-full" id="modifyLectureTimediv">
 											    <button type="button" id="modifyLectureTime" class="btn btn-outline-primary w-full">강의시간 재선택</button>
+											</div>
+						            	</td>
+						            </tr>
+						        </tbody>
+						   </table>
+						   <table id="newLectureTime" style="width: 100%; table-layout: fixed;" hidden>
+						        <tbody id="timeDiv">
+						            <tr>
+						            	<td class="lecutre-title">강의시간</td>
+						            	<td colspan="4">
+										<div class="flex w-full">
+											<select id="weekdayId0" class="form-select disabled:pointer-events-none disabled:bg-[#eee] dark:disabled:bg-[#1b2e4b] cursor-not-allowed mr-3" name="lectureWeekday[0].weekdayCode">
+												<option value="" disabled selected>요일</option>
+											    <option th:each="cwk : ${commonWeekday}" th:value="${cwk.code}" th:text="${cwk.name}"></option>
+											</select>
+											<select id="beginTimeId0" class="form-select mr-3 disabled:pointer-events-none disabled:bg-[#eee] dark:disabled:bg-[#1b2e4b] cursor-not-allowed" name="lectureWeekday[0].beginTimeCode" onchange="disableSelectedOption()">
+											    <option value="" disabled selected>시작시간</option>
+											</select>	
+											<span>~</span>
+											<select id="endTimeId0" class="form-select form-input disabled:pointer-events-none disabled:bg-[#eee] dark:disabled:bg-[#1b2e4b] cursor-not-allowed ml-3 " name="lectureWeekday[0].endTimeCode" disabled>
+												<option value="" disabled selected>종료시간</option>
+											</select>
+										</div>
+										</td>								
+						            </tr>
+						        </tbody>
+						        <tbody>
+						            <tr>
+						            	<td colspan="5">
+						            		<div class="flex justify-end w-full">
+											    <a type="button" id="BtnEndTime" class="btn btn-outline-dark ltr:rounded-r-none rtl:rounded-l-none">강의시간 제거</a>
+											    <a type="button" id="btnAddTime" class="btn btn-outline-danger ltr:rounded-l-none rtl:rounded-r-none">강의시간 추가</a>
 											</div>
 						            	</td>
 						            </tr>
@@ -282,13 +318,67 @@
 				           	   </div>
 					        </div>
 					   </div>
-                           </div> 
-                       </div>
+                       </div> 
+                    </div>
+                    
+                    <!-- 강의시간을 선택하지않고 추가버튼을 누를 때 경고 모달 -->
+			        <div class="modal">
+					  <div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundAddFileError">
+					       <div class="flex min-h-screen items-center justify-center px-4" id="modalWrapperAddFileError">
+					           <div
+					               class="panel my-8 w-[90%] max-w-lg overflow-hidden rounded-lg border-0 p-0 md:w-full"
+					               id="modal"
+					           >
+					               <button
+					                   type="button"
+					                   class="absolute top-4 text-white-dark hover:text-dark ltr:right-4 rtl:left-4"
+					                   id="closeModalButtonAddFileError"
+					               >
+					                   <svg
+					                       xmlns="http://www.w3.org/2000/svg"
+					                       width="24px"
+					                       height="24px"
+					                       viewBox="0 0 24 24"
+					                       fill="none"
+					                       stroke="currentColor"
+					                       stroke-width="1.5"
+					                       stroke-linecap="round"
+					                       stroke-linejoin="round"
+					                       class="h-6 w-6"
+					                   >
+					                       <line x1="18" y1="6" x2="6" y2="18"></line>
+					                       <line x1="6" y1="6" x2="18" y2="18"></line>
+					                   </svg>
+					               </button>
+					               <h3
+					                   class="bg-[#fbfbfb] py-3 text-lg font-medium ltr:pl-5 ltr:pr-[50px] rtl:pl-[50px] rtl:pr-5 dark:bg-[#121c2c]"
+					               >
+					                   안내
+					               </h3>
+					               <div class="p-5">
+					                   이전 항목을 입력하고 추가버튼을 눌러주세요.
+					                   <div class="mt-8 flex items-center justify-end">
+				                          <button
+				                          	  id="employeeBtnAddFileError"
+				                              type="button"
+				                              class="btn btn-primary ltr:ml-4 rtl:mr-4"
+				                          >
+				                              확인
+				                          </button>
+				                      </div>
+					               </div>
+					           </div>
+					       </div>
+					   </div>
+					</div>
 					<!--  풋터 파일 연결 -->
-			<div th:replace="fragments/footer :: footer"></div>
+				<div th:replace="fragments/footer :: footer"></div>
 				</div> <!-- 메인화면 div 끝 -->
 			</div>
 		</div>
+		<script th:inline="javascript">
+        	var lectureNo = [[${lecture.lectureNo}]]
+        </script>
 		<script th:src="@{/customjs/modifyLecture.js}"></script>
 	</body>
 
