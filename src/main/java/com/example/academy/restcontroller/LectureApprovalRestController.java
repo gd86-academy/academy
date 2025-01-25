@@ -41,4 +41,16 @@ public class LectureApprovalRestController {
 	public List<Common> getEndLectureTimeFromModify(@RequestBody LectureApprovalGetBeginTimeDTO lectureApprovalGetBeginTimeDTO) {
 		return lectureApprovalService.getLectureApprovalGetEndTimeFromModify(lectureApprovalGetBeginTimeDTO);
 	}
+	
+	// 진수우 : 폼에서 입력한 데이터를 기반으로 예약 가능한 시작시간 조회.
+	@PostMapping("/restapi/getBeginLectureTimeFromLectureModify")
+	public List<Common> getBeginLectureTimeFromLectureModify(@RequestBody LectureApprovalGetBeginTimeDTO lectureApprovalGetBeginTimeDTO) {
+		return lectureApprovalService.getLectureApprovalGetBeginTimeFromLectureModify(lectureApprovalGetBeginTimeDTO);
+	}
+	
+	// 진수우 : 폼에서 입력한 데이터를 기반으로 예약 가능한 시작시간 조회.
+	@PostMapping("/restapi/getEndLectureTimeFromLectureModify")
+	public List<Common> getEndLectureTimeFromLectureModify(@RequestBody LectureApprovalGetBeginTimeDTO lectureApprovalGetBeginTimeDTO) {
+		return lectureApprovalService.getLectureApprovalGetEndTimeFromLectureModify(lectureApprovalGetBeginTimeDTO);
+	}
 }

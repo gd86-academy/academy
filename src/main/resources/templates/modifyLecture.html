@@ -108,10 +108,9 @@
 				<div class="animate__animated p-6" :class="[$store.app.animation]"> <!-- 메인화면 div 시작 -->
 				<div class="flex justify-between mb-5">
 					<h2 class="text-2xl ml-3 mb-5">강의목록</h2>
-				</div>
-				 
-					
-				
+				</div>	
+				<form id="addForm" method="post" th:action="@{/modifyLecture}">
+				<input type="hidden" name="lectureNo" th:value="${lecture.lectureNo}">
 					<div id="capture_area" class="panel" style="margin: 0% 15% 1% 15%; padding: 4%; ">
 						<div class="flex flex-wrap justify-between gap-4 px-4" style="margin-top: 20px;">
 							<div class="text-2xl font-semibold uppercase">&nbsp;&nbsp;강의 소개서</div>
@@ -142,7 +141,7 @@
 											        style="flex: 1;">
 											        사원검색
 											    </button>
-											    <input id="employeeNo" name="employeeNo"
+											    <input id="employeeNo" name="lecturer"
 											        type="text"
 											        class="form-input ltr:rounded-l-none rtl:rounded-r-none flex-grow" 
 											        style="flex: 5;" th:value="${lecture.employeeName} + '[' + ${lecture.lecturer} + ']'" readonly/>
@@ -164,7 +163,7 @@
 						        		<td><div class="lecutre-title">강의제목</div></td>
 										<td colspan="4">
 											<div class="flex" >
-												<input type="text" class="form-input" th:value="${lecture.lectureName}">
+												<input type="text" class="form-input" name="lectureName" id="lectureName" th:value="${lecture.lectureName}">
 											</div>
 										</td>
 						        	</tr>
@@ -172,7 +171,7 @@
 						        		<td><div class="lecutre-title">강의내용</div></td>
 										<td colspan="4">
 											<div class="flex">
-												<textarea id="lectureApprovalContent" name="lectureApprovalContent" rows="15" cols="205" class="form-textarea w-full" placeholder="강의내용을 입력해주세요." th:text="${lecture.lectureContent}"></textarea>
+												<textarea name="lectureContent" id="lectureContent" rows="15" cols="205" class="form-textarea w-full" placeholder="강의내용을 입력해주세요." th:text="${lecture.lectureContent}"></textarea>
 											</div>
 										</td>
 						        	</tr>
@@ -228,15 +227,15 @@
 						            	<td class="lecutre-title">강의시간</td>
 						            	<td colspan="4">
 										<div class="flex w-full">
-											<select id="weekdayId0" class="form-select disabled:pointer-events-none disabled:bg-[#eee] dark:disabled:bg-[#1b2e4b] cursor-not-allowed mr-3" name="lectureWeekday[0].weekdayCode">
+											<select id="weekdayId0" class="form-select disabled:pointer-events-none disabled:bg-[#eee] dark:disabled:bg-[#1b2e4b] cursor-not-allowed mr-3" name="timeList">
 												<option value="" disabled selected>요일</option>
 											    <option th:each="cwk : ${commonWeekday}" th:value="${cwk.code}" th:text="${cwk.name}"></option>
 											</select>
-											<select id="beginTimeId0" class="form-select mr-3 disabled:pointer-events-none disabled:bg-[#eee] dark:disabled:bg-[#1b2e4b] cursor-not-allowed" name="lectureWeekday[0].beginTimeCode" onchange="disableSelectedOption()">
+											<select id="beginTimeId0" class="form-select mr-3 disabled:pointer-events-none disabled:bg-[#eee] dark:disabled:bg-[#1b2e4b] cursor-not-allowed" name="timeList" onchange="disableSelectedOption()">
 											    <option value="" disabled selected>시작시간</option>
 											</select>	
 											<span>~</span>
-											<select id="endTimeId0" class="form-select form-input disabled:pointer-events-none disabled:bg-[#eee] dark:disabled:bg-[#1b2e4b] cursor-not-allowed ml-3 " name="lectureWeekday[0].endTimeCode" disabled>
+											<select id="endTimeId0" class="form-select form-input disabled:pointer-events-none disabled:bg-[#eee] dark:disabled:bg-[#1b2e4b] cursor-not-allowed ml-3 " name="timeList" disabled>
 												<option value="" disabled selected>종료시간</option>
 											</select>
 										</div>
@@ -269,6 +268,7 @@
 						</div>
                        </div>                       
 					</div>
+					</form>
 					
 					<!--  담당자 수정 모달 -->
 					<div class="fixed inset-0 z-[999] hidden overflow-y-auto bg-[black]/60" id="modalBackgroundModifyPeople">

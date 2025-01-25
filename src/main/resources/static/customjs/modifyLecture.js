@@ -275,7 +275,7 @@ $('#weekdayId0').on('change', function () {
 
     // 선택된 데이터를 REST API로 전달하여 시간 데이터 요청
     $.ajax({
-        url: `http://localhost/academy/restapi/getBeginLectureTimeFromModify`,
+        url: `http://localhost/academy/restapi/getBeginLectureTimeFromLectureModify`,
 		contentType: 'application/json', 
         type: 'POST',
         data: JSON.stringify({
@@ -323,7 +323,7 @@ $('#weekdayId0').on('change', function () {
 
     // 선택된 데이터를 REST API로 전달하여 시간 데이터 요청
     $.ajax({
-        url: `http://localhost/academy/restapi/getEndLectureTimeFromModify`,
+        url: `http://localhost/academy/restapi/getEndLectureTimeFromLectureModify`,
 		contentType: 'application/json', 
         type: 'POST',
         data: JSON.stringify({
@@ -584,14 +584,14 @@ $('#btnAddTime').click(function () {
                 <td></td>
                 <td colspan="4">
                     <div class="flex justify-between">
-						<select id="${weekdayId}" class="form-select weekday-select form-input disabled:pointer-events-none disabled:bg-[#eee] dark:disabled:bg-[#1b2e4b] cursor-not-allowed mr-3" name="lectureWeekday[${timeResult}].weekdayCode">
+						<select id="${weekdayId}" class="form-select weekday-select form-input disabled:pointer-events-none disabled:bg-[#eee] dark:disabled:bg-[#1b2e4b] cursor-not-allowed mr-3" name="timeList">
 	                        <option value="" disabled selected>요일</option>
 	                    </select>
-                        <select id="${beginTimeId}" class=" mr-3 form-input disabled:pointer-events-none disabled:bg-[#eee] dark:disabled:bg-[#1b2e4b] cursor-not-allowed" name="lectureWeekday[${timeResult}].beginTimeCode" onchange="disableSelectedOption()">
+                        <select id="${beginTimeId}" class=" mr-3 form-input disabled:pointer-events-none disabled:bg-[#eee] dark:disabled:bg-[#1b2e4b] cursor-not-allowed" name="timeList" onchange="disableSelectedOption()">
                             <option value="" disabled selected>시작시간</option>
                         </select>
                         <div>~</div>
-                        <select id="${endTimeId}" class=" ml-3 form-input disabled:pointer-events-none disabled:bg-[#eee] dark:disabled:bg-[#1b2e4b] cursor-not-allowed" name="lectureWeekday[${timeResult}].endTimeCode" disabled>
+                        <select id="${endTimeId}" class=" ml-3 form-input disabled:pointer-events-none disabled:bg-[#eee] dark:disabled:bg-[#1b2e4b] cursor-not-allowed" name="timeList" disabled>
                             <option value="" disabled selected>종료시간</option>
                         </select>
                     </div>
@@ -646,7 +646,7 @@ $('#btnAddTime').click(function () {
 
             // 선택된 데이터를 REST API로 전달하여 시간 데이터 요청
             $.ajax({
-                url: `http://localhost/academy/restapi/getBeginLectureTimeFromModify`,
+                url: `http://localhost/academy/restapi/getBeginLectureTimeFromLectureModify`,
 				contentType: 'application/json', 
                 type: 'POST',
                 data: JSON.stringify({
@@ -686,7 +686,7 @@ $('#btnAddTime').click(function () {
 	
 	        // 선택된 데이터를 REST API로 전달하여 시간 데이터 요청
 	        $.ajax({
-	            url: `http://localhost/academy/restapi/getEndLectureTimeFromModify`,
+	            url: `http://localhost/academy/restapi/getEndLectureTimeFromLectureModify`,
 				contentType: 'application/json', 
 	            type: 'POST',
 	            data: JSON.stringify({
@@ -731,3 +731,122 @@ const closeModalAddFileError = () => {
 
 if (closeModalButtonAddFileError) closeModalButtonAddFileError.addEventListener('click', closeModalAddFileError); // 닫기 버튼 클릭 시
 if (employeeBtnAddFileError) employeeBtnAddFileError.addEventListener('click', closeModalAddFileError);     // 취소 버튼 클릭 시
+
+
+// 유효성 검사 
+$('#addBtn').click(function() {
+    let isVal = true;
+    
+ 	// 시작날짜 검사
+    if ($('#beginDate').val().trim() === '') {
+        $('#beginDate').addClass("errorInput");
+        $('.beginDate-error').show();
+        isVal = false;
+    } else {
+        $('.beginDate-error').hide();
+        $('#beginDate').removeClass("errorInput");
+    }
+	
+	// 종료날짜 검사
+    if ($('#endDate').val().trim() === '') {
+        $('#endDate').addClass("errorInput");
+        $('.endDate-error').show();
+        isVal = false;
+    } else {
+        $('.endDate-error').hide();
+        $('#endDate').removeClass("errorInput");
+    }
+	
+	if ($('#alreadyLectureTime').length === 0) {
+		$('#timeDiv tr').each(function(index) {
+	        // 각 select 요소에 대한 검사
+			console.log($('#timeDiv tr').length);
+	        const weekday = $(this).find(`#weekdayId${index}`);
+	        const beginTime = $(this).find(`#beginTimeId${index}`);
+	        const endTime = $(this).find(`#endTimeId${index}`);
+
+	        // 요일 검사
+	        if (weekday.val() === '' || weekday.val() === null) {
+	            weekday.addClass('errorInput');
+	            $(this).find('.weekday-error').show();
+	            isVal = false;
+	        } else {
+	            weekday.removeClass('errorInput');
+	            $(this).find('.weekday-error').hide();
+	        }
+			console.log("요일" + weekday.val());
+	        // 시작시간 검사
+	        if (beginTime.val() === '' || beginTime.val() === null) {
+	            beginTime.addClass('errorInput');
+	            $(this).find('.beginTime-error').show();
+	            isVal = false;
+	        } else {
+	            beginTime.removeClass('errorInput');
+	            $(this).find('.beginTime-error').hide();
+	        }
+			console.log("시작시간" + beginTime.val());
+	        // 종료시간 검사
+	        if (endTime.val() === '' || endTime.val() === null) {
+	            endTime.addClass('errorInput');
+	            $(this).find('.endTime-error').show();
+	            isVal = false;
+	        } else {
+	            endTime.removeClass('errorInput');
+	            $(this).find('.endTime-error').hide();
+	        }
+			console.log("종료시간" + endTime.val());
+	    });
+	}
+	
+	// 강의명 검사
+    if ($('#lectureName').val().trim() === '') {
+        $('#lectureName').addClass("errorInput");
+        $('.lectureName-error').show();
+        isVal = false;
+    } else {
+        $('.lectureName-error').hide();
+        $('#lectureName').removeClass("errorInput");
+    }
+	
+	const $classroomList = $('#classroomList'); // 선택박스 참조
+	const $niceSelectclassroomList = $classroomList.next('.nice-select'); // nice-select 참조
+		
+ 	// 강의실 검사
+    if ($('#classroomList').val() === null) {
+        $('.classroomList-error').show();
+        $niceSelectclassroomList.addClass("errorInput"); // 에러 클래스 추가
+        isVal = false;
+    } else {
+        $('.classroomList-error').hide();
+        $niceSelectclassroomList.removeClass("errorInput"); // 에러 클래스 제거
+    }
+	
+	// 강의내용 검사
+	if ($('#lectureContent').val().trim() === '') {
+        $('#lectureContent').addClass("errorInput");
+        $('.lectureContent-error').show();
+        isVal = false;
+    } else {
+        $('.lectureContent-error').hide();
+        $('#lectureContent').removeClass("errorInput");
+    }
+ 	
+    // 폼 제출
+    if (isVal) {
+        console.log("submit 성공");
+		$('#endDate').prop('disabled', false);
+		$('#timeDiv tr').each(function(index) {
+			const weekday = $(this).find(`#weekdayId${index}`);
+	        const beginTime = $(this).find(`#beginTimeId${index}`);
+	        const endTime = $(this).find(`#endTimeId${index}`);
+			weekday.prop('disabled', false);
+			beginTime.prop('disabled', false);
+			endTime.prop('disabled', false);
+		});
+		
+        $('#addForm').submit();
+    } else {
+	  	modalBackgroundSubmitError.classList.remove('hidden');  // 모달 배경 보이기
+	  	modalBackgroundSubmitError.classList.add('block');     // 모달 배경 보이게 설정
+	}
+});

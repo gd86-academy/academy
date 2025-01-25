@@ -40,7 +40,7 @@ public class LectureController {
 		return "redirect:/lectureList";
 	}
 	
-	// 김혜린 : 강의 수정페이지
+	// 김혜린, 진수우 : 강의 수정페이지
 	@GetMapping("/modifyLecture")
 	public String modifyLecture(Model model, Integer lectureNo) {
 		// 강의 기존정보 불러오기 
@@ -69,7 +69,7 @@ public class LectureController {
  	 	
 		return "modifyLecture";
 	}
-	// 김혜린 : 강의 수정페이지
+	// 김혜린, 진수우 : 강의 수정페이지
 	@PostMapping("/modifyLecture")
 	public String modifyLecture(LectureModifyDTO lectureModifyDTO, @RequestParam(value="timeList", required = false) List<String> list) {
 		log.debug("----------lectureModifyDTO : " + lectureModifyDTO);	//디버깅
@@ -81,7 +81,7 @@ public class LectureController {
 	}
 	
 	
-	// 김혜린 : 강의 상세페이지
+	// 김혜린, 진수우 : 강의 상세페이지
 	@GetMapping("/lectureOne")
 	public String lectureOne(Model model, Integer lectureNo) {
 		

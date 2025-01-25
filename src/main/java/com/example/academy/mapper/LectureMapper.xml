@@ -2,6 +2,34 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.LectureMapper">
 
+	<!-- 진수우 : 강의수정 시 강의/강의시간 연결테이블에서 기존 강의시간번호 조회 -->
+	<select id="selectLectureLectureWeekdayNo">
+		SELECT lecture_weekday_no lectureWeekdayNo
+		FROM lecture_lecture_weekday
+		WHERE lecture_no = #{lectureNo}
+	</select>
+	
+	<!-- 진수우 : 강의수정 시 강의시간 테이블에서 강의시간정보 조회 -->
+	<select id="selectLectureWeekday">
+		SELECT 
+			lecture_weekday_no lectureWeekdayNo
+			, weekday_code weekdayCode
+			, begin_time_code beginTimeCode
+			, end_time_code endTimeCode
+		FROM lecture_weekday
+		WHERE lecture_weekday_no = #{lectureWeekdayNo}
+	</select>
+	
+	<!-- 진수우 : 강의수정 시 삭제된 강의시간을 강의/강의시간 연결테이블에서 삭제 -->
+	<delete id="deleteLectureWeekday">
+		DELETE FROM lecture_lecture_weekday WHERE lecture_weekday_no = #{lectureWeekdayNo} 
+	</delete>
+	
+	<!-- 진수우 : 강의수정 시 새로 입력된 강의시간을 강의시간 테이블에 삽입 -->
+	<insert id="insertLectureWeekday" useGeneratedKeys="true" keyProperty="lectureWeekdayNo">
+		INSERT INTO lecture_weekday(weekday_code, begin_time_code, end_time_code) VALUES(#{weekdayCode}, #{beginTimeCode}, #{endTimeCode})
+	</insert>
+
 	<!-- 진수우 : 강의결재 승인 시 강의/강의시간 추가 -->
 	<insert id="insertLectureLectureWeekday">
 		INSERT INTO lecture_lecture_weekday(lecture_no, lecture_weekday_no) VALUES(#{lectureNo}, #{lectureWeekdayNo})
@@ -29,6 +57,7 @@
 			, lecture_content = #{lectureContent} 
 			, lecture_begin_date = #{lectureBeginDate} 
 			, lecture_end_date = #{lectureEndDate} 
+			, lecturer = #{lecturer}
 		WHERE lecture_no = #{lectureNo}
 	</update>
 	
