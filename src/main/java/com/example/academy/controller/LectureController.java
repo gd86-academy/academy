@@ -43,6 +43,20 @@ public class LectureController {
 	// 김혜린, 진수우 : 강의 수정페이지
 	@GetMapping("/modifyLecture")
 	public String modifyLecture(Model model, Integer lectureNo) {
+		// 스프링시큐리티에서 계정정보 가져오기.
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		// 로그인 상태일 때만 model에 정보담기.
+	    if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+	        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+	        model.addAttribute("userNo", Integer.parseInt(userDetails.getUsername()));
+	        model.addAttribute("userName", userDetails.getUserRealName());
+	        model.addAttribute("userMail", userDetails.getUserMail());
+	        model.addAttribute("userRole", userDetails.getUserRole());
+	        model.addAttribute("userPhotoFileName", userDetails.getUserPhotoFileName());
+	        model.addAttribute("userPhotoFileExt", userDetails.getUserPhotoFileExt());
+	    }
+	    
 		// 강의 기존정보 불러오기 
 		// 1) 강의 상세정보 출력
 		LectureOneDTO lecture = lectureService.getLectureOne(lectureNo);
@@ -115,6 +129,19 @@ public class LectureController {
 	// 김혜린 : 강의 리스트 출력
 	@GetMapping("/lectureList")
 	public String lectureList(Model model) {
+		// 스프링시큐리티에서 계정정보 가져오기.
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		// 로그인 상태일 때만 model에 정보담기.
+	    if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+	        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+	        model.addAttribute("userNo", Integer.parseInt(userDetails.getUsername()));
+	        model.addAttribute("userName", userDetails.getUserRealName());
+	        model.addAttribute("userMail", userDetails.getUserMail());
+	        model.addAttribute("userRole", userDetails.getUserRole());
+	        model.addAttribute("userPhotoFileName", userDetails.getUserPhotoFileName());
+	        model.addAttribute("userPhotoFileExt", userDetails.getUserPhotoFileExt());
+	    }
 		return "lectureList";		
 	}
 
