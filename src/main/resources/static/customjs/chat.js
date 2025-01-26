@@ -95,48 +95,49 @@ document.addEventListener('alpine:init', () => {
 
 		initMulticolumn() {
 			$.ajax({
-				url: 'http://localhost/academy/restapi/employeeList',
-				type: 'GET',
-				dataType: 'json',
-				success: (data) => {
-					this.chatUserTable = new simpleDatatables.DataTable('#chatUserTable', {
-						data: {
-							data: data.map(item => [
-								[item[0], item[5]]
-							])
-						},
+			       url: 'http://localhost/academy/restapi/employeeList',
+			       type: 'GET',
+			       dataType: 'json',
+			       success: (data) => {
+			           // 로그인한 사용자를 제외한 데이터 필터링
+			           const filteredData = data.filter(item => item[0] !== this.currentUserName);
 
-						searchable: true,
-						perPage: 5,
-						perPageSelect: [10, 20, 30, 50, 100],
+			           this.chatUserTable = new simpleDatatables.DataTable('#chatUserTable', {
+			               data: {
+			                   data: filteredData.map(item => [
+			                       [item[0], item[5]]
+			                   ])
+			               },
 
-						columns: [
-							{
-								select: 0,
-								render: (data, cell, row) => {
-									const [name, image] = data.split(',');
-									if (image == 'null.null') {
-										return `
-																			<div class="flex items-center w-max">
-																			<img class="w-9 h-9 rounded-full ltr:mr-2 rtl:ml-2 object-cover" src="./images/defaultProfile.png" />
-																		    <span>${name}</span>
-																			</div>
-																			`;
-									} else {
-										return `
-																		    <div class="flex items-center w-max">
-																		    <img class="w-9 h-9 rounded-full ltr:mr-2 rtl:ml-2 object-cover" src="./upload/${image}" />
-																		    &nbsp;&nbsp;&nbsp;<span>${name}</span>
-																			</div>
-																			`;
-									}
-								},
-								sortable: true,
-							},
+			               searchable: true,
+			               perPage: 5,
+			               perPageSelect: [10, 20, 30, 50, 100],
 
-
-						],
-
+			               columns: [
+			                   {
+			                       select: 0,
+			                       render: (data, cell, row) => {
+			                           const [name, image] = data.split(',');
+			                           if (image == 'null.null') {
+			                               return `
+			                                   <div class="flex items-center w-max">
+			                                   <img class="w-9 h-9 rounded-full ltr:mr-2 rtl:ml-2 object-cover" src="./images/defaultProfile.png" />
+			                                   <span>${name}</span>
+			                                   </div>
+			                               `;
+			                           } else {
+			                               return `
+			                                   <div class="flex items-center w-max">
+			                                   <img class="w-9 h-9 rounded-full ltr:mr-2 rtl:ml-2 object-cover" src="./upload/${image}" />
+			                                   &nbsp;&nbsp;&nbsp;<span>${name}</span>
+			                                   </div>
+			                               `;
+			                           }
+			                       },
+			                       sortable: true,
+			                   },
+			               ],
+			          
 						firstLast: true,
 						firstText:
 							'<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M13 19L7 12L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M16.9998 19L10.9998 12L16.9998 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
