@@ -48,13 +48,10 @@ public class ChattingController {
 	}
 	
 	@GetMapping("/chat/messages")
-	public List<chattingMessageDTO> getMessages(@RequestParam String fromUserName, @RequestParam String toUserName){
-		
-		
-	    List<chattingMessageDTO> messages = chattingService.getMessages(fromUserName, toUserName);
-	   
-	    return messages;
-		
+	public List<chattingMessageDTO> getMessages(@RequestParam String fromUserName, 
+	                                            @RequestParam String toUserName) {
+	    
+	    return chattingService.getMessages(fromUserName, toUserName);
 	}
 
     

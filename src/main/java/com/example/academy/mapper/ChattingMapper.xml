@@ -9,18 +9,15 @@
   </insert>
   
   <select id="getMessages" resultType="com.example.academy.dto.chattingMessageDTO">
-    SELECT 
-        id,
-        fromUserName, 
-        toUserName, 
-        content, 
-        create_date
-    FROM chat_message
-    WHERE (fromUserName = #{fromUserName} AND toUserName = #{toUserName})
-       OR (fromUserName = #{toUserName} AND toUserName = #{fromUserName})
+    SELECT * 
+    FROM chat_message 
+    WHERE 
+        (fromUserName LIKE CONCAT('%', #{fromUserName}, '%') 
+         AND toUserName LIKE CONCAT('%', #{toUserName}, '%')) 
+        OR 
+        (fromUserName LIKE CONCAT('%', #{toUserName}, '%') 
+         AND toUserName LIKE CONCAT('%', #{fromUserName}, '%')) 
     ORDER BY create_date ASC
 </select>
-
-  
 
 </mapper>

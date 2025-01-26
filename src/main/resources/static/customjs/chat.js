@@ -201,25 +201,25 @@ document.addEventListener('alpine:init', () => {
 			}
 		},
 		getMessages() {
-			console.log('Fetching messages for:', this.currentUserName, this.selectedUser);
-			$.ajax({
-				url: 'http://localhost/academy/chat/messages',
-				type: 'GET',
-				data: {
-					fromUserName: this.currentUserName,
-					toUserName: this.selectedUser
-				},
-				success: (messages) => {
-					console.log('Received messages:', messages);
-					this.messages = messages;
-					this.scrollToBottom();
-				},
-				error: (xhr, status, error) => {
-					console.error('Error getting messages:', error);
-
-				}
-			});
+		    console.log('Sending request:', this.currentUserName, this.selectedUser);
+		    $.ajax({
+		        url: 'http://localhost/academy/chat/messages',
+		        type: 'GET',
+		        data: {
+		            fromUserName: this.currentUserName.trim(),
+		            toUserName: this.selectedUser.trim()
+		        },
+		        success: (messages) => {
+		            console.log('Received messages:', messages);
+		            this.messages = messages;
+		            this.scrollToBottom();
+		        },
+		        error: (xhr, status, error) => {
+		            console.error('Error getting messages:', xhr.responseText);
+		        }
+		    });
 		},
+
 
 		scrollToBottom() {
 		    setTimeout(() => {
