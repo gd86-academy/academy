@@ -32,7 +32,9 @@
 		<script src="https://uicdn.toast.com/tui-tree/latest/tui-tree.js"></script>
 		<script th:src="@{/js/nice-select2.js}"></script>
 		<link rel="stylesheet" type="text/css" href="https://uicdn.toast.com/tui-tree/latest/tui-tree.css"/>
-		<link th:href="@{/css/templete.css}" rel="stylesheet" />		
+		<link th:href="@{/css/templete.css}" rel="stylesheet" />	
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>	
 			
 		<style>
 	       	.lecutre-title-align {
@@ -69,6 +71,8 @@
 		<div x-cloak class="fixed inset-0 z-50 bg-[black]/60 lg:hidden"
 			:class="{'hidden' : !$store.app.sidebar}"
 			@click="$store.app.toggleSidebar()"></div>
+			
+		<img id="capture_img" src="" alt="screenshot" hidden>
 	
 		<!-- 화면로딩 UI -->
 		<div
@@ -108,9 +112,16 @@
 	
 				<!-- 메인화면 -->
 				<div class="animate__animated p-6 white-light" :class="[$store.app.animation]"> <!-- 메인화면 div 시작 -->
+					<div class="flex justify-between mb-5">
 					<h2 class="text-2xl ml-3 mb-5">나의 신청 목록</h2>
+					<div class="flex items-center justify-end">
+						<button type="button" class="btn btn-dark ltr:ml-4 rtl:mr-4" style="width:130px; height:40px;" th:onclick="capture()">
+	                        PDF 저장
+	                    </button>
+                    </div>
+                    </div>
 					
-					<div class="panel" style="margin: 0% 15% 0% 15%; padding: 4%; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05); border-radius : 10px;">
+					<div id="capture_area" class="panel" style="margin: 0% 15% 0% 15%; padding: 4%; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05); border-radius : 10px;">
 						<div class="p-3">
 							<div class="flex items-center justify-between" style="margin-bottom: 20px; margin-top: 20px;">
 								<div class="text-3xl font-semibold uppercase m-3" style="white-space: nowrap;">근태 신청서</div>
@@ -399,7 +410,7 @@
 							                <td class="bg-[#f4f4f4] lecutre-title-align">결재내용</td>
 							                <td colspan="3">
 							                	<textarea id="attendanceApprovalContent" name="attendanceApprovalContent"  style="pointer-events: none;"
-							                			rows="15" cols="205" class="custom-textarea w-full" placeholder="결재내용을 입력해주세요."
+							                			rows="15" cols="205" class="form-textarea w-full" placeholder="결재내용을 입력해주세요."
 							                			th:text="${attendanceApproval.attendanceApprovalContent}"></textarea>
 							                </td>				                
 							            </tr>
@@ -618,7 +629,7 @@
 		</div>
 		
 	   <script th:src="@{/customjs/attendanceApprovalOne.js}"> </script>
-		
+	   <script th:src="@{/customjs/capture.js}"></script>
 		
 	</body>
 
