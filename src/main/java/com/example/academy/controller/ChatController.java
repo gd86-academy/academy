@@ -7,12 +7,17 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessageHeaderAccessor;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.academy.dto.ChatDTO;
+import com.example.academy.security.CustomUserDetails;
 import com.example.academy.service.ChatService;
 import com.example.academy.vo.chatMessage;
 
@@ -91,4 +96,6 @@ public class ChatController {
 		보안 강화를 위해 사용자 검증 로직 추가.
      */
 
+    
+    
 }

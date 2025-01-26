@@ -173,4 +173,6 @@ public class ChatRoomController {
     }
     // ResponseEntity<?> : HTTP 응답 상태 코드와 데이터를 함께 전달하는 데 사용.
     
+    
+    
 }
