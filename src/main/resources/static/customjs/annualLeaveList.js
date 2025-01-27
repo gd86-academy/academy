@@ -149,6 +149,12 @@ document.addEventListener('alpine:init', () => {
 	                    if (rowElement) {
 	                        const tdElements = rowElement.querySelectorAll('td');
 	                        const approvalNo = tdElements[0].textContent; // approvalNo 데이터 추출
+							
+							if (!attendanceApprovalNo || attendanceApprovalNo === '항목이 없습니다.') {
+					            // 항목이 없으면 클릭 동작 차단
+					            console.warn('유효하지 않은 행 클릭');
+					            return;
+					        } 
 	                        window.location.href = `/academy/attendanceApprovalOne?approvalNo=${approvalNo}`;
 	                    }
 	                });
