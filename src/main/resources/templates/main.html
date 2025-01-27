@@ -107,15 +107,20 @@
 							</div>
 							<div style="width: 160px;"></div>
 							<div class="w-full">
-								<div th:if="${checkinNo == 0}">
-									<a type="button" class="btn btn-outline-info mb-1"
+								<div>
+									<a th:if="${checkinNo == 0}" type="button" class="btn btn-outline-info mb-1"
 										style="background-color: #ffffff; width: 100%;" 
 										th:href="@{/modifyCheckin}">출근</a>
+									<a th:if="${checkinNo > 1}" type="button" class="btn text-blackbtn-outline-white mb-1"
+										style="background-color: #f0f0f0; color: #d3d3d3; border-color: #d3d3d3; width: 100%;">출근</a>
 								</div>
-								<div th:if="${checkoutNo == 0}">
-									<a type="button" class="btn btn-outline-info"
+								<div>
+									<a th:if="${checkinNo > 1 && checkoutNo == 0}" type="button" class="btn btn-outline-info"
 										style="background-color: #ffffff; width: 100%;" 
 										th:href="@{/modifyCheckout}">퇴근</a>
+									<a th:if="${checkinNo == 0 || checkoutNo > 1}" type="button" class="btn btn-outline-primary"
+										style="background-color: #f0f0f0; color: #d3d3d3; border-color: #d3d3d3; width: 100%;" 
+										>퇴근</a>
 								</div>
 							</div>
 						</div>
