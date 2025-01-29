@@ -13,4 +13,5 @@ public class LectureApprovalEmployeeListDTO {
 	private String stampFileExt;
 	private String approvalEmployeeStatus;
 	private String approvalEmployeeStatusName;
+	private String departmentName;
 }

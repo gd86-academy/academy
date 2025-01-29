@@ -206,6 +206,10 @@ public class LectureApprovalController {
 		List<LectureApprovalEmployeeListDTO> lectureApprovalEmployee = lectureApprovalService.getLectureApprovalEmployee(lectureApprovalNo);
 		model.addAttribute("lectureApprovalEmployee", lectureApprovalEmployee);
 		
+		// 결재자 테이블에서 최고 결재자 가져오기.
+		Integer maxLevel = lectureApprovalService.getApprovalEmployeeMaxLevel(lectureApprovalNo);
+		model.addAttribute("maxLevel", maxLevel);
+		
 		return "lectureApprovalOne";
 	}
 	
@@ -241,6 +245,10 @@ public class LectureApprovalController {
 		// 결재자 테이블에서 데이터 가져오기.
 		List<LectureApprovalEmployeeListDTO> lectureApprovalEmployee = lectureApprovalService.getLectureApprovalEmployee(lectureApprovalNo);
 		model.addAttribute("lectureApprovalEmployee", lectureApprovalEmployee);
+		
+		// 결재자 테이블에서 최고 결재자 가져오기.
+		Integer maxLevel = lectureApprovalService.getApprovalEmployeeMaxLevel(lectureApprovalNo);
+		model.addAttribute("maxLevel", maxLevel);
 		
 		return "completeLectureApprovalOne";
 	}

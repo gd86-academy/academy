@@ -55,6 +55,11 @@ public class LectureApprovalService {
 		return lectureApprovalMapper.selectLectureApprovalList(employeeNo);
 	}
 	
+	// 진수우 : 결재자 테이블에서 해당 결재의 최고결재단계를 조회.
+	public Integer getApprovalEmployeeMaxLevel(Integer lectureApprovalNo){
+		return lectureApprovalMapper.selectApprovalEmployeeMaxLevel(lectureApprovalNo);
+	}
+	
 	// 진수우 : 강의결재 재신청 시 폼에 입력한 내용 데이터베이스에 저장.
 	public void retryLectureApproval(LectureApprovalAddDTO lectureApprovalAddDTO, Integer lectureApprovalOriginNo) {
 		

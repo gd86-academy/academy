@@ -140,23 +140,30 @@
 							                <td class="bg-[#f4f4f4] lecutre-title-align" style="padding: 5px 10px;">
 								                <div th:each="employee : ${lectureApprovalEmployee}">
 								                	<div th:if="${employee.approvalLevel == 1}">
-							                			<span class="text-center w-full" th:text="${employee.approver}"></span>
+							                			<span class="text-center w-full" th:text="${employee.departmentName + ' ' + employee.approver}"></span>
 							                		</div>
 							                	</div>
 							                </td>
 							                <td class="bg-[#f4f4f4] lecutre-title-align" style="padding: 5px 10px;">
 								                <div th:each="employee : ${lectureApprovalEmployee}">
 								                	<div th:if="${employee.approvalLevel == 2}">
-							                			<span class="text-center w-full" th:text="${employee.approver}"></span>
+							                			<span class="text-center w-full" th:text="${employee.departmentName + ' ' + employee.approver}"></span>
 							                		</div>
+							                		
 							                	</div>
+							                	<div th:if="${maxLevel < 2}">
+						                			<span>-</span>
+						                		</div>
 							                </td>
 							                <td class="bg-[#f4f4f4] lecutre-title-align" style="padding: 5px 10px;">
 								                <div th:each="employee : ${lectureApprovalEmployee}">
 								                	<div th:if="${employee.approvalLevel == 3}">
-							                			<span class="text-center w-full" th:text="${employee.approver}"></span>
+							                			<span class="text-center w-full" th:text="${employee.departmentName + ' ' + employee.approver}"></span>
 							                		</div>
 							                	</div>
+							                	<div th:if="${maxLevel < 3}">
+						                			<span>-</span>
+						                		</div>
 							                </td>
 							            </tr>
 							            <!-- 도장이미지 출력 -->
@@ -182,6 +189,9 @@
 										                <span th:if="${employee.approvalEmployeeStatus.equals('AS001')}" th:text="${employee.approvalEmployeeStatusName}"></span>
 										            </div>
 										        </div>
+										        <div th:if="${maxLevel < 2}">
+						                			<span>-</span>
+						                		</div>
 											</td>
 							                <td class="lecture-text-align" style="border-right: 1px solid #f0f0f0; text-align: center; vertical-align: middle;">
 										        <div th:each="employee : ${lectureApprovalEmployee}">
@@ -193,6 +203,9 @@
 										                <span th:if="${employee.approvalEmployeeStatus.equals('AS001')}" th:text="${employee.approvalEmployeeStatusName}"></span>
 										            </div>
 										        </div>
+										        <div th:if="${maxLevel < 3}">
+						                			<span>-</span>
+						                		</div>
 											</td>
 							            </tr>
 							            <!-- 결재순서 출력 -->	
@@ -200,6 +213,16 @@
 							            	<td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0; padding: 5px 10px;">1</td>
 							            	<td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0; padding: 5px 10px;">2</td>
 							            	<td class="lecutre-text-align" style="border-right: 1px solid #f0f0f0; padding: 5px 10px;">3</td>
+							            </tr>
+							            <tr style="height: 15px;">
+							            	<td class="bg-[#f4f4f4] text-center" colspan="3" style="padding: 5px 10px;">
+							            		<span th:if="${lectureApprovalOne.lectureApprovalStatusCode == 'AS001'}" style="color: gray;" 
+							                		th:text="${lectureApprovalOne.lectureApprovalStatus}"></span>
+							                	<span th:if="${lectureApprovalOne.lectureApprovalStatusCode == 'AS002'}" style="color: red;" 
+							                		th:text="${lectureApprovalOne.lectureApprovalStatus}"></span>
+							                	<span th:if="${lectureApprovalOne.lectureApprovalStatusCode == 'AS003'}" style="color: blue;" 
+							                		th:text="${lectureApprovalOne.lectureApprovalStatus}"></span>
+							            	</td>
 							            </tr>					            
 							        </tbody>
 							    </table>

@@ -188,6 +188,7 @@
 			ae.approval_employee_no approvalEmployee
 			, ae.lecture_approval_no lectureApprovalNo
 			, e.employee_name approver
+			, (SELECT name FROM common c WHERE e.employee_department = c.code) departmentName
 			, ae.approver approverNo
 			, ae.approval_level approvalLevel
 			, ae.approval_employee_status approvalEmployeeStatus
