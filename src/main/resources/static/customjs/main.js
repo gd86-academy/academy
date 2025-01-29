@@ -79,7 +79,7 @@ document.addEventListener('alpine:init', () => {
 
 	Alpine.data('contacts1', () => ({
 	    init() {
-	        this.fetchWeather();
+	        this.fetchWeather(); // 날씨 데이터 가져오기
 	    },
 	    
 	    fetchWeather() {
@@ -148,12 +148,12 @@ document.addEventListener('alpine:init', () => {
 
         init() {
             // 컴포넌트 초기화 시 실시간 시간 업데이트 시작
-            this.updateTime();
+            this.updateTime(); // 최초 실행 시 한 번 현재 시간 설정
             setInterval(() => this.updateTime(), 1000); // 1초마다 업데이트
         },
 
-        updateTime() {
-            const now = new Date();
+        updateTime() { // 현재 시간 업데이트
+            const now = new Date(); // 현재 날짜 및 시간 가져오기
             let hours = now.getHours();
             let minutes = now.getMinutes();
             let seconds = now.getSeconds();
@@ -167,6 +167,7 @@ document.addEventListener('alpine:init', () => {
             if (seconds < 10) {
                 seconds = '0' + seconds;
             }
+			// 한 자리 숫자일 때 '0'을 추가
 
             this.currentTime = `${hours}:${minutes}:${seconds}`; // 시간 데이터 업데이트
         }

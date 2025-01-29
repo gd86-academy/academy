@@ -149,17 +149,17 @@ document.addEventListener('alpine:init', () => {
 	}));
 });
 // 모달 관련 DOM 요소
-const openModalButton = document.getElementById('openModalButton');
-const closeModalButton = document.getElementById('closeModalButton');
-const modalBackground = document.getElementById('modalBackground');
-const modalWrapper = document.getElementById('modalWrapper');
-const cancelButton = document.getElementById('cancelButton');
+const openModalButton = document.getElementById('openModalButton'); // 모달 여는 버튼
+const closeModalButton = document.getElementById('closeModalButton'); // 모달 닫기 버튼
+const modalBackground = document.getElementById('modalBackground'); // 모달 배경
+const modalWrapper = document.getElementById('modalWrapper'); // 모달의 실제 내용이 들어가는 컨테이너
+const cancelButton = document.getElementById('cancelButton');  // 취소버튼
 
 // 모달 열기
 openModalButton.addEventListener('click', () => {
   modalBackground.classList.remove('hidden');  // 모달 배경 보이기
   modalBackground.classList.add('block');     // 모달 배경 보이게 설정
-});
+}); // 버튼을 클릭하면 모달창이 나타남
 
 // 모달 닫기
 const closeModal = () => {
@@ -175,9 +175,9 @@ const closeModal = () => {
 
 closeModalButton.addEventListener('click', closeModal); // 닫기 버튼 클릭 시
 cancelButton.addEventListener('click', closeModal);     // 취소 버튼 클릭 시
+// 닫기 버튼 또는 취소 버튼을 누르면 모달이 닫히고 입력값이 초기화된다.
 
-
-$('#meetingRoomAddBtn').click(function() {
+$('#meetingRoomAddBtn').click(function() { 
 
     // 회의실 이름 검사
     let isVal = true;
@@ -218,11 +218,11 @@ $('#meetingRoomAddBtn').click(function() {
 
 
 // 회의실 삭제 모달 관련 DOM 요소
-const modalDeleteBackground = document.getElementById('modalDeleteBackground');
-const deleteMeetingroomLabel = document.getElementById('deleteMeetingroomLabel');
-const confirmDeleteButton = document.getElementById('confirmDeleteButton');
-const closeDeleteModalButton = document.getElementById('closeDeleteModalButton');
-const cancelDeleteButton = document.getElementById('cancelDeleteButton');
+const modalDeleteBackground = document.getElementById('modalDeleteBackground'); // 모달 배경
+const deleteMeetingroomLabel = document.getElementById('deleteMeetingroomLabel'); // 삭제할 회의실 번호를 표시
+const confirmDeleteButton = document.getElementById('confirmDeleteButton'); // 삭제 확정버튼
+const closeDeleteModalButton = document.getElementById('closeDeleteModalButton'); // 닫기 버튼
+const cancelDeleteButton = document.getElementById('cancelDeleteButton'); // 취소버튼
 
 // 모달 열기 함수 (회의실 번호를 받아서 데이터 세팅)
 const openDeleteModal = (meetingroomNo) => {
@@ -253,8 +253,8 @@ cancelDeleteButton.addEventListener('click', closeDeleteModal);
 
 
 // 회의실 수정 모달 관련 DOM 요소
-const openModifyModalButton = document.getElementById('openModifyModalButton');
-const closeModifyModalButton = document.getElementById('closeModifyModalButton');
+const openModifyModalButton = document.getElementById('openModifyModalButton'); // 모달 열기
+const closeModifyModalButton = document.getElementById('closeModifyModalButton'); // 모달 닫기
 const modalModifyBackground = document.getElementById('modalModifyBackground');
 const modalModifyWrapper = document.getElementById('modalModifyWrapper');
 const cancelModifyButton = document.getElementById('cancelModifyButton');

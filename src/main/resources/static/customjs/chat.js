@@ -64,20 +64,20 @@ document.addEventListener('alpine:init', () => {
 
 	//chat
 	Alpine.data('chat', () => ({
-		isShowUserChat: false,
-		isShowChatMenu: false,
-		chatUserTable: null,
-		textMessage: '',
-		selectedUser: '',
-		currentUserName: '',
-		messages: [],
+		isShowUserChat: false, // 사용자 채팅 화면 표시 여부
+		isShowChatMenu: false, // 채팅 메뉴 표시 여부
+		chatUserTable: null, // 테이블 객체
+		textMessage: '', // 사용자가 입력한 메시지 내용
+		selectedUser: '', // 현재 선택된 사용자
+		currentUserName: '', // 로그인한 사용자의 이름
+		messages: [], // 채팅 메시지 목록
 
-		initChat() {
+		initChat() { // 채팅 기능 초기화
 			this.initMulticolumn();
 			this.getCurrentUser();
 		},
 
-		getCurrentUser() {
+		getCurrentUser() { // 로그인한 사용자의 정보 가져오기 (이름)
 			$.ajax({
 				url: 'http://localhost/academy/chat/fromUserId',
 				type: 'GET',
@@ -93,7 +93,7 @@ document.addEventListener('alpine:init', () => {
 		},
 
 
-		initMulticolumn() {
+		initMulticolumn() { // 왼쪽 채팅목록에 직원 목록을 가져옴
 			$.ajax({
 			       url: 'http://localhost/academy/restapi/employeeList',
 			       type: 'GET',
@@ -154,12 +154,13 @@ document.addEventListener('alpine:init', () => {
 						},
 
 					});
-
+					
+					// 해당 직원의 행을 클릭해서 채팅 상대 선택
 					document.querySelector('#chatUserTable tbody').addEventListener('click', (e) => {
 						const rowElement = e.target.closest('tr');
 						if (rowElement) {
 							const tdElements = rowElement.querySelectorAll('td');
-							const employeeName = tdElements[0].textContent;
+							const employeeName = tdElements[0].textContent.trim();
 							console.log(employeeName);
 							this.selectUser(employeeName);
 						}
@@ -170,17 +171,18 @@ document.addEventListener('alpine:init', () => {
 				}
 			});
 		},
-
+		
+		// 선택된 직원을 저장하고, 채팅 화면에 표시
 		selectUser(user) {
 			console.log('Selected user:', user);
 			this.selectedUser = user;
 			this.isShowUserChat = true;
 			this.scrollToBottom;
 			this.isShowChatMenu = false;
-			this.getMessages();
+			this.getMessages(); // 해당 직원과의 채팅 메시지를 가져옴
 		},
 
-		sendMessage() {
+		sendMessage() { // 메시지 보내기
 			if (this.textMessage.trim()) {
 				$.ajax({
 					url: 'http://localhost/academy/chat/send',
@@ -201,7 +203,7 @@ document.addEventListener('alpine:init', () => {
 				});
 			}
 		},
-		getMessages() {
+		getMessages() { // 채팅 메시지 가져오기
 		    console.log('Sending request:', this.currentUserName, this.selectedUser);
 		    $.ajax({
 		        url: 'http://localhost/academy/chat/messages',
@@ -221,7 +223,7 @@ document.addEventListener('alpine:init', () => {
 		    });
 		},
 
-
+		// 스크롤 바 기능
 		scrollToBottom() {
 		    setTimeout(() => {
 		        const chatBox = document.querySelector('.chat-conversation-box');
