@@ -242,6 +242,7 @@ document.addEventListener('alpine:init', () => {
                     success: () => {
                         this.textMessage = '';
                         this.getMessages();
+						this.scrollToBottom();
                     },
                     error: (xhr, status, error) => {
                         console.error('Error sending message:', error);
@@ -262,7 +263,7 @@ document.addEventListener('alpine:init', () => {
                 success: (messages) => {
                     console.log('Received messages:', messages);
                     this.messages = messages;
-                    this.scrollToBottom();
+                    
                 },
                 error: (xhr, status, error) => {
                     console.error('Error getting messages:', xhr.responseText);
