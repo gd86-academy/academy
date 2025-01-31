@@ -18,8 +18,6 @@ public class MeetingRoomService {
 	@Autowired
 	public MeetingRoomMapper meetingRoomMapper;
 	
-	
-
 	// 하상우) 회의실 수정
 	public Integer modifyMeetingRoom(MeetingRoomAddDTO modifymeetingroom) {
 		String[] inputManager = modifymeetingroom.getMeetingroomManager().split("\\[|\\]");
@@ -27,7 +25,6 @@ public class MeetingRoomService {
 	    return meetingRoomMapper.modifyMeetingRoom(modifymeetingroom);
 	}
 
-	
 	// 하상우) 회의실 번호 조회
 	public MeetingRoomAddDTO getMeetingRoomNo(Integer meetingroomNo) {
 		return meetingRoomMapper.getMeetingRoomNo(meetingroomNo);

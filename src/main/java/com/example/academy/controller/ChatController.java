@@ -11,7 +11,8 @@ import com.example.academy.security.CustomUserDetails;
 
 @Controller
 public class ChatController {
-
+	
+	// chat.html 페이지로 이동
 	@GetMapping("/")
 	public String chat(Model model) {
 		
@@ -27,7 +28,6 @@ public class ChatController {
 	        model.addAttribute("userPhotoFileName", userDetails.getUserPhotoFileName());
 	        model.addAttribute("userPhotoFileExt", userDetails.getUserPhotoFileExt());
 	    }
-		
 		return "chat";
 	}
 

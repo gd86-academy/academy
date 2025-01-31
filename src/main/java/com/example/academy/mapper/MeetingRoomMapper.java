@@ -1,9 +1,7 @@
 package com.example.academy.mapper;
 
 import java.util.List;
-
 import org.apache.ibatis.annotations.Mapper;
-
 import com.example.academy.dto.MeetingRoomAddDTO;
 import com.example.academy.dto.MeetingRoomListDTO;
 

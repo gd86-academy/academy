@@ -71,10 +71,10 @@ document.addEventListener('alpine:init', () => {
         messages: [], // 채팅 메시지 목록
 
         initChat() { // 채팅 기능 초기화
-            this.initMulticolumn();
-            this.getCurrentUser();
+            this.initMulticolumn(); // 직원 목록 가져오기
+            this.getCurrentUser(); // 현재 로그인한 사용자 가져오기
             
-            // 일정 간격으로 메시지 갱신
+            // 일정 간격으로 메시지 갱신(1초)
             setInterval(() => {
                 if (this.selectedUser) {
                     this.getMessages();
@@ -82,7 +82,7 @@ document.addEventListener('alpine:init', () => {
             }, 1000);
         },
 
-        getCurrentUser() { // 로그인한 사용자의 정보 가져오기 (이름)
+        getCurrentUser() { // 로그인한 사용자의 정보 가져오기 (이름) -> GET요청을 보내 현재 로그인한 사용자의 이름을 가져옴
             $.ajax({
                 url: 'http://localhost/academy/chat/fromUserId',
                 type: 'GET',
@@ -95,7 +95,7 @@ document.addEventListener('alpine:init', () => {
             });
         },
 
-        initMulticolumn() { // 왼쪽 채팅목록에 직원 목록을 가져옴
+        initMulticolumn() { // 왼쪽 채팅목록에 직원 목록을 가져옴 (로그인한 사용자를 제외하고 테이블에 표시)
             $.ajax({
                 url: 'http://localhost/academy/restapi/employeeList',
                 type: 'GET',
@@ -133,7 +133,8 @@ document.addEventListener('alpine:init', () => {
                                 sortable: true,
                             },
                         ],
-
+						
+						// 직원 리스트가 5명이 넘어가면 페이징하는 버튼
 						firstLast: true,
 						    firstText: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M13 19L7 12L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M16.9998 19L10.9998 12L16.9998 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
 						    lastText: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M11 19L17 12L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M6.99976 19L12.9998 12L6.99976 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
@@ -141,12 +142,14 @@ document.addEventListener('alpine:init', () => {
 						    nextText: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
 							
                         layout: {
-                            top: '{search}',
-							bottom: '{pager}' 
+							top: '<div class="dataTable-top">{search}</div>',
+							bottom: '{pager}'
+							
                         },
 						
                     });
-
+					
+					// 안 읽은 
                     this.updateUnreadCounts();
 
                     // 해당 직원의 행을 클릭해서 채팅 상대 선택
@@ -154,10 +157,12 @@ document.addEventListener('alpine:init', () => {
 					    const rowElement = e.target.closest('tr');
 					    if (rowElement) {
 					        const nameElement = rowElement.querySelector('.employee-name');
-					        const unreadCountElement = rowElement.querySelector('.unread-count');
-					        if (nameElement) {
+							const imageElement = rowElement.querySelector('img');
+					        const unreadCountElement = rowElement.querySelector('.unread-count'); // updateUnreadCounts()
+					        if (nameElement&&imageElement) {
 					            const employeeName = nameElement.textContent.trim();
-					            console.log(employeeName);
+								const employeeImageData = imageElement.getAttribute('src').split('/').pop();
+					            console.log(employeeName, employeeImageData);
 
 					            // DB의 use_yn을 0으로 변경하는 AJAX 요청
 					            $.ajax({
@@ -173,7 +178,7 @@ document.addEventListener('alpine:init', () => {
 					                    if (unreadCountElement) {
 					                        unreadCountElement.textContent = '';
 					                    }
-					                    this.selectUser(employeeName);
+					                    this.selectUser(employeeName,employeeImageData);
 					                },
 					                error: (xhr, status, error) => {
 					                    console.error('Error updating use_yn:', error);
@@ -187,10 +192,10 @@ document.addEventListener('alpine:init', () => {
             });
         },
 
-        updateUnreadCounts() {
+        updateUnreadCounts() { // 사용자별로 읽지 않은 메시지 개수를 동적으로 표시
             const unreadCountElements = document.querySelectorAll('.unread-count');
             unreadCountElements.forEach(element => {
-                const username = element.getAttribute('data-username');
+                const username = element.getAttribute('data-username'); // columns에서 가져옴
                 this.getUnreadMessageCount(username, (unreadCount) => {
                     if (unreadCount > 0) {
                         element.textContent = `(${unreadCount})`;
@@ -202,22 +207,25 @@ document.addEventListener('alpine:init', () => {
         },
 
         // 선택된 직원을 저장하고, 채팅 화면에 표시
-        selectUser(user) {
+        selectUser(user,userImage) { 
             console.log('Selected user:', user);		
             this.selectedUser = user;
+			this.selectedUserImage = userImage === 'null.null' ? './images/defaultProfile.png' : './upload/' + userImage; // 이미지 받아오기
             this.isShowUserChat = true;
             this.scrollToBottom(); // 수정된 호출
             this.isShowChatMenu = false;
             this.getMessages(); // 해당 직원과의 채팅 메시지를 가져옴
+			
+			
         },
 
-        getUnreadMessageCount(userName, callback) {
+        getUnreadMessageCount(userName, callback) { // 특정 사용자가 보낸 읽지 않은 메시지 수를 가져오는 함수
             $.ajax({
                 url: 'http://localhost/academy/chat/unreadCount',
                 type: 'GET',
                 data: {
-                    fromUserName: userName,
-                    toUserName: this.currentUserName
+                    fromUserName: userName, // 보낸 사람
+                    toUserName: this.currentUserName // 받은 사람 (현재 로그인한 사용자)
                 },
                 success: (unreadCount) => {
                     callback(unreadCount);
