@@ -102,7 +102,7 @@ document.addEventListener('alpine:init', () => {
                 dataType: 'json',
                 success: (data) => {
                     // 로그인한 사용자를 제외한 데이터 필터링
-                    const filteredData = data.filter(item => item[0] !== this.currentUserName);
+					const filteredData = data.filter(item => item[0] !== this.currentUserName);
 
                     this.chatUserTable = new simpleDatatables.DataTable('#chatUserTable', {
                         data: {
@@ -139,11 +139,12 @@ document.addEventListener('alpine:init', () => {
 						    lastText: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M11 19L17 12L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M6.99976 19L12.9998 12L6.99976 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
 						    prevText: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M15 5L9 12L15 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
 						    nextText: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
+							
                         layout: {
                             top: '{search}',
-							
+							bottom: '{pager}' 
                         },
-						paging: true,
+						
                     });
 
                     this.updateUnreadCounts();
@@ -202,7 +203,7 @@ document.addEventListener('alpine:init', () => {
 
         // 선택된 직원을 저장하고, 채팅 화면에 표시
         selectUser(user) {
-            console.log('Selected user:', user);
+            console.log('Selected user:', user);		
             this.selectedUser = user;
             this.isShowUserChat = true;
             this.scrollToBottom(); // 수정된 호출

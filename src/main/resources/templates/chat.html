@@ -164,7 +164,9 @@ table.whitespace-nowrap tbody tr:hover {
 													@click="isShowChatMenu = !isShowChatMenu"> <!-- 채팅 메뉴 표시 여부를 전환하는 버튼 -->
 												</button> <!-- 토글 버튼 끝 -->
 												<div class="relative flex-none"> <!-- 선택된 사용자 프로필 이미지를 위한 컨테이너 --> 
-													<img :src=th:src="@{/images/logo.png}" />
+													<img class="h-9 w-9 rounded-full object-cover saturate-50 group-hover:saturate-100"
+								 th:src="@{'/upload/' + ${userPhotoFileName} + '.' + ${userPhotoFileExt}}"
+								 alt="image">
 													<div class="absolute bottom-0 ltr:right-0 rtl:left-0"> <!-- 사용자의 온라인 상태를 보여주는 아바타 하단의 작은 표시기 -->
 														<div class="h-4 w-4 rounded-full bg-success"></div>
 													</div> <!-- 사용자 프로필 컨테이너 끝 -->
