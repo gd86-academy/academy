@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.academy.dto.chattingMessageDTO;
 import com.example.academy.security.CustomUserDetails;
+import com.example.academy.service.ChatService;
 import com.example.academy.service.ChattingService;
 
 
@@ -25,6 +26,7 @@ public class ChattingController {
 	@Autowired
 	
 	private ChattingService chattingService;
+	
 	
 	// 로그인한 사용자의 직원정보 가져오기
 	@GetMapping("/chat/fromUserId")
