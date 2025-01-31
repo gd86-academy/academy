@@ -164,8 +164,8 @@ table.whitespace-nowrap tbody tr:hover {
 													@click="isShowChatMenu = !isShowChatMenu"> <!-- 채팅 메뉴 표시 여부를 전환하는 버튼 -->
 												</button> <!-- 토글 버튼 끝 -->
 												<div class="relative flex-none"> <!-- 선택된 사용자 프로필 이미지를 위한 컨테이너 --> 
-													<img :src="`assets/images/${selectedUser.path}`"
-														class="h-10 w-10 rounded-full object-cover sm:h-12 sm:w-12" />
+													<img :src="selectedUser.path ? `./upload/${selectedUser.path}` : './images/defaultProfile.png'" 
+        class="h-10 w-10 rounded-full object-cover" />
 													<div class="absolute bottom-0 ltr:right-0 rtl:left-0"> <!-- 사용자의 온라인 상태를 보여주는 아바타 하단의 작은 표시기 -->
 														<div class="h-4 w-4 rounded-full bg-success"></div>
 													</div> <!-- 사용자 프로필 컨테이너 끝 -->
@@ -200,9 +200,7 @@ table.whitespace-nowrap tbody tr:hover {
 															:class="{'order-2' : currentUserName === message.fromUserName}">  <!-- 각 메시지에 대한 div는 메시지를 보낸 사람에 따라 조건부 정렬을 적용함 -->
 															<template
 																x-if="currentUserName === message.fromUserName">
-																<img :src="currentUserName === message.fromUserName ? 
-																currentUserImage : selectedUser.path" 
-																	class="h-10 w-10 rounded-full object-cover" />
+																
 															</template>
 															<template
 																x-if="selectedUser.userId !== message.fromUserId">
