@@ -28,6 +28,22 @@ public class ChattingController {
 	private ChattingService chattingService;
 	
 	
+	@PostMapping("/chat/updateUseYn")
+	public ResponseEntity<String> updateUseYn(@RequestParam String fromUserName, @RequestParam String toUserName) {
+		chattingService.updateUseYn(fromUserName, toUserName);
+	    return ResponseEntity.ok("Updated successfully");
+	}
+	
+	@GetMapping("/chat/unreadCount")
+	public ResponseEntity<Integer> getUnreadMessageCount(
+	        @RequestParam String fromUserName, 
+	        @RequestParam String toUserName) {
+
+	    int unreadCount = chattingService.countUnreadMessages(fromUserName, toUserName);
+	    return ResponseEntity.ok(unreadCount);
+	}
+	
+	
 	// 로그인한 사용자의 직원정보 가져오기
 	@GetMapping("/chat/fromUserId")
 	public String fromUserId(Model model) {

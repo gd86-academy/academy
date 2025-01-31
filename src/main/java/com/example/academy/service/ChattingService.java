@@ -16,6 +16,16 @@ public class ChattingService {
 	@Autowired
 	private ChattingMapper chattingMapper;
 	
+	public void updateUseYn(String fromUserName, String toUserName) {
+	    // use_yn을 0으로 업데이트하는 쿼리 실행
+		chattingMapper.updateUseYn(fromUserName, toUserName);
+	}
+	
+	// 읽지 않은 메시지 개수 조회
+    public int countUnreadMessages(String fromUserName, String toUserName) {
+        return chattingMapper.countUnreadMessages(fromUserName, toUserName);
+    }
+	
 	public void sendMessage(chattingMessageDTO message) {
 		chattingMapper.insertMessage(message);
 	}

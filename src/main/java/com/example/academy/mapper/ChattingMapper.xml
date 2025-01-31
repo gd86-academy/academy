@@ -3,9 +3,24 @@
 <mapper namespace="com.example.academy.mapper.ChattingMapper">
 
 
+<update id="updateUseYn">
+        UPDATE chat_message
+        SET use_yn = 0
+        WHERE fromUserName = #{fromUserName} AND toUserName = #{toUserName}
+    </update>
+
+ <!-- 읽지 않은 메시지 개수 조회 -->
+    <select id="countUnreadMessages" resultType="int">
+        SELECT COUNT(*) 
+        FROM chat_message 
+        WHERE fromUserName = #{fromUserName} 
+          AND toUserName = #{toUserName} 
+          AND use_yn = 1
+    </select>
+
 <insert id="insertMessage" parameterType="com.example.academy.dto.chattingMessageDTO">
-    INSERT INTO chat_message (fromUserName, toUserName, content, create_date)
-    VALUES (#{fromUserName}, #{toUserName}, #{content}, NOW())
+    INSERT INTO chat_message (fromUserName, toUserName, content, create_date,use_yn)
+    VALUES (#{fromUserName}, #{toUserName}, #{content}, NOW(), '1')
   </insert>
   
   <select id="getMessages" resultType="com.example.academy.dto.chattingMessageDTO">
