@@ -14,6 +14,8 @@ import com.example.academy.dto.BoardFileDTO;
 import com.example.academy.dto.BoardListByMainDTO;
 import com.example.academy.dto.BoardListDTO;
 import com.example.academy.dto.BoardModifyDTO;
+import com.example.academy.dto.CommentAddDTO;
+import com.example.academy.dto.CommentListDTO;
 import com.example.academy.mapper.BoardFileMapper;
 import com.example.academy.mapper.BoardMapper;
 import com.example.academy.mapper.FilesMapper;
@@ -30,6 +32,25 @@ public class BoardService {
 	@Autowired BoardMapper boardMapper;
 	@Autowired FilesMapper filesMapper;
 	@Autowired BoardFileMapper boardFileMapper;
+	
+	// 진수우 : 추가한 댓글 조회.
+	public CommentListDTO getNewComment(Integer employeeNo) {
+		return boardMapper.selectNewComment(employeeNo);
+	}
+	
+	// 진수우 : 댓글 등록.
+	public void addComment(CommentAddDTO commentAddDTO) {
+		// 댓글 테이블에 데이터 추가.
+		boardMapper.insertComment(commentAddDTO);
+		
+		// 게시물/댓글 연결테이블에 데이터 추가.
+		boardMapper.insertBoardComment(commentAddDTO);
+	}
+	
+	// 진수우 : 해당 게시물의 댓글 조회.
+	public List<CommentListDTO> getCommentList(Integer boardNo) {
+		return boardMapper.selectCommentList(boardNo);
+	}
 	
 	// 메인페이지에 최신 공지사항 3개 조회
 	public List<BoardListByMainDTO> getBoardListByMain() {

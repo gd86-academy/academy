@@ -2,7 +2,56 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.BoardMapper">
 
-	<!-- 메인페이지에 최신 공지사항 3개 조회 -->
+	<!-- 진수우 : 추가한 댓글 조회 -->
+	<select id="selectNewComment">
+		SELECT 
+			(SELECT e.employee_name FROM employee e WHERE e.employee_no = c.employee_no) employeeName
+			, (SELECT co.name FROM common co LEFT OUTER JOIN employee e ON e.employee_no = c.employee_no
+				WHERE e.employee_department = co.code) employeeDepartmentName
+			, c.comment_content commentContent
+		    , c.update_date updateDate
+		    , (SELECT f.file_name FROM file f LEFT OUTER JOIN employee e ON e.employee_no = c.employee_no
+				WHERE e.photo_file_no = f.file_no) photoFileName
+			, (SELECT f.file_ext FROM file f LEFT OUTER JOIN employee e ON e.employee_no = c.employee_no
+				WHERE e.photo_file_no = f.file_no) photoFileExt
+		FROM comment c
+		LEFT OUTER JOIN board_comment bc ON c.comment_no = bc.comment_no
+		LEFT OUTER JOIN board b ON bc.board_no = b.board_no
+		WHERE c.employee_no = #{employeeNo}
+		ORDER BY c.comment_no DESC
+		LIMIT 1;
+	</select>
+
+	<!-- 진수우 : 게시물/댓글 추가 -->
+	<insert id="insertBoardComment">
+		INSERT INTO board_comment(comment_no, board_no) VALUES(#{commentNo}, #{boardNo});
+	</insert>
+
+	<!-- 진수우 : 댓글 추가 -->
+	<insert id="insertComment" useGeneratedKeys="true" keyProperty="commentNo">
+		INSERT INTO comment(employee_no, comment_content) VALUES(#{employeeNo}, #{commentContent});
+	</insert>
+
+	<!-- 진수우 : 해당 게시물의 댓글 조회 -->
+	<select id="selectCommentList">
+		SELECT
+			(SELECT e.employee_no FROM employee e WHERE e.employee_no = c.employee_no) employeeNo
+			, (SELECT e.employee_name FROM employee e WHERE e.employee_no = c.employee_no) employeeName
+			, (SELECT co.name FROM common co LEFT OUTER JOIN employee e ON e.employee_no = c.employee_no
+				WHERE e.employee_department = co.code) employeeDepartmentName
+			, c.comment_content commentContent
+		    , c.update_date updateDate
+		    , (SELECT f.file_name FROM file f LEFT OUTER JOIN employee e ON e.employee_no = c.employee_no
+				WHERE e.photo_file_no = f.file_no) photoFileName
+			, (SELECT f.file_ext FROM file f LEFT OUTER JOIN employee e ON e.employee_no = c.employee_no
+				WHERE e.photo_file_no = f.file_no) photoFileExt
+		FROM comment c
+		LEFT OUTER JOIN board_comment bc ON c.comment_no = bc.comment_no
+		LEFT OUTER JOIN board b ON bc.board_no = b.board_no
+		WHERE bc.board_no = #{boardNo} AND c.use_yn = 1
+	</select>
+
+	<!-- 메인페이지에 최신 공지사항 5개 조회 -->
 	<select id="selectBoardListByMain" resultType="com.example.academy.dto.BoardListByMainDTO">
 		SELECT
 					b.board_no boardNo
