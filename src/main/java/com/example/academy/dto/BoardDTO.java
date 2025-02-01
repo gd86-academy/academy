@@ -19,6 +19,7 @@ public class BoardDTO {
 	private String updateDate;
 	private String employeeName;
 	private String employeeDepartment;
+	private String employeeDepartmentName;
 	
 	private List<MultipartFile> boardFiles;
 	

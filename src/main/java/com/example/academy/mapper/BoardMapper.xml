@@ -72,6 +72,7 @@
 			, f.file_ext fileExt
 			, e.employee_name employeeName
 			, e.employee_department employeeDepartment
+			, (SELECT c.name FROM common c WHERE c.code = e.employee_department) employeeDepartmentName
 		FROM board b
 		INNER JOIN employee e ON e.employee_no = b.update_employee_no
 		INNER JOIN file f ON f.file_no = e.photo_file_no
@@ -84,6 +85,7 @@
 			b.board_no boardNo
 			, b.board_title boardTitle
 			, e.employee_name employeeName
+			, (SELECT c.name FROM common c WHERE c.code = e.employee_department) employeeDepartmentName
 			, b.board_count boardCount
 			, b.create_date createDate
 			, b.update_date updateDate

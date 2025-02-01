@@ -176,6 +176,7 @@
 							<div class="flex gap-3 items-center mt-1">
 								<img class="w-10 h-10 rounded-full overflow-hidden object-cover" th:src="@{'/upload/' + ${boardOne.fileName} + '.' + ${boardOne.fileExt}}">
 						    	<p class="text-lg ml-3" th:text="${boardOne.employeeName}"></p>
+						    	<p style="color:#a9a9a9" th:text="'(' + ${boardOne.employeeDepartmentName} + ')'"></p>
 								<p style="color:#a9a9a9" th:text="${boardOne.updateDate}"></p>
 							</div>
 						

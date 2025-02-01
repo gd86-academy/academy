@@ -8,6 +8,7 @@ public class BoardListDTO {
 	private Integer boardNo;
 	private String boardTitle;
 	private String employeeName;
+	private String employeeDepartmentName;
 	private Integer boardCount;
 	private String updateDate;
 	private String createDate;
@@ -20,7 +21,8 @@ public class BoardListDTO {
 				this.employeeName,
 				this.boardCount,
 				this.updateDate,
-				this.createDate					
+				this.createDate,
+				this.employeeDepartmentName
 		};
 	}
 }
