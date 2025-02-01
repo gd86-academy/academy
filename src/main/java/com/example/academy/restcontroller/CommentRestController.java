@@ -35,4 +35,10 @@ public class CommentRestController {
 		// 추가된 댓글 rest로 반환.
 		return boardService.getNewComment(commentAddDTO.getEmployeeNo());
 	}
+	
+	// 진수우 : 댓글 삭제.
+	@PostMapping("/restapi/removeComment")
+	public void removeComment(@RequestBody Integer commentNo) {
+	    boardService.removeComment(commentNo);
+	}
 }

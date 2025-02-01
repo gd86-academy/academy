@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class CommentListDTO {
+	private Integer commentNo; // 댓글번호
 	private Integer employeeNo; // 사원번호
 	private String employeeName; // 사원이름
 	private String employeeDepartmentName; // 부서이름

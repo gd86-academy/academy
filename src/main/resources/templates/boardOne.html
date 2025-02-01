@@ -283,7 +283,9 @@
 		    		<button id="commentAddBtn" type="button" class="btn btn-primary" style="width:100px;">등록</button>
 		    	</div><hr>
 			    <div id="commentDiv">
-	            	<div th:each="comment : ${commentList}">
+	            	<div th:each="comment, stat : ${commentList}">
+	            	<div th:id="'commentRow' + ${stat.index}" name="commentRow" >
+	            	<input type="hidden" th:value="${comment.commentNo}">
 	            		<div class="flex justify-between">
 		            		<div class="p-5">
 		            			<!-- 작성자정보 -->
@@ -302,8 +304,8 @@
 		            			<button
 					           		type="button"
 					           		class = "btn btn-outline-danger ml-2"
-					           		id = "removeButtonId"
-					           		
+					           		th:id="'commentDeleteRow' + ${stat.index}"
+					           		th:onclick="'removeComment(\'commentRow' + ${stat.index} + '\')'"
 					           		>
 					           		<!--휴지통 아이콘추가-->
 					           		<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -334,7 +336,8 @@
 	            		</div>
 					    <!-- 구분선 -->
 					    <div class="h-px border-b border-[#e0e6ed]"></div>
-	            	</div>		    
+	            	</div>
+	            </div>	    
 			    </div>
             </div>
             
@@ -345,7 +348,35 @@
     </div>
         
     <script>
+    // 댓글 삭제 버튼을 누를 때
+    function removeComment(commentRowId) {
+    	var commentNo = document.querySelector(`#${commentRowId} input[type="hidden"]`).value;
+    	console.log("삭제 버튼이 클릭된 댓글의 번호:", commentNo);
+	    // DB에 있는 해당 댓글 데이터 삭제.
+	    $.ajax({
+            url: `http://localhost/academy/restapi/removeComment`,
+            contentType: 'application/json', 
+            type: 'POST',
+            data: JSON.stringify(commentNo),
+            success: function () {},
+            error: function () {
+                alert('댓글 삭제 중 오류가 발생했습니다.');
+            }
+        });
+	    
+	 	// 프론트에서 삭제한 댓글 HTML제거.
+	    var commentElement = document.getElementById(commentRowId);
+	    if (commentElement) {
+	        commentElement.remove();
+	    }
+	}
+    
+    // 댓글 등록 버튼을 누를 때
     $(document).on('click', '#commentAddBtn', function () {
+    	// 댓글 개수 카운트.
+    	var commentRowCount = $('div[name="commentRow"]').length;
+        console.log(commentRowCount);
+        
         $.ajax({
             url: `http://localhost/academy/restapi/addComment`,
             contentType: 'application/json', 
@@ -356,7 +387,9 @@
             }),
             success: function (data) {
                 $('#commentDiv').append(`
-                	<div class="flex justify-between">
+                	<div id="commentRow${commentRowCount}" name="commentRow">
+                	<input type="hidden" value="${data.commentNo}">
+                	<div class="flex justify-between" >
                     <div class="p-5">
                         <!-- 작성자정보 -->
                         <div class="flex items-center">
@@ -374,8 +407,8 @@
 	                    <button
 		           		type="button"
 		           		class = "btn btn-outline-danger ml-2"
-		           		id = "removeButtonId"
-		           		
+		           		id = "commentDeleteRow${commentRowCount}"
+		           		onclick="removeComment('commentRow${commentRowCount}')"
 		           		>
 		           		<!--휴지통 아이콘추가-->
 		           		<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -406,6 +439,8 @@
                     </div>
                     <!-- 구분선 -->
                     <div class="h-px border-b border-[#e0e6ed]"></div>
+                    </div>
+                    
                 `);
                 $('#commentContent').val('');
             },
@@ -413,7 +448,6 @@
                 alert('댓글 등록 중 오류가 발생했습니다.');
             }
         });
-        
     });
     
  	// 사원삭제 모달 관련 DOM 요소

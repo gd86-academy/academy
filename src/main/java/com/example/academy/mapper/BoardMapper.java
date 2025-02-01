@@ -13,6 +13,12 @@ import com.example.academy.dto.CommentListDTO;
 
 @Mapper
 public interface BoardMapper {
+	// 진수우 : 전체 댓글 삭제.
+	Integer deleteAllComment(Integer boardNo);
+	
+	// 진수우 : 댓글 삭제.
+	Integer deleteComment(Integer commentNo);
+	
 	// 진수우 : 추가한 댓글 조회.
 	CommentListDTO selectNewComment(Integer employeeNo);
 	

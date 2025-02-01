@@ -33,6 +33,11 @@ public class BoardService {
 	@Autowired FilesMapper filesMapper;
 	@Autowired BoardFileMapper boardFileMapper;
 	
+	// 진수우 : 댓글 삭제.
+	public Integer removeComment(Integer commentNo) {
+		return boardMapper.deleteComment(commentNo);
+	}
+	
 	// 진수우 : 추가한 댓글 조회.
 	public CommentListDTO getNewComment(Integer employeeNo) {
 		return boardMapper.selectNewComment(employeeNo);
@@ -63,6 +68,7 @@ public class BoardService {
 	
 	// 공지사항 삭제 버튼 클릭 시 yn 수정
 	public Integer updateBoardYN(Integer boardNo) {
+		boardMapper.deleteAllComment(boardNo);
 		return boardMapper.updateBoardYN(boardNo);
 	}
 	
