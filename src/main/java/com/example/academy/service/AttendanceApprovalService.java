@@ -14,10 +14,12 @@ import com.example.academy.dto.AttendanceApprovalAddDTO;
 import com.example.academy.dto.AttendanceApprovalListDTO;
 import com.example.academy.dto.AttendanceApprovalModifyDTO;
 import com.example.academy.dto.AttendanceApprovalOneDTO;
+import com.example.academy.dto.NoticeAddDTO;
 import com.example.academy.mapper.ApprovalEmployeeMapper;
 import com.example.academy.mapper.AttendanceApprovalFileMapper;
 import com.example.academy.mapper.AttendanceApprovalMapper;
 import com.example.academy.mapper.FilesMapper;
+import com.example.academy.mapper.NoticeMapper;
 import com.example.academy.util.InputFile;
 import com.example.academy.vo.Files;
 
@@ -31,6 +33,7 @@ public class AttendanceApprovalService {
 	@Autowired ApprovalEmployeeMapper approvalEmployeeMapper;
 	@Autowired FilesMapper filesMapper;
 	@Autowired AttendanceApprovalFileMapper attendanceApprovalFileMapper;
+	@Autowired NoticeMapper noticeMapper;
 	
 	// 김혜린 : 근태신청서 재신청 페이지
 	public void retryAttendanceApproval(AttendanceApprovalAddDTO addDTO) {
@@ -174,6 +177,14 @@ public class AttendanceApprovalService {
 		// 마지막 결재자라면 근태신청서(attendance_approval) 테이블에서 승인으로 상태 업데이트
 		if(step == (totalApprover+1)) {
 			attendanceApprovalMapper.updateAttendanceApprovalStatusAgree(attendanceApprovalOneDTO);
+			
+			// 알림테이블에 해당 정보 삽입.
+			AttendanceApprovalOneDTO result = attendanceApprovalMapper.selectAttendanceApprovalOne(attendanceApprovalOneDTO.getAttendanceApprovalNo());
+			NoticeAddDTO noticeAddDTO = new NoticeAddDTO();
+			noticeAddDTO.setEmployeeNo(result.getEmployeeNo());
+			noticeAddDTO.setNoticeContent("'" + result.getAttendanceApprovalTitle() + "' 결재가 승인되었습니다.");
+			noticeAddDTO.setNoticeType("NT002");
+			noticeMapper.insertNotice(noticeAddDTO);
 		}
 		
 	}
@@ -185,6 +196,14 @@ public class AttendanceApprovalService {
 		
 		// 2) 근태신청서(attendance_approval) 테이블에서 반려로 상태 및 반려 사유 업데이트
 		attendanceApprovalMapper.updateAttendanceApprovalStatusReject(attendanceApprovalOneDTO);
+		
+		// 3) 알림테이블에 해당 정보 삽입.
+		AttendanceApprovalOneDTO result = attendanceApprovalMapper.selectAttendanceApprovalOne(attendanceApprovalOneDTO.getAttendanceApprovalNo());
+		NoticeAddDTO noticeAddDTO = new NoticeAddDTO();
+		noticeAddDTO.setEmployeeNo(result.getEmployeeNo());
+		noticeAddDTO.setNoticeContent("'" + result.getAttendanceApprovalTitle() + "' 결재가 반려되었습니다.");
+		noticeAddDTO.setNoticeType("NT002");
+		noticeMapper.insertNotice(noticeAddDTO);
 	}
 	
 	// 김혜린 : 근태 신청서 삭제 - 근태신청서 사용상태를 비활성화로 바꿔줌

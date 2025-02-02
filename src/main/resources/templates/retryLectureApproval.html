@@ -768,6 +768,9 @@
 		<script th:inline="javascript">
         	var lectureApprovalNo = [[${lectureApprovalOne.lectureApprovalNo}]]
         </script>
+        <script th:inline="javascript">
+	    	var employeeNo = [[${userNo}]];
+	    </script>
 	   <script th:src="@{/customjs/retryLectureApproval.js}"> </script>
 	   
 	</body>

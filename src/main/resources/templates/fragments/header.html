@@ -32,7 +32,7 @@
 	                <div class="sm:ltr:mr-auto sm:rtl:ml-auto">
 	                    <!-- 빈 공간 -->
 	                </div>
-	                <!-- 채팅 버튼 -->
+	                <!-- 알림 버튼 -->
 	                <div class="dropdown" x-data="dropdown" @click.outside="open = false">
 	                    <a
 	                        href="javascript:;"
@@ -70,27 +70,18 @@
 	                    >
 	                        <li>
 	                            <div class="flex items-center justify-between px-4 py-2 font-semibold hover:!bg-transparent">
-	                                <h4 class="text-lg">내 채팅</h4>
+	                                <h4 class="text-lg">최근 알림</h4>
 	                            </div>
 	                        </li>
 	                        <template x-for="notification in notifications">
 	                            <li class="dark:text-white-light/90">
 	                                <div class="group flex items-center px-4 py-2" @click.self="toggle">
-	                                    <div class="grid place-content-center rounded">
-	                                        <div class="relative h-12 w-12">
-	                                            <!-- 프로필 사진 -->
-	                                           <img class="h-12 w-12 rounded-full object-cover"
-													   th:src="@{/images/profile-16.jpeg}"
-													   alt="image">
-	                                            <span class="absolute bottom-0 right-[6px] block h-2 w-2 rounded-full bg-success"></span>
-	                                        </div>
-	                                    </div>
 	                                    <div class="flex flex-auto ltr:pl-3 rtl:pr-3">
 	                                        <div class="ltr:pr-3 rtl:pl-3">
 	                                            <!-- 내용 -->
 	                                            <h6 x-html="notification.message"></h6>
 	                                            <!-- 시간 -->
-	                                            <span class="block text-xs font-normal dark:text-gray-500" x-text="notification.time"></span>
+	                                            <span class="block font-normal" style="color: #a0a0a0;" x-text="notification.time"></span>
 	                                        </div>
 	                                    </div>
 	                                </div>
@@ -99,7 +90,7 @@
 	                        <template x-if="notifications.length">
 	                            <li>
 	                                <div class="p-4">
-	                                    <button class="btn btn-primary btn-small block w-full" @click="toggle">채팅 더보기</button>
+	                                    <a type="button" class="btn btn-primary btn-small block w-full text-center" th:href="@{/allNotice}">알림 더보기</a>
 	                                </div>
 	                            </li>
 	                        </template>
@@ -123,7 +114,7 @@
 	                                            />
 	                                        </svg>
 	                                    </div>
-	                                    No data available.
+	                                    알림이 없습니다.
 	                                </div>
 	                            </li>
 	                        </template>

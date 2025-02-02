@@ -34,6 +34,20 @@ public class AttendanceApprovalController {
 	// 김혜린 : 근태 신청서 재신청페이지 GET
 	@GetMapping("/retryAttendanceApproval")
 	public String retryAttendanceApproval(Model model, Integer attendanceApprovalNo) {
+		// 스프링시큐리티에서 계정정보 가져오기.
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		// 로그인 상태일 때만 model에 정보담기.
+	    if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+	        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+	        model.addAttribute("userNo", Integer.parseInt(userDetails.getUsername()));
+	        model.addAttribute("userName", userDetails.getUserRealName());
+	        model.addAttribute("userMail", userDetails.getUserMail());
+	        model.addAttribute("userRole", userDetails.getUserRole());
+	        model.addAttribute("userPhotoFileName", userDetails.getUserPhotoFileName());
+	        model.addAttribute("userPhotoFileExt", userDetails.getUserPhotoFileExt());
+	    }
+	    
 		// 원래 정보 불러오기
 		// 1) 근태신청서 테이블 정보
 		AttendanceApprovalOneDTO attendanceApproval = attendanceApprovalService.getAttendanceApprovalOne(attendanceApprovalNo);
@@ -130,6 +144,19 @@ public class AttendanceApprovalController {
 	// 김혜린 : 근태 신청서 상세페이지 - 나의 신청 목록
 	@GetMapping("/attendanceApprovalOne")
 	public String attenddanceApprovalOne(Model model, Integer attendanceApprovalNo) {
+		// 스프링시큐리티에서 계정정보 가져오기.
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		// 로그인 상태일 때만 model에 정보담기.
+	    if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+	        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+	        model.addAttribute("userNo", Integer.parseInt(userDetails.getUsername()));
+	        model.addAttribute("userName", userDetails.getUserRealName());
+	        model.addAttribute("userMail", userDetails.getUserMail());
+	        model.addAttribute("userRole", userDetails.getUserRole());
+	        model.addAttribute("userPhotoFileName", userDetails.getUserPhotoFileName());
+	        model.addAttribute("userPhotoFileExt", userDetails.getUserPhotoFileExt());
+	    }
 		
 		log.debug("==============attendanceApprovalNo1 : " + attendanceApprovalNo);	//디버깅
 		// 1) 근태신청서 테이블 상세

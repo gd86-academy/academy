@@ -367,6 +367,9 @@
       		// Thymeleaf에서 전달된 연차 데이터와 employeeNo를 JavaScript 변수에 할당
         	var totalWorkTimeList = [[${totalWorkTimeList}]];
         </script>
+        <script th:inline="javascript">
+        	var employeeNo = [[${userNo}]];
+        </script>
 
     </body>
 </html>

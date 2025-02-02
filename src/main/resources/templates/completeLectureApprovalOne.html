@@ -427,7 +427,9 @@
 			</div>
 	   <script th:src="@{/customjs/completeLectureApprovalOne.js}"> </script>
 	   <script th:src="@{/customjs/capture.js}"></script>
-	   
+	   <script th:inline="javascript">
+	    	var employeeNo = [[${userNo}]];
+	    </script>
 	</body>
 
 </html>

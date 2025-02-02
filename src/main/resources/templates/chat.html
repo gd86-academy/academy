@@ -407,14 +407,15 @@ table.whitespace-nowrap tbody tr:hover {
 					</div>
 					<!-- end main content section -->
 				</div>
-			</div>
-
-
-			<!--  풋터 파일 연결 -->
+				<!--  풋터 파일 연결 -->
 			<div th:replace="fragments/footer :: footer"></div>
+			</div>
 		</div>
 	</div>
 	<script th:src="@{/customjs/employeeList.js}"></script>
 	<script th:src="@{/customjs/chat.js}"></script>
+	<script th:inline="javascript">
+    	var employeeNo = [[${employeeNo}]];
+    </script>
 </body>
 </html>

@@ -379,6 +379,9 @@
 		<script th:inline="javascript">
         	var lectureNo = [[${lecture.lectureNo}]]
         </script>
+        <script th:inline="javascript">
+	    	var employeeNo = [[${userNo}]];
+	    </script>
 		<script th:src="@{/customjs/modifyLecture.js}"></script>
 	</body>
 

@@ -14,6 +14,9 @@
 	    <link defer rel="stylesheet" type="text/css" media="screen" th:href="@{/css/animate.css}" />
 	    <!-- Quill 스타일 시트 추가 -->
   		<link rel="stylesheet" type="text/css" th:href="@{/css/quill.snow.css}">
+  		<script th:inline="javascript">
+	    	var employeeNo = [[${userNo}]];
+	    </script>
 	    <script th:src="@{/js/perfect-scrollbar.min.js}"></script>
 	    <script defer th:src="@{/js/popper.min.js}"></script>
 	    <script th:src="@{/js/alpine-collaspe.min.js}"></script>

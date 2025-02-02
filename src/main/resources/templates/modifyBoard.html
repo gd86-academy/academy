@@ -267,5 +267,8 @@
                 <div th:replace="fragments/footer :: footer"></div>
 	    </div>
 	    <script th:src="@{/customjs/modifyBoard.js}"> </script>
+	    <script th:inline="javascript">
+	    	var employeeNo = [[${employeeNo}]];
+	    </script>
     </body>
 </html>

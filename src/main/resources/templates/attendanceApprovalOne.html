@@ -627,7 +627,9 @@
 		       </div>
 		   </div>
 		</div>
-		
+	   <script th:inline="javascript">
+	    	var employeeNo = [[${userNo}]];
+	    </script>
 	   <script th:src="@{/customjs/attendanceApprovalOne.js}"> </script>
 	   <script th:src="@{/customjs/capture.js}"></script>
 		

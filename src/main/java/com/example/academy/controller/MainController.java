@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import com.example.academy.dto.AttendanceContentDTO;
 import com.example.academy.dto.AttendanceDTO;
 import com.example.academy.dto.BoardListByMainDTO;
+import com.example.academy.dto.NewNoticeListDTO;
 import com.example.academy.dto.WaitApprovalListDTO;
 import com.example.academy.security.CustomUserDetails;
 import com.example.academy.service.AnnualLeaveService;
@@ -24,6 +25,7 @@ import com.example.academy.service.AuthService;
 import com.example.academy.service.BoardService;
 import com.example.academy.service.EmployeeService;
 import com.example.academy.service.MemoService;
+import com.example.academy.service.NoticeService;
 import com.example.academy.service.WaitApprovalService;
 import com.example.academy.vo.Memo;
 
@@ -35,6 +37,28 @@ public class MainController {
 	@Autowired BoardService boardService;
 	@Autowired MemoService memoService;
 	@Autowired WaitApprovalService waitApprovalService;
+	@Autowired NoticeService noticeService;
+	
+	// 진수우 : 전체알림페이지 호출.
+	@GetMapping("/allNotice")
+	public String allNotice(Model model) {
+		// 스프링시큐리티에서 계정정보 가져오기.
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		// 로그인 상태일 때만 model에 정보담기.
+	    if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+	        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+	        model.addAttribute("userNo", userDetails.getUsername());
+	        model.addAttribute("userName", userDetails.getUserRealName());
+	        model.addAttribute("userMail", userDetails.getUserMail());
+	        model.addAttribute("userPhotoFileName", userDetails.getUserPhotoFileName());
+	        model.addAttribute("userPhotoFileExt", userDetails.getUserPhotoFileExt());
+	        model.addAttribute("writer", Integer.parseInt(userDetails.getUsername()));
+	        List<NewNoticeListDTO> newNoticeListDTO = noticeService.getAllNotice(Integer.parseInt(userDetails.getUsername()));
+	        model.addAttribute("noticeList", newNoticeListDTO);
+	    }
+		return "allNotice";
+	}
 	
 	// 진수우 : 메인페이지 호출.
 	@GetMapping("/main")

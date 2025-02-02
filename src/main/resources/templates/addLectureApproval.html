@@ -641,7 +641,9 @@
 		</div>
 		
 	   <script th:src="@{/customjs/addLectureApproval.js}"> </script>
-	   
+	   <script th:inline="javascript">
+        	var employeeNo = [[${userNo}]];
+        </script>
 	</body>
 
 </html>

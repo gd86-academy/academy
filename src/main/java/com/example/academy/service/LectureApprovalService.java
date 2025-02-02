@@ -22,9 +22,11 @@ import com.example.academy.dto.LectureApprovalListDTO;
 import com.example.academy.dto.LectureApprovalModifyDTO;
 import com.example.academy.dto.LectureApprovalOneDTO;
 import com.example.academy.dto.LectureApprovalWeekdayListDTO;
+import com.example.academy.dto.NoticeAddDTO;
 import com.example.academy.mapper.FilesMapper;
 import com.example.academy.mapper.LectureApprovalMapper;
 import com.example.academy.mapper.LectureMapper;
+import com.example.academy.mapper.NoticeMapper;
 import com.example.academy.util.InputFile;
 import com.example.academy.vo.Common;
 import com.example.academy.vo.Files;
@@ -39,6 +41,7 @@ public class LectureApprovalService {
 	@Autowired LectureApprovalMapper lectureApprovalMapper;
 	@Autowired FilesMapper filesMapper;
 	@Autowired LectureMapper lectureMapper;
+	@Autowired NoticeMapper noticeMapper;
 	
 	// 김혜린 : 결재 완료 목록 - 강의신청서 리스트 조회
 	public List<LectureApprovalListDTO> getCompleteLectureApprovalList(Integer employeeNo){
@@ -248,6 +251,13 @@ public class LectureApprovalService {
 				resultMap.put("lectureNo", lectureApprovalOne.getLectureNo());
 				lectureMapper.insertLectureLectureWeekday(resultMap);
 			}
+			
+			// 알림테이블에 해당 정보 삽입.
+			NoticeAddDTO noticeAddDTO = new NoticeAddDTO();
+			noticeAddDTO.setEmployeeNo(lectureApprovalOne.getEmployeeNo());
+			noticeAddDTO.setNoticeContent("'" + lectureApprovalOne.getLectureApprovalTitle() + "' 결재가 승인되었습니다.");
+			noticeAddDTO.setNoticeType("NT001");
+			noticeMapper.insertNotice(noticeAddDTO);
 		}
 	}
 	
@@ -258,6 +268,16 @@ public class LectureApprovalService {
 		
 		// 결재자 테이블에 결재자의 결재상태를 반려로 변경.
 		lectureApprovalMapper.updateApprovalEmployeeStatusReturn(lectureApprovalNo, approver);
+		
+		// 강의결재 테이블에서 해당 결재 신청정보 조회.
+		LectureApprovalOneDTO lectureApprovalOne = lectureApprovalMapper.selectLectureApprovalOne(lectureApprovalNo);
+		
+		// 알림테이블에 해당 정보 삽입.
+		NoticeAddDTO noticeAddDTO = new NoticeAddDTO();
+		noticeAddDTO.setEmployeeNo(lectureApprovalOne.getEmployeeNo());
+		noticeAddDTO.setNoticeContent("'" + lectureApprovalOne.getLectureApprovalTitle() + "' 결재가 반려되었습니다.");
+		noticeAddDTO.setNoticeType("NT001");
+		noticeMapper.insertNotice(noticeAddDTO);
 	}
 	
 	// 진수우 : 강의결재 수정수행.

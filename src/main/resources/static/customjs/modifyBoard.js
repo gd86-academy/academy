@@ -49,20 +49,35 @@ document.addEventListener('alpine:init', () => {
 
     // header section
     Alpine.data('header', () => ({
-        notifications: [
-            {
-                id: 1,
-                profile: 'user-profile.jpeg',
-                message: '<strong class="text-sm mr-1">John Doe</strong>invite you to <strong>Prototyping</strong>',
-                time: '45 min ago',
-            },
-            {
-                id: 2,
-                profile: 'profile-34.jpeg',
-                message: '<strong class="text-sm mr-1">Adam Nolan</strong>mentioned you to <strong>UX Basics</strong>',
-                time: '9h Ago',
-            },
-        ],
+		notifications: [],  // 빈 배열로 초기화
+			    employeeNo: employeeNo,  // 예시로 직원 번호를 하드코딩했지만, 실제 값에 맞게 설정
+
+			    // 알림 데이터를 가져오는 함수
+			    loadNotifications() {
+			        $.ajax({
+			            url: "http://localhost/academy/restapi/newNoticeList",  // REST API 엔드포인트
+			            contentType: 'application/json',
+			            type: 'POST',
+			            data: JSON.stringify(this.employeeNo),  // this.employeeNo를 사용해 보내기
+			            success: (data) => {
+			                // 서버에서 받은 데이터를 notifications 배열 형식으로 변환
+			                this.notifications = data.map(item => ({
+			                    id: item.noticeNo,  // 알림 ID
+			                    message: `<span class="text-sm mr-1">${item.noticeContent}</span>`,  // 메시지
+			                    time: item.createDate,  // 시간
+			                }));
+			                console.log(this.notifications);  // 확인용
+			            },
+			            error: () => {
+			                alert("알림을 불러오는 중 오류가 발생했습니다.");
+			            }
+			        });
+			    },
+
+			    // 초기화 시 알림을 로드하는 함수
+			    init() {
+			        this.loadNotifications();  // 알림 목록 로드
+			    }
     }));
 });
 
