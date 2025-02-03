@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.academy.dto.AttendanceApprovalAddDTO;
 import com.example.academy.dto.BoardDTO;
 import com.example.academy.dto.BoardFileDTO;
 import com.example.academy.dto.BoardListByMainDTO;
@@ -247,8 +246,8 @@ public class BoardService {
 	}
 	
 	// 공지사항 리스트 조회
-	public List<BoardListDTO> getBoardList() {
-		List<BoardListDTO> boardList = boardMapper.selectBoardList();
+	public List<BoardListDTO> getBoardList(String categoryCode) {
+		List<BoardListDTO> boardList = boardMapper.selectBoardList(categoryCode);
 		for(BoardListDTO board : boardList) {
 			board.setUpdateDate(board.getCreateDate().substring(0, 10));
 		}

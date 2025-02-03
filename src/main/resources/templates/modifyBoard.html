@@ -100,6 +100,22 @@
 	            <div class="dvanimation animate__animated p-6" :class="[$store.app.animation]">
 	                <div x-data="multicolumn">
 	                    <div class="panel">
+	                    
+	                    	<!-- 게시판 카테고리 입력창 -->
+	                    	<div>
+		                    	<select id="boardCategory" name="boardCategory">
+							   	    <option value="" disabled selected>게시판 종류</option>
+							   	    <th:block th:each="commonBoardCategory : ${commonBoardCategory}">
+							   	   	 	 <option th:value="${commonBoardCategory.code}" 
+							   	   	 	 		 th:text="${commonBoardCategory.name}"
+	  						   	   	 	 		 th:selected="${commonBoardCategory.code == boardOne.boardCategory}">
+	  						   	   	 	 </option>
+							   	    </th:each>
+							    </select>
+	                    	</div>
+	 						
+	 						<br>
+	                    
 	                        <!-- 제목 입력창 -->
 	                        <div>
 	                            <input type="text" id="boardTitle" name="boardTitle" class="form-input" th:value="${boardOne.boardTitle}">

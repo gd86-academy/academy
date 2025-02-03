@@ -13,6 +13,7 @@ import com.example.academy.dto.AttendanceDTO;
 import com.example.academy.dto.EmployeeListDTO;
 import com.example.academy.mapper.EmployeeMapper;
 import com.example.academy.mapper.ScheduledMapper;
+import com.example.academy.vo.Holiday;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,15 +24,34 @@ public class ScheduledService {
 
 	@Autowired private ScheduledMapper scheduledMapper;
 	@Autowired private EmployeeMapper employeeMapper;
+	@Autowired private HolidayService holidayService;
 	
 	// 00시마다 모든 사원 근태 데이터 생성
-	@Scheduled(cron = "0 54 15 * * ?")
+	@Scheduled(cron = "0 17 14 * * ?")
 	public void generateAttendanceData() {
 		// 현재 시간정보를 가져옴.
 		LocalDate today = LocalDate.now();
+		String year = Integer.toString(today.getYear());
+		
+		// 공휴일 확인
+		List<Holiday> holidays = holidayService.getHolidayList(year);
+		
+		boolean isHoliday = holidays.stream()
+                					.anyMatch(holiday -> holiday.getDate().equals(today.toString())); // 공휴일 여부 체크
+		log.debug("----------------------->" + holidays);
+		log.debug("----------------------->" + isHoliday);
+		
+		if (isHoliday) {
+			log.debug("오늘은 공휴일입니다. 근태 데이터 생성을 생략합니다.");
+			return;  // 공휴일인 경우 데이터 생성을 중지
+		} else {
+			log.debug("오늘은 공휴일이 아닙니다.");
+		}
 		
 		// 현재 시간정보가 주말이 아니라면,
 		if (today.getDayOfWeek() != DayOfWeek.SATURDAY && today.getDayOfWeek() != DayOfWeek.SUNDAY) {
+			
+			
 			log.debug("근태 데이터를 생성합니다.");
 	        
 			// 1. 모든 사원 조회

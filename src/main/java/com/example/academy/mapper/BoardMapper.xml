@@ -112,12 +112,14 @@
 			, board_content
 			, create_employee_no
 			, update_employee_no
+			, board_category
 			)
 		VALUES (
 			#{boardTitle}
 			, #{boardContent}
 			, #{createEmployeeNo}
 			, #{updateEmployeeNo}
+			, #{boardCategory}
 			)
 	</insert>
 
@@ -129,6 +131,7 @@
 			, b.board_content boardContent
 			, b.create_employee_no createEmployeeNo
 			, b.update_employee_no updateEmployeeNo
+			, b.board_category boardCategory
 			, b.board_count boardCount
 			, b.create_date createDate
 			, b.update_date updateDate
@@ -144,18 +147,20 @@
 	</select>
 	
 	<!-- 공지사항리스트 조회 -->
-	<select id="selectBoardList" resultType="com.example.academy.dto.BoardListDTO">
+	<select id="selectBoardList" resultType="com.example.academy.dto.BoardListDTO" parameterType="String">
 		SELECT
 			b.board_no boardNo
 			, b.board_title boardTitle
 			, e.employee_name employeeName
+			, b.board_category boardCategory
 			, (SELECT c.name FROM common c WHERE c.code = e.employee_department) employeeDepartmentName
 			, b.board_count boardCount
 			, b.create_date createDate
-			, b.update_date updateDate
 		FROM board b
-		LEFT OUTER JOIN employee e ON e.employee_no = b.update_employee_no
+		LEFT OUTER JOIN common c ON c.`code` = b.board_category
+		LEFT OUTER join employee e ON e.employee_no = b.update_employee_no
 		WHERE b.use_yn = 1
+			  AND b.board_category = #{categoryCode}
 		ORDER BY createDate DESC
 	</select>
 

@@ -2,6 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.CommonMapper">
 	
+	<!-- 조세영 : 게시판 카테고리 조회 -->
+	<select id="selectBoardCategory">
+		SELECT 
+			code
+			, name 
+		FROM common
+		WHERE code LIKE 'BF%'		
+	</select>
+	
 	<!-- 김혜린 : 시간 조회 -->
 	<select id="selectTime">
 		SELECT 

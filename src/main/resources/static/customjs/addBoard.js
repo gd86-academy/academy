@@ -107,6 +107,7 @@ $('#submitButton').on('click', function() {
     var boardTitle = $('#boardTitle').val();
     var createEmployeeNo = parseInt($('#createEmployeeNo').val(), 10);
     var updateEmployeeNo = parseInt($('#updateEmployeeNo').val(), 10);
+	var boardCategory = $('#boardCategory').val();
  	
     // 동적으로 추가된 파일 입력 필드의 파일을 모두 가져오기
     var boardFiles = [];
@@ -130,6 +131,7 @@ $('#submitButton').on('click', function() {
     formData.append('boardContent', boardContent); // Quill 에디터 내용
     formData.append('createEmployeeNo', createEmployeeNo); // 작성자
     formData.append('updateEmployeeNo', updateEmployeeNo); // 수정자
+    formData.append('boardCategory', boardCategory); // 게시판 종류
 	
     // 파일이 있다면 추가
     boardFiles.forEach(function(file) {

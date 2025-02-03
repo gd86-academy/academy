@@ -14,6 +14,7 @@ public class BoardDTO {
 	private String boardContent;
 	private Integer createEmployeeNo;
 	private Integer updateEmployeeNo;
+	private String boardCategory;
 	private Integer boardCount;
 	private String createDate;
 	private String updateDate;

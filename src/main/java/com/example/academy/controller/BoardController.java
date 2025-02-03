@@ -12,15 +12,17 @@ import org.springframework.ui.Model;
 import com.example.academy.dto.BoardDTO;
 import com.example.academy.dto.BoardFileDTO;
 import com.example.academy.dto.BoardModifyDTO;
-import com.example.academy.dto.CommentAddDTO;
 import com.example.academy.dto.CommentListDTO;
 import com.example.academy.security.CustomUserDetails;
 import com.example.academy.service.BoardFileService;
 import com.example.academy.service.BoardService;
+import com.example.academy.service.CommonService;
+import com.example.academy.vo.Common;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Slf4j
@@ -28,6 +30,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class BoardController {
 	@Autowired BoardService boardService;
 	@Autowired BoardFileService boardFileService;
+	@Autowired CommonService commonService;
+	
+//	// 게시판 종류 리스트 조회
+//	@ModelAttribute("boardCategory")
+//    public List<Common> boardCategoryList() {
+//        return commonService.getBoardCategory();
+//    }
 	
 	// 공지사항yn 수정
 	@GetMapping("/deleteBoard")
@@ -72,11 +81,17 @@ public class BoardController {
  		
 		// 상세 공지사항 정보 조회
 		BoardDTO boardOne = boardService.boardOne(boardNo);
+		
+		// 공지사항 파일리스트 조회
 		List<BoardFileDTO> boardFileList = boardFileService.getBoardFileList(boardNo);
+		
+		// 게시판 카테고리 조회
+	    List<Common> commonBoardCategory = commonService.getBoardCategory();
 		
 		// 모델에 정보 담기
 		model.addAttribute("boardOne", boardOne);
 		model.addAttribute("boardFileList", boardFileList);
+		model.addAttribute("commonBoardCategory", commonBoardCategory);
 		
 		return "modifyBoard";
 	}
@@ -109,7 +124,10 @@ public class BoardController {
 	        model.addAttribute("userPhotoFileName", userDetails.getUserPhotoFileName());
 	        model.addAttribute("userPhotoFileExt", userDetails.getUserPhotoFileExt());
 	    }
-	 
+	    // 게시판 카테고리 조회
+	    List<Common> commonBoardCategory = commonService.getBoardCategory();
+	    model.addAttribute("commonBoardCategory", commonBoardCategory);
+	    
 		return "addBoard";
 	}
 	
@@ -153,8 +171,9 @@ public class BoardController {
 	}
 	
 	// 공지사항 리스트 조회
-	@GetMapping("/boardList")
-	public String boardList(Model model) {
+	@GetMapping("/boardList/{categoryCode}")
+	public String boardList(@PathVariable("categoryCode") String categoryCode
+							, Model model) {
 		
 		// 스프링시큐리티에서 계정정보 가져오기.
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

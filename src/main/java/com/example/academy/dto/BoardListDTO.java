@@ -12,6 +12,7 @@ public class BoardListDTO {
 	private Integer boardCount;
 	private String updateDate;
 	private String createDate;
+	private String categoryCode;
 	
 	// 데이터를 배열로 반환하는 메서드
 	public Object[] toArray() {
@@ -22,7 +23,8 @@ public class BoardListDTO {
 				this.boardCount,
 				this.updateDate,
 				this.createDate,
-				this.employeeDepartmentName
+				this.employeeDepartmentName,
+				this.categoryCode
 		};
 	}
 }

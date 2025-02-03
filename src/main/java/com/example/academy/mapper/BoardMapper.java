@@ -50,6 +50,6 @@ public interface BoardMapper {
 	BoardDTO selectBoardOne(Integer boardNo);
 	
 	// 공지사항 리스트 조회
-	List<BoardListDTO> selectBoardList();
+	List<BoardListDTO> selectBoardList(String categoryCode);
 	
 }

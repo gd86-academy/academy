@@ -14,6 +14,11 @@ import com.example.academy.vo.Common;
 public class CommonService {
 	@Autowired CommonMapper commonMapper;
 	
+	// 조세영 : 게시판 카테고리 조회
+	public List<Common> getBoardCategory() {
+		return commonMapper.selectBoardCategory();
+	}
+	
 	// 김혜린 : 시간 조회
 	public List<Common> getTime() {
 		return commonMapper.selectTime();

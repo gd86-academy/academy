@@ -74,7 +74,7 @@
 	
 	    <div class="main-container min-h-screen text-black dark:text-white-dark" :class="[$store.app.navbar]">
 	        <!-- 사이드바 파일 연결 -->
-	        <div th:replace="fragments/sidebar :: sidebar"></div>
+	        <div th:replace="fragments/sidebar :: sidebar" th:with="boardCategory=${boardCategory}"></div>
 	
 	        <!-- 최상단 이동 버튼 끝 -->
 	        <div class="main-content flex min-h-screen flex-col">
@@ -89,6 +89,19 @@
 	                </div>
 	                <div x-data="multicolumn">
 	                    <div class="panel" style="padding: 40px;">
+	                    
+	                    	<!-- 게시판 카테고리 입력창 -->
+	                    	<div>
+		                    	<select id="boardCategory" name="boardCategory">
+							   	    <option value="" disabled selected>게시판 종류</option>
+							   	    <th:block th:each="commonBoardCategory : ${commonBoardCategory}">
+							   	   	 	 <option th:value="${commonBoardCategory.code}" th:text="${commonBoardCategory.name}"></option>
+							   	    </th:each>
+							    </select>
+	                    	</div>
+	 						
+	 						<br>
+	 						                   
 	                        <!-- 제목 입력창 -->
 	                        <div>
 	                            <input type="text" id="boardTitle" name="boardTitle" placeholder="제목" class="form-input">

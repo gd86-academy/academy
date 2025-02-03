@@ -93,7 +93,7 @@ document.addEventListener('alpine:init', () => {
 	    init() {
 	        // AJAX 요청
 	        $.ajax({
-	            url: 'http://localhost/academy/restapi/boardList',
+	            url: 'http://localhost/academy/restapi/boardList/' + categoryCode,
 	            type: 'GET',
 	            dataType: 'json',
 	            success: (data) => {
