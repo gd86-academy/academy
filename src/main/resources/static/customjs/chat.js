@@ -294,6 +294,14 @@ document.addEventListener('alpine:init', () => {
                 }
             });
         },
+		
+		formatDateTime(dateString) {
+		    const date = new Date(dateString);
+		    const formattedDate = date.toLocaleDateString();
+		    const formattedTime = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+		    return `${formattedDate} ${formattedTime}`;
+		},
+
 
         // 스크롤 바 기능
 		scrollToBottom() {

@@ -1,6 +1,8 @@
 package com.example.academy.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -116,8 +118,11 @@ public class ReservationService {
 	}
 	
 	// 박시현 : 예약 신청 - 사원 검색
-	public List<Employee> getReservationByEmployee(String searchEmployee) {
-		return reservationMapper.selectReservationByEmployee(searchEmployee);
+	public List<Employee> getReservationByEmployee(String searchEmployee, Integer reservationPerson) {
+	    Map<String, Object> params = new HashMap<>();
+	    params.put("searchEmployee", searchEmployee);
+	    params.put("reservationPerson", reservationPerson);
+	    return reservationMapper.selectReservationByEmployee(params);
 	}
 	
 	// 박시현 : 예약 신청

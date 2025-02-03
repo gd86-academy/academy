@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -110,12 +111,23 @@ public class ReservationRestController {
 	
 	// 박시현 : 사원검색
 	@GetMapping("/restapi/searchEmployee")
-    public List<Employee> searchEmployee(@RequestParam String searchEmployee) {
-        if (searchEmployee.isEmpty()) {
-            return new ArrayList<>(); // 빈 값 처리
-        }
-        return reservationService.getReservationByEmployee(searchEmployee);
-    }
+	public List<Employee> searchEmployee(@RequestParam String searchEmployee) {
+	    // 로그인한 사용자 정보 가져오기
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    Integer employeeNo = null;
+
+	    if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+	        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+	        employeeNo = Integer.parseInt(userDetails.getUsername()); // 로그인한 사원 번호
+	    }
+
+	    if (searchEmployee.isEmpty()) {
+	        return new ArrayList<>(); // 빈 값 처리
+	    }
+
+	    // 검색어 + 로그인한 사원번호를 서비스로 전달
+	    return reservationService.getReservationByEmployee(searchEmployee, employeeNo);
+	}
 	
 	// 박시현 : 예약 리스트
 	@GetMapping("/restapi/reservationList")

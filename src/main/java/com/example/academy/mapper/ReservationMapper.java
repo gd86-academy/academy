@@ -1,6 +1,7 @@
 package com.example.academy.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -48,7 +49,7 @@ public interface ReservationMapper {
 	Integer insertReservationByEmployee(ReservationEmployeeDTO reservationEmployeeDTO);
 	
 	// 박시현 : 사원검색 - 예약신청시 참여인원에서 필요
-	List<Employee> selectReservationByEmployee(String searchEmployee); 
+	List<Employee> selectReservationByEmployee(Map<String, Object> params); 
 	
 	// 박시현 : 회의실 예약 신청 
 	Integer insertReservation(AddReservationDTO addReservationListDTO);
