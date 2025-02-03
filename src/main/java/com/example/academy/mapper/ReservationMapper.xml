@@ -223,12 +223,13 @@
 	</insert>
 
 	<!-- 박시현 : 예약신청시 참여인원에 필요한 사원검색 -->
-	<select id="selectReservationByEmployee" parameterType="String" resultType="com.example.academy.vo.Employee">
+	<select id="selectReservationByEmployee" parameterType="Map" resultType="com.example.academy.vo.Employee">
 		SELECT 
-			employee_no employeeNo
-			, employee_name employeeName
-		FROM employee
-		WHERE LOWER(employee_name) LIKE LOWER(CONCAT('%',#{searchEmployee},'%'))
+	        employee_no AS employeeNo,
+	        employee_name AS employeeName
+	    FROM employee e
+	    WHERE LOWER(e.employee_name) LIKE LOWER(CONCAT('%', #{searchEmployee}, '%'))
+	    AND employee_no != #{reservationPerson}
 	</select>
 
 	<!-- 박시현 : 회의실 예약 신청 -->
