@@ -293,9 +293,6 @@ table.whitespace-nowrap tbody tr:hover {
 														class="h-9 w-9 rounded-full object-cover saturate-50 group-hover:saturate-100"
 														:src="selectedUserImage || './images/defaultProfile.png'"
 														:alt="selectedUser || 'Default profile'">
-													<div class="absolute bottom-0 ltr:right-0 rtl:left-0"> <!-- 사용자의 온라인 상태를 보여주는 아바타 하단의 작은 표시기 -->
-														<div class="h-4 w-4 rounded-full bg-success"></div>
-													</div> <!-- 사용자 프로필 컨테이너 끝 -->
 												</div>
 												<div class="mx-3">
 													<p class="font-semibold" x-text="selectedUser"></p> <!-- 선택된 사용자의 이름을 표시하는 굵은 글씨의 문장 -->
@@ -315,7 +312,7 @@ table.whitespace-nowrap tbody tr:hover {
 														class="relative border-b border-[#f4f4f4] text-center text-xs dark:border-gray-800">
 														<span
 															class="relative top-2 bg-white px-3 dark:bg-[#0e1726]"
-															x-text="'Today, ' + new Date().toLocaleTimeString()"></span>
+															></span>
 													</h4>   <!-- 오늘의 날짜와 시간을 표시하는 동적 텍스트가 포함된 채팅 메시지의 날짜에 대한 헤더 -->
 												</div>
 												<template x-for="message in messages" :key="message.id">  <!-- 선택된 사용자의 메시지를 렌더링하는 Alpine.js루프 -->
@@ -343,7 +340,7 @@ table.whitespace-nowrap tbody tr:hover {
 															</div>
 															<div class="text-xs text-white-dark"   
 																:class="{'ltr:text-right rtl:text-left' : currentUserName === message.fromUserName}"
-																x-text="new Date(message.create_date).toLocaleTimeString()"></div>
+																x-text="formatDateTime(message.create_date)"></div>
 														</div> <!-- 발신자 ID를 기준으로 조건부 정렬이 적용된 메시지 타임스탬프이다. -->
 													</div>
 												</template>
