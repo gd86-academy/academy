@@ -11,6 +11,8 @@ spring:
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html
+mybatis:
+  mapper-locations: classpath*:com/example/academy/mapper/*.xml
 logging:
   level:
     org:

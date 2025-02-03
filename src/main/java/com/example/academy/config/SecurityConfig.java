@@ -22,7 +22,7 @@ public class SecurityConfig {
 	@Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http.authorizeHttpRequests((auth) -> auth
-        	.requestMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**", "/upload/**", "/customjs").permitAll() // CSS, JS, 이미지 파일 접근 허용
+        	.requestMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**", "/upload/**", "/customjs/**").permitAll() // CSS, JS, 이미지 파일 접근 허용
             .requestMatchers("/login", "/loginProc", "/join", "/joinProc").permitAll()
             // .requestMatchers("/all/**").hasAnyRole("management", "humanresources", "Administration") // 모든사원
             .requestMatchers("/management/**").hasRole("management") // 운영팀
