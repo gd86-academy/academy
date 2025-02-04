@@ -171,7 +171,7 @@ $('#submitButton').on('click', function() {
             console.log('Success:', response);
             //alert("게시글이 성공적으로 등록되었습니다.");
             // 성공 후 페이지 이동
-           window.location.href = '/academy/boardList'; // 게시판 목록 페이지로 이동
+           window.location.href = '/academy/boardOne?boardNo=' + boardNo; // 게시판 목록 페이지로 이동
         },
         error: function(xhr, status, error) {
             console.error('Error:', error);

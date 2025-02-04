@@ -7,6 +7,8 @@ public class BoardListDTO {
 	
 	private Integer boardNo;
 	private String boardTitle;
+	private String fileName;
+	private String fileExt;
 	private String employeeName;
 	private String employeeDepartmentName;
 	private Integer boardCount;
@@ -18,13 +20,13 @@ public class BoardListDTO {
 	public Object[] toArray() {
 		return new Object[] {
 				this.boardNo,
-				this.boardTitle,
+				this.fileName + "." + this.fileExt,
 				this.employeeName,
+				this.boardTitle,
 				this.boardCount,
 				this.updateDate,
 				this.createDate,
-				this.employeeDepartmentName,
-				this.categoryCode
+				this.employeeDepartmentName
 		};
 	}
 }

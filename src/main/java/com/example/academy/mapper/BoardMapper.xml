@@ -150,6 +150,8 @@
 	<select id="selectBoardList" resultType="com.example.academy.dto.BoardListDTO" parameterType="String">
 		SELECT
 			b.board_no boardNo
+			, f.file_name fileName
+			, f.file_ext fileExt
 			, b.board_title boardTitle
 			, e.employee_name employeeName
 			, b.board_category boardCategory
@@ -158,7 +160,8 @@
 			, b.create_date createDate
 		FROM board b
 		LEFT OUTER JOIN common c ON c.`code` = b.board_category
-		LEFT OUTER join employee e ON e.employee_no = b.update_employee_no
+		LEFT OUTER JOIN employee e ON e.employee_no = b.update_employee_no
+		LEFT OUTER JOIN file f ON f.file_no = e.photo_file_no
 		WHERE b.use_yn = 1
 			  AND b.board_category = #{categoryCode}
 		ORDER BY createDate DESC

@@ -84,6 +84,7 @@ document.addEventListener('alpine:init', () => {
 var quill = new Quill('#editor', {
     theme: 'snow',
     placeholder: '내용을 입력하세요.',  // Placeholder 텍스트 설정
+	bounds: '#editor',
     modules: {
         toolbar: [
             [{ 'font': [] }],  // 글자 크기
@@ -96,6 +97,11 @@ var quill = new Quill('#editor', {
             ['clean'],  // 서식 초기화
         ]
     }
+});
+
+// Placeholder 문제 해결: 입력 시 강제 삭제
+document.querySelector('.ql-editor').addEventListener('focus', function() {
+    this.classList.remove('ql-blank'); // Placeholder 강제 제거
 });
 
 // 전송 버튼 클릭 이벤트
@@ -119,7 +125,8 @@ $('#submitButton').on('click', function() {
     });
 
     // 제목, 내용 입력 여부 확인
-    if (!boardContent.trim() || boardContent === '<p><br></p>' || !boardTitle.trim()) {
+    if (!boardContent.trim() || boardContent === '<p><br></p>' || 
+		!boardTitle.trim() || !boardCategory || boardCategory.trim() === '') {
 		modalBackgroundBoardDelete.classList.remove('hidden');  // 모달 배경 보이기
 		modalBackgroundBoardDelete.classList.add('block');     // 모달 배경 보이게 설정
         return;
@@ -148,7 +155,7 @@ $('#submitButton').on('click', function() {
         success: function(response) {
             console.log('Success:', response);
             // 성공 후 페이지 이동
-           window.location.href = '/academy/boardList'; // 게시판 목록 페이지로 이동
+           window.location.href = '/academy/boardList/' + boardCategory // 게시판 목록 페이지로 이동
         },
         error: function(xhr, status, error) {
             console.error('Error:', error);

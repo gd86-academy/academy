@@ -40,12 +40,12 @@ public class BoardController {
 	
 	// 공지사항yn 수정
 	@GetMapping("/deleteBoard")
-	public String modifyBoardYN(Integer boardNo) {
+	public String modifyBoardYN(Integer boardNo, String boardCategory) {
 		
 		Integer updateRow = boardService.updateBoardYN(boardNo);
 		log.debug("updateRow --------------------> " + updateRow);
 		
-		return "boardList";
+		return "redirect:/boardList/" + boardCategory;
 	}
 	
 	// 공지사항 수정
@@ -104,7 +104,7 @@ public class BoardController {
 		
 		boardService.addBoard(boardDTO);
 		
-		return "redirect:/boardList";	
+		return "redirect:/boardList/" + boardDTO.getBoardCategory();	
 	}
 	
 	// 공지사항 추가 폼 호출
