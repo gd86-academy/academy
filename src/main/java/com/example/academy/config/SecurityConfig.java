@@ -35,10 +35,6 @@ public class SecurityConfig {
         
         
         http
-        .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/login").anonymous() // 로그인되지 않은 사용자만 접근 가능
-                .anyRequest().authenticated() // 그 외의 요청은 로그인된 사용자만 접근 가능
-        )
     	.formLogin((auth) -> auth.loginPage("/login")
     				.loginProcessingUrl("/loginProc")
     				.defaultSuccessUrl("/main", true)  // 로그인 성공 후 이동할 URL 설정

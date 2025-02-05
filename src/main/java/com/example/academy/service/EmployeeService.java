@@ -49,7 +49,7 @@ public class EmployeeService {
 		filesMapper.deletePhotoFile(employeeNo);
 		
 		// 사원 프로필사진 물리적 파일 삭제.
-		String photoFullname = System.getProperty("user.dir") + "/src/main/resources/static/upload/" + employeeModifyGetDTO.getPhotoFileName() + "." + employeeModifyGetDTO.getPhotoFileExt();
+		String photoFullname = "/home/ubuntu/apache-tomcat-10.1.34/webapps/upload/" + employeeModifyGetDTO.getPhotoFileName() + "." + employeeModifyGetDTO.getPhotoFileExt();
 		File photoFile = new File(photoFullname);
 		photoFile.delete();
 		
@@ -57,7 +57,7 @@ public class EmployeeService {
 		filesMapper.deleteStampFile(employeeNo);
 		
 		// 사원 도장사진 물리적 파일 삭제.
-		String stampFullname = System.getProperty("user.dir") + "/src/main/resources/static/upload/" + employeeModifyGetDTO.getStampFileName() + "." + employeeModifyGetDTO.getStampFileExt();
+		String stampFullname = "/home/ubuntu/apache-tomcat-10.1.34/webapps/upload/" + employeeModifyGetDTO.getStampFileName() + "." + employeeModifyGetDTO.getStampFileExt();
 		File stampFile = new File(stampFullname);
 		stampFile.delete();
 		
@@ -92,13 +92,13 @@ public class EmployeeService {
 			// 프로필사진 파일정보 수정이 완료되었다면,
 			if (result == 3) {
 				// 서버에 기존 물리적 파일삭제.
-				String fullname = System.getProperty("user.dir") + "/src/main/resources/static/upload/" + employeeModifyGetDTO.getPhotoFileName() + "." + employeeModifyGetDTO.getPhotoFileExt();
+				String fullname = "/home/ubuntu/apache-tomcat-10.1.34/webapps/upload/" + employeeModifyGetDTO.getPhotoFileName() + "." + employeeModifyGetDTO.getPhotoFileExt();
 				File f = new File(fullname);
 				f.delete();
 				
 				// 서버에 새로운 물리적 파일추가.
 				try {
-					photoMf.transferTo(new File(System.getProperty("user.dir") + "/src/main/resources/static/upload/" + photofile.getFileName() + "." + photofile.getFileExt()));
+					photoMf.transferTo(new File("/home/ubuntu/apache-tomcat-10.1.34/webapps/upload/" + photofile.getFileName() + "." + photofile.getFileExt()));
 				} catch (Exception e) {
 					e.printStackTrace();
 					throw new RuntimeException();
@@ -139,13 +139,13 @@ public class EmployeeService {
 				// 등록한 도장 파일이 있다면,
 				if (employeeModifyGetDTO.getStampFileName() != null) {
 					// 서버에 기존 물리적 파일삭제.
-					String fullname = System.getProperty("user.dir") + "/src/main/resources/static/upload/" + employeeModifyGetDTO.getStampFileName() + "." + employeeModifyGetDTO.getStampFileExt();
+					String fullname = "/home/ubuntu/apache-tomcat-10.1.34/webapps/upload/" + employeeModifyGetDTO.getStampFileName() + "." + employeeModifyGetDTO.getStampFileExt();
 					File f = new File(fullname);
 					f.delete();
 				}
 				// 서버에 새로운 물리적 파일추가.
 				try {
-					stampMf.transferTo(new File(System.getProperty("user.dir") + "/src/main/resources/static/upload/" + stampfile.getFileName() + "." + stampfile.getFileExt()));
+					stampMf.transferTo(new File("/home/ubuntu/apache-tomcat-10.1.34/webapps/upload/" + stampfile.getFileName() + "." + stampfile.getFileExt()));
 				} catch (Exception e) {
 					e.printStackTrace();
 					throw new RuntimeException();
