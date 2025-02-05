@@ -169,6 +169,13 @@ document.addEventListener('alpine:init', () => {
 					    if (rowElement) {
 							const tdElements = rowElement.querySelectorAll('td');
 							const lectureNo = tdElements[0].textContent; // 두번째 열 데이터 추출.
+							
+							if (!lectureNo || lectureNo === '항목이 없습니다.') {
+					            // 항목이 없으면 클릭 동작 차단
+					            console.warn('유효하지 않은 행 클릭');
+					            return;
+					        }
+							
 							window.location.href = `/academy/lectureOne?lectureNo=${lectureNo}`;
 					    }
 					});
