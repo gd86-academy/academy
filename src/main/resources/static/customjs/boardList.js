@@ -130,7 +130,7 @@ document.addEventListener('alpine:init', () => {
 									} else {
 										return `
 											<div class="flex items-center w-max">
-												<img class="w-9 h-9 rounded-full ltr:mr-2 rtl:ml-2 object-cover" src="./upload/${image}" />
+												<img class="w-9 h-9 rounded-full ltr:mr-2 rtl:ml-2 object-cover" src="../upload/${image}" />
 												<span>${name}</span>
 											</div>
 										`;

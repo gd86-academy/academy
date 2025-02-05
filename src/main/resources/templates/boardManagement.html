@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="ko" dir="ltr">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	    <title>공지사항</title>
+	    <title>게시판 관리</title>
 	    <meta name="viewport" content="width=device-width, initial-scale=1" />
 	    <link rel="icon" type="image/x-icon" th:href="@{/favicon.png}" />
 	    <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -23,25 +24,9 @@
         <script th:src="@{/js/templete.js}"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
         <script th:src="@{/js/simple-datatables.js}"></script>
-        <style>
-			/* 기본 커서 설정 */
-	        table.whitespace-nowrap tbody tr {
-	            cursor: pointer; /* 행에 커서 올리면 포인터로 변경 */
-	        }
+	</head>
 	
-	        /* 행을 클릭했을 때 스타일 */
-	        table.whitespace-nowrap tbody tr.selected {
-	            background-color: #d1ecf1; /* 클릭된 행 색상 */
-	        }
-	
-	        /* 마우스를 올렸을 때 스타일 */
-	        table.whitespace-nowrap tbody tr:hover {
-	            background-color: #f1f1f1; /* 마우스를 올렸을 때 색상 */
-	        }
-		</style>
-    </head>
-
-    <body
+	<body
         x-data="main"
         class="relative overflow-x-hidden font-nunito text-sm font-normal antialiased"
         :class="[ $store.app.sidebar ? 'toggle-sidebar' : '', $store.app.theme === 'dark' || $store.app.isDarkMode ?  'dark' : '', $store.app.menu, $store.app.layout,$store.app.rtlClass]"
@@ -86,43 +71,62 @@
 
             <div class="main-content flex min-h-screen flex-col">
                 <!-- 헤더 파일 연결 -->
-                 <div th:replace="fragments/header :: header"></div>
-
+                <div th:replace="fragments/header :: header"></div>
+                 
                 <!-- 메인화면 -->
                 <div class="animate__animated p-6" :class="[$store.app.animation]">
-                	<!-- 타이틀 -->
-                	<div class="flex flex-wrap items-center justify-between gap-4 ml-3">
-                       <h2 class="text-2xl ml-3" th:text="${name}"></h2>
-                       <div class="flex w-full flex-col gap-4 sm:w-auto sm:flex-row sm:items-center sm:gap-3">
-                           <div class="flex gap-3 mr-3">
-                               <div>
-  									<!-- 버튼 -->
-									 <button style="width:130px;" type="button" class="btn btn-primary mr-3" th:onclick="|window.location.href='@{/addBoard}'|">
-									     게시글 작성
-									 </button>
-								</div>
-							</div>
+                	<!-- 게시판 관리 -->
+		            <div class=" m-6 bg-white shadow" style="border-radius: 10px;">
+		            	<div class=" ml-3 p-4 text-lg">
+		                   	<span>게시판 관리</span>
+					    </div>
+					    
+					    <hr>
+					    
+					    <!-- 게시판 카테고리 작성영역 -->
+				    	<div class="p-1 flex">
+						    <input type="text" id="boardCategory" name="boardCategory" class="form-textarea w-full mr-1" placeholder="게시판 종류를 입력해주세요."></input>
+						    <button id="boardCategoryAddBtn" type="button" class="btn btn-primary" style="width:100px;">등록</button>
 						</div>
-					</div>
-					
-					<div class="dvanimation animate__animated p-6" :class="[$store.app.animation]">
-                		<div x-data="multicolumn">
-                			<div class="panel">
-                				<table id="myTable" class="whitespace-nowrap"></table>
-                			</div>
-                		</div>
-                	</div>
-                	<!--  풋터 파일 연결 -->
+						
+						<hr>
+							
+						<!-- 게시판 카테고리 리스트 영역 -->
+						<div id="boardCategoryDiv">
+						    <div th:each="boardCategory, stat : ${boardCategoryList}">
+						        <div th:id="'boardCategoryRow' + ${stat.index}" name="boardCategoryRow">
+						        <input type="hidden" th:value="${boardCategory.code}">
+						            <div class="flex justify-between p-5">
+						                <p class="ml-2 text-lg font-medium" th:text="${boardCategory.name}"></p>
+						                <button
+						                    type="button"
+						                    class="btn btn-outline-danger ml-2"
+						                    th:id="'boardCategoryDeleteRow' + ${stat.index}"
+						                    th:onclick="'removeBoardCategory(\'boardCategoryRow' + ${stat.index} + '\')'"
+						                >
+						                    <!-- 휴지통 아이콘 -->
+						                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+						                        <path opacity="0.5" d="M11.5956 22.0001H12.4044C15.1871 22.0001 16.5785 22.0001 17.4831 21.1142C18.3878 20.2283 18.4803 18.7751 18.6654 15.8686L18.9321 11.6807C19.0326 10.1037 19.0828 9.31524 18.6289 8.81558C18.1751 8.31592 17.4087 8.31592 15.876 8.31592H8.12405C6.59127 8.31592 5.82488 8.31592 5.37105 8.81558C4.91722 9.31524 4.96744 10.1037 5.06788 11.6807L5.33459 15.8686C5.5197 18.7751 5.61225 20.2283 6.51689 21.1142C7.42153 22.0001 8.81289 22.0001 11.5956 22.0001Z" fill="currentColor"/>
+						                        <path d="M3 6.38597C3 5.90152 3.34538 5.50879 3.77143 5.50879L6.43567 5.50832C6.96502 5.49306 7.43202 5.11033 7.61214 4.54412C7.61688 4.52923 7.62232 4.51087 7.64185 4.44424L7.75665 4.05256C7.8269 3.81241 7.8881 3.60318 7.97375 3.41617C8.31209 2.67736 8.93808 2.16432 9.66147 2.03297C9.84457 1.99972 10.0385 1.99986 10.2611 2.00002H13.7391C13.9617 1.99986 14.1556 1.99972 14.3387 2.03297C15.0621 2.16432 15.6881 2.67736 16.0264 3.41617C16.1121 3.60318 16.1733 3.81241 16.2435 4.05256L16.3583 4.44424C16.3778 4.51087 16.3833 4.52923 16.388 4.54412C16.5682 5.11033 17.1278 5.49353 17.6571 5.50879H20.2286C20.6546 5.50879 21 5.90152 21 6.38597C21 6.87043 20.6546 7.26316 20.2286 7.26316H3.77143C3.34538 7.26316 3 6.87043 3 6.38597Z" fill="currentColor"/>
+						                    </svg>
+						                </button>
+						            </div>
+						            <!-- 구분선 -->
+						            <div class="h-px border-b border-[#e0e6ed]"></div>
+						        </div>
+						    </div>
+						</div>
+
+					    
+		            </div>
+                </div>
+                
+                <!-- 풋터 -->
                 <div th:replace="fragments/footer :: footer"></div>
-            	</div>
         	</div>
         </div>
-        <script th:inline="javascript">
-	    	var employeeNo = [[${employeeNo}]];
-	    </script>
-	    <script th:inline="javascript">
-        	var categoryCode = [[${categoryCode}]];  // Thymeleaf 변수 categoryCode를 JavaScript로 전달
-    	</script>
-        <script th:src="@{/customjs/BoardList.js}"></script>
-    </body>
+        
+        <script th:src="@{/customjs/boardManagement.js}"></script>
+       
+	</body>
 </html>

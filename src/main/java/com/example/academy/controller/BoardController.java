@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 
+import com.example.academy.dto.AddCommonDTO;
 import com.example.academy.dto.BoardDTO;
 import com.example.academy.dto.BoardFileDTO;
 import com.example.academy.dto.BoardModifyDTO;
@@ -32,11 +33,32 @@ public class BoardController {
 	@Autowired BoardFileService boardFileService;
 	@Autowired CommonService commonService;
 	
-//	// 게시판 종류 리스트 조회
-//	@ModelAttribute("boardCategory")
-//    public List<Common> boardCategoryList() {
-//        return commonService.getBoardCategory();
-//    }
+	// 게시판 관리 페이지
+	@GetMapping("/boardManagement")
+	public String boardManagement(Model model) {
+		
+		// 스프링시큐리티에서 계정정보 가져오기.
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		// 로그인 상태일 때만 model에 정보담기.
+	    if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+	        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+	    
+	        model.addAttribute("employeeNo", Integer.parseInt(userDetails.getUsername()));
+	        model.addAttribute("userName", userDetails.getUserRealName());
+	        model.addAttribute("userMail", userDetails.getUserMail());
+	        model.addAttribute("userPhotoFileName", userDetails.getUserPhotoFileName());
+	        model.addAttribute("userPhotoFileExt", userDetails.getUserPhotoFileExt());
+	    }
+		
+	    // 공지사항 게시판을 제외한 게시판 종류 리스트 불러오기
+		List<Common> boardCategoryList = commonService.getBoardCategoryByNotice();
+		log.debug("------------------->" + boardCategoryList);
+		
+		model.addAttribute("boardCategoryList", boardCategoryList);
+		
+		return "boardManagement";
+	}
 	
 	// 공지사항yn 수정
 	@GetMapping("/deleteBoard")
@@ -174,6 +196,14 @@ public class BoardController {
 	@GetMapping("/boardList/{categoryCode}")
 	public String boardList(@PathVariable("categoryCode") String categoryCode
 							, Model model) {
+	
+		log.debug("categoryCode--------------------->" + categoryCode);
+		
+		// 해당 게시판 카테고리 조회
+		AddCommonDTO boardCategory = commonService.getBoardCategoryOne(categoryCode);
+		// 해당 게시판 카테고리 이름 조회
+		String name = boardCategory.getName();
+		log.debug("name--------------------->" + name);
 		
 		// 스프링시큐리티에서 계정정보 가져오기.
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -181,10 +211,12 @@ public class BoardController {
 		// 로그인 상태일 때만 model에 정보담기.
 	    if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
 	        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-	    
+	 
+	        model.addAttribute("name", name);
 	        model.addAttribute("employeeNo", Integer.parseInt(userDetails.getUsername()));
 	        model.addAttribute("userName", userDetails.getUserRealName());
 	        model.addAttribute("userMail", userDetails.getUserMail());
+	        model.addAttribute("userRole", userDetails.getUserRole());
 	        model.addAttribute("userPhotoFileName", userDetails.getUserPhotoFileName());
 	        model.addAttribute("userPhotoFileExt", userDetails.getUserPhotoFileExt());
 	    }

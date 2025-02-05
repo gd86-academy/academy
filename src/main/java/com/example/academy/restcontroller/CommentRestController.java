@@ -10,10 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.academy.dto.CommentAddDTO;
 import com.example.academy.dto.CommentListDTO;
-import com.example.academy.mapper.BoardMapper;
 import com.example.academy.security.CustomUserDetails;
 import com.example.academy.service.BoardService;
-import com.example.academy.vo.Board;
 
 @RestController
 public class CommentRestController {
