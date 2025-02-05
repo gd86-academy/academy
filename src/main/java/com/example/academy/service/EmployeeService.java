@@ -217,7 +217,7 @@ public class EmployeeService {
 		// 서버에 물리적 파일 저장.
 		if (result == 3) {
 			try {
-				mf.transferTo(new File(System.getProperty("user.dir") + "/src/main/resources/static/upload/" + files.getFileName() + "." + files.getFileExt()));
+				mf.transferTo(new File("/home/ubuntu/apache-tomcat-10.1.34/webapps/upload/" + files.getFileName() + "." + files.getFileExt()));
 			} catch (Exception e) {
 				e.printStackTrace();
 				throw new RuntimeException();
