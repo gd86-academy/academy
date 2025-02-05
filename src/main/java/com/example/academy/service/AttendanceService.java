@@ -22,6 +22,11 @@ public class AttendanceService {
 	@Autowired AttendanceMapper attendanceMapper;
 	@Autowired AttendanceApprovalMapper attendanceApprovalMapper;
 	
+	// 오늘 출퇴근 시간 조회
+	public AttendanceDTO getCheckTime(AttendanceDTO OattendanceDTO) {
+		return attendanceMapper.selectCheckTime(OattendanceDTO);
+	}
+	
 	// 오늘 퇴근 활성화 확인
 	public Integer getSelectCheckout(AttendanceDTO attendanceDTO) {
 		return attendanceMapper.selectCheckout(attendanceDTO);

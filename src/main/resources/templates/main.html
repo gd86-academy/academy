@@ -102,23 +102,29 @@
 						</div>
 						<div style="height: 20px;"></div>
 						<div class="mt-5 flex justify-between">
-							<div x-data="contacts2" x-init="init" class="text-3xl font-bold">
-								<div id="time" x-text="currentTime"></div>
+							<div x-data="contacts2" x-init="init">
+								<div id="time" x-text="currentTime" class="text-3xl font-bold"></div>
+								<div th:text="'출근 시간 ' + ${checkin}" class="text-ml"></div>
+								<div th:text="'퇴근 시간 ' + ${checkout}" class="text-ml"></div>	
 							</div>
 							<div style="width: 160px;"></div>
 							<div class="w-full">
 								<div>
+									<!-- 활성화 -->
 									<a th:if="${checkinNo == 0}" type="button" class="btn btn-outline-info mb-1"
 										style="background-color: #ffffff; width: 100%;" 
 										th:href="@{/modifyCheckin}">출근</a>
-									<a th:if="${checkinNo > 1}" type="button" class="btn text-blackbtn-outline-white mb-1"
+									<!-- 비활성화 -->
+									<a th:if="${checkinNo == 1}" type="button" class="btn text-blackbtn-outline-white mb-1"
 										style="background-color: #f0f0f0; color: #d3d3d3; border-color: #d3d3d3; width: 100%;">출근</a>
 								</div>
 								<div>
-									<a th:if="${checkinNo > 1 && checkoutNo == 0}" type="button" class="btn btn-outline-info"
+									<!-- 활성화 -->
+									<a th:if="${checkinNo == 1 && checkoutNo == 0}" type="button" class="btn btn-outline-info"
 										style="background-color: #ffffff; width: 100%;" 
 										th:href="@{/modifyCheckout}">퇴근</a>
-									<a th:if="${checkinNo == 0 || checkoutNo > 1}" type="button" class="btn btn-outline-primary"
+									<!-- 비활성화 -->
+									<a th:if="${(checkinNo == 0 && checkoutNo == 0) || (checkinNo == 1 && checkoutNo == 1)}" type="button" class="btn btn-outline-primary"
 										style="background-color: #f0f0f0; color: #d3d3d3; border-color: #d3d3d3; width: 100%;" 
 										>퇴근</a>
 								</div>
@@ -218,7 +224,7 @@
                     </svg>
 							</div>
 							<div class="font-semibold ml-3">
-								<p class="text-xl text-black">출근통계</p>
+								<p class="text-xl text-black">출근통계(총 시간)</p>
 								<h5 class="text-xs text-[#506690]">최근 6개월</h5>
 							</div>
 						</div>

@@ -40,8 +40,8 @@
 	<select id="selectCheckTime" parameterType="com.example.academy.dto.AttendanceDTO"
 							resultType="com.example.academy.dto.AttendanceDTO">
 		SELECT 
-		    attendance_checkin attendanceCheckIn
-		    , attendance_checkout attendanceCheckOut
+		    IFNULL(attendance_checkin, '') attendanceCheckIn
+		    , IFNULL(attendance_checkout, '') attendanceCheckOut
 		FROM attendance
 		WHERE employee_no = #{employeeNo}
 		  AND attendance_date = #{currentDate}

@@ -29,6 +29,10 @@ import com.example.academy.service.NoticeService;
 import com.example.academy.service.WaitApprovalService;
 import com.example.academy.vo.Memo;
 
+import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Controller
 public class MainController {
 	@Autowired AuthService authService;
@@ -92,15 +96,40 @@ public class MainController {
 	        attendanceDTO.setCurrentDate(currentDate);
 	        attendanceDTO.setEmployeeNo(Integer.parseInt(userDetails.getUsername()));
 	        
-	        // 오늘 출근 활성화 확인
+	        // 오늘 출퇴근 활성화 확인
 	        Integer checkinNo = attendanceService.getSelectCheckin(attendanceDTO);
-	        
-	        // 오늘 퇴근 활성화 확인
 	        Integer checkoutNo = attendanceService.getSelectCheckout(attendanceDTO);
+	        log.debug("checkinNo--------->" + checkinNo);
+	        log.debug("checkoutNo--------->" + checkoutNo);
+	        
+	        
+	        // 오늘 출퇴근 시간 조회
+	        AttendanceDTO checkTime = attendanceService.getCheckTime(attendanceDTO);
+	        String checkin = checkTime.getAttendanceCheckIn();
+	        String checkout = checkTime.getAttendanceCheckOut();
+	        
+	        // 문자열을 LocalDateTime으로 파싱
+	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	        // 원하는 포맷으로 시간만 추출
+	        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm");
+	        // 출퇴근시간이 공백이 아닐 시
+	        if(!checkin.equals("")) {
+		        LocalDateTime dateinTime = LocalDateTime.parse(checkin, formatter);
+		        checkin = dateinTime.format(timeFormatter);
+		        log.debug("checkin----------->" + checkin); // 퇴근시간
+	        }
+	        if(!checkout.equals("")) {
+	        	LocalDateTime dateoutTime = LocalDateTime.parse(checkout, formatter);
+	        	checkout = dateoutTime.format(timeFormatter);
+	        	log.debug("checkout----------->" + checkout); // 퇴근시간
+	        	
+	        }
 	        
 	        // 미결재 리스트
 	        List<WaitApprovalListDTO> waitApprovalList = waitApprovalService.getWaitApprovalList(Integer.parseInt(userDetails.getUsername())); 
-	        
+	        	        
+	        model.addAttribute("checkin", checkin); // 출근시간
+	        model.addAttribute("checkout", checkout); // 퇴근시간
 	        model.addAttribute("checkinNo", checkinNo); // 오늘 출근 활성화
 	        model.addAttribute("checkoutNo", checkoutNo); // 오늘 퇴근 활성화
 	        model.addAttribute("boardList", boardList); // 최근 공지사항 5개 조회
