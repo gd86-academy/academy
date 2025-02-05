@@ -85,20 +85,23 @@
 	
 	            <div class="dvanimation animate__animated" :class="[$store.app.animation]" style="padding:25px 45px 25px 45px;">
 	            	<div class="flex flex-wrap items-center justify-between">
-	                    <h2 class="text-2xl mb-5">공지사항</h2>
+	                    <h2 class="text-2xl mb-5">게시글 작성</h2>
 	                </div>
 	                <div x-data="multicolumn">
 	                    <div class="panel" style="padding: 40px;">
 	                    
 	                    	<!-- 게시판 카테고리 입력창 -->
 	                    	<div>
-		                    	<select id="boardCategory" name="boardCategory">
-							   	    <option value="" disabled selected>게시판 종류</option>
-							   	    <th:block th:each="commonBoardCategory : ${commonBoardCategory}">
-							   	   	 	 <option th:value="${commonBoardCategory.code}" th:text="${commonBoardCategory.name}"></option>
-							   	    </th:each>
+							    <select id="boardCategory" name="boardCategory">
+							        <option value="" disabled selected>카테고리를 선택해주세요</option>
+							        <th:block th:each="commonBoardCategory : ${commonBoardCategory}">
+							            <option th:value="${commonBoardCategory.code}" 
+							                    th:text="${commonBoardCategory.name}" 
+							                    th:selected="${commonBoardCategory.name == name}">
+							            </option>
+							        </th:block>
 							    </select>
-	                    	</div>
+							</div>
 	 						
 	 						<br>
 	 						                   

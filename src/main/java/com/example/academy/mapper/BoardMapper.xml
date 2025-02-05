@@ -139,10 +139,13 @@
 			, f.file_ext fileExt
 			, e.employee_name employeeName
 			, e.employee_department employeeDepartment
+			, c.code
+			, c.name
 			, (SELECT c.name FROM common c WHERE c.code = e.employee_department) employeeDepartmentName
 		FROM board b
 		INNER JOIN employee e ON e.employee_no = b.update_employee_no
 		INNER JOIN file f ON f.file_no = e.photo_file_no
+		INNER JOIN common c ON c.code = b.board_category
 		WHERE b.board_no = #{boardNo}
 	</select>
 	
@@ -158,6 +161,7 @@
 			, (SELECT c.name FROM common c WHERE c.code = e.employee_department) employeeDepartmentName
 			, b.board_count boardCount
 			, b.create_date createDate
+			, c.name
 		FROM board b
 		LEFT OUTER JOIN common c ON c.`code` = b.board_category
 		LEFT OUTER JOIN employee e ON e.employee_no = b.update_employee_no

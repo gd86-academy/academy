@@ -21,6 +21,8 @@ public class BoardDTO {
 	private String employeeName;
 	private String employeeDepartment;
 	private String employeeDepartmentName;
+	private String code;
+	private String name;	
 	
 	private List<MultipartFile> boardFiles;
 	

@@ -92,7 +92,7 @@
                 <div class="animate__animated p-6" :class="[$store.app.animation]">
                 	<!-- 타이틀 -->
                 	<div class="flex flex-wrap items-center justify-between gap-4 ml-3">
-                    	<h2 class="text-2xl ml-3">공지사항</h2>
+                    	<h2 class="text-2xl ml-3" th:text="${name}"></h2>
                     	<div class="flex w-full flex-col gap-4 sm:w-auto sm:flex-row sm:items-center sm:gap-3 mr-3">
 							<div class="flex gap-3 mr-3">
 								<!-- 공지사항 수정 버튼 -->

@@ -131,8 +131,10 @@ public class BoardController {
 	
 	// 공지사항 추가 폼 호출
 	@GetMapping("/addBoard")
-	public String addBoard(Model model) {
-	
+	public String addBoard(Model model, String name) {
+		// 게시판 카테고리 이름 디버깅
+		log.debug("name---------------------------------------" + name);
+		
 		// 스프링시큐리티에서 계정정보 가져오기.
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		
@@ -140,6 +142,8 @@ public class BoardController {
 	    if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
 	        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 	    
+	        // 게시판 카테고리 이름 모델에 넣기
+	        model.addAttribute("name", name);
 	        model.addAttribute("employeeNo", Integer.parseInt(userDetails.getUsername()));
 	        model.addAttribute("userName", userDetails.getUserRealName());
 	        model.addAttribute("userMail", userDetails.getUserMail());
@@ -155,8 +159,10 @@ public class BoardController {
 	
 	// 상세 공지사항 조회
 	@GetMapping("/boardOne")
-	public String boardOne(Model model, Integer boardNo) {
+	public String boardOne(Model model, Integer boardNo, String name) {
 		
+		log.debug("name----------->" + name);
+		log.debug("boardNo-------->" + boardNo);
 		// 스프링시큐리티에서 계정정보 가져오기.
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		
@@ -185,6 +191,7 @@ public class BoardController {
 		log.debug("commentList ----> " + commentList);
 		
 		// 모델에 정보 담기
+		model.addAttribute("name", boardOne.getName());
 		model.addAttribute("boardOne", boardOne);
 		model.addAttribute("boardFileList", boardFileList);
 		model.addAttribute("commentList", commentList);
