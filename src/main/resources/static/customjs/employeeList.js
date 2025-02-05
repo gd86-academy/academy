@@ -124,14 +124,13 @@ document.addEventListener('alpine:init', () => {
 	            success: (data) => {
 					this.datatable = new simpleDatatables.DataTable('#myTable', {
 					    data: {
-					        headings: ['이름', '사원번호', '전화번호', '소속팀', '직급', ''],
+					        headings: ['이름', '사원번호', '전화번호', '소속팀', '직급'],
 					        data: data.map(item => [
 								[item[0], item[5]],	// 이미지파일 + 사원명
 					            item[1], // 사원번호
 					            item[2], // 전화번호
 					            item[3], // 소속팀
-					            item[4], // 직급
-								item[1] // 버튼
+					            item[4] // 직급
 					        ])
 					    },
 					    searchable: true,
@@ -160,16 +159,6 @@ document.addEventListener('alpine:init', () => {
 									}
 					            },
 								sortable: true,
-					        },
-							{
-					            select: 5,
-					            render: (data, cell, row) => {
-					                return `<a type="button" class="btn btn-outline-dark mx-auto d-block" style="width:100px;" href="">
-					                    <img class="h-4 w-4" src="/academy/images/icon/Dialog.png" alt="image">
-					                    &nbsp;메신저
-					                </a>`;
-					            },
-								sortable: false,
 					        },
 					    ],
 					
