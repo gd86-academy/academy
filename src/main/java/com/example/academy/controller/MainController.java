@@ -127,7 +127,8 @@ public class MainController {
 	        
 	        // 미결재 리스트
 	        List<WaitApprovalListDTO> waitApprovalList = waitApprovalService.getWaitApprovalList(Integer.parseInt(userDetails.getUsername())); 
-	        	        
+	        log.debug("waitApprovalList------------>" + waitApprovalList);	        
+	        
 	        model.addAttribute("checkin", checkin); // 출근시간
 	        model.addAttribute("checkout", checkout); // 퇴근시간
 	        model.addAttribute("checkinNo", checkinNo); // 오늘 출근 활성화

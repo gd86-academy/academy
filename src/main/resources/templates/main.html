@@ -264,7 +264,7 @@
 						<div class="panel w-full ml-3">
 							<div class="flex justify-between">
 								<div class="text-xl font-bold text-black">최근 공지사항</div>
-								<a th:href="@{/boardList}" class="mr-1" style="color: #888ea8">더보기</a>
+								<a th:href="@{/boardList/BF001}" class="mr-1" style="color: #888ea8">더보기</a>
 							</div>
 							<div class="table-responsive mt-2">
 								<table>
@@ -283,6 +283,9 @@
 										    <td class="text-center" th:text="${b.boardTitle}"></td>
 										    <td class="text-center" th:text="${b.employeeName}"></td>
 										    <td class="text-center" th:text="${b.createDate}"></td>
+										</tr>
+										<tr th:if="${boardList.isEmpty()}">
+											<td colspan="4">항목이 없습니다.</td>
 										</tr>
 									</tbody>
 								</table>
@@ -354,6 +357,9 @@
 								        <td class="text-center" th:text="${list.writer}"></td>
 								        <td class="text-center" th:text="${list.createDate}"></td>
 								    </tr>
+									<tr th:if="${waitApprovalList.isEmpty()}">
+										<td colspan="4">항목이 없습니다.</td>
+									</tr>
 								</tbody>
 							</table>
 						</div>
