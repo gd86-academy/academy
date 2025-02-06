@@ -143,21 +143,21 @@
 								<div
 									class="flex h-14 w-14 items-center justify-center rounded-full bg-white text-secondary"
 									style="font-size: 20px;"><span th:text="${late}"></span></div>
-								<div class="mt-3 font-semibold text-center">지각</div>
+								<div class="mt-3 text-md font-semibold text-center">지각</div>
 							</div>
 							<div style="width: 40px;"></div>
 							<div class="text-base">
 								<div
 									class="flex h-14 w-14 items-center justify-center rounded-full bg-white text-secondary"
 									style="font-size: 20px;"><span th:text="${earlyLeave}"></span></div>
-								<div class="mt-3 font-semibold text-center">조퇴</div>
+								<div class="mt-3 text-md font-semibold text-center">조퇴</div>
 							</div>
 							<div style="width: 40px;"></div>
 							<div class="text-base">
 								<div
 									class="flex h-14 w-14 items-center justify-center rounded-full bg-white text-secondary"
 									style="font-size: 20px;"><span th:text="${absence}"></span></div>
-								<div class="mt-3 font-semibold text-center">결근</div>
+								<div class="mt-3 text-md font-semibold text-center">결근</div>
 							</div>
 						</div>
 					</div>
@@ -173,7 +173,7 @@
 								<div
 									class="flex h-14 w-14 items-center justify-center rounded-full bg-white text-primary"
 									style="font-size: 20px;">15.0</div>
-								<div class="mt-3 font-semibold text-center">총연차</div>
+								<div class="mt-3 text-md font-semibold text-center">총연차</div>
 							</div>
 							<div style="width: 40px;"></div>
 							<!-- 사용연차 -->
@@ -181,7 +181,7 @@
 								<div
 									class="flex h-14 w-14 items-center justify-center rounded-full bg-white text-primary"
 									style="font-size: 20px;"><span th:text="${count}"></span></div>
-								<div class="mt-3 font-semibold text-center">사용연차</div>
+								<div class="mt-3 text-md font-semibold text-center">사용연차</div>
 							</div>
 							<div style="width: 40px;"></div>
 							<!-- 총연차 -->
@@ -189,39 +189,39 @@
 								<div
 									class="flex h-14 w-14 items-center justify-center rounded-full bg-white text-primary"
 									style="font-size: 20px;"><span th:text="15.0-${count}"></span></div>
-								<div class="mt-3 font-semibold text-center">잔여연차</div>
+								<div class="text-md mt-3 font-semibold text-center ">잔여연차</div>
 							</div>
 						</div>
 					</div>
 
 					<!-- 출근통계 -->
-					<div class="panel h-full p-0">
+					<div class="panel h-full p-0"  style="height: 160px;">
 						<div class="flex p-5">
 							<div
 								class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary dark:bg-primary dark:text-white-light">
 								<svg width="24" height="24" viewBox="0 0 24 24" fill="none"
 									xmlns="http://www.w3.org/2000/svg" class="h-5 w-5">
-                        <circle cx="12" cy="6" r="4"
-										stroke="currentColor" stroke-width="1.5" />
-                        <path opacity="0.5"
-										d="M18 9C19.6569 9 21 7.88071 21 6.5C21 5.11929 19.6569 4 18 4"
-										stroke="currentColor" stroke-width="1.5"
-										stroke-linecap="round" />
-                        <path opacity="0.5"
-										d="M6 9C4.34315 9 3 7.88071 3 6.5C3 5.11929 4.34315 4 6 4"
-										stroke="currentColor" stroke-width="1.5"
-										stroke-linecap="round" />
-                        <ellipse cx="12" cy="17" rx="6" ry="4"
-										stroke="currentColor" stroke-width="1.5" />
-                        <path opacity="0.5"
-										d="M20 19C21.7542 18.6153 23 17.6411 23 16.5C23 15.3589 21.7542 14.3847 20 14"
-										stroke="currentColor" stroke-width="1.5"
-										stroke-linecap="round" />
-                        <path opacity="0.5"
-										d="M4 19C2.24575 18.6153 1 17.6411 1 16.5C1 15.3589 2.24575 14.3847 4 14"
-										stroke="currentColor" stroke-width="1.5"
-										stroke-linecap="round" />
-                    </svg>
+			                        <circle cx="12" cy="6" r="4"
+													stroke="currentColor" stroke-width="1.5" />
+			                        <path opacity="0.5"
+													d="M18 9C19.6569 9 21 7.88071 21 6.5C21 5.11929 19.6569 4 18 4"
+													stroke="currentColor" stroke-width="1.5"
+													stroke-linecap="round" />
+			                        <path opacity="0.5"
+													d="M6 9C4.34315 9 3 7.88071 3 6.5C3 5.11929 4.34315 4 6 4"
+													stroke="currentColor" stroke-width="1.5"
+													stroke-linecap="round" />
+			                        <ellipse cx="12" cy="17" rx="6" ry="4"
+													stroke="currentColor" stroke-width="1.5" />
+			                        <path opacity="0.5"
+													d="M20 19C21.7542 18.6153 23 17.6411 23 16.5C23 15.3589 21.7542 14.3847 20 14"
+													stroke="currentColor" stroke-width="1.5"
+													stroke-linecap="round" />
+			                        <path opacity="0.5"
+													d="M4 19C2.24575 18.6153 1 17.6411 1 16.5C1 15.3589 2.24575 14.3847 4 14"
+													stroke="currentColor" stroke-width="1.5"
+													stroke-linecap="round" />
+			                    </svg>
 							</div>
 							<div class="font-semibold ml-3">
 								<p class="text-xl text-black">출근통계</p>
@@ -239,10 +239,9 @@
 
 				<div class="flex justify-between pt-0 ml-1">
 					<!-- 날씨정보 및 공지사항을 나란히 배치 -->
-					<div class="flex w-full">
+					<div class="flex w-full weather-board">
 						<!-- 날씨 -->
-						<div
-							class="panel bg-gradient-to-r from-blue-500 to-sky-600 w-full mr-3 p-5">
+						<div class="panel bg-gradient-to-r from-blue-500 to-sky-600 w-full mr-3 p-5">
 							<div class="flex items-center justify-between">
 								<div class="text-xl font-bold text-white ml-3">날씨</div>
 								<div class="font-bold mr-3" style="color: #888ea8">서울특별시</div>
@@ -251,7 +250,7 @@
 								<div x-data="contacts1" class="text-white flex items-center">
 									<img id="currentIcon" src="" alt="Weather Icon"
 										class="w-20 h-20 mr-5" />
-									<div id="currentTemperature" class="text-5xl font-bold"></div>
+									<div id="currentTemperature" class="weather-text text-5xl font-bold"></div>
 								</div>
 								<div id="weeklyWeather"
 									class="p-3 font-semibold text-white ">
@@ -261,28 +260,28 @@
 						</div>
 
 						<!-- 공지사항 -->
-						<div class="panel w-full ml-3">
+						<div class="panel w-full ml-3 boardList">
 							<div class="flex justify-between">
 								<div class="text-xl font-bold text-black">최근 공지사항</div>
-								<a th:href="@{/boardList/BF001}" class="mr-1" style="color: #888ea8">더보기</a>
+								<a th:href="@{/boardList/BF001}" class="mr-1 link-btn" style="color: #888ea8">더보기</a>
 							</div>
 							<div class="table-responsive mt-2">
 								<table>
 									<thead>
 										<tr>
-											<th class="text-center">글번호</th>
-											<th class="text-center">제목</th>
-											<th class="text-center">작성자</th>
-											<th class="text-center">작성일</th>
+											<th class="text-center word-break long-text">글번호</th>
+											<th class="text-center word-break long-text">제목</th>
+											<th class="text-center word-break long-text">작성자</th>
+											<th class="text-center word-break long-text">작성일</th>
 										</tr>
 									</thead>
 									<tbody>
 										<!-- boardList를 반복하여 tr로 출력 -->
 								        <tr th:each="b : ${boardList}" th:onclick="|location.href='@{/boardOne(boardNo=${b.boardNo})}'|">
-										    <td class="text-center" th:text="${b.boardNo}"></td>
-										    <td class="text-center" th:text="${b.boardTitle}"></td>
-										    <td class="text-center" th:text="${b.employeeName}"></td>
-										    <td class="text-center" th:text="${b.createDate}"></td>
+										    <td class="text-center long-text" th:text="${b.boardNo}"></td>
+										    <td class="text-center long-text" th:text="${b.boardTitle}"></td>
+										    <td class="text-center long-text" th:text="${b.employeeName}"></td>
+										    <td class="text-center long-text" th:text="${b.createDate}"></td>
 										</tr>
 										<tr th:if="${boardList.isEmpty()}">
 											<td colspan="4">항목이 없습니다.</td>
@@ -294,7 +293,7 @@
 					</div>
 				</div>
 
-				<div class="flex justify-between mt-5 ml-1">
+				<div class="flex justify-between mt-5 ml-1 memo-waitApproval">
 					<!-- 메모 -->
 					<div class="panel w-full mr-3"
 						style="background-color: #FFFACD; color: #000; padding: 1rem;">
@@ -321,8 +320,8 @@
 							    ></textarea>
 							</div>
 							<div class="flex justify-end">
-								<a th:if="${memoContent} != null" type="button" class="btn btn-dark mr-1" th:href="@{/removeMemo(employeeNo=${writer})}">삭제</a>
-								<button type="submit" class="btn btn-warning">저장</button>
+								<a th:if="${memoContent} != null" type="button" class="btn btn-dark mr-1 link-btn" th:href="@{/removeMemo(employeeNo=${writer})}">삭제</a>
+								<button type="submit" class="btn btn-warning link-btn">저장</button>
 							</div>
 							</form>
 							<div  class="flex justify-end">
@@ -332,19 +331,19 @@
 					</div>
 
 					<!-- 미결재 리스트 : 강의, 근태 미결재 리스트 5개 출력 -->
-					<div class="panel w-full ml-3">
+					<div class="panel w-full ml-3 waitApprovalList">
 						<div class="flex justify-between">
 							<div class="text-xl font-bold text-black">미결재 리스트</div>
-							<a th:href="@{/waitApprovalList}" class="mr-1" style="color: #888ea8">더보기</a>
+							<a th:href="@{/waitApprovalList}" class="mr-1 link-btn" style="color: #888ea8">더보기</a>
 						</div>
 						<div class="table-responsive mt-2">
 							<table>
 								<thead>
 									<tr>
-										<th class="text-center">결재번호</th>
-										<th class="text-center">제목</th>
-										<th class="text-center">작성자</th>							
-										<th class="text-center">작성일</th>
+										<th class="text-center word-break long-text">결재번호</th>
+										<th class="text-center word-break long-text">제목</th>
+										<th class="text-center word-break long-text">작성자</th>							
+										<th class="text-center word-break long-text">작성일</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -352,10 +351,10 @@
 								        th:onclick="|location.href='@{${#strings.isEmpty(list.attendanceApprovalNo) 
 											? '/lectureApprovalOne?lectureApprovalNo=' + list.lectureApprovalNo 
 											: '/waitAttendanceApprovalOne?attendanceApprovalNo=' + list.attendanceApprovalNo}}'|">
-								        <td class="text-center" th:text="${list.approvalEmployeeNo}"></td>
-								        <td class="text-center" th:text="${list.title}"></td>
-								        <td class="text-center" th:text="${list.writer}"></td>
-								        <td class="text-center" th:text="${list.createDate}"></td>
+								        <td class="text-center long-text" th:text="${list.approvalEmployeeNo}"></td>
+								        <td class="text-center long-text" th:text="${list.title}"></td>
+								        <td class="text-center long-text" th:text="${list.writer}"></td>
+								        <td class="text-center long-text" th:text="${list.createDate}"></td>
 								    </tr>
 									<tr th:if="${waitApprovalList.isEmpty()}">
 										<td colspan="4">항목이 없습니다.</td>

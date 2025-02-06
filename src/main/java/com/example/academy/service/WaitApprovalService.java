@@ -17,6 +17,10 @@ public class WaitApprovalService {
 	
 	// 박시현 : 메인페이지 - 미결재 리스트
 	public List<WaitApprovalListDTO> getWaitApprovalList(Integer employeeNo) {
-		return waitApprovalMapper.selectWaitApprovalList(employeeNo);	
+		List<WaitApprovalListDTO> waitApprovalList = waitApprovalMapper.selectWaitApprovalList(employeeNo);
+		for(WaitApprovalListDTO waitApproval : waitApprovalList) {
+			waitApproval.setCreateDate(waitApproval.getCreateDate().substring(0, 10));
+		}
+		return waitApprovalList;	
 	}
 }
