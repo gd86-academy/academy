@@ -95,7 +95,7 @@
             </template>
         </div>
 
-        <div class="main-container min-h-screen text-black dark:text-white-dark" :class="[$store.app.navbar]">
+        <div class="main-container  min-h-screen text-black dark:text-white-dark" :class="[$store.app.navbar]">
             <!-- 사이드바 파일 연결 -->
             <div th:replace="fragments/sidebar :: sidebar"></div>
             <!-- end sidebar section -->
@@ -105,16 +105,16 @@
                  <div th:replace="fragments/header :: header"></div>
 
                 <!-- 메인화면 -->
-                <div class="animate__animated p-6" :class="[$store.app.animation]">
+                <div class="mobile-padding animate__animated p-6" :class="[$store.app.animation]">
                 	<!-- 타이틀 -->
-                	<div class="flex flex-wrap items-center justify-between gap-4 ml-3">
-                       <h2 class="text-2xl ml-3">주소록</h2>
-                       <div class="flex w-full flex-col gap-4 sm:w-auto sm:flex-row sm:items-center sm:gap-3">
-                           <div class="flex gap-3 mr-3">
+                	<div class="flex flex-nowrap w-full items-center justify-between gap-4 ml-3 weather-board">
+                       <h2 class="text-2xl ml-3 mobile-title">주소록</h2>
+                       <div class="flex flex-col gap-4 sm:w-auto sm:flex-row sm:items-center sm:gap-3 mr-3 mobile-title">
+                           <div class="flex gap-3 mr-3 mobile-title">
                                <div>
   									<!-- 버튼 -->
   									 <div th:if="${userRole == 'humanresources'}">
-  									 	<button type="button" class="btn btn-primary mr-3" id="openModalButton">
+  									 	<button type="button" class="btn btn-primary mr-3 mobile-title" id="openModalButton">
 										     <svg
 										         width="24"
 										         height="24"
@@ -339,7 +339,7 @@
                             </div>
                         </div>   
 					</div>
-					<div class="dvanimation animate__animated p-6" :class="[$store.app.animation]">
+					<div class="dvanimation animate__animated p-6 mobile-padding" :class="[$store.app.animation]">
                 		<div x-data="multicolumn">
                 			<div class="panel">
                 				<table id="myTable" class="whitespace-nowrap"></table>

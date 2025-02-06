@@ -9885,4 +9885,26 @@ pre {
 		margin-bottom: 1.5rem;
 		margin-left: 0px;
 	}
+	.mobile-padding {
+		padding: 0px;
+		margin: 0px;
+		margin-top: 40px;
+	}
+	.mobile-calendar {
+		padding: 10px;
+		padding-top: 20px;
+		margin: 0px;
+	}
+	.mobile-chat-contact {
+		height: 300px;
+	}
+	.mobile-title {
+		margin: 0px;
+	}
+	.mobile-chat-width {
+		width: 100%;
+	}
+	.mobile-btn-width {
+		width: 100%;
+	}
 }

@@ -195,3 +195,10 @@ table.table-compact tbody tr td {
 .next-prev-pagination .dataTable-pagination {
   @apply ltr:ml-0 rtl:mr-0;
 }
+
+
+/* 
+페이지네이션 개수제한
+.dataTable-pagination ul.dataTable-pagination-list li:nth-child(n+6):not(.pager) {
+  @apply hidden;
+} */
