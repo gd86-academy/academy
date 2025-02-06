@@ -55,7 +55,7 @@ document.addEventListener('alpine:init', () => {
 			    // 알림 데이터를 가져오는 함수
 			    loadNotifications() {
 			        $.ajax({
-			            url: "http://localhost/academy/restapi/newNoticeList",  // REST API 엔드포인트
+			            url: `http://${locations}:${ports}/academy/restapi/newNoticeList`,  // REST API 엔드포인트
 			            contentType: 'application/json',
 			            type: 'POST',
 			            data: JSON.stringify(this.employeeNo),  // this.employeeNo를 사용해 보내기
@@ -99,7 +99,7 @@ document.addEventListener('alpine:init', () => {
 	    init() {
 	        // AJAX 요청
 	        $.ajax({
-	            url: 'http://localhost/academy/restapi/classroomList',
+	            url: `http://${locations}:${ports}/academy/restapi/classroomList`,
 	            type: 'GET',
 	            dataType: 'json',
 	            success: (data) => {
@@ -275,7 +275,7 @@ const submitModifyButton = document.getElementById('classroomModifyBtn');
 const openModifyModal = (classroomNo) => {
 	console.log('classroomNo : ' + classroomNo);
   $.ajax({
-    url: `http://localhost/academy/restapi/modifyClassroom?classroomNo=${classroomNo}`,
+    url: `http://${locations}:${ports}/academy/restapi/modifyClassroom?classroomNo=${classroomNo}`,
     type: 'GET',
     dataType: 'json',
     success: (data) => {
@@ -318,7 +318,7 @@ submitModifyButton.addEventListener('click', function(e) {
       classroomNo = $('#classroomNoModify').val();
 	  
 	  $.ajax({
-	    url: `http://localhost/academy/restapi/modifyClassroom?classroomNo=${classroomNo}`,
+	    url: `http://${locations}:${ports}/academy/restapi/modifyClassroom?classroomNo=${classroomNo}`,
 	    type: 'POST',
 	    data: formData,
 	    processData: false,
@@ -423,7 +423,7 @@ function validateForm() {
 // 트리에 팀명이 선택되는 것을 방지하기위해서 팀명 리스트로 받아오기.
 const departmentName = [];
 $.ajax({
-    url: 'http://localhost/academy/restapi/getDepartment',
+    url: `http://${locations}:${ports}/academy/restapi/getDepartment`,
     type: 'GET',
     dataType: 'json',
     success: (data) => {
@@ -439,7 +439,7 @@ $.ajax({
 
 // 트리에 사원목록 출력.
 $.ajax({
-    url: 'http://localhost/academy/restapi/employeeListNodeShowMe',
+    url: `http://${locations}:${ports}/academy/restapi/employeeListNodeShowMe`,
     type: 'GET',
     dataType: 'json',
     success: (data) => {
@@ -512,7 +512,7 @@ $.ajax({
 
 // 트리에 사원목록 출력.
 $.ajax({
-    url: 'http://localhost/academy/restapi/employeeListNodeShowMe',
+    url: `http://${locations}:${ports}/academy/restapi/employeeListNodeShowMe`,
     type: 'GET',
     dataType: 'json',
     success: (data) => {

@@ -55,7 +55,7 @@ document.addEventListener('alpine:init', () => {
 			    // 알림 데이터를 가져오는 함수
 			    loadNotifications() {
 			        $.ajax({
-			            url: "http://localhost/academy/restapi/newNoticeList",  // REST API 엔드포인트
+			            url: `http://${locations}:${ports}/academy/restapi/newNoticeList`,  // REST API 엔드포인트
 			            contentType: 'application/json',
 			            type: 'POST',
 			            data: JSON.stringify(this.employeeNo),  // this.employeeNo를 사용해 보내기
@@ -117,7 +117,7 @@ document.addEventListener('alpine:init', () => {
 		init() {
 		    // AJAX 요청
 		    $.ajax({
-		        url: `http://localhost/academy/restapi/reservationList`,
+		        url: `http://${locations}:${ports}/academy/restapi/reservationList`,
 		        type: 'GET',
 		        dataType: 'json',
 		        success: (data) => {
@@ -229,13 +229,13 @@ document.addEventListener('alpine:init', () => {
 							const reservationNo = info.event.id;
 							// 수정 접근권한 확인
 							$.ajax({
-								url: `http://localhost/academy/restapi/checkReservationPerson`,
+								url: `http://${locations}:${ports}/academy/restapi/checkReservationPerson`,
 						        type: 'GET',
 						        data: {reservationNo},
 								success: function(response) {
 						            if (response.hasPermission) {
 						                // 수정 페이지로 이동
-						                window.location.href = `http://localhost/academy/modifyReservation?reservationNo=${reservationNo}`;
+						                window.location.href = `http://${locations}:${ports}/academy/modifyReservation?reservationNo=${reservationNo}`;
 						            } else {
 										
 						                alert("수정 권한이 없습니다.");

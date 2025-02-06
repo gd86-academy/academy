@@ -715,7 +715,12 @@
 		</div>
 		
 	   <script th:src="@{/customjs/modifyAttendanceApproval.js}"> </script>
-		
+		<script th:inline="javascript">
+	    	var locations = [[${location}]];
+	    </script>
+	    <script th:inline="javascript">
+	    	var ports = [[${port}]];
+	    </script>
 		
 	</body>
 

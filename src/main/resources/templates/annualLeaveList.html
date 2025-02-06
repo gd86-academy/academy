@@ -174,6 +174,12 @@
         <script th:inline="javascript">
 	    	var employeeNo = [[${employeeNo}]];
 	    </script>
+	    <script th:inline="javascript">
+	    	var locations = [[${location}]];
+	    </script>
+	    <script th:inline="javascript">
+	    	var ports = [[${port}]];
+	    </script>
         <script th:src="@{/customjs/annualLeaveList.js}"></script>
     </body>
 </html>

@@ -56,7 +56,7 @@ document.addEventListener('alpine:init', () => {
 			    // 알림 데이터를 가져오는 함수
 			    loadNotifications() {
 			        $.ajax({
-			            url: "http://localhost/academy/restapi/newNoticeList",  // REST API 엔드포인트
+			            url: `http://${locations}:${ports}/academy/restapi/newNoticeList`,  // REST API 엔드포인트
 			            contentType: 'application/json',
 			            type: 'POST',
 			            data: JSON.stringify(this.employeeNo),  // this.employeeNo를 사용해 보내기
@@ -416,7 +416,7 @@ if (applyModalButtonAddPeople) applyModalButtonAddPeople.addEventListener('click
 // 트리에 팀명이 선택되는 것을 방지하기위해서 팀명 리스트로 받아오기.
 const departmentName = [];
 $.ajax({
-    url: 'http://localhost/academy/restapi/getDepartment',
+    url: `http://${locations}:${ports}/academy/restapi/getDepartment`,
     type: 'GET',
     dataType: 'json',
     success: (data) => {
@@ -433,7 +433,7 @@ console.log(departmentName);
 
 // 트리에 사원목록 출력.
 $.ajax({
-    url: 'http://localhost/academy/restapi/employeeListNode',
+    url: `http://${locations}:${ports}/academy/restapi/employeeListNode`,
     type: 'GET',
     dataType: 'json',
     success: (data) => {

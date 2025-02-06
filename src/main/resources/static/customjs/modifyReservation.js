@@ -55,7 +55,7 @@ document.addEventListener('alpine:init', () => {
 			    // 알림 데이터를 가져오는 함수
 			    loadNotifications() {
 			        $.ajax({
-			            url: "http://localhost/academy/restapi/newNoticeList",  // REST API 엔드포인트
+			            url: `http://${locations}:${ports}/academy/restapi/newNoticeList`,  // REST API 엔드포인트
 			            contentType: 'application/json',
 			            type: 'POST',
 			            data: JSON.stringify(this.employeeNo),  // this.employeeNo를 사용해 보내기
@@ -88,7 +88,7 @@ document.addEventListener('alpine:init', () => {
 	    // 참여자 목록을 가져오는 API
 	    if (reservationNo) {
 	        $.ajax({
-	            url: 'http://localhost/academy/restapi/getReservationEmployeeOne?reservationNo=' + reservationNo,
+	            url: `http://${locations}:${ports}/academy/restapi/getReservationEmployeeOne?reservationNo=` + reservationNo,
 	            type: 'GET',
 	            data: { reservationNo: reservationNo },
 	            dataType: 'json',
@@ -127,7 +127,7 @@ document.addEventListener('alpine:init', () => {
 	    // 시간 데이터를 가져오는 API (시작 및 종료 시간)
 		if (reservationNo) {
 		    $.ajax({
-		        url: 'http://localhost/academy/restapi/getReservationTime?reservationNo=' + reservationNo,
+		        url: `http://${locations}:${ports}/academy/restapi/getReservationTime?reservationNo=` + reservationNo,
 		        type: 'GET',
 		        success: function(data) {
 		            console.log("AJAX 성공 - 응답 데이터:", data);
@@ -151,7 +151,7 @@ document.addEventListener('alpine:init', () => {
 		            }
 
 		            $.ajax({
-		                url: 'http://localhost/academy/restapi/modifyReservationByBeginTime',
+		                url: `http://${locations}:${ports}/academy/restapi/modifyReservationByBeginTime`,
 		                contentType: 'application/json',
 		                type: 'POST',
 		                data: JSON.stringify({
@@ -182,7 +182,7 @@ document.addEventListener('alpine:init', () => {
 		            });
 
 		            $.ajax({
-		                url: 'http://localhost/academy/restapi/modifyReservationByEndTime',
+		                url: `http://${locations}:${ports}/academy/restapi/modifyReservationByEndTime`,
 		                contentType: 'application/json',
 		                type: 'POST',
 		                data: JSON.stringify({
@@ -295,7 +295,7 @@ document.addEventListener('alpine:init', () => {
 	    // 시작 시간 데이터 가져오기
 	    $('#beginTimeCode').empty().append('<option value="" disabled selected>시작 시간</option>').prop('disabled', false);
 	    $.ajax({
-	        url: 'http://localhost/academy/restapi/modifyReservationByBeginTime',
+	        url: `http://${locations}:${ports}/academy/restapi/modifyReservationByBeginTime`,
 	        contentType: 'application/json',
 	        type: 'POST',
 	        data: JSON.stringify({
@@ -315,7 +315,7 @@ document.addEventListener('alpine:init', () => {
 	    // 종료 시간 데이터 가져오기
 	    $('#endTimeCode').empty().append('<option value="" disabled selected>종료 시간</option>').prop('disabled', false);
 	    $.ajax({
-	        url: 'http://localhost/academy/restapi/modifyReservationByEndTime',
+	        url: `http://${locations}:${ports}/academy/restapi/modifyReservationByEndTime`,
 	        contentType: 'application/json',
 	        type: 'POST',
 	        data: JSON.stringify({
@@ -369,7 +369,7 @@ document.addEventListener('alpine:init', () => {
 
 	    // Ajax 요청
 	    $.ajax({
-	        url: 'http://localhost/academy/restapi/searchEmployee', // 사원 검색 API URL
+	        url: `http://${locations}:${ports}/academy/restapi/searchEmployee`, // 사원 검색 API URL
 	        type: 'GET',
 	        data: { searchEmployee: searchValue },
 	        dataType: 'json',
@@ -626,7 +626,7 @@ const openDeleteModal = () => {
 
     // 삭제 확인 버튼 클릭 이벤트 설정
     openModalButtonDeleteReservation.onclick = () => {
-        window.location.href = `http://localhost/academy/removeReservation?reservationNo=${reservationNo}`;
+        window.location.href = `http://${locations}:${ports}/academy/removeReservation?reservationNo=${reservationNo}`;
     };
 
     // 모달 보이기

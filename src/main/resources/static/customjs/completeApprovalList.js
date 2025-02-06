@@ -60,7 +60,7 @@ document.addEventListener('alpine:init', () => {
 			    // 알림 데이터를 가져오는 함수
 			    loadNotifications() {
 			        $.ajax({
-			            url: "http://localhost/academy/restapi/newNoticeList",  // REST API 엔드포인트
+			            url: `http://${locations}:${ports}/academy/restapi/newNoticeList`,  // REST API 엔드포인트
 			            contentType: 'application/json',
 			            type: 'POST',
 			            data: JSON.stringify(this.employeeNo),  // this.employeeNo를 사용해 보내기
@@ -102,7 +102,7 @@ document.addEventListener('alpine:init', () => {
 	    init() {
 	        // AJAX 요청
 	        $.ajax({
-	            url: 'http://localhost/academy/restapi/completeAttendanceApprovalList',
+	            url: `http://${locations}:${ports}/academy/restapi/completeAttendanceApprovalList`,
 	            type: 'GET',
 				data: {employeeNo: employeeNo},	// employeeNo값을 전달
 	            dataType: 'json',
@@ -219,7 +219,7 @@ $('#lectureApprovalBtn').click(function() {
    tableElement.empty();  // 기존 테이블 내용 비우기
 	
 	$.ajax({
-		url: 'http://localhost/academy/restapi/completeLectureApprovalList',
+		url: `http://${locations}:${ports}/academy/restapi/completeLectureApprovalList`,
 		type: 'GET',
 		data: {employeeNo: employeeNo},	// employeeNo값을 전달
 		dataType: 'json',
@@ -324,7 +324,7 @@ $('#attendanceApprovalBtn').click(function() {
    tableElement.empty();  // 기존 테이블 내용 비우기
 	
 	$.ajax({
-		url: 'http://localhost/academy/restapi/completeAttendanceApprovalList',
+		url: `http://${locations}:${ports}/academy/restapi/completeAttendanceApprovalList`,
 		type: 'GET',
 		data: {employeeNo: employeeNo},	// employeeNo값을 전달
 		dataType: 'json',

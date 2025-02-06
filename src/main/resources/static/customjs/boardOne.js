@@ -4,7 +4,7 @@ function removeComment(commentRowId) {
 	console.log("삭제 버튼이 클릭된 댓글의 번호:", commentNo);
     // DB에 있는 해당 댓글 데이터 삭제.
     $.ajax({
-        url: `http://localhost/academy/restapi/removeComment`,
+        url: `http://${locations}:${ports}/academy/restapi/removeComment`,
         contentType: 'application/json', 
         type: 'POST',
         data: JSON.stringify(commentNo),
@@ -33,7 +33,7 @@ $(document).on('click', '#commentAddBtn', function () {
         console.log(commentRowCount);
         
         $.ajax({
-            url: `http://localhost/academy/restapi/addComment`,
+            url: `http://${locations}:${ports}/academy/restapi/addComment`,
             contentType: 'application/json', 
             type: 'POST',
             data: JSON.stringify({

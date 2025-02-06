@@ -4,7 +4,7 @@ function removeBoardCategory(boardCategoryRowId) {
 	console.log("삭제 버튼이 클릭된 카테고리의 번호:", code);
     // DB에 있는 해당 카테고리 데이터 삭제.
     $.ajax({
-        url: `http://localhost/academy/restapi/removeBoardCategory`,
+        url: `http://${locations}:${ports}/academy/restapi/removeBoardCategory`,
         contentType: 'application/json', 
         type: 'POST',
         data: code,
@@ -33,7 +33,7 @@ $(document).on('click', '#boardCategoryAddBtn', function () {
         console.log(boardCategoryRowCount);
         
         $.ajax({
-            url: `http://localhost/academy/restapi/addBoardCategory`,
+            url: `http://${locations}:${ports}/academy/restapi/addBoardCategory`,
             type: 'POST',
 			contentType: "application/json",  // JSON으로 전송
 			data: $("#boardCategory").val(),

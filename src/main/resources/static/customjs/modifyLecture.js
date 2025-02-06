@@ -55,7 +55,7 @@ document.addEventListener('alpine:init', () => {
 			    // 알림 데이터를 가져오는 함수
 			    loadNotifications() {
 			        $.ajax({
-			            url: "http://localhost/academy/restapi/newNoticeList",  // REST API 엔드포인트
+			            url: `http://${locations}:${ports}/academy/restapi/newNoticeList`,  // REST API 엔드포인트
 			            contentType: 'application/json',
 			            type: 'POST',
 			            data: JSON.stringify(this.employeeNo),  // this.employeeNo를 사용해 보내기
@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // 트리에 팀명이 선택되는 것을 방지하기위해서 팀명 리스트로 받아오기.
 const departmentName = [];
 $.ajax({
-    url: 'http://localhost/academy/restapi/getDepartment',
+    url: `http://${locations}:${ports}/academy/restapi/getDepartment`,
     type: 'GET',
     dataType: 'json',
     success: (data) => {
@@ -200,7 +200,7 @@ $.ajax({
 
 // 트리에 사원목록 출력.
 $.ajax({
-    url: 'http://localhost/academy/restapi/employeeListNodeManagement',
+    url: `http://${locations}:${ports}/academy/restapi/employeeListNodeManagement`,
     type: 'GET',
     dataType: 'json',
     success: (data) => {
@@ -290,7 +290,7 @@ $('#weekdayId0').on('change', function () {
 
     // 선택된 데이터를 REST API로 전달하여 시간 데이터 요청
     $.ajax({
-        url: `http://localhost/academy/restapi/getBeginLectureTimeFromLectureModify`,
+        url: `http://${locations}:${ports}/academy/restapi/getBeginLectureTimeFromLectureModify`,
 		contentType: 'application/json', 
         type: 'POST',
         data: JSON.stringify({
@@ -338,7 +338,7 @@ $('#weekdayId0').on('change', function () {
 
     // 선택된 데이터를 REST API로 전달하여 시간 데이터 요청
     $.ajax({
-        url: `http://localhost/academy/restapi/getEndLectureTimeFromLectureModify`,
+        url: `http://${locations}:${ports}/academy/restapi/getEndLectureTimeFromLectureModify`,
 		contentType: 'application/json', 
         type: 'POST',
         data: JSON.stringify({
@@ -617,7 +617,7 @@ $('#btnAddTime').click(function () {
         $('#timeDiv').append(html);
 
         // 요일 데이터 가져오기 및 옵션 추가
-        $.get('http://localhost/academy/restapi/getWeekday', function (data) {
+        $.get(`http://${locations}:${ports}/academy/restapi/getWeekday`, function (data) {
             data.forEach(cwk => {
                 $(`#${weekdayId}`).append(`<option value="${cwk.code}">${cwk.name}</option>`);
             });
@@ -661,7 +661,7 @@ $('#btnAddTime').click(function () {
 
             // 선택된 데이터를 REST API로 전달하여 시간 데이터 요청
             $.ajax({
-                url: `http://localhost/academy/restapi/getBeginLectureTimeFromLectureModify`,
+                url: `http://${locations}:${ports}/academy/restapi/getBeginLectureTimeFromLectureModify`,
 				contentType: 'application/json', 
                 type: 'POST',
                 data: JSON.stringify({
@@ -701,7 +701,7 @@ $('#btnAddTime').click(function () {
 	
 	        // 선택된 데이터를 REST API로 전달하여 시간 데이터 요청
 	        $.ajax({
-	            url: `http://localhost/academy/restapi/getEndLectureTimeFromLectureModify`,
+	            url: `http://${locations}:${ports}/academy/restapi/getEndLectureTimeFromLectureModify`,
 				contentType: 'application/json', 
 	            type: 'POST',
 	            data: JSON.stringify({

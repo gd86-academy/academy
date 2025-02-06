@@ -55,7 +55,7 @@ document.addEventListener('alpine:init', () => {
 			    // 알림 데이터를 가져오는 함수
 			    loadNotifications() {
 			        $.ajax({
-			            url: "http://localhost/academy/restapi/newNoticeList",  // REST API 엔드포인트
+			            url: `http://${locations}:${ports}/academy/restapi/newNoticeList`,  // REST API 엔드포인트
 			            contentType: 'application/json',
 			            type: 'POST',
 			            data: JSON.stringify(this.employeeNo),  // this.employeeNo를 사용해 보내기
@@ -127,7 +127,7 @@ document.addEventListener('alpine:init', () => {
 
 	        // AJAX 요청
 	        $.ajax({
-	            url: 'http://localhost/academy/restapi/annualLeaveList',
+	            url: `http://${locations}:${ports}/academy/restapi/annualLeaveList`,
 	            type: 'GET',
 	            dataType: 'json',
 	            data: { month }, // 'YYYY-MM' 형식으로 전달
