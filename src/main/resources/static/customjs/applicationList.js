@@ -1,7 +1,7 @@
 // html에서 userNo값 받아오기  console.log(myButton.value); // "submit"
 const employeeNo = document.getElementById('employeeNo').value;
 console.log("employeeNo는", employeeNo);
-let datatable = null;
+let datatable = 	null;
 
 document.addEventListener('alpine:init', () => {
     // main section
@@ -246,12 +246,12 @@ $('#lectureApprovalBtn').click(function() {
 						select: 3, // 결재상태 열								
 						render: (data, cell, row) => {
 						    switch (data) {
-						        case '승인':
-						            return `<span style="color: blue; font-weight: bold;">${data}</span>`;
+								case '승인':
+						            return `<span class="badge rounded-full bg-success/20 text-success hover:top-0">${data}</span>`;
 						        case '반려':
-						            return `<span style="color: red; font-weight: bold;">${data}</span>`;
+						            return `<span class="badge rounded-full bg-danger/20 text-danger hover:top-0">${data}</span>`;
 						        case '대기':
-						            return `<span style="color: gray;">${data}</span>`;
+						            return `<span class="badge rounded-full bg-info/20 text-info hover:top-0">${data}</span>`;
 						        default:
 						            return `<span>${data}</span>`;
 						    }
@@ -354,12 +354,12 @@ $('#attendanceApprovalBtn').click(function() {
 						select: 4, // 결재상태 열								
 						render: (data, cell, row) => {
 						    switch (data) {
-						        case '승인':
-						            return `<span style="color: blue; font-weight: bold;">${data}</span>`;
+								case '승인':
+						            return `<span class="badge rounded-full bg-success/20 text-success hover:top-0">${data}</span>`;
 						        case '반려':
-						            return `<span style="color: red; font-weight: bold;">${data}</span>`;
+						            return `<span class="badge rounded-full bg-danger/20 text-danger hover:top-0">${data}</span>`;
 						        case '대기':
-						            return `<span style="color: gray;">${data}</span>`;
+						            return `<span class="badge rounded-full bg-info/20 text-info hover:top-0">${data}</span>`;
 						        default:
 						            return `<span>${data}</span>`;
 						    }
