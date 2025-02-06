@@ -133,9 +133,6 @@
 								 	<div class="flex" style="align-items: center;">
 								 		<div style="width:200px;"><img class="rounded-full overflow-hidden object-cover aspect-square" style="width: 140px; height: 140px;" th:src="@{/upload/{fileName}.{fileExt}(fileName=${employee.fileName}, fileExt=${employee.fileExt})}" alt="profile image"></div>
 								 		<span style="width:120px; font-size: 25px; font-weight: bold;" th:text="${employee.employeeName}"></span>
-								 		<a type="button" style="background-color: #f0f0f0;" class="btn w-10 h-10 p-0 rounded-full" th:href="@{/chat?employeeNo={employeeNo}(employeeNo=${employee.employeeNo})}">
-										    <img style="width: 19px; height: 19px;" th:src="@{/images/icon/Chat Round.png}" alt="image" />
-										</a>
 								 	</div>
 								 	<div>
 								 		
