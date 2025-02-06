@@ -106,7 +106,7 @@
                        <div class="flex w-full flex-col gap-4 sm:w-auto sm:flex-row sm:items-center sm:gap-3 mr-3">
 							<div class="flex gap-3 mr-3">
 								<!-- 부서/직책 수정 버튼 -->
-								<div th:if="${userRole == 'humanresources'}">
+								<div th:if="${userRole == 'humanresources' && userNo != employee.employeeNo}">
 									<button type="button" class="btn btn-warning mr-1" style="width:150px;" id="openModalButtonDepartment">부서/직책 수정</button>
 								</div>
 								<!-- 비밀번호 변경 버튼 -->
@@ -118,7 +118,7 @@
 									<button type="button" class="btn btn-dark mr-1" style="width:150px;" id="openModalButtonModifyEmployee">개인정보 수정</button>
 								</div>
 								<!-- 계정 삭제 버튼 -->
-								<div th:if="${userRole == 'humanresources'}">
+								<div th:if="${userRole == 'humanresources' && userNo != employee.employeeNo}">
 									<button type="button" class="btn btn-danger mr-1" style="width:150px;" id="openModalButtonEmployeeDelete">계정 삭제</button>
 								</div>
 							</div>
@@ -159,21 +159,23 @@
 									 		<span class="employee-detail-title" style="width:100px;">이메일</span>
 									 		<span class="employee-detail-text" th:text="${employee.employeeMail}">
 									 	</div>
-									 	<div class="flex mb-5">
-									 		<span class="employee-detail-title" style="width:100px;">입사일</span>
-									 		<span class="employee-detail-text" th:text="${employee.employeeDate}">
-									 	</div>
-									 	<div class="flex mb-5">
-									 		<span class="employee-detail-title" style="width:100px;">생년월일</span>
-									 		<span class="employee-detail-text" th:text="${employee.employeeBirth}">
-									 	</div>
-									 	<div class="flex mb-5">
-									 		<span class="employee-detail-title" style="width:100px;">성별</span>
-									 		<span class="employee-detail-text" th:text="${employee.employeeGender}">
-									 	</div>
-									 	<div class="flex">
-									 		<span class="employee-detail-title" style="width:100px;">주소</span>
-									 		<span class="employee-detail-text" th:text="${employee.addressName + ' ' + employee.addressDetail}">
+									 	<div th:if="${userRole == 'humanresources' || userNo == employee.employeeNo}">
+										 	<div class="flex mb-5">
+										 		<span class="employee-detail-title" style="width:100px;">입사일</span>
+										 		<span class="employee-detail-text" th:text="${employee.employeeDate}">
+										 	</div>
+										 	<div class="flex mb-5">
+										 		<span class="employee-detail-title" style="width:100px;">생년월일</span>
+										 		<span class="employee-detail-text" th:text="${employee.employeeBirth}">
+										 	</div>
+										 	<div class="flex mb-5">
+										 		<span class="employee-detail-title" style="width:100px;">성별</span>
+										 		<span class="employee-detail-text" th:text="${employee.employeeGender}">
+										 	</div>
+										 	<div class="flex">
+										 		<span class="employee-detail-title" style="width:100px;">주소</span>
+										 		<span class="employee-detail-text" th:text="${employee.addressName + ' ' + employee.addressDetail}">
+										 	</div>
 									 	</div>
 								 	</div>
 								 	<div style="height:50px;"></div> <!-- 여백공간 -->
