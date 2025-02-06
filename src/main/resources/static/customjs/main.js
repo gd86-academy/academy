@@ -105,7 +105,7 @@ document.addEventListener('alpine:init', () => {
 	            dataType: 'json',
 	            success: (data) => {
 	                // 현재 날씨 데이터 가져오기
-	                const currentTemp = data.list[0].main.temp; // 첫 번째 데이터는 현재 시간 기준
+	                const currentTemp = Math.round(data.list[0].main.temp); // 첫 번째 데이터는 현재 시간 기준
 	                const currentIconCode = data.list[0].weather[0].icon;
 	                const currentIconURL = `https://openweathermap.org/img/wn/${currentIconCode}@2x.png`;
 	                
@@ -130,7 +130,7 @@ document.addEventListener('alpine:init', () => {
 	                    // 오늘과 같은 날짜 또는 지나간 날짜를 제외하고 5일치 출력
 	                    if ((dayMonth === todayMonth && dayDay > todayDate) || dayMonth > todayMonth) {
 	                        if (displayedDays < 5) {
-	                            const dayTemp = day.main.temp;
+	                            const dayTemp = Math.round(day.main.temp);
 	                            const dayName = this.getDayName(dayDate.getDay()); // 요일 이름
 	                            weeklyHTML += `
 	                                <div class="mt-3 font-semibold text-white">

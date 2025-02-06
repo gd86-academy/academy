@@ -24,6 +24,7 @@ public class ChattingController {
 	
 	private ChattingService chattingService;
 	
+	
 	// 채팅 활성화 여부 업데이트
 	@PostMapping("/chat/updateUseYn")
 	public ResponseEntity<String> updateUseYn(@RequestParam String fromUserName, @RequestParam String toUserName) {

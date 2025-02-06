@@ -78,24 +78,37 @@ document.addEventListener('alpine:init', () => {
     // chat section
     Alpine.data('chat', () => ({
         isShowUserChat: false, // 사용자 채팅 화면 표시 여부
-        isShowChatMenu: false, // 채팅 메뉴 표시 여부
-        chatUserTable: null, // 테이블 객체
+        isShowChatMenu: false, // 채팅 메뉴 표시 여부    
         textMessage: '', // 사용자가 입력한 메시지 내용
         selectedUser: '', // 현재 선택된 사용자
+		selectedUserImage: '',
         currentUserName: '', // 로그인한 사용자의 이름
         messages: [], // 채팅 메시지 목록
+		searchUsers: [],
+		
+		searchUser: '',
+		unreadCounts: {},
+		
+		
 
-        initChat() { // 채팅 기능 초기화
-            this.initMulticolumn(); // 직원 목록 가져오기
-            this.getCurrentUser(); // 현재 로그인한 사용자 가져오기
-            
+        init() { // 채팅 기능 초기화
+             
+			
+            this.getCurrentUser(); // 현재 로그인한 사용자 가져오기   
+			      
             // 일정 간격으로 메시지 갱신(1초)
             setInterval(() => {
                 if (this.selectedUser) {
                     this.getMessages();
                 }
             }, 1000);
+			
+			setInterval(() => {
+			            this.updateUnreadCounts();
+			        }, 1000);
         },
+		
+		
 
         getCurrentUser() { // 로그인한 사용자의 정보 가져오기 (이름) -> GET요청을 보내 현재 로그인한 사용자의 이름을 가져옴
             $.ajax({
@@ -103,6 +116,7 @@ document.addEventListener('alpine:init', () => {
                 type: 'GET',
                 success: (userName) => {
                     this.currentUserName = userName;
+					this.getEmployeeList();
                 },
                 error: (xhr, status, error) => {
                     console.error('Error getting current user:', error);
@@ -110,129 +124,116 @@ document.addEventListener('alpine:init', () => {
             });
         },
 
-        initMulticolumn() { // 왼쪽 채팅목록에 직원 목록을 가져옴 (로그인한 사용자를 제외하고 테이블에 표시)
-            $.ajax({
-                url: 'http://localhost/academy/restapi/employeeList',
-                type: 'GET',
-                dataType: 'json',
-                success: (data) => {
-                    // 로그인한 사용자를 제외한 데이터 필터링
-					const filteredData = data.filter(item => item[0] !== this.currentUserName);
-
-                    this.chatUserTable = new simpleDatatables.DataTable('#chatUserTable', {
-                        data: {
-                            data: filteredData.map(item => [
-                                [item[0], item[5]]
-                            ])
-                        },
-
-                        searchable: true,
-                        perPage: 5,
-                        perPageSelect: [10, 20, 30, 50, 100],
-
-                        columns: [
-                            {
-                                select: 0,
-                                render: (data, cell, row) => {
-                                    const [name, image] = data.split(',');
-                                    return `
-                                        <div class="flex items-center w-max">
-                                            <img class="w-9 h-9 rounded-full ltr:mr-2 rtl:ml-2 object-cover" 
-                                                 src="${image === 'null.null' ? './images/defaultProfile.png' : './upload/' + image}" />
-                                            <span class="employee-name">${name}</span>
-                                            <span class="ml-2 unread-count text-red-500 font-bold" data-username="${name}"></span>
-                                        </div>
-                                    `;
-                                },
-
-                                sortable: true,
-                            },
-                        ],
-						
-						// 직원 리스트가 5명이 넘어가면 페이징하는 버튼
-						firstLast: true,
-						    firstText: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M13 19L7 12L13 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M16.9998 19L10.9998 12L16.9998 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
-						    lastText: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M11 19L17 12L11 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> <path opacity="0.5" d="M6.99976 19L12.9998 12L6.99976 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
-						    prevText: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M15 5L9 12L15 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
-						    nextText: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-4.5 h-4.5 rtl:rotate-180"> <path d="M9 5L15 12L9 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/> </svg>',
+		getEmployeeList() {
+		        $.ajax({
+		            url: 'http://localhost/academy/restapi/employeeList',
+		            type: 'GET',
+		            dataType: 'json',
+		            success: (data) => {
+		                this.searchUsers = data
+		                    .filter(item => item[0] !== this.currentUserName)
+		                    .map(item => ({
+		                        userId: item[0],
+		                        name: item[0],
+		                        path: item[5] === 'null.null' ? 'defaultProfile.png' : item[5]
+		                    }));
+							this.updateUnreadCounts();
 							
-                        layout: {
-							top: '<div class="dataTable-top">{search}</div>',
-							bottom: '{pager}'
-							
-                        },
-						
-                    });
+		            },
+		            error: (xhr, status, error) => {
+		                console.error('Error fetching employee list:', error);
+		            }
+		        });
+		    },
+			
+			updateUnreadCounts() {
+			        const promises = this.searchUsers.map(user => 
+			            new Promise(resolve => {
+			                this.getUnreadMessageCount(user.name, count => {
+			                    this.unreadCounts[user.name] = count;
+			                    resolve();
+			                });
+			            })
+			        );
+
+			        Promise.all(promises).then(() => {
+			            this.unreadCounts = { ...this.unreadCounts };
+			            this.sortUsers();
+			        });
+			    },
+
+			    sortUsers() {
+			        this.searchUsers.sort((a, b) => {
+			            const unreadCountA = this.unreadCounts[a.name] || 0;
+			            const unreadCountB = this.unreadCounts[b.name] || 0;
+			            return unreadCountB - unreadCountA;
+			        });
+			    },
+
+				searchUsermethod() {
 					
-					// 안 읽은 
-                    this.updateUnreadCounts();
+				
+				    const searchTerm = this.searchUser.toLowerCase();
+				    const filteredUsers = this.searchUsers.filter(user => 
+				        user.name.toLowerCase().includes(searchTerm)
+				    );
 
-                    // 해당 직원의 행을 클릭해서 채팅 상대 선택
-					document.querySelector('#chatUserTable tbody').addEventListener('click', (e) => {
-					    const rowElement = e.target.closest('tr');
-					    if (rowElement) {
-					        const nameElement = rowElement.querySelector('.employee-name');
-							const imageElement = rowElement.querySelector('img');
-					        const unreadCountElement = rowElement.querySelector('.unread-count'); // updateUnreadCounts()
-					        if (nameElement&&imageElement) {
-					            const employeeName = nameElement.textContent.trim();
-								const employeeImageData = imageElement.getAttribute('src').split('/').pop();
-					            console.log(employeeName, employeeImageData);
+				    // 스크롤을 맨 위로 이동
+				    this.$nextTick(() => {
+				        const element = document.querySelector('.chat-users');
+				        if (element) {
+				            element.scrollTop = 0;
+				        }
+				    });
 
-					            // DB의 use_yn을 0으로 변경하는 AJAX 요청
-					            $.ajax({
-					                url: 'http://localhost/academy/chat/updateUseYn',
-					                type: 'POST',
-					                data: {
-					                    fromUserName: employeeName,  
-					                    toUserName: this.currentUserName  
-					                },
-					                success: () => {
-					                    console.log('use_yn updated successfully');
-					                    // 읽지 않은 메시지 카운트를 화면에서 제거
-					                    if (unreadCountElement) {
-					                        unreadCountElement.textContent = '';
-					                    }
-					                    this.selectUser(employeeName,employeeImageData);
-					                },
-					                error: (xhr, status, error) => {
-					                    console.error('Error updating use_yn:', error);
-					                }
-					            });
-					        }
-					    }
-					});
+				    return filteredUsers;
+				},
 
-                },
-            });
-        },
+			   
+			   selectUser(user, userImage) {
+			           console.log('Selected user:', user);
+			           this.selectedUser = user;
+			           this.selectedUserImage = userImage === 'null.null' ? './images/defaultProfile.png' : './upload/' + userImage;
+			           this.isShowUserChat = true;
+			           this.scrollToBottom();
+			           this.isShowChatMenu = false;
+			           this.getMessages();
 
-        updateUnreadCounts() { // 사용자별로 읽지 않은 메시지 개수를 동적으로 표시
-            const unreadCountElements = document.querySelectorAll('.unread-count');
-            unreadCountElements.forEach(element => {
-                const username = element.getAttribute('data-username'); // columns에서 가져옴
-                this.getUnreadMessageCount(username, (unreadCount) => {
-                    if (unreadCount > 0) {
-                        element.textContent = `(${unreadCount})`;
-                    } else {
-                        element.textContent = '';
-                    }
-                });
-            });
-        },
+			           $.ajax({
+			               url: 'http://localhost/academy/chat/updateUseYn',
+			               type: 'POST',
+			               data: {
+			                   fromUserName: user.name,
+			                   toUserName: this.currentUserName
+			               },
+			               success: () => {
+			                   console.log('use_yn updated successfully');
+							   this.updateUnreadCounts(); // 읽음 표시 후 카운트 업데이트
+			               },
+			               error: (xhr, status, error) => {
+			                   console.error('Error updating use_yn:', error);
+			               }
+			           });
+			       },
 
-        // 선택된 직원을 저장하고, 채팅 화면에 표시
-        selectUser(user,userImage) { 
-            console.log('Selected user:', user);		
-            this.selectedUser = user;
-			this.selectedUserImage = userImage === 'null.null' ? './images/defaultProfile.png' : './upload/' + userImage; // 이미지 받아오기
-            this.isShowUserChat = true;
-            this.scrollToBottom(); // 수정된 호출
-            this.isShowChatMenu = false;
-            this.getMessages(); // 해당 직원과의 채팅 메시지를 가져옴
-			
-			
-        },
+		   
+				   updateUnreadCounts() {
+				           this.searchUsers.forEach(user => {
+				               this.getUnreadMessageCount(user.name, (count) => {
+				                   if (count > 0) {
+				                       // 읽지 않은 메시지가 있는 경우, 해당 사용자를 배열에서 제거하고 맨 앞에 추가
+				                       const index = this.searchUsers.findIndex(u => u.name === user.name);
+				                       if (index > -1) {
+				                           const [movedUser] = this.searchUsers.splice(index, 1);
+				                           this.searchUsers.unshift(movedUser);
+				                       }
+				                   }
+				                   this.unreadCounts[user.name] = count;
+				                   
+				               });
+				           });
+				       },
+       
 
         getUnreadMessageCount(userName, callback) { // 특정 사용자가 보낸 읽지 않은 메시지 수를 가져오는 함수
             $.ajax({
@@ -242,9 +243,17 @@ document.addEventListener('alpine:init', () => {
                     fromUserName: userName, // 보낸 사람
                     toUserName: this.currentUserName // 받은 사람 (현재 로그인한 사용자)
                 },
-                success: (unreadCount) => {
-                    callback(unreadCount);
-                },
+				success: (unreadCount) => {
+				                callback(parseInt(unreadCount, 10));
+								if (count > 0) {
+								                    // 읽지 않은 메시지가 있는 경우, 해당 사용자를 배열에서 제거하고 맨 앞에 추가
+								                    const index = this.searchUsers.findIndex(u => u.name === userName);
+								                    if (index > -1) {
+								                        const [movedUser] = this.searchUsers.splice(index, 1);
+								                        this.searchUsers.unshift(movedUser);
+								                    }
+								                }
+				            },
                 error: (xhr, status, error) => {
                     console.error('Error getting unread message count:', error);
                     callback(0);
@@ -260,13 +269,14 @@ document.addEventListener('alpine:init', () => {
                     contentType: 'application/json',
                     data: JSON.stringify({
                         fromUserName: this.currentUserName,
-                        toUserName: this.selectedUser,
+                          toUserName: this.selectedUser.name,
                         content: this.textMessage
                     }),
                     success: () => {
                         this.textMessage = '';
                         this.getMessages();
 						this.scrollToBottom();
+						this.updateUnreadCount(this.selectedUser.name); // 메시지 전송 후 읽지 않은 메시지 수 업데이트
                     },
                     error: (xhr, status, error) => {
                         console.error('Error sending message:', error);
@@ -282,11 +292,14 @@ document.addEventListener('alpine:init', () => {
                 type: 'GET',
                 data: {
                     fromUserName: this.currentUserName.trim(),
-                    toUserName: this.selectedUser.trim()
+                    toUserName: this.selectedUser.name.trim()
                 },
                 success: (messages) => {
                     console.log('Received messages:', messages);
                     this.messages = messages;
+					
+					// 메시지를 읽음 처리
+					            this.markMessagesAsRead();
                     
                 },
                 error: (xhr, status, error) => {
@@ -294,6 +307,25 @@ document.addEventListener('alpine:init', () => {
                 }
             });
         },
+		
+		markMessagesAsRead() {
+		    $.ajax({
+		        url: 'http://localhost/academy/chat/updateUseYn',
+		        type: 'POST',
+		        data: {
+		            fromUserName: this.selectedUser.name,
+		            toUserName: this.currentUserName
+		        },
+		        success: () => {
+		            console.log('Messages marked as read');
+		            // 읽음 처리 후 안 읽은 메시지 수 업데이트
+		            this.updateUnreadCount(this.selectedUser.name);
+		        },
+		        error: (xhr, status, error) => {
+		            console.error('Error marking messages as read:', error);
+		        }
+		    });
+		},
 		
 		formatDateTime(dateString) {
 		    const date = new Date(dateString);
@@ -321,7 +353,8 @@ document.addEventListener('alpine:init', () => {
 		            }
 		        }, 100);
 		    });
-		}
-
+		},
+		
+		
     }));
 });
