@@ -22,6 +22,7 @@ public class BoardRestController {
 	// 공지사항 리스트 조회
 	@GetMapping("/restapi/boardList/{categoryCode}")
 	public List<Object[]> boardList(@PathVariable("categoryCode") String categoryCode) {
+		
 		List<BoardListDTO> boardsList = boardService.getBoardList(categoryCode);
 		List<Object[]> result = new ArrayList<>();
 		for(BoardListDTO boardList : boardsList) {

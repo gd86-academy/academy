@@ -159,16 +159,18 @@
 			, e.employee_name employeeName
 			, b.board_category boardCategory
 			, (SELECT c.name FROM common c WHERE c.code = e.employee_department) employeeDepartmentName
+			, (SELECT COUNT(board_no) FROM board_file bf WHERE bf.board_no = b.board_no) boardFileCount
 			, b.board_count boardCount
 			, b.create_date createDate
 			, c.name
+			, b.is_pinned pinned
 		FROM board b
 		LEFT OUTER JOIN common c ON c.`code` = b.board_category
 		LEFT OUTER JOIN employee e ON e.employee_no = b.update_employee_no
 		LEFT OUTER JOIN file f ON f.file_no = e.photo_file_no
 		WHERE b.use_yn = 1
 			  AND b.board_category = #{categoryCode}
-		ORDER BY createDate DESC
+		ORDER BY b.is_pinned DESC, b.create_date DESC
 	</select>
 
 </mapper>

@@ -103,10 +103,10 @@ document.addEventListener('alpine:init', () => {
 					        data: data.map(item => [
 								item[0], // 번호
 					            [item[1], item[2]], // 작성자
-					            item[3], // 제목
+					            [item[3], item[8]],// 제목, 파일유무
 								item[7], // 부서
 					            item[4], // 작성일
-					            item[5], // 조회수								
+					            item[5], // 조회수				
 					        ])
 					    },
 					    searchable: true,
@@ -138,7 +138,29 @@ document.addEventListener('alpine:init', () => {
 					            },
 								sortable: false,
 					        },
-					        
+							{
+								select: 2,
+								render: (data, cell, row) => {
+									console.log("데이터받은거확인:", data); // 디버깅용 로그
+									const [content, count] = data.split(',');
+									if(parseInt(count) >= 1) {
+										return `
+											<div class="flex items-center w-max">
+												<span>${content}</span>
+												<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-paperclip ml-2" viewBox="0 0 16 16">
+												  <path d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0z"/>
+												</svg>
+											</div>
+										`;
+									} else {
+										return `
+											<div class="flex items-center w-max">
+												<span>${content}</span>
+											</div>
+										`;
+									}
+								}
+							}			        
 					    ],
 						
 	                    firstLast: true,
