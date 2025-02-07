@@ -143,9 +143,9 @@
 			, c.name
 			, (SELECT c.name FROM common c WHERE c.code = e.employee_department) employeeDepartmentName
 		FROM board b
-		INNER JOIN employee e ON e.employee_no = b.update_employee_no
-		INNER JOIN file f ON f.file_no = e.photo_file_no
-		INNER JOIN common c ON c.code = b.board_category
+		LEFT OUTER JOIN employee e ON e.employee_no = b.update_employee_no
+		LEFT OUTER JOIN file f ON f.file_no = e.photo_file_no
+		LEFT OUTER JOIN common c ON c.code = b.board_category
 		WHERE b.board_no = #{boardNo}
 	</select>
 	

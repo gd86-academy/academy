@@ -105,8 +105,8 @@ document.addEventListener('alpine:init', () => {
 					            [item[1], item[2]], // 작성자
 					            item[3], // 제목
 								item[7], // 부서
-					            item[5], // 작성일
-					            item[4], // 조회수								
+					            item[4], // 작성일
+					            item[5], // 조회수								
 					        ])
 					    },
 					    searchable: true,
