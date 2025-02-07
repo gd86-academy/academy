@@ -9933,6 +9933,16 @@ pre {
 	.approval-type {
 		margin: 0%;
 	}
+	/* attendance */
+	.attendance .attendance-box {
+		margin-left: 0px;
+	}
+	.attendance .chart {
+		height: 160px;
+	}
+	.attendance-table {
+		padding: 0px;
+	}
 }
 @media(max-width:1024px) {
 	/* lectureList */
@@ -10023,6 +10033,9 @@ pre {
 	}
 	.mobile-btn-width {
 		width: 100%;
+	}
+	.mobile-text {
+		font-size: 0.75rem;
 	}
 	
 	/* employeeOne */
