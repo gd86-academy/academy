@@ -8,8 +8,8 @@ import lombok.Data;
 public class chattingMessageDTO {
 	
 	private Long id;
-    private String fromUserName;
-    private String toUserName;
+    private Integer fromUserName;
+    private Integer toUserName;
     private String content;
     private LocalDateTime create_date;
 

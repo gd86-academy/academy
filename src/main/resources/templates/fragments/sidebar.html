@@ -98,7 +98,7 @@
                             <!-- 채팅 -->
                             <li class="nav-item">
                                  <a href="/academy/" class="group">
-                                     <div class="flex items-center">
+                                     <div class="flex items-center"  x-data="sidebar">
                                          <svg	
                                              class="shrink-0 group-hover:!text-primary"
                                              width="20"
@@ -119,7 +119,10 @@
                                                  fill="currentColor"
                                              />
                                          </svg>
-                                         <span class="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">메신저</span>
+								 <span class="text-black ltr:pl-3 rtl:pr-3 dark:text-[#506690] dark:group-hover:text-white-dark">메신저</span>
+						     		<span 
+                  th:if="${chatCount == 1}" 
+                  class="ml-2 bg-primary w-2 h-2 rounded-full inline-block"></span>
                                      </div>
                                  </a>
                              </li>
