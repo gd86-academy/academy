@@ -59,6 +59,12 @@
 		    .table-height tr {
 			    height: 58px; /* 원하는 높이로 설정 */
 			}
+			.tree-scroll {	/* 스크롤 생성 */
+		    	max-height: 350px; 
+		    	overflow-y: auto; 
+		    	overflow-x: hidden;  
+		    	width: 100%;
+		    }
 	    </style>	
 	</head>
 	
@@ -342,7 +348,7 @@
 					               <div>
 						               <div class="flex justify-between p-5 pb-0">
 						               		<div>
-						               			<div style="border-radius: 10px;" id="tree" class="tui-tree-wrap"></div>
+						               			<div style="border-radius: 10px;" id="tree" class="tui-tree-wrap tree-scroll"></div>
 						               		</div>
 						                    
 						                    <div style="margin-left: 30px;" class="w-full">
