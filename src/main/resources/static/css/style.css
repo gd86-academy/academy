@@ -4,7 +4,38 @@
 .text-md {
 	font-size: 0.875rem;
 }
+/* employeeOne */
+.employee-detail-title {
+	font-size: 17px;
+	font-weight: bold;
+}
+.employee-detail-text {
+	font-size: 17px;
+}
+.employee-name {
+	width:120px;
+	font-size: 1.5625rem;
+	font-weight: bold;
+}
 
+/* lectureList */
+.lectureList {
+	margin: 0% 15% 1% 15%;
+	padding: 4%; 
+	height:1000px;
+}
+.lecture-date td {
+	width:70px;
+	padding-left: 0px;
+	padding-right: 0px;
+}
+.lecture-time td {
+	width:70px;
+	padding-left: 0px;
+	padding-right: 0px;
+}
+
+	
 .ql-snow .ql-editor img {
 	margin:20px;
 	height:176px;
@@ -125,6 +156,7 @@
 	padding:8px 15px!important
 }
 .ltr .calendar-wrapper .fc-button {
+	font-size: 0.75rem;
 	margin-left:12px!important
 }
 .rtl .calendar-wrapper .fc-button {
@@ -9866,14 +9898,27 @@ pre {
 	.link-btn {
 		font-size: 0.75rem;
 	}
+	
+	/* employeeOne */
+	.employee-board {
+		flex-direction: column;
+	}
+	.employee-text {
+		width: 100%;
+	}
 }
-
+@media(max-width:1024px) {
+	/* lectureList */
+	.lectureList {
+		margin: 0;
+	}
+	
+}
 @media(max-width: 640px) {
 	/* main */
 	.chart {
 		height: 160px;
 	}
-	
 	.weather-board {
 		flex-direction: column;
 	}
@@ -9909,6 +9954,32 @@ pre {
 	}
 	.mobile-btn-width {
 		width: 100%;
+	}
+	
+	/* employeeOne */
+	.employee-name {
+		font-size: 1.25rem
+	}
+	.employee-detail-title,
+	.employee-detail-text {
+	    font-size: 0.875rem;
+	}
+	
+	/* boardList */
+	.board-add-btn {
+		justify-content: flex-end;
+	}
+	
+	/* lectureOne*/
+	.lecture-btn-box {
+		flex-direction: column;	
+	}
+	.lecture-btn-box {
+		flex-direction: column;	
+	}
+	.lecture-btn-box button,
+	.lecture-btn-box a {
+		font-size: 0.75rem;	
 	}
 }
 @media(max-width: 360px) {

@@ -38,16 +38,6 @@
 		<script th:src="@{/js/nice-select2.js}"></script>
 		<script defer th:src="@{/js/address.js}"></script>
 		<script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-        
-        <style>
-        	.employee-detail-title {
-	        	font-size: 17px;
-	        	font-weight: bold;
-        	}
-        	.employee-detail-text {
-	        	font-size: 17px;
-        	}
-        </style>
     </head>
 
     <body
@@ -126,13 +116,13 @@
 					</div>
 					<div class="p-5 mobile-padding">
 						 <div class="panel mt-1">
-							 <div class="flex weather-board" style="display: flex; justify-content: space-between; align-items: center;">
+							 <div class="flex employee-board" style="display: flex; justify-content: space-between; align-items: center;">
 							 	<!-- 사원 상세정보 출력 -->
-							 	<div class="p-5" style="flex: 4.5; text-align: left;">
+							 	<div class="p-5 employee-text" style="flex: 3; text-align: left;">
 							 		<div style="height:50px;"></div> <!-- 여백공간 -->
 								 	<div class="flex" style="align-items: center;">
 								 		<div style="width:200px;"><img class="rounded-full overflow-hidden object-cover aspect-square" style="width: 140px; height: 140px;" th:src="@{/upload/{fileName}.{fileExt}(fileName=${employee.fileName}, fileExt=${employee.fileExt})}" alt="profile image"></div>
-								 		<span style="width:120px; font-size: 25px; font-weight: bold;" th:text="${employee.employeeName}"></span>
+								 		<span class="employee-name"th:text="${employee.employeeName}"></span>
 								 	</div>
 								 	<div>
 								 		
@@ -141,40 +131,40 @@
 								 	<div class="ml-3">
 									 	<div class="flex mb-5">
 									 		<span class="employee-detail-title" style="width:100px;">사원번호</span>
-									 		<span class="employee-detail-text" th:text="${employee.employeeNo}">
+									 		<span class="employee-detail-text" th:text="${employee.employeeNo}"></span>
 									 	</div>
 									 	<div class="flex mb-5">
 									 		<span class="employee-detail-title" style="width:100px;">부서</span>
-									 		<span class="employee-detail-text" th:text="${employee.employeeDepartment}">
+									 		<span class="employee-detail-text" th:text="${employee.employeeDepartment}"></span>
 									 	</div>
 									 	<div class="flex mb-5">
 									 		<span class="employee-detail-title" style="width:100px;">직책</span>
-									 		<span class="employee-detail-text" th:text="${employee.employeePosition}">
+									 		<span class="employee-detail-text" th:text="${employee.employeePosition}"></span>
 									 	</div>
 									 	<div class="flex mb-5">
 									 		<span class="employee-detail-title" style="width:100px;">전화번호</span>
-									 		<span class="employee-detail-text" th:text="${employee.employeePhone}">
+									 		<span class="employee-detail-text" th:text="${employee.employeePhone}"></span>
 									 	</div>
 									 	<div class="flex mb-5">
 									 		<span class="employee-detail-title" style="width:100px;">이메일</span>
-									 		<span class="employee-detail-text" th:text="${employee.employeeMail}">
+									 		<span class="employee-detail-text" th:text="${employee.employeeMail}"></span>
 									 	</div>
 									 	<div th:if="${userRole == 'humanresources' || userNo == employee.employeeNo}">
 										 	<div class="flex mb-5">
 										 		<span class="employee-detail-title" style="width:100px;">입사일</span>
-										 		<span class="employee-detail-text" th:text="${employee.employeeDate}">
+										 		<span class="employee-detail-text" th:text="${employee.employeeDate}"></span>
 										 	</div>
 										 	<div class="flex mb-5">
 										 		<span class="employee-detail-title" style="width:100px;">생년월일</span>
-										 		<span class="employee-detail-text" th:text="${employee.employeeBirth}">
+										 		<span class="employee-detail-text" th:text="${employee.employeeBirth}"></span>
 										 	</div>
 										 	<div class="flex mb-5">
 										 		<span class="employee-detail-title" style="width:100px;">성별</span>
-										 		<span class="employee-detail-text" th:text="${employee.employeeGender}">
+										 		<span class="employee-detail-text" th:text="${employee.employeeGender}"></span>
 										 	</div>
 										 	<div class="flex">
 										 		<span class="employee-detail-title" style="width:100px;">주소</span>
-										 		<span class="employee-detail-text" th:text="${employee.addressName + ' ' + employee.addressDetail}">
+										 		<span class="employee-detail-text" th:text="${employee.addressName + ' ' + employee.addressDetail}"></span>
 										 	</div>
 									 	</div>
 								 	</div>
