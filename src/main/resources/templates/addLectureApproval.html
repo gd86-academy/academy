@@ -69,7 +69,7 @@
 	</head>
 	
 	<body x-data="main"
-		class="relative overflow-x-hidden font-nunito text-sm font-normal antialiased"
+		class="approval-body relative overflow-x-hidden font-nunito text-sm font-normal antialiased"
 		:class="[ $store.app.sidebar ? 'toggle-sidebar' : '', $store.app.theme === 'dark' || $store.app.isDarkMode ?  'dark' : '', $store.app.menu, $store.app.layout,$store.app.rtlClass]">
 		<!-- sidebar menu overlay -->
 		<div x-cloak class="fixed inset-0 z-50 bg-[black]/60 lg:hidden"
@@ -116,17 +116,17 @@
 				<div class="animate__animated p-6 white-light" :class="[$store.app.animation]"> <!-- 메인화면 div 시작 -->
 					<h2 class="text-2xl ml-3 mb-5">결재신청</h2>
 					<!-- 신청양식 선택버튼 -->
-					<div class="relative inline-flex" style="margin: 0% 15% 0% 15%;">
+					<div class="relative inline-flex approval-type">
 					    <a type="button" class="btn btn-outline-primary ltr:rounded-r-none rtl:rounded-l-none mb-3" th:href="@{/addAttendanceApproval}">근태신청</a>
 					    <a type="button" class="btn btn-primary ltr:rounded-l-none rtl:rounded-r-none mb-3">강의신청</a>
 					</div>
-					<div class="panel" style="margin: 0% 15% 0% 15%; padding: 4%; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05); border-radius : 10px;">
+					<div class="panel approval" >
 						<form id="addForm" method="post" th:action="@{/addLectureApproval}" enctype="multipart/form-data">
 						<div class="p-5">
-						<div class="flex items-center justify-between" style="margin-bottom: 20px; margin-top: 20px;">
+						<div class="flex items-center justify-between approval-top" style="margin-bottom: 20px; margin-top: 20px;">
 							<div class="text-3xl font-bold uppercase m-3" style="white-space: nowrap;">&nbsp;강의 신청서</div>
-							<div style="flex-grow: 1; display: flex; justify-content: flex-end;">
-								<table id="peoples" style="table-layout: fixed; width: 60%; height:65px; border: 1px solid #f0f0f0;">
+							<div class="approval-employee">
+								<table id="peoples" class="approval-table">
 							        <tbody>
 							            <tr class="border-dark-dark-light" style="height: 30px;">
 							                <td class="bg-[#f4f4f4] lecutre-title-align" colspan="3" style="padding: 5px 10px;">결재자</td>				                

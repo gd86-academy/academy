@@ -34,7 +34,27 @@
 	padding-left: 0px;
 	padding-right: 0px;
 }
-
+/* Approval */
+.approval {
+	margin: 0% 15% 0% 15%; 
+	padding: 4%; 
+	box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05); 
+	border-radius : 10px;
+}
+.approval-type {
+	margin: 0% 15% 0% 15%;
+}
+.approval-table {
+	table-layout: fixed; 
+	width: 60%; 
+	height:65px; 
+	border: 1px solid #f0f0f0;
+}
+.approval-employee {
+	flex-grow: 1; 
+	display: flex; 
+	justify-content: flex-end;
+}
 	
 .ql-snow .ql-editor img {
 	margin:20px;
@@ -9906,13 +9926,39 @@ pre {
 	.employee-text {
 		width: 100%;
 	}
+	/* addAttendanceApproval */
+	.approval {
+		margin: 0%; 
+	}
+	.approval-type {
+		margin: 0%;
+	}
 }
 @media(max-width:1024px) {
 	/* lectureList */
 	.lectureList {
 		margin: 0;
 	}
-	
+	/* Approval */
+	.approval .text-3xl {
+		font-size: 1.5rem;
+	}
+	.approval .lecutre-title-align,
+	.approval .lecutre-text-align,
+	.approval .lecutre-text-align span,
+	.approval input::placeholder, 
+	.approval textarea::placeholder, 
+	.approval select,
+	.approval option {
+		font-size: 0.75rem;
+	}
+	.approval .form-radio {
+		height: 1rem;
+    	width: 1rem;
+	}
+	.approval-table { 
+		width: 80%; 
+	}
 }
 @media(max-width: 640px) {
 	/* main */
@@ -9974,13 +10020,32 @@ pre {
 	.lecture-btn-box {
 		flex-direction: column;	
 	}
-	.lecture-btn-box {
-		flex-direction: column;	
-	}
 	.lecture-btn-box button,
 	.lecture-btn-box a {
 		font-size: 0.75rem;	
 	}
+	
+	/* Approval */
+	.approval-body {
+		overflow-x: auto;
+		min-width: 640px;
+	}
+	.approval-top {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+	.approval-employee {
+		justify-content: flex-start;
+		margin-top: 1rem;
+	}
+	.approval-table {
+        width: 100%;
+    }
+    .approval-body button,
+    .approval-body a {
+    	font-size: 0.75rem;
+    }
+	
 }
 @media(max-width: 360px) {
 	body {
