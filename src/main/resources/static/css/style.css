@@ -9871,6 +9871,10 @@ pre {
 
 @media(max-width: 640px) {
 	/* main */
+	.chart {
+		height: 160px;
+	}
+	
 	.weather-board {
 		flex-direction: column;
 	}
@@ -9906,5 +9910,11 @@ pre {
 	}
 	.mobile-btn-width {
 		width: 100%;
+	}
+}
+@media(max-width: 360px) {
+	body {
+	    min-width: 360px !important;
+		overflow: auto !important;
 	}
 }
