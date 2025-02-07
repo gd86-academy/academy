@@ -7,7 +7,7 @@ spring:
       enabled: 'true'
       max-request-size: 100MB
   profiles:
-    include: db, port
+    include: db, mail, port
   thymeleaf:
     prefix: classpath:/templates/
     suffix: .html

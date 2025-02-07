@@ -23,7 +23,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
         http.authorizeHttpRequests((auth) -> auth
         	.requestMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**", "/upload/**", "/customjs/**").permitAll() // CSS, JS, 이미지 파일 접근 허용
-            .requestMatchers("/login", "/loginProc", "/join", "/joinProc").permitAll()
+            .requestMatchers("/login", "/loginProc", "/passwordReset", "/passwordSendMail").permitAll()
             // .requestMatchers("/all/**").hasAnyRole("management", "humanresources", "Administration") // 모든사원
             .requestMatchers("/management/**").hasRole("management") // 운영팀
             .requestMatchers("/humanresources/**").hasRole("humanresources") // 인사팀
@@ -32,8 +32,6 @@ public class SecurityConfig {
             //.anyRequest().permitAll()
             .anyRequest().authenticated() // 위에 등록되지 않은 경로는 로그인된 사원만 접근가능하도록 설정.
         );
-        
-        
         http
     	.formLogin((auth) -> auth.loginPage("/login")
     				.loginProcessingUrl("/loginProc")
