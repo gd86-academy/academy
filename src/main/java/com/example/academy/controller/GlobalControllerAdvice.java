@@ -11,12 +11,16 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import com.example.academy.security.CustomUserDetails;
+import com.example.academy.service.ChattingService;
 import com.example.academy.service.CommonService;
 import com.example.academy.vo.Common;
 
 // 모든 컨트롤러 모델 값에 넣기
 @ControllerAdvice
 public class GlobalControllerAdvice {
+	
+	@Autowired ChattingService chattingService;
+	
     @Autowired CommonService commonService;
     
     @Value("${custom.location}")
@@ -33,6 +37,23 @@ public class GlobalControllerAdvice {
     @ModelAttribute("port")
     public int port() {
         return port;
+    }
+    
+ // 사이드메뉴에 게시판 리스트에 사용하기 위해
+    @ModelAttribute("chatCount")
+    public Integer getTotalCount() {
+    	
+    	Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    Integer userId = 0;
+	    
+	    
+    	if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+	        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+	        userId = Integer.parseInt(userDetails.getUsername()); // Logged-in user's ID  
+	    }
+    	
+    	
+        return chattingService.totalUnreadMessages(userId);
     }
 
     // 사이드메뉴에 게시판 리스트에 사용하기 위해

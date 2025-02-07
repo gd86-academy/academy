@@ -44,17 +44,20 @@ public class ChattingController {
 
 	// 로그인한 사용자의 직원정보 가져오기
 	@GetMapping("/chat/fromUserId")
-	public String fromUserId() {
+	public ResponseEntity<String[]> fromUserId() {
 	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    String userId = "";
 	    String userName = "";
 	    
 	    if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
 	        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-	     userName = userDetails.getUserRealName(); // Logged-in user's ID  
+	        userId = userDetails.getUsername(); // Logged-in user's ID  
+	        userName = userDetails.getUserRealName();
 	    }
 
-	    return userName;
+	    return ResponseEntity.ok(new String[]{userId, userName});
 	}
+
 	
 	// 메시지 전송
 	@PostMapping("/chat/send")
@@ -66,9 +69,8 @@ public class ChattingController {
 	
 	// 메시지 조회
 	@GetMapping("/chat/messages")
-	public List<chattingMessageDTO> getMessages(@RequestParam String fromUserName, 
-	                                            @RequestParam String toUserName) {
-	    
+	public List<chattingMessageDTO> getMessages(@RequestParam Integer fromUserName, 
+	                                            @RequestParam Integer toUserName) {
 	    return chattingService.getMessages(fromUserName, toUserName);
 	}
 }

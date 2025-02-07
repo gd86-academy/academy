@@ -14,6 +14,11 @@ public class ChattingService {
 	@Autowired
 	private ChattingMapper chattingMapper;
 	
+	// 전체 읽지 않은 메시지 개수 조회
+		public int totalUnreadMessages(Integer userId) {
+			return chattingMapper.totalUnreadMessages(userId);
+		} 
+	
 	// 읽지 않은 메시지 상태 변화
 	public void updateUseYn(String fromUserName, String toUserName) {
 	    // use_yn을 0으로 업데이트하는 쿼리 실행
@@ -31,8 +36,8 @@ public class ChattingService {
 	}
 	
 	// 채팅 메시지 조회
-	public List<chattingMessageDTO> getMessages(String fromUserName, String toUserName){
-		return chattingMapper.getMessages(fromUserName,toUserName);
+	public List<chattingMessageDTO> getMessages(Integer fromUserName, Integer toUserName) {
+	    return chattingMapper.getMessages(fromUserName, toUserName);
 	}
 
 }
