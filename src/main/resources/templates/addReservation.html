@@ -141,11 +141,11 @@
 	                	<div class="flex flex-wrap items-center justify-between gap-4 ml-3">
 	                       <h2 class="text-2xl ml-3">예약신청</h2>
 						</div>
-		                <div class="dvanimation animate__animated p-6" :class="[$store.app.animation]">
+		                <div class=" dvanimation animate__animated p-6" :class="[$store.app.animation]">
 		                    <div class="w-full" style="flex: 5.5; text-align: left;">
 			                    <div class="panel">
-				                    <form id="addReservationForm" th:action="@{/addReservation}" method="post">
-				                    	<div class="d-flex items-start justify-between ">
+				                    <form id="addReservationForm" class="reservation" th:action="@{/addReservation}" method="post">
+				                    	<div class="d-flex items-start justify-between reservation-box">
 					                    	<div class="w-100 d-flex flex-wrap">
 					                    		<label for="reservationPerson">예약자</label>
 					                    		<input 
@@ -210,7 +210,7 @@
 					                                class="form-input"
 					                            />
 					                    	</div>
-					                    	<div class="w-100 d-flex flex-wrap panel ms-5">
+					                    	<div class="w-100 d-flex flex-wrap panel ms-5 employee-add">
 								        		<label for="searchEmployee" class="word-break">참여인원</label>
 								        		<div class="d-flex w-100 mb-3">
 													<input type="text" name="searchEmployee" id="searchEmployee" class="form-input">
@@ -227,7 +227,7 @@
 								        		<button id="addResultEmployee" class="btn btn-primary w-100 mt-3" type="button">사원추가</button>													
 							        		</div>
 				                    	</div>
-				                    	<div class="d-grid gap-2 d-md-flex justify-content-md-end mt-3">
+				                    	<div class="d-grid gap-2 d-md-flex justify-content-md-end mt-3 reservation-btn">
 							        		<button class="btn btn-primary" type="button" id="btnAddReservation">예약신청</button>
 										</div>
 				                    </form>

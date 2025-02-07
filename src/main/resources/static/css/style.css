@@ -9959,6 +9959,29 @@ pre {
 	.approval-table { 
 		width: 80%; 
 	}
+	/* reservation */
+	.reservation input::placeholder, 
+	.reservation .form-input, 
+	.reservation .form-select, 
+	.reservation .form-textarea
+	.reservation textarea::placeholder, 
+	.reservation label,
+	.reservation select,
+	.reservation option,
+	.reservation .btn {
+		font-size: 0.75rem;
+	}
+	.reservation-box {
+		flex-direction: column;
+	}
+	.employee-add {
+	    margin-left: 0 !important;
+	    margin-top: 1.5rem;
+	}
+	.reservation-btn {
+        justify-content: flex-end;
+        display: flex !important;
+    }
 }
 @media(max-width: 640px) {
 	/* main */
@@ -10044,6 +10067,7 @@ pre {
     .approval-body .btn {
     	font-size: 0.75rem;
     }
+    
     .application-btn .btn {
     	font-size: 0.75rem;
     }
