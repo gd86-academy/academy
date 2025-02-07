@@ -10041,8 +10041,10 @@ pre {
 	.approval-table {
         width: 100%;
     }
-    .approval-body button,
-    .approval-body a {
+    .approval-body .btn {
+    	font-size: 0.75rem;
+    }
+    .application-btn .btn {
     	font-size: 0.75rem;
     }
 	

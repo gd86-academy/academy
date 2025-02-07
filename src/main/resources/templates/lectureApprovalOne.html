@@ -74,7 +74,7 @@
 	</head>
 	
 	<body x-data="main"
-		class="relative overflow-x-hidden font-nunito text-sm font-normal antialiased"
+		class="approval-body relative overflow-x-hidden font-nunito text-sm font-normal antialiased"
 		:class="[ $store.app.sidebar ? 'toggle-sidebar' : '', $store.app.theme === 'dark' || $store.app.isDarkMode ?  'dark' : '', $store.app.menu, $store.app.layout,$store.app.rtlClass]">
 		<!-- sidebar menu overlay -->
 		<div x-cloak class="fixed inset-0 z-50 bg-[black]/60 lg:hidden"
@@ -129,12 +129,12 @@
 	                    </button>
                     </div>
                     </div>
-					<div id="capture_area" class="panel" style="margin: 0% 15% 0% 15%; padding: 4%; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05); border-radius : 10px;">
+					<div id="capture_area" class="panel approval" >
 						<div class="p-5">
-						<div class="flex items-center justify-between" style="margin-bottom: 20px; margin-top: 20px;">
+						<div class="flex items-center justify-between approval-top" style="margin-bottom: 20px; margin-top: 20px;">
 							<div class="text-3xl font-bold uppercase m-3" style="white-space: nowrap;">&nbsp;강의 신청서</div>
-							<div style="flex-grow: 1; display: flex; justify-content: flex-end;">
-								<table id="peoples" style="table-layout: fixed; width: 60%; height:65px; border: 1px solid #f0f0f0;">
+							<div class="approval-employee">
+								<table id="peoples" class="approval-table">
 							        <tbody>
 							        	<!-- 결재자명 출력 -->
 							            <tr class="border-dark-dark-light" style="height: 30px;">
@@ -376,38 +376,38 @@
 							        <p class="text-[12px] text-gray-400 dark:text-gray-600" x-text="attachment.size"></p>
 							    </div>
 							     <a th:href="@{/upload/{filenames}(filenames=${file.fileName} + '.' + ${file.fileExt})}" th:download="${file.fileOrigin + '.' + file.fileExt}" download>
-                                <div
-                                    class="absolute top-0 z-[5] hidden h-full w-full rounded-md bg-dark-light/40 group-hover:block ltr:left-0 rtl:right-0"
-                                    
-                                ></div>
-                                <div
-                                    class="btn btn-primary absolute left-1/2 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 rounded-full p-1 group-hover:block"
-                                >
-                                    <svg
-                                        width="24"
-                                        height="24"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="h-5 w-5"
-                                    >
-                                        <path
-                                            opacity="0.5"
-                                            d="M3 15C3 17.8284 3 19.2426 3.87868 20.1213C4.75736 21 6.17157 21 9 21H15C17.8284 21 19.2426 21 20.1213 20.1213C21 19.2426 21 17.8284 21 15"
-                                            stroke="currentColor"
-                                            stroke-width="1.5"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                        />
-                                        <path
-                                            d="M12 3V16M12 16L16 11.625M12 16L8 11.625"
-                                            stroke="currentColor"
-                                            stroke-width="1.5"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                        />
-                                    </svg>
-                                </div>
+	                                <div
+	                                    class="absolute top-0 z-[5] hidden h-full w-full rounded-md bg-dark-light/40 group-hover:block ltr:left-0 rtl:right-0"
+	                                    
+	                                ></div>
+	                                <div
+	                                    class="btn btn-primary absolute left-1/2 top-1/2 z-10 hidden -translate-x-1/2 -translate-y-1/2 rounded-full p-1 group-hover:block"
+	                                >
+	                                    <svg
+	                                        width="24"
+	                                        height="24"
+	                                        viewBox="0 0 24 24"
+	                                        fill="none"
+	                                        xmlns="http://www.w3.org/2000/svg"
+	                                        class="h-5 w-5"
+	                                    >
+	                                        <path
+	                                            opacity="0.5"
+	                                            d="M3 15C3 17.8284 3 19.2426 3.87868 20.1213C4.75736 21 6.17157 21 9 21H15C17.8284 21 19.2426 21 20.1213 20.1213C21 19.2426 21 17.8284 21 15"
+	                                            stroke="currentColor"
+	                                            stroke-width="1.5"
+	                                            stroke-linecap="round"
+	                                            stroke-linejoin="round"
+	                                        />
+	                                        <path
+	                                            d="M12 3V16M12 16L16 11.625M12 16L8 11.625"
+	                                            stroke="currentColor"
+	                                            stroke-width="1.5"
+	                                            stroke-linecap="round"
+	                                            stroke-linejoin="round"
+	                                        />
+	                                    </svg>
+	                                </div>
                                 </a>
                             </button>
 						</div>
