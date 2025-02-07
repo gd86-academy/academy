@@ -600,7 +600,6 @@
 		   </div>
 		</div>
 		
-	   <script th:src="@{/customjs/addAttendanceApproval.js}"> </script>
 	   <script th:inline="javascript">
         	var employeeNo = [[${userNo}]];
         </script>
@@ -610,6 +609,7 @@
 	    <script th:inline="javascript">
 	    	var ports = [[${port}]];
 	    </script>
+	    <script th:src="@{/customjs/addAttendanceApproval.js}"> </script>
 	</body>
 
 </html>

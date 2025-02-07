@@ -500,8 +500,6 @@
            <!--  풋터 파일 연결 -->
            <div th:replace="fragments/footer :: footer"></div>   
         </div>
-		
-        <script th:src="@{/customjs/classroomList.js}"></script>
         <script th:inline="javascript">
 	    	var employeeNo = [[${userNo}]];
 	    </script>
@@ -511,6 +509,7 @@
 	    <script th:inline="javascript">
 	    	var ports = [[${port}]];
 	    </script>
+	     <script th:src="@{/customjs/classroomList.js}"></script>
 	</body>
 </html>
 
