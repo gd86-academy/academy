@@ -19,6 +19,8 @@ public class BoardModifyDTO {
 	private String updateDate;
 	private String employeeName;
 	private String employeeDepartment;
+	private Integer pinned;
+	private String boardCategory;
 	
 	private List<MultipartFile> boardFiles;
 	private List<String> alreadyFiles;	// 기존 파일

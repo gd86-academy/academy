@@ -39,6 +39,7 @@
 			  overflow-y: scroll;
 			  overflow-x: scroll;
 			}
+			
 		</style>
     </head>
 
@@ -102,16 +103,24 @@
 	                    <div class="panel">
 	                    
 	                    	<!-- 게시판 카테고리 입력창 -->
-	                    	<div>
-		                    	<select id="boardCategory" name="boardCategory">
-							   	    <option value="" disabled selected>게시판 종류</option>
-							   	    <th:block th:each="commonBoardCategory : ${commonBoardCategory}">
-							   	   	 	 <option th:value="${commonBoardCategory.code}" 
-							   	   	 	 		 th:text="${commonBoardCategory.name}"
-	  						   	   	 	 		 th:selected="${commonBoardCategory.code == boardOne.boardCategory}">
-	  						   	   	 	 </option>
-							   	    </th:each>
-							    </select>
+	                    	<div class="flex justify-between items-center w-full">
+		                    	<div>
+			                    	<select id="boardCategory" name="boardCategory">
+								   	    <option value="" disabled selected>게시판 종류</option>
+								   	    <th:block th:each="commonBoardCategory : ${commonBoardCategory}">
+								   	   	 	 <option th:value="${commonBoardCategory.code}" 
+								   	   	 	 		 th:text="${commonBoardCategory.name}"
+		  						   	   	 	 		 th:selected="${commonBoardCategory.code == boardOne.boardCategory}">
+		  						   	   	 	 </option>
+								   	    </th:each>
+								    </select>
+		                    	</div>
+		                    	<div class="flex">
+									<label for="pinned" class="mr-2">고정 유무 </label>
+									<input type="hidden" name="pinned" value="0">
+	   							    <input type="checkbox" id="pinned" name="pinned" value="1"
+	   							    	   th:checked="${boardOne.pinned == 1}">
+								</div>
 	                    	</div>
 	 						
 	 						<br>

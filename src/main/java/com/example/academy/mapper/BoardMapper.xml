@@ -102,6 +102,8 @@
 			    b.board_title = #{boardTitle}
 			    , b.board_content = #{boardContent}
 			    , b.update_employee_no = #{updateEmployeeNo}
+			    , b.is_pinned = #{pinned}
+			    , b.board_category = #{boardCategory}
 			WHERE b.board_no = #{boardNo}
 	</update>
 	
@@ -113,6 +115,7 @@
 			, create_employee_no
 			, update_employee_no
 			, board_category
+			, is_pinned
 			)
 		VALUES (
 			#{boardTitle}
@@ -120,6 +123,7 @@
 			, #{createEmployeeNo}
 			, #{updateEmployeeNo}
 			, #{boardCategory}
+			, #{pinned}
 			)
 	</insert>
 
@@ -142,6 +146,7 @@
 			, c.code
 			, c.name
 			, (SELECT c.name FROM common c WHERE c.code = e.employee_department) employeeDepartmentName
+			, b.is_pinned pinned
 		FROM board b
 		LEFT OUTER JOIN employee e ON e.employee_no = b.update_employee_no
 		LEFT OUTER JOIN file f ON f.file_no = e.photo_file_no

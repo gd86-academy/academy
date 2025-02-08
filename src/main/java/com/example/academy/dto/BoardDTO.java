@@ -22,7 +22,8 @@ public class BoardDTO {
 	private String employeeDepartment;
 	private String employeeDepartmentName;
 	private String code;
-	private String name;	
+	private String name;
+	private Integer pinned;
 	
 	private List<MultipartFile> boardFiles;
 	

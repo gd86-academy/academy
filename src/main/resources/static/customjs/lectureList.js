@@ -104,11 +104,11 @@ document.addEventListener('alpine:init', () => {
 	            success: (data) => {
 					this.datatable = new simpleDatatables.DataTable('#myTable', {
 					    data: {
-					        headings: ['강의번호', '강사명', '강의명', '개강일', '종강일'],
+					        headings: ['강의번호', '강의명', '강사명', '개강일', '종강일'],
 					        data: data.map(item => [
 								item[0], // 강의번호
-								[item[1], item[2]],	// 이미지파일 + 강사명
 					            item[3], // 강의명
+								[item[1], item[2]],	// 이미지파일 + 강사명
 					            item[4], // 개강일
 								item[5], // 종강일
 					        ])
@@ -119,7 +119,7 @@ document.addEventListener('alpine:init', () => {
 						
 					    columns: [
 							{
-					            select: 1,	// 강사명 열
+					            select: 2,	// 강사명 열
 					            render: (data, cell, row) => {
 									console.log("데이터받은거확인:", data); // 디버깅용 로그
 									const [image, name] = data.split(','); 
