@@ -185,8 +185,8 @@
 									       </div>
 									   </div>
 									</div>
-				                    <form id="modifyReservationForm" th:action="@{/modifyReservation}" method="post">
-				                    	<div class="d-flex items-start justify-between ">
+				                    <form id="modifyReservationForm" class="reservation" th:action="@{/modifyReservation}" method="post">
+				                    	<div class="d-flex items-start justify-between reservation-box">
 					                    	<div class="w-100 d-flex flex-wrap">
 												<input id="reservationNo" name="reservationNo" th:value="${reservation.reservationNo}" type="hidden">
 					                    		<label for="reservationPerson">예약자</label>
@@ -257,7 +257,7 @@
 													th:value="${reservation.reservationContent}"
 					                            />
 					                    	</div>
-					                    	<div class="w-100 d-flex flex-wrap panel ms-5">
+					                    	<div class="w-100 d-flex flex-wrap panel ms-5 employee-add">
 								        		<label for="searchEmployee" class="word-break">참여인원</label>
 								        		<div class="d-flex w-100 mb-3">
 													<input type="text" name="searchEmployee" id="searchEmployee" class="form-input">
@@ -274,7 +274,7 @@
 								        		<button id="addResultEmployee" class="btn btn-primary w-100 mt-3" type="button">사원추가</button>													
 							        		</div>
 				                    	</div>
-				                    	<div class="d-grid gap-2 d-md-flex justify-content-md-end mt-3">
+				                    	<div class="d-grid gap-2 d-md-flex justify-content-md-end mt-3 reservation-btn">
 							        		<button class="btn btn-danger" type="button" id="btnRemoveReservation" onClick="openDeleteModal()">예약취소</button>
 							        		<button class="btn btn-primary" type="button" id="btnModifyReservation">예약수정</button>
 										</div>

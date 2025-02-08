@@ -73,7 +73,7 @@
 	</head>
 	
 	<body x-data="main"
-		class="relative overflow-x-hidden font-nunito text-sm font-normal antialiased"
+		class="approval-body relative overflow-x-hidden font-nunito text-sm font-normal antialiased"
 		:class="[ $store.app.sidebar ? 'toggle-sidebar' : '', $store.app.theme === 'dark' || $store.app.isDarkMode ?  'dark' : '', $store.app.menu, $store.app.layout,$store.app.rtlClass]">
 		<!-- sidebar menu overlay -->
 		<div x-cloak class="fixed inset-0 z-50 bg-[black]/60 lg:hidden"
@@ -121,19 +121,20 @@
 				<!-- 메인화면 -->
 				<div class="animate__animated p-6 white-light" :class="[$store.app.animation]"> <!-- 메인화면 div 시작 -->
 					<div class="flex justify-between mb-5">
-					<h2 class="text-2xl ml-3 mb-5">결재 완료 목록</h2>
-					<div class="flex items-center justify-end">
-						<button type="button" class="btn btn-dark ltr:ml-4 rtl:mr-4" style="width:130px; height:40px;" th:onclick="capture()">
-	                        PDF 저장
-	                    </button>
+						<h2 class="text-2xl ml-3 mb-5">결재 완료 목록</h2>
+						<div class="flex items-center justify-end">
+							<button type="button" class="btn btn-dark ltr:ml-4 rtl:mr-4" style="width:130px; height:40px;" th:onclick="capture()">
+		                        PDF 저장
+		                    </button>
+	                    </div>
                     </div>
-                    </div>
-					<div id="capture_area" class="panel" style="margin: 0% 15% 0% 15%; padding: 4%; box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.05); border-radius : 10px;">
+					<div id="capture_area" class="panel approval" >
 						<div class="p-5">
-						<div class="flex items-center justify-between" style="margin-bottom: 20px; margin-top: 20px;">
+						<div class="flex items-center justify-between approval-top" style="margin-bottom: 20px; margin-top: 20px;">
 							<div class="text-3xl font-bold uppercase m-3" style="white-space: nowrap;">&nbsp;강의 신청서</div>
-							<div style="flex-grow: 1; display: flex; justify-content: flex-end;">
-								<table id="peoples" style="table-layout: fixed; width: 60%; height:65px; border: 1px solid #f0f0f0;">
+							<div class="approval-employee">
+								<!-- 결재자 테이블 -->
+								<table id = "peoples" class="approval-table" >
 							        <tbody>
 							        	<!-- 결재자명 출력 -->
 							            <tr class="border-dark-dark-light" style="height: 30px;">
