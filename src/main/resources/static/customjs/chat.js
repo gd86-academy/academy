@@ -49,7 +49,7 @@ document.addEventListener('alpine:init', () => {
 		// 알림 데이터를 가져오는 함수
 		loadNotifications() {
 			$.ajax({
-				url: "http://localhost/academy/restapi/newNoticeList",  // REST API 엔드포인트
+				url: `http://${locations}:${ports}/academy/restapi/newNoticeList`,  // REST API 엔드포인트
 				contentType: 'application/json',
 				type: 'POST',
 				data: JSON.stringify(this.employeeNo),  // this.employeeNo를 사용해 보내기
@@ -112,7 +112,7 @@ document.addEventListener('alpine:init', () => {
 
 		getCurrentUser() { // 로그인한 사용자의 정보 가져오기 (이름) -> GET요청을 보내 현재 로그인한 사용자의 이름을 가져옴
 			$.ajax({
-				url: 'http://localhost/academy/chat/fromUserId',
+				url: `http://${locations}:${ports}/academy/chat/fromUserId`,
 				type: 'GET',
 				success: (data) => {
 					this.currentUserName = data[1];
@@ -127,7 +127,7 @@ document.addEventListener('alpine:init', () => {
 
 		getEmployeeList() {
 			$.ajax({
-				url: 'http://localhost/academy/restapi/employeeList',
+				url: `http://${locations}:${ports}/academy/restapi/employeeList`,
 				type: 'GET',
 				dataType: 'json',
 				success: (data) => {
@@ -216,7 +216,7 @@ document.addEventListener('alpine:init', () => {
 			this.getMessages();
 
 			$.ajax({
-				url: 'http://localhost/academy/chat/updateUseYn',
+				url: `http://${locations}:${ports}/academy/chat/updateUseYn`,
 				type: 'POST',
 				data: {
 					fromUserName: user.userId,
@@ -236,7 +236,7 @@ document.addEventListener('alpine:init', () => {
 
 		getUnreadMessageCount(userId, callback) { // 특정 사용자가 보낸 읽지 않은 메시지 수를 가져오는 함수
 			$.ajax({
-				url: 'http://localhost/academy/chat/unreadCount',
+				url: `http://${locations}:${ports}/academy/chat/unreadCount`,
 				type: 'GET',
 				data: {
 					fromUserName: userId, // 보낸 사람
@@ -263,7 +263,7 @@ document.addEventListener('alpine:init', () => {
 		sendMessage() { // 메시지 보내기
 			if (this.textMessage.trim()) {
 				$.ajax({
-					url: 'http://localhost/academy/chat/send',
+					url: `http://${locations}:${ports}/academy/chat/send`,
 					type: 'POST',
 					contentType: 'application/json',
 					data: JSON.stringify({
@@ -287,7 +287,7 @@ document.addEventListener('alpine:init', () => {
 		getMessages() { // 채팅 메시지 가져오기
 			console.log('Sending request:', this.currentUserId, this.selectedUser.userId);
 			$.ajax({
-				url: 'http://localhost/academy/chat/messages',
+				url: `http://${locations}:${ports}/academy/chat/messages`,
 				type: 'GET',
 				data: {
 					fromUserName: this.currentUserId,
@@ -310,7 +310,7 @@ document.addEventListener('alpine:init', () => {
 
 		markMessagesAsRead() {
 			$.ajax({
-				url: 'http://localhost/academy/chat/updateUseYn',
+				url: `http://${locations}:${ports}/academy/chat/updateUseYn`,
 				type: 'POST',
 				data: {
 					fromUserName: this.selectedUser.userId,

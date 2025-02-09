@@ -470,10 +470,16 @@ table.whitespace-nowrap tbody tr:hover {
 			</div>
 		</div>
 	</div>
-	<script th:src="@{/customjs/employeeList.js}"></script>
-	<script th:src="@{/customjs/chat.js}"></script>
 	<script th:inline="javascript">
     	var employeeNo = "[[${employeeNo}]]";
     </script>
+    <script th:inline="javascript">
+    	var locations = [[${location}]];
+    </script>
+    <script th:inline="javascript">
+    	var ports = [[${port}]];
+    </script>
+    <script th:src="@{/customjs/employeeList.js}"></script>
+	<script th:src="@{/customjs/chat.js}"></script>
 </body>
 </html>
