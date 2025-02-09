@@ -158,8 +158,8 @@
 							            </li>
 							        </th:block>
 							        <!-- 게시물관리 행정팀에게만 노출 -->
-							         <li th:if="${userRole == 'humanresources'}">
-						                <a th:href="@{/boardManagement}">게시판관리</a>
+							         <li th:if="${userRole == 'Administration'}">
+						                <a th:href="@{/Administration/boardManagement}">게시판관리</a>
 						            </li>
 							    </ul>
 							</li>

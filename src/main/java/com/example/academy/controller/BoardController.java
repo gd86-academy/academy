@@ -34,7 +34,7 @@ public class BoardController {
 	@Autowired CommonService commonService;
 	
 	// 게시판 관리 페이지
-	@GetMapping("/boardManagement")
+	@GetMapping("/Administration/boardManagement")
 	public String boardManagement(Model model) {
 		
 		// 스프링시큐리티에서 계정정보 가져오기.
