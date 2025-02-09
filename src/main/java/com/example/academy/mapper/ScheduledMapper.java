@@ -6,6 +6,11 @@ import com.example.academy.dto.AttendanceDTO;
 
 @Mapper
 public interface ScheduledMapper {
+	// 매일 23시 59분에 유형 NULL이고, 출퇴근시간이 비정상일 시 비정상출근처리
+	Integer updateContentByAbnormal(Integer employeeNo);
+	
+	// 주말 23시 59분에 출퇴 NULL인 데이터 휴일처리
+	Integer updateContentByHoliday(Integer employeeNo);
 	
 	// 매일 23시 59분에 출퇴,유형 NULL인 데이터 결석처리
 	Integer updateContentByAbsence(Integer employeeNo);

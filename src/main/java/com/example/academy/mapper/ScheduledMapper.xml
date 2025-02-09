@@ -2,6 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.example.academy.mapper.ScheduledMapper">
 	
+	<!-- 주말 23시 59분에 출퇴 NULL인 데이터 휴일처리 -->
+	<update id="updateContentByHoliday" parameterType="Integer">
+		UPDATE attendance
+		SET attendance_content = 'CT008'
+		WHERE employee_no = #{employeeNo}
+			AND attendance_date = CURDATE()
+			AND attendance_checkin IS NULL
+			AND attendance_checkout IS NULL
+	</update>
+	
+	<!-- 매일 23시 59분에 유형 NULL이고, 출퇴근시간이 비정상일 시 비정상출근처리 -->
+	<update id="updateContentByAbnormal" parameterType="Integer">
+		UPDATE attendance
+		SET attendance_content = 'CT011'
+		WHERE employee_no = #{employeeNo}
+			AND attendance_date = CURDATE()
+			AND attendance_content IS null
+	</update>
+	
 	<!-- 매일 23시 59분에 출퇴,유형 NULL인 데이터 결석처리 -->
 	<update id="updateContentByAbsence" parameterType="Integer">
 		UPDATE attendance
