@@ -111,6 +111,7 @@ document.addEventListener('alpine:init', () => {
 					            item[1], // 강의실명
 								`<div class="flex items-center"><img class="w-9 h-9 rounded-full ltr:mr-2 rtl:ml-2 object-cover" src="./upload/${item[6]}.${item[7]}" /><span>${item[5]}</span>&nbsp;<span style="color: #cccccc;">${item[2]}</span></div>`,
 								`<span>${item[3]}명</span>`, // 수용 인원
+								userRole === 'Administration' ? 
 							    `<div class="flex gap-3">
 									<button type="button" x-tooltip="Edit" onclick="openModifyModal(${item[0]})"
 											class="p-2 w-12 h-12 flex justify-center items-center hover:text-primary">
@@ -132,6 +133,7 @@ document.addEventListener('alpine:init', () => {
 										</svg>
 									</button>
 								</div>`  // 버튼
+								: ''
 					        ])
 					    },
 					    searchable: true,

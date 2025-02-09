@@ -138,8 +138,7 @@
 						<div class="flex gap-3 mr-3 application-btn">
 							<div>
 								<!-- 버튼 -->
-								<button type="button" class="btn btn-primary mr-3"
-									id="openModalButton">
+								<button th:if="${userRole == 'Administration'}" type="button" class="btn btn-primary mr-3"	id="openModalButton">
 									<svg width="24" height="24" viewBox="0 0 24 24" fill="none"
 										xmlns="http://www.w3.org/2000/svg"
 										class="h-5 w-5 ltr:mr-2 rtl:ml-2">
@@ -490,6 +489,9 @@
 			</div>
         <script th:inline="javascript">
 	    	var employeeNo = [[${userNo}]];
+	    </script>
+        <script th:inline="javascript">
+	    	var userRole = [[${userRole}]];
 	    </script>
         <script th:inline="javascript">
 	    	var locations = [[${location}]];

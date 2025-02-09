@@ -128,7 +128,7 @@
                            <div class="flex gap-3 application-btn">
                                <div>
   									<!-- 강의실 등록 버튼 -->
-									<button type="button" class="btn btn-primary" id="openModalButtonAddClassroom">
+									<button th:if="${userRole == 'Administration'}" type="button" class="btn btn-primary" id="openModalButtonAddClassroom">
 									     <svg
 									         width="24"
 									         height="24"
@@ -502,6 +502,9 @@
         </div>
         <script th:inline="javascript">
 	    	var employeeNo = [[${userNo}]];
+	    </script>
+	    <script th:inline="javascript">
+	    	var userRole = [[${userRole}]];
 	    </script>
 	    <script th:inline="javascript">
 	    	var locations = [[${location}]];

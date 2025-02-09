@@ -19,11 +19,9 @@ public class MeetingRoomController {
 	@Autowired
 	public MeetingRoomService meetingroomservice;
 	
-	
 	// 회의실 삭제
 	@GetMapping("/deleteMeetingRoom")
 	public String deleteMeetingRoom(@RequestParam Integer meetingroomNo) {
-		
 		
 	    int row = meetingroomservice.deleteMeetingRoom(meetingroomNo);
 	    if (row == 0) {
@@ -31,8 +29,6 @@ public class MeetingRoomController {
 	    }
 	    return "redirect:/meetingRoomList"; // 삭제 성공 시 회의실 목록 페이지로 리다이렉트
 	}
-
-	
 	
 	// 하상우) 회의실 추가
 	 @PostMapping("/addMeetingRoom")
@@ -43,7 +39,6 @@ public class MeetingRoomController {
 	        }
 	        return "redirect:/meetingRoomList";
 	    }
-	
 	
 	// 하상우 ) 회의실 목록 조회
 	@GetMapping("/meetingRoomList")
@@ -58,6 +53,7 @@ public class MeetingRoomController {
 	        model.addAttribute("userNo", userDetails.getUsername());
 	        model.addAttribute("userName", userDetails.getUserRealName());
 	        model.addAttribute("userMail", userDetails.getUserMail());
+	        model.addAttribute("userRole", userDetails.getUserRole());
 	        model.addAttribute("userPhotoFileName", userDetails.getUserPhotoFileName());
 	        model.addAttribute("userPhotoFileExt", userDetails.getUserPhotoFileExt());
 	    }
