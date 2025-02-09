@@ -228,7 +228,7 @@
 	        employee_no AS employeeNo,
 	        employee_name AS employeeName
 	    FROM employee e
-	    WHERE LOWER(e.employee_name) LIKE LOWER(CONCAT('%', #{searchEmployee}, '%'))
+	    WHERE LOWER(e.employee_name) LIKE LOWER(CONCAT('%', #{searchEmployee}, '%')) AND e.use_yn = 1
 	    AND employee_no != #{reservationPerson}
 	</select>
 

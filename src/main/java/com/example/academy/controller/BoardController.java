@@ -220,6 +220,7 @@ public class BoardController {
 	        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 	 
 	        model.addAttribute("name", name);
+	        model.addAttribute("userNo", Integer.parseInt(userDetails.getUsername()));
 	        model.addAttribute("employeeNo", Integer.parseInt(userDetails.getUsername()));
 	        model.addAttribute("userName", userDetails.getUserRealName());
 	        model.addAttribute("userMail", userDetails.getUserMail());

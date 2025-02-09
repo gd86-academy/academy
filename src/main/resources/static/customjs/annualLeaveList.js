@@ -140,8 +140,8 @@ document.addEventListener('alpine:init', () => {
 	                            item[0], // 번호
 	                            item[1], // 시작날짜
 	                            item[2], // 종료날짜
+								item[4], // 승인날짜
 	                            item[3], // 신청일자
-	                            item[4], // 승인날짜
 	                            item[5], // 신청종류								
 	                        ])
 	                    },
