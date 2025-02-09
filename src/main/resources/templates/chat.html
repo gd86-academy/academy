@@ -339,9 +339,9 @@ table.whitespace-nowrap tbody tr:hover {
 												<div class="relative flex-none">
 													<!-- 선택된 사용자 프로필 이미지를 위한 컨테이너 -->
 													<img
-														class="h-9 w-9 rounded-full object-cover saturate-50 group-hover:saturate-100"
-														:src="selectedUserImage || './images/defaultProfile.png'"
-														:alt="selectedUser ? selectedUser.name : 'Default profile'">
+			                                          class="h-9 w-9 rounded-full object-cover saturate-50 group-hover:saturate-100"
+			                                          :src="selectedUserImage === 'defaultProfile.png' ? 'assets/images/defaultProfile.png' : `${selectedUserImage}`"
+			                                          :alt="selectedUser ? selectedUser.name : 'Default profile'">
 
 												</div>
 												<div class="mx-3">

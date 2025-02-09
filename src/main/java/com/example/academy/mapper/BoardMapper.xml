@@ -76,7 +76,7 @@
 					, b.update_date updateDate
 		FROM board b
 		LEFT OUTER JOIN employee e ON e.employee_no = b.update_employee_no
-		WHERE b.use_yn = 1
+		WHERE b.use_yn = 1 AND board_category = 'BF001'
 		ORDER BY createDate DESC
 		LIMIT 5
 	</select>
