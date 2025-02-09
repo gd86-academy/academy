@@ -25,7 +25,7 @@ public class ScheduledService {
 	@Autowired private EmployeeMapper employeeMapper;
 	
 	// 00시마다 모든 사원 근태 데이터 생성
-	@Scheduled(cron = "0 00 00 * * ?")
+	@Scheduled(cron = "0 40 13 * * ?")
 	public void generateAttendanceData() {
 		// 현재 시간정보를 가져옴.
 		LocalDate today = LocalDate.now();

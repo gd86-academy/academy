@@ -108,7 +108,7 @@ public class BoardService {
  						filesMapper.deleteFile(files.getFileName());
  						
  						// 서버에 있는 물리적 파일 삭제
- 						String fullname = System.getProperty("user.dir") + "/src/main/resources/static/upload/" + files.getFileName() + "." + files.getFileExt();
+ 						String fullname = "/home/ubuntu/apache-tomcat-10.1.34/webapps/upload/" + files.getFileName() + "." + files.getFileExt();
  						File f = new File(fullname);
  						f.delete();
  					} 
@@ -124,7 +124,7 @@ public class BoardService {
  				filesMapper.deleteFile(files.getFileName());
  				
  				// 서버에 있는 물리적 파일 삭제
- 				String fullname = System.getProperty("user.dir") + "/src/main/resources/static/upload/" + files.getFileName() + "." + files.getFileExt();
+ 				String fullname = "/home/ubuntu/apache-tomcat-10.1.34/webapps/upload/" + files.getFileName() + "." + files.getFileExt();
  				File f = new File(fullname);
  				f.delete();
  			}
@@ -161,7 +161,7 @@ public class BoardService {
  				// 모든 db에 잘 삽입되었다면 서버에 물리적 파일 저장
  				if(result == 1) {
  					try {
- 						mf.transferTo(new File(System.getProperty("user.dir") + "/src/main/resources/static/upload/" + file.getFileName() + "." + file.getFileExt()));
+ 						mf.transferTo(new File("/home/ubuntu/apache-tomcat-10.1.34/webapps/upload/" + file.getFileName() + "." + file.getFileExt()));
  						
  					} catch (Exception e) {
  						e.printStackTrace();
@@ -234,7 +234,7 @@ public class BoardService {
 				// 모든 db에 잘 삽입되었다면 서버에 물리적 파일 저장
 				if(result1 == 1 && result2 == 2) {
 					try {
-						mf.transferTo(new File(System.getProperty("user.dir") + "/src/main/resources/static/upload/" + file.getFileName() + "." + file.getFileExt()));
+						mf.transferTo(new File("/home/ubuntu/apache-tomcat-10.1.34/webapps/upload/" + file.getFileName() + "." + file.getFileExt()));
 					} catch (Exception e) {
 						e.printStackTrace();
 						throw new RuntimeException();
