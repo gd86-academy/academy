@@ -94,8 +94,6 @@ document.addEventListener('alpine:init', () => {
 
 
 			this.getCurrentUser(); // 현재 로그인한 사용자 가져오기   
-			
-
 			// 일정 간격으로 메시지 갱신(1초)
 			setInterval(() => {
 				if (this.selectedUser) {
@@ -151,41 +149,42 @@ document.addEventListener('alpine:init', () => {
 		
 		
 		updateUnreadCounts() {
-			this.totalUnreadCount = 0;
-			const promises = this.searchUsers.map(user =>
-				new Promise(resolve => {
-					this.getUnreadMessageCount(user.userId, count => {
-						this.unreadCounts[user.userId] = count;
-						this.totalUnreadCount += count;
+		    this.totalUnreadCount = 0;
+		    const promises = this.searchUsers.map(user =>
+		        new Promise(resolve => {
+		            this.getUnreadMessageCount(user.userId, count => {
+		                this.unreadCounts[user.userId] = count;
+		                this.totalUnreadCount += count;
+		                resolve();
+		            });
+		        })
+		    );
 
-						if (count > 0) {
-							// 읽지 않은 메시지가 있는 경우, 해당 사용자를 배열에서 제거하고 맨 앞에 추가
-							const index = this.searchUsers.findIndex(u => u.userId === user.userId);
-							if (index > -1) {
-								const [movedUser] = this.searchUsers.splice(index, 1);
-								this.searchUsers.unshift(movedUser);
-							}
-						}
-						resolve();
-					});
-				})
-			);
-
-			Promise.all(promises).then(() => {
-				this.unreadCounts = { ...this.unreadCounts };
-				window.dispatchEvent(new CustomEvent('unreadCountUpdated', { detail: this.totalUnreadCount }));
-			});
+		    Promise.all(promises).then(() => {
+		        this.unreadCounts = { ...this.unreadCounts };
+		        this.sortUsers();
+		        window.dispatchEvent(new CustomEvent('unreadCountUpdated', { detail: this.totalUnreadCount }));
+		    });
 		},
 
 
 		sortUsers() {
-			this.searchUsers.sort((a, b) => {
-				const unreadCountA = this.unreadCounts[a.userId] || 0;
-				const unreadCountB = this.unreadCounts[b.userId] || 0;
-				return unreadCountB - unreadCountA;
-			});
+		    this.searchUsers.sort((a, b) => {
+		        const unreadCountA = this.unreadCounts[a.userId] || 0;
+		        const unreadCountB = this.unreadCounts[b.userId] || 0;
+		        
+		        if (unreadCountA > 0 && unreadCountB > 0) {
+		            // 둘 다 읽지 않은 메시지가 있는 경우, userId로 정렬
+		            return parseInt(a.userId) - parseInt(b.userId);
+		        } else if (unreadCountA > 0) {
+		            return -1; // a를 위로
+		        } else if (unreadCountB > 0) {
+		            return 1; // b를 위로
+		        }
+		        // 둘 다 읽지 않은 메시지가 없는 경우, 원래 순서 유지
+		        return 0;
+		    });
 		},
-
 		searchUsermethod() {
 
 
@@ -206,10 +205,12 @@ document.addEventListener('alpine:init', () => {
 		},
 
 
-		selectUser(user, userImage) {
+		selectUser(user) {
 			console.log('Selected user:', user);
 			this.selectedUser = user;
-			this.selectedUserImage = userImage === 'null.null' ? './images/defaultProfile.png' : './upload/' + userImage;
+			this.selectedUserImage = user.path === 'defaultProfile.png' 
+			        ? 'assets/images/defaultProfile.png' 
+			        : `./upload/${user.path}`;
 			this.isShowUserChat = true;
 			this.scrollToBottom();
 			this.isShowChatMenu = false;
