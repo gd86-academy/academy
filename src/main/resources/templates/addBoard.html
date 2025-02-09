@@ -91,17 +91,24 @@
 	                    <div class="panel" style="padding: 40px;">
 	                    
 	                    	<!-- 게시판 카테고리 입력창 -->
-	                    	<div>
-							    <select id="boardCategory" name="boardCategory">
-							        <option value="" disabled selected>카테고리를 선택해주세요</option>
-							        <th:block th:each="commonBoardCategory : ${commonBoardCategory}">
-							            <option th:value="${commonBoardCategory.code}" 
-							                    th:text="${commonBoardCategory.name}" 
-							                    th:selected="${commonBoardCategory.name == name}">
-							            </option>
-							        </th:block>
-							    </select>
-							</div>
+	                    	<div class="flex justify-between items-center w-full">
+		                    	<div>
+								    <select id="boardCategory" name="boardCategory">
+								        <option value="" disabled selected>카테고리를 선택해주세요</option>
+								        <th:block th:each="commonBoardCategory : ${commonBoardCategory}">
+								            <option th:value="${commonBoardCategory.code}" 
+								                    th:text="${commonBoardCategory.name}" 
+								                    th:selected="${commonBoardCategory.name == name}">
+								            </option>
+								        </th:block>
+								    </select>
+								</div>
+								<div class="flex">
+									<label for="pinned" class="mr-2">고정 유무 </label>
+									<input type="hidden" name="pinned" value="0">
+	   							    <input type="checkbox" id="pinned" name="pinned" value="1">
+								</div>
+	                    	</div>
 	 						
 	 						<br>
 	 						                   
