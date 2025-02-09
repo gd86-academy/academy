@@ -98,7 +98,7 @@ public class AttendanceApprovalService {
 				
 				// 복사한 파일 물리적 파일 저장
 				// 프로젝트의 static/upload 디렉토리 경로
-				String basePath = System.getProperty("user.dir") + "/src/main/resources/static/upload/";
+				String basePath = "/home/ubuntu/apache-tomcat-10.1.34/webapps/upload/";
 				
 				// 기존 파일 경로
 				File alreadyFile = new File(basePath + fileName + "." + copyFile.getFileExt());
@@ -148,7 +148,7 @@ public class AttendanceApprovalService {
 				
 				// 물리적 파일 저장
 				try {
-					mf.transferTo(new File(System.getProperty("user.dir") + "/src/main/resources/static/upload/" + file.getFileName() + "." + file.getFileExt()));
+					mf.transferTo(new File("/home/ubuntu/apache-tomcat-10.1.34/webapps/upload/" + file.getFileName() + "." + file.getFileExt()));
 				} catch (Exception e) {
 					e.printStackTrace();
 					throw new RuntimeException();
@@ -318,7 +318,7 @@ public class AttendanceApprovalService {
 						filesMapper.deleteFile(files.getFileName());
 						
 						// 서버에 있는 물리적 파일 삭제
-						String fullname = System.getProperty("user.dir") + "/src/main/resources/static/upload/" + files.getFileName() + "." + files.getFileExt();
+						String fullname = "/home/ubuntu/apache-tomcat-10.1.34/webapps/upload/" + files.getFileName() + "." + files.getFileExt();
 						File f = new File(fullname);
 						f.delete();
 					} 
@@ -334,7 +334,7 @@ public class AttendanceApprovalService {
 				filesMapper.deleteFile(files.getFileName());
 				
 				// 서버에 있는 물리적 파일 삭제
-				String fullname = System.getProperty("user.dir") + "/src/main/resources/static/upload/" + files.getFileName() + "." + files.getFileExt();
+				String fullname = "/home/ubuntu/apache-tomcat-10.1.34/webapps/upload/" + files.getFileName() + "." + files.getFileExt();
 				File f = new File(fullname);
 				f.delete();
 			}
@@ -372,7 +372,7 @@ public class AttendanceApprovalService {
 				// 모든 db에 잘 삽입되었다면 서버에 물리적 파일 저장
 				if(result == 1) {
 					try {
-						mf.transferTo(new File(System.getProperty("user.dir") + "/src/main/resources/static/upload/" + file.getFileName() + "." + file.getFileExt()));
+						mf.transferTo(new File("/home/ubuntu/apache-tomcat-10.1.34/webapps/upload/" + file.getFileName() + "." + file.getFileExt()));
 					} catch (Exception e) {
 						e.printStackTrace();
 						throw new RuntimeException();
@@ -455,7 +455,7 @@ public class AttendanceApprovalService {
 				// 모든 db에 잘 삽입되었다면 서버에 물리적 파일 저장
 				if(result == 2 && row2 == 2) {
 					try {
-						mf.transferTo(new File(System.getProperty("user.dir") + "/src/main/resources/static/upload/" + file.getFileName() + "." + file.getFileExt()));
+						mf.transferTo(new File("/home/ubuntu/apache-tomcat-10.1.34/webapps/upload/" + file.getFileName() + "." + file.getFileExt()));
 					} catch (Exception e) {
 						e.printStackTrace();
 						throw new RuntimeException();

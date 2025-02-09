@@ -145,7 +145,7 @@ public class LectureApprovalService {
 						Files copyFile = filesMapper.selectCopyFile(alreadyfiles);
 						
 						// 저장 경로 설정
-					    String uploadDir = System.getProperty("user.dir") + "/src/main/resources/static/upload/";
+					    String uploadDir = "/home/ubuntu/apache-tomcat-10.1.34/webapps/upload/";
 
 					    // 새로운 UUID를 부여하여 저장할 파일 객체를 생성.
 					    InputFile inputFile = new InputFile();
@@ -200,7 +200,7 @@ public class LectureApprovalService {
 				// 서버에 물리적 파일 저장.
 				if (result == 1) {
 					try {
-						getFiles.transferTo(new File(System.getProperty("user.dir") + "/src/main/resources/static/upload/" + files.getFileName() + "." + files.getFileExt()));
+						getFiles.transferTo(new File("/home/ubuntu/apache-tomcat-10.1.34/webapps/upload/" + files.getFileName() + "." + files.getFileExt()));
 					} catch (Exception e) {
 						e.printStackTrace();
 						throw new RuntimeException();
@@ -377,7 +377,7 @@ public class LectureApprovalService {
 						lectureApprovalMapper.deleteContactLectureApprovalFile(deleteFileNo, lectureApprovalModifyDTO.getLectureApprovalNo());
 						
 						// 서버에 있는 물리적 파일 삭제.
-						String fullname = System.getProperty("user.dir") + "/src/main/resources/static/upload/" + files.getFileName() + "." + files.getFileExt();
+						String fullname = "/home/ubuntu/apache-tomcat-10.1.34/webapps/upload/" + files.getFileName() + "." + files.getFileExt();
 						File f = new File(fullname);
 						f.delete();
 					}
@@ -390,7 +390,7 @@ public class LectureApprovalService {
 				// 파일/결재 연결테이블 삭제.
 				lectureApprovalMapper.deleteContactLectureApprovalFile(deleteFileNo, lectureApprovalModifyDTO.getLectureApprovalNo());
 				// 서버에 있는 물리적 파일 삭제.
-				String fullname = System.getProperty("user.dir") + "/src/main/resources/static/upload/" + files.getFileName() + "." + files.getFileExt();
+				String fullname = "/home/ubuntu/apache-tomcat-10.1.34/webapps/upload/" + files.getFileName() + "." + files.getFileExt();
 				File f = new File(fullname);
 				f.delete();
 			}
@@ -414,7 +414,7 @@ public class LectureApprovalService {
 				// 서버에 물리적 파일 저장.
 				if (result == 1) {
 					try {
-						getFiles.transferTo(new File(System.getProperty("user.dir") + "/src/main/resources/static/upload/" + files.getFileName() + "." + files.getFileExt()));
+						getFiles.transferTo(new File("/home/ubuntu/apache-tomcat-10.1.34/webapps/upload/" + files.getFileName() + "." + files.getFileExt()));
 					} catch (Exception e) {
 						e.printStackTrace();
 						throw new RuntimeException();
@@ -485,7 +485,7 @@ public class LectureApprovalService {
 				// 서버에 물리적 파일 저장.
 				if (result == 1) {
 					try {
-						getFiles.transferTo(new File(System.getProperty("user.dir") + "/src/main/resources/static/upload/" + files.getFileName() + "." + files.getFileExt()));
+						getFiles.transferTo(new File("/home/ubuntu/apache-tomcat-10.1.34/webapps/upload/" + files.getFileName() + "." + files.getFileExt()));
 					} catch (Exception e) {
 						e.printStackTrace();
 						throw new RuntimeException();
