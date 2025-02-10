@@ -88,8 +88,6 @@ public class AttendanceService {
 		} else if(approvalContent.equals("CT003")) { // 근태유형 == '오전반차'
 			if((checkInTime.isBefore(twoPM) || checkInTime.equals(twoPM)) 
 					&& (checkOutTime.isAfter(evening) || checkOutTime.equals(evening))) { // 근태유형 == '오전반차' && 14:00 >= 출근시간 && 퇴근시간 >= 18:00 -> 오전반차
-					attendanceDTO.setAttendanceContent("CT010"); // CT010 = 정상출근 
-					attendanceMapper.updateContent(attendanceDTO); // 근태유형 정상출근으로 변경
 			} else if(checkInTime.isAfter(twoPM)
 					&& (checkOutTime.isAfter(evening) || checkOutTime.equals(evening))) { // 근태유형 == '오전반차' && 14:00 < 출근시간 && 퇴근시간 >= 18:00 -> (오전반차)지각 CT006 
 					attendanceMapper.updateLate(attendanceDTO); // 지각 활성화
@@ -105,8 +103,6 @@ public class AttendanceService {
 		} else if(approvalContent.equals("CT004")) {	// 근태유형 == '오후반차'
 			if((checkInTime.isBefore(nineAM) || checkInTime.equals(nineAM)) 
 					&& (checkOutTime.isAfter(noon) || checkOutTime.equals(noon))) { // 09:00 >= 출근시간 && 퇴근시간 >= 13:00 -> 오후반차 CT004'
-					attendanceDTO.setAttendanceContent("CT010"); // CT010 = 정상출근 
-					attendanceMapper.updateContent(attendanceDTO); // 근태유형 정상출근으로 변경
 			} else if(checkInTime.isAfter(nineAM)
 					&& (checkOutTime.isAfter(noon) || checkOutTime.equals(noon))) { // 09:00 < 출근시간 && 퇴근시간 >= 13:00 -> (오후반차)지각
 					attendanceMapper.updateLate(attendanceDTO); // 지각 활성화
@@ -127,9 +123,13 @@ public class AttendanceService {
 			} else if(checkInTime.isAfter(nineAM)
 					&& (checkOutTime.isAfter(evening) || checkOutTime.equals(evening))) { // 09:00 < 출근시간 && 퇴근시간 >= 18:00 -> 지각
 					attendanceMapper.updateLate(attendanceDTO); // 지각 활성화
+					attendanceDTO.setAttendanceContent("CT006"); // CT006 = 지각
+					attendanceMapper.updateContent(attendanceDTO); // 근태유형 지각으로 변경
 			} else if((checkInTime.isBefore(nineAM) || checkInTime.equals(nineAM)) // 09:00 >= 출근시간 && 퇴근시간 < 18:00 -> 조퇴 
 					&& checkOutTime.isBefore(evening)) { 
 					attendanceMapper.updateEarlyLeave(attendanceDTO); // 조퇴 활성화
+					attendanceDTO.setAttendanceContent("CT005"); // CT005 = 조퇴
+					attendanceMapper.updateContent(attendanceDTO); // 근태유형 조퇴으로 변경
 			} else { // 9 < 출근시간 && 퇴근시간 < 18
 	 				attendanceMapper.updateLate(attendanceDTO); // 지각 활성화
 					attendanceMapper.updateEarlyLeave(attendanceDTO); // 조퇴 활성화
