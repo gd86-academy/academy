@@ -54,7 +54,7 @@ public class ScheduledService {
         }
 	}
 	
-	// 11시 59분마다 출/퇴 시간이 NULL이고 근태유형이 NULL인 데이터는 근태유형 결석으로 변경
+	// 11시 59분마다 출/퇴 시간이 NULL이고 근태유형이 NULL인 데이터는 근태유형 결석／휴일로 변경
 	@Scheduled(cron = "0 59 23 * * ?")
 	public void attendanceByAbsence() {
 		// 현재 시간정보를 가져옴.

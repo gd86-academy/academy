@@ -82,6 +82,8 @@ public class AttendanceService {
 			} else { // 9 < 출근시간 && 퇴근시간 < 18
 					attendanceMapper.updateLate(attendanceDTO); // 지각 활성화
 					attendanceMapper.updateEarlyLeave(attendanceDTO); // 조퇴 활성화
+					attendanceDTO.setAttendanceContent("CT011"); // CT011 = 비정상출근
+					attendanceMapper.updateContent(attendanceDTO); // 근태유형 비정상출근으로 변경
 			}
 		} else if(approvalContent.equals("CT003")) { // 근태유형 == '오전반차'
 			if((checkInTime.isBefore(twoPM) || checkInTime.equals(twoPM)) 
@@ -97,8 +99,8 @@ public class AttendanceService {
 			} else { // 14 < 출근시간 && 퇴근시간 < 18
 					attendanceMapper.updateLate(attendanceDTO); // 지각 활성화
 					attendanceMapper.updateEarlyLeave(attendanceDTO); // 조퇴 활성화
-					attendanceDTO.setAttendanceContent("CT006"); // CT006 = 지각
-					attendanceMapper.updateContent(attendanceDTO); // 근태유형 지각으로 변경
+					attendanceDTO.setAttendanceContent("CT011"); // CT011 = 비정상출근
+					attendanceMapper.updateContent(attendanceDTO); // 근태유형 비정상출근으로 변경
 			}
 		} else if(approvalContent.equals("CT004")) {	// 근태유형 == '오후반차'
 			if((checkInTime.isBefore(nineAM) || checkInTime.equals(nineAM)) 
@@ -114,6 +116,8 @@ public class AttendanceService {
  			} else { // 9 < 출근시간 && 퇴근시간 < 13
 	 				attendanceMapper.updateLate(attendanceDTO); // 지각 활성화
 					attendanceMapper.updateEarlyLeave(attendanceDTO); // 조퇴 활성화
+					attendanceDTO.setAttendanceContent("CT011"); // CT011 = 비정상출근
+					attendanceMapper.updateContent(attendanceDTO); // 근태유형 비정상출근으로 변경
  			}
 		} else  { // 근무유형이 NULL이 아니거나 다른 근무 유형일때
 			if((checkInTime.isBefore(nineAM) || checkInTime.equals(nineAM)) 
@@ -129,8 +133,8 @@ public class AttendanceService {
 			} else { // 9 < 출근시간 && 퇴근시간 < 18
 	 				attendanceMapper.updateLate(attendanceDTO); // 지각 활성화
 					attendanceMapper.updateEarlyLeave(attendanceDTO); // 조퇴 활성화
-					attendanceDTO.setAttendanceContent("CT006"); // CT006 = 지각
-					attendanceMapper.updateContent(attendanceDTO); // 근태유형 지각으로 변경
+					attendanceDTO.setAttendanceContent("CT011"); // CT011 = 비정상출근
+					attendanceMapper.updateContent(attendanceDTO); // 근태유형 비정상출근으로 변경
 			}
 		}	
 		return 1;
