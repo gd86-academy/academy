@@ -409,31 +409,31 @@ function validateForm() {
   // 이름 검사
   if ($('#classroomNameModify').val().trim() === '') {
     $('#classroomNameModify').addClass("errorInput");
-    $('.meetingroomName-error').show();
+    $('.modifyClassroomName-error').show();
     isValid = false;
   } else {
     $('#classroomNameModify').removeClass("errorInput");
-    $('.meetingroomName-error').hide();
+    $('.modifyClassroomName-error').hide();
   }
 
   // 담당자 검사
   if ($('#classroomManagerModify').val().trim() === '') {
     $('#classroomManagerModify').addClass("errorInput");
-    $('.meetingroomManager-error').show();
+    $('.modifyClassroomManager-error').show();
     isValid = false;
   } else {
     $('#classroomManagerModify').removeClass("errorInput");
-    $('.meetingroomManager-error').hide();
+    $('.modifyClassroomManager-error').hide();
   }
 
   // 수용인원 검사
   if ($('#classroomCapacityModify').val().trim() === '') {
     $('#classroomCapacityModify').addClass("errorInput");
-    $('.meetingroomCapacity-error').show();
+    $('.modifyClassroomCapacity-error').show();
     isValid = false;
   } else {
     $('#classroomCapacityModify').removeClass("errorInput");
-    $('.meetingroomCapacity-error').hide();
+    $('.modifyClassroomCapacity-error').hide();
   }
 
   return isValid;
