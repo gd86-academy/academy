@@ -96,7 +96,7 @@
 		LEFT OUTER JOIN common name ON name.code = ap.attendance_approval_type
 		LEFT OUTER JOIN common status ON status.code = ap.attendance_approval_status
 		WHERE ap.use_yn = 1
-		  AND e.employee_no = 32
+		  AND e.employee_no = #{employeeNo}
 		  AND DATE_FORMAT(ap.attendance_approval_begindate, '%Y') = YEAR(NOW())
 		  AND (status.name = '승인' OR status.name = '대기')
 		  AND (name.name IN ('연차', '오전반차', '오후반차'))  
