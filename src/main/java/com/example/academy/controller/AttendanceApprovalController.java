@@ -17,6 +17,7 @@ import com.example.academy.dto.AttendanceApprovalAddDTO;
 import com.example.academy.dto.AttendanceApprovalModifyDTO;
 import com.example.academy.dto.AttendanceApprovalOneDTO;
 import com.example.academy.security.CustomUserDetails;
+import com.example.academy.service.AnnualLeaveService;
 import com.example.academy.service.ApprovalEmployeeService;
 import com.example.academy.service.AttendanceApprovalFileService;
 import com.example.academy.service.AttendanceApprovalService;
@@ -30,6 +31,7 @@ public class AttendanceApprovalController {
 	@Autowired AttendanceApprovalService attendanceApprovalService;
 	@Autowired ApprovalEmployeeService approvalEmployeeService;
 	@Autowired AttendanceApprovalFileService attendanceApprovalFileService;
+	@Autowired AnnualLeaveService annualLeaveService;
 	
 	// 김혜린 : 근태 신청서 재신청페이지 GET
 	@GetMapping("/retryAttendanceApproval")
@@ -46,6 +48,11 @@ public class AttendanceApprovalController {
 	        model.addAttribute("userRole", userDetails.getUserRole());
 	        model.addAttribute("userPhotoFileName", userDetails.getUserPhotoFileName());
 	        model.addAttribute("userPhotoFileExt", userDetails.getUserPhotoFileExt());
+	        
+	        // 년별 사용연차 개수 조회
+	        Double useCount = annualLeaveService.getAnnualLeaveCount(Integer.parseInt(userDetails.getUsername()));
+	        // 잔여연차
+	        model.addAttribute("annualLeave", 15.0 - useCount);
 	    }
 	    
 		// 원래 정보 불러오기
@@ -110,6 +117,25 @@ public class AttendanceApprovalController {
 	// 김혜린 : 근태 신청서 수정페이지 GET
 	@GetMapping("/modifyAttendanceApproval")
 	public String modifyAttendanceApproval(Model model, Integer attendanceApprovalNo) {
+		// 스프링시큐리티에서 계정정보 가져오기.
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		
+		// 로그인 상태일 때만 model에 정보담기.
+	    if (authentication != null && authentication.isAuthenticated() && !(authentication instanceof AnonymousAuthenticationToken)) {
+	        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+	        model.addAttribute("userNo", Integer.parseInt(userDetails.getUsername()));
+	        model.addAttribute("userName", userDetails.getUserRealName());
+	        model.addAttribute("userMail", userDetails.getUserMail());
+	        model.addAttribute("userRole", userDetails.getUserRole());
+	        model.addAttribute("userPhotoFileName", userDetails.getUserPhotoFileName());
+	        model.addAttribute("userPhotoFileExt", userDetails.getUserPhotoFileExt());
+	        
+	        // 년별 사용연차 개수 조회
+	        Double useCount = annualLeaveService.getAnnualLeaveCount(Integer.parseInt(userDetails.getUsername()));
+	        // 잔여연차
+	        model.addAttribute("annualLeave", 15.0 - useCount);
+	    }
+		
 		// 원래 정보 불러오기
 		// 1) 근태신청서 테이블 정보
 		AttendanceApprovalOneDTO attendanceApproval = attendanceApprovalService.getAttendanceApprovalOne(attendanceApprovalNo);
@@ -127,6 +153,7 @@ public class AttendanceApprovalController {
 		List<Files> files = attendanceApprovalFileService.getAttendanceApprovalFileList(attendanceApprovalNo);
 		model.addAttribute("files", files);
 		log.debug("파일 목록 : " + files);	//디버깅
+		
 		
 		return "modifyAttendanceApproval";
 	}
@@ -266,9 +293,13 @@ public class AttendanceApprovalController {
 	        model.addAttribute("userRole", userDetails.getUserRole());
 	        model.addAttribute("userPhotoFileName", userDetails.getUserPhotoFileName());
 	        model.addAttribute("userPhotoFileExt", userDetails.getUserPhotoFileExt());
+	        
+	        // 년별 사용연차 개수 조회
+	        Double useCount = annualLeaveService.getAnnualLeaveCount(Integer.parseInt(userDetails.getUsername()));
+	        // 잔여연차
+	        model.addAttribute("annualLeave", 15.0 - useCount);
 	    }
 	    
-		
 		return "addAttendanceApproval";		
 	}
 	

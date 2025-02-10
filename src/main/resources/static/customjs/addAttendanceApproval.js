@@ -251,6 +251,7 @@ function removeFileField(fileId) {
 	errMsgs = errMsgs.filter(errMsg => errMsg !== 'errMsg' + fileId);	
 }
 
+
 // 유효성 검사 
 $('#addBtn').click(function() {
     let isVal = true;
@@ -315,6 +316,50 @@ $('#addBtn').click(function() {
 	if ($('#people1 input:not([type="hidden"])').length === 0) {
 		modalBackgroundApprovalValidation.classList.toggle('hidden', false);
 		modalBackgroundApprovalValidation.classList.toggle('block', true);
+		isVal = false;
+    }
+	
+	// 연차일수 계산
+	// 1. 신청 종류 가져오기
+    const attendanceType = document.querySelector('input[name="attendanceApprovalType"]:checked').value;
+
+    // 2. 시작 날짜와 종료 날짜 가져오기
+    const startDate = document.getElementById('beginDate').value;
+    const endDate = document.getElementById('endDate').value;
+
+    // 3. 날짜 범위의 주말 제외 계산 함수
+    function calculateBusinessDays(start, end) {
+        const startDay = new Date(start);
+        const endDay = new Date(end);
+        let totalDays = 0;	// 평일 개수를 저장할 변수
+
+        for (let d = startDay; d <= endDay; d.setDate(d.getDate() + 1)) {
+            const day = d.getDay();
+            if (day !== 0 && day !== 6) { // 0: Sunday, 6: Saturday
+                totalDays++;
+            }
+        }
+
+        return totalDays;
+    }
+
+    // 4. 주말 제외한 총 날짜 계산
+    const totalDays = calculateBusinessDays(startDate, endDate);
+
+    // 5. 신청 종류에 따른 계산
+    let finalCount;
+    if (attendanceType === 'CT003' || attendanceType === 'CT004') { // 오전 반차 또는 오후 반차
+        finalCount = totalDays * 0.5;
+    } else if(attendanceType === 'CT001' || attendanceType === 'CT009'){ // 병가, 공가
+		finalCount = 0;
+	} else { // 연차
+        finalCount = totalDays * 1;
+    }
+
+	let annualLeave = $('#annualLeave').val();
+	if (annualLeave < finalCount) {	// 잔여연차 < 사용일수
+		modalBackgroundAnnualOver.classList.toggle('hidden', false);
+		modalBackgroundAnnualOver.classList.toggle('block', true);
 		isVal = false;
     }
 	
@@ -709,4 +754,19 @@ const closeModalAddFileError = () => {
 
 if (closeModalButtonAddFileError) closeModalButtonAddFileError.addEventListener('click', closeModalAddFileError); // 닫기 버튼 클릭 시
 if (employeeBtnAddFileError) employeeBtnAddFileError.addEventListener('click', closeModalAddFileError);     // 취소 버튼 클릭 시
+
+// 연차개수 초과오류 모달 관련 DOM 요소
+const modalBackgroundAnnualOver = document.getElementById('modalBackgroundAnnualOver');
+const modalWrapperAnnualOver = document.getElementById('modalWrapperAnnualOver');
+const closeModalButtonAnnualOver = document.getElementById('closeModalButtonAnnualOver');
+const checkBtnAnnualOver = document.getElementById('checkBtnAnnualOver');
+
+// 연차개수 초과 오류 모달 닫기
+const closeModalAnnualOver = () => {
+	  modalBackgroundAnnualOver.classList.remove('block');
+	  modalBackgroundAnnualOver.classList.add('hidden');  // 모달 배경 숨기기
+};
+
+if (closeModalButtonAnnualOver) closeModalButtonAnnualOver.addEventListener('click', closeModalAnnualOver); // X 버튼 클릭 시
+if (checkBtnAnnualOver) checkBtnAnnualOver.addEventListener('click', closeModalAnnualOver);     // 확인 버튼 클릭 시
 
