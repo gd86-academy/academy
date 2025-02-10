@@ -343,7 +343,7 @@ submitModifyButton.addEventListener('click', function(e) {
 	    processData: false,
 	    contentType: false,
 	    success: function(response) {
-	      alert('회의실이 성공적으로 수정되었습니다.');
+	      alert('강의실이 성공적으로 수정되었습니다.');
 	      closeModifyModal();
 	      // 테이블 새로고침
 	      if (window.multicolumn && window.multicolumn.datatable) {
@@ -353,7 +353,7 @@ submitModifyButton.addEventListener('click', function(e) {
 	      }
 	    },
 	    error: function(xhr, status, error) {
-		    alert('회의실 수정에 실패했습니다.');
+		    alert('강의실 수정에 실패했습니다.');
 	    }
 	  });
 	}
