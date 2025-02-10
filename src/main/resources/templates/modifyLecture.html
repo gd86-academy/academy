@@ -57,6 +57,12 @@
 		        font-size: 14px;
 		        width: 100%; /* 화면 크기에 맞게 크기 조정 */    			
 		    }
+		    .tree-scroll {	/* 스크롤 생성 */
+		    	max-height: 350px; 
+		    	overflow-y: auto; 
+		    	overflow-x: hidden;  
+		    	width: 100%;
+		    }
 	    </style>	
 	</head>
 	
@@ -313,7 +319,7 @@
 	                    		  <input type="hidden" id="selectedValue">
 	                    		  <input type="hidden" id="approvalRemoveBtn">
 				               	  <div class="p-1 mb-3 font-bold"><span>변경할 강사를 선택해주세요.</span></div>
-					              <div style="border-radius: 10px;" id="tree" class="tui-tree-wrap"></div>
+					              <div style="border-radius: 10px;" id="tree" class="tui-tree-wrap tree-scroll"></div>
 					              <button id="modifyEmployeeButton" style="width:300px;" type="button" class="btn btn-dark mt-3">선택한 강사로 수정</button>
 				           	   </div>
 					        </div>
