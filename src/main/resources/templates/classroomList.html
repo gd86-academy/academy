@@ -70,6 +70,12 @@
 			#classroomTable tbody td:nth-child(5) {
 			    width: 10%; /* 두 번째 열 */
 			}
+			.tree-scroll {	/* 스크롤 생성 */
+		    	max-height: 350px; 
+		    	overflow-y: auto; 
+		    	overflow-x: hidden;  
+		    	width: 100%;
+		    }
 		</style>
     </head>
 	<body
@@ -430,7 +436,7 @@
 				                    		  <input type="hidden" id="selectedValue">
 				                    		  <input type="hidden" id="approvalRemoveBtn">
 							               	  <div class="p-1 mb-3 font-bold"><span>회의실 담당자로 지정할 사원을 선택해주세요.</span></div>
-								              <div style="border-radius: 10px;" id="tree" class="tui-tree-wrap"></div>
+								              <div style="border-radius: 10px;" id="tree" class="tui-tree-wrap tree-scroll"></div>
 								              <button id="addEmployeeListButton" style="width:300px;" type="button" class="btn btn-dark mt-3">선택한 사원추가</button>
 							           	   </div>
 								        </div>
@@ -479,7 +485,7 @@
 		   	                    		  <input type="hidden" id="selectedValue2">
 		   	                    		  <input type="hidden" id="approvalRemoveBtn2">
 		   				               	  <div class="p-1 mb-3 font-bold"><span>회의실 담당자로 지정할 사원을 선택해주세요.</span></div>
-		   					              <div style="border-radius: 10px;" id="modifytree" class="tui-tree-wrap"></div>
+		   					              <div style="border-radius: 10px;" id="modifytree" class="tui-tree-wrap tree-scroll"></div>
 		   					              <button id="modifyEmployeeListButton" style="width:300px;" type="button" class="btn btn-dark mt-3">선택한 사원추가</button>
 		   				           	   </div>
 		   				          </div>
