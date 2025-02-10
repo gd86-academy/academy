@@ -76,9 +76,13 @@ public class AttendanceService {
 			} else if(checkInTime.isAfter(nineAM)
 					&& (checkOutTime.isAfter(evening) || checkOutTime.equals(evening))) { // 09:00 < 출근시간 && 퇴근시간 >= 18:00 -> 지각
 					attendanceMapper.updateLate(attendanceDTO); // 지각 활성화
+					attendanceDTO.setAttendanceContent("CT006"); // CT006 = 지각
+					attendanceMapper.updateContent(attendanceDTO); // 근태유형 지각으로 변경
 			} else if((checkInTime.isBefore(nineAM) || checkInTime.equals(nineAM)) // 09:00 >= 출근시간 && 퇴근시간 < 18:00 -> 조퇴 
 					&& checkOutTime.isBefore(evening)) { 
 					attendanceMapper.updateEarlyLeave(attendanceDTO); // 조퇴 활성화
+					attendanceDTO.setAttendanceContent("CT005"); // CT005 = 조퇴
+					attendanceMapper.updateContent(attendanceDTO); // 근태유형 조퇴으로 변경
 			} else { // 9 < 출근시간 && 퇴근시간 < 18
 					attendanceMapper.updateLate(attendanceDTO); // 지각 활성화
 					attendanceMapper.updateEarlyLeave(attendanceDTO); // 조퇴 활성화
