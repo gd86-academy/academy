@@ -1,10 +1,12 @@
 # **학원 그룹웨어 프로젝트 📚**  
-## 개요
+## 개요 📝
 - **Spring Boot**기반으로 **MySQL**과 **MyBatis**를 활용하여 제작한 학원 그룹웨어 시스템.
 - 강의 관리, 근태 관리, 결재 관리 기능을 중심으로 시스템을 개발. 🎯
 - 2024/01/02부터 2024/02/11까지 해당 프로젝트를 진행.
 
-## 주요기능
+<br>
+
+## 주요기능 💡
 ### 로그인 🔑
 <img width="100%" alt="로그인" src="https://github.com/user-attachments/assets/18220e6c-bb0d-4af6-8128-104e2853f316" /><br>
 - 사용자는 사원번호와 비밀번호를 입력해야 합니다.
@@ -95,6 +97,12 @@
 
 <br><br>
 
+## 데이터베이스 구조 💾
+![academy](https://github.com/user-attachments/assets/bee00497-0c29-4a5c-92d4-da495ce508d6)<br>  
+📄 [ERD CLOUD 보러가기](https://www.erdcloud.com/d/2K3qNBC8u2kbMX8Lk)  
+
+<br><br>
+
 ## 사용된 기술 스택 💻
 | **분류**          | **기술 및 도구** |
 |------------------|---------------------------------------------------------------|
@@ -107,12 +115,16 @@
 
 <br><br>
 
-## 💾 데이터베이스 구조
-![academy](https://github.com/user-attachments/assets/bee00497-0c29-4a5c-92d4-da495ce508d6)
+## 프로젝트 설계 문서 📑 
+| 문서이름       | 문서툴              | 링크                                                                 |
+|----------------|---------------------|----------------------------------------------------------------------|
+| 기능 요구사항 정의서 | ![Google Sheets](https://img.shields.io/badge/Google_Sheets-34A853?style=for-the-badge&logo=google-drive&logoColor=white) |[보러가기](https://docs.google.com/spreadsheets/d/1gGca0uRlSDLVAm9M9VOJv_4-IwDch2k5BVnrTimr2-k/edit?usp=sharing)|
+| 테이블 요구사항 정의서 | ![Google Sheets](https://img.shields.io/badge/Google_Sheets-34A853?style=for-the-badge&logo=google-drive&logoColor=white) |[보러가기](https://docs.google.com/spreadsheets/d/1sVAALbD1u538aRXUgKcvdULasvhgFWJBEMSuuAwxg-w/edit?usp=sharing)|
+| 화면설계서     | ![Figma](https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white) |[보러가기](https://www.figma.com/design/Vc4psYCSXfQMj57Ji53wMM/figma?node-id=0-1&t=fAosbIlqz8wkW7Qx-1)|
 
 <br><br>
 
-## 🧑‍🤝‍🧑 팀 정보
+## 팀 정보 🧑‍🤝‍🧑
 | **이름** | **GitHub** | **담당 역할** |
 |----------|-----------|--------------|
 | 🏅 **진수우**  | [https://github.com/orukdoline](https://github.com/orukdoline) | 로그인 기능, 주소록 기능, 강의결재 기능 |
@@ -125,9 +137,10 @@
 
 ## 설치 방법 ⚙️
 1. **데이터베이스 설정**  
- - 프로젝트에서 databaseFile 폴더를 찾아 폴더 내에 있는 쿼리문을 MySQL에서 실행시켜 데이터베이스를 구축.
+ - [여기](https://github.com/)에서 sql파일을 다운로드 받아 쿼리문을 MySQL에서 실행시켜 데이터베이스를 구축.
 2. **프로젝트 실행**  
- - Spring Tool Suite에서 프로젝트를 실행. 
+ - 'src/main/resources' 경로에 application-db, application-mail, application-port 파일을 추가.
+ - Spring Tool Suite에서 프로젝트를 실행.
  - 브라우저에서 `http://localhost/academy/login`으로 접속.
 3. **로그인 진행**
 - 로그인페이지에서 92(인사팀), 99(운영팀), 101(행정팀) 중 하나를 사원번호 입력칸에 입력.
