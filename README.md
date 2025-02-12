@@ -110,7 +110,7 @@
 | 🎨 **프론트엔드** | ![HTML](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white) ![CSS](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white) ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black) ![jQuery](https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white) ![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-38B2AC?style=for-the-badge&logo=tailwindcss&logoColor=white) |
 | 📜 **템플릿 엔진** | ![Thymeleaf](https://img.shields.io/badge/Thymeleaf-005F0F?style=for-the-badge&logo=thymeleaf&logoColor=white) |
 | 💾 **데이터베이스** | ![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white) ![MySQL Workbench](https://img.shields.io/badge/MySQL%20Workbench-4479A1?style=for-the-badge&logo=mysql&logoColor=white) |
-| 🤝 **협업 및 디자인** | ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white) ![Figma](https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white) |
+| 🤝 **협업 및 디자인** | ![GitHub](https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=github&logoColor=white) ![Figma](https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white) ![Google Sheets](https://img.shields.io/badge/Google_Sheets-34A853?style=for-the-badge&logo=google-drive&logoColor=white) |
 | 🔧 **개발 도구**   | ![STS](https://img.shields.io/badge/Spring%20Tool%20Suite-6DB33F?style=for-the-badge&logo=spring&logoColor=white) ![ERD Cloud](https://img.shields.io/badge/ERD%20Cloud-005FCC?style=for-the-badge&logoColor=white) ![FileZilla](https://img.shields.io/badge/FileZilla-BF0000?style=for-the-badge&logo=filezilla&logoColor=white) |
 
 <br><br>
@@ -127,11 +127,11 @@
 ## 팀 정보 🧑‍🤝‍🧑
 | **이름** | **GitHub** | **담당 역할** |
 |----------|-----------|--------------|
-| 🏅 **진수우**  | [https://github.com/orukdoline](https://github.com/orukdoline) | 로그인 기능, 주소록 기능, 강의결재 기능 |
-| 🎨 **김혜린**  | [https://github.com/hyerin716](https://github.com/hyerin716) | 근태결재 기능, 강의관리 기능 |
-| 🏗 **박시현**  | [https://github.com/Hyuns99](https://github.com/Hyuns99) | 회의실예약 기능, 강의실관리 기능 |
-| 📌 **조세영**  | [https://github.com/seyoung512](https://github.com/seyoung512) | 근태관리 기능, 게시판 기능 |
-| 🏆 **하상우**  | [https://github.com/hsw52233](https://github.com/hsw52233) | 채팅 기능, 회의실관리 기능 |
+| 👨‍💻 **진수우**  | [https://github.com/orukdoline](https://github.com/orukdoline) | 로그인 기능, 주소록 기능, 강의결재 기능 |
+| 👩‍💻 **김혜린**  | [https://github.com/hyerin716](https://github.com/hyerin716) | 근태결재 기능, 강의관리 기능 |
+| 👩‍💻 **박시현**  | [https://github.com/Hyuns99](https://github.com/Hyuns99) | 회의실예약 기능, 강의실관리 기능 |
+| 👨‍💻 **조세영**  | [https://github.com/seyoung512](https://github.com/seyoung512) | 근태관리 기능, 게시판 기능 |
+| 👨‍💻 **하상우**  | [https://github.com/hsw52233](https://github.com/hsw52233) | 채팅 기능, 회의실관리 기능 |
 
 <br><br>
 
