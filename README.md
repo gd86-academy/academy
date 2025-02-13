@@ -15,7 +15,7 @@
 ---
 ### 비밀번호 찾기 🕵️‍♀️
 <img width="1470" alt="비밀번호찾기" src="https://github.com/user-attachments/assets/e8d21f90-3247-4736-8967-85d8f064defe" /><br>
-- 등록된 이메일을 입력하면 무작위 임시 비밀번호 8자리가 발급되고, 이를 통해 로그인할 수 있습니다. 📧
+- 등록된 이메일을 입력하면 무작위 임시 비밀번호 8자리가 메일을 통해 발급되고, 이를 통해 로그인할 수 있습니다. 📧
 - 비밀번호변경기능을 활용해 사용하고 싶은 비밀번호로 변경이 가능합니다.
 ---
 ### 메인 페이지 🏠
@@ -139,7 +139,7 @@
 1. **데이터베이스 설정**  
  - [여기](https://drive.google.com/file/d/17OUra5EzRRnyzsZAxfktDzymbBt9tjb_/view?usp=sharing)에서 sql파일을 다운로드 받아 쿼리문을 MySQL에서 실행시켜 데이터베이스를 구축.
 2. **프로젝트 실행**  
- - 'src/main/resources' 경로에 application-db, application-mail, application-port 파일을 추가.
+ - 'src/main/resources' 경로에 [application-db](https://drive.google.com/file/d/1hesSD3dLRiLO8sjO2pJfjkEgsqXABoL4/view?usp=sharing), [application-mail](https://drive.google.com/file/d/1mIwvzvLb7RaT8-ZsaN3KDENNRqDaL7Aw/view?usp=sharing), [application-port](https://drive.google.com/file/d/1-bYM8n7ti_tzInjSa1I3fW2RC3chL78M/view?usp=sharing) 파일을 추가.
  - Spring Tool Suite에서 프로젝트를 실행.
  - 브라우저에서 `http://localhost/academy/login`으로 접속.
 3. **로그인 진행**
