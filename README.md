@@ -137,7 +137,7 @@
 
 ## 설치 방법 ⚙️
 1. **데이터베이스 설정**  
- - [여기](https://github.com/)에서 sql파일을 다운로드 받아 쿼리문을 MySQL에서 실행시켜 데이터베이스를 구축.
+ - [여기](https://drive.google.com/file/d/17OUra5EzRRnyzsZAxfktDzymbBt9tjb_/view?usp=sharing)에서 sql파일을 다운로드 받아 쿼리문을 MySQL에서 실행시켜 데이터베이스를 구축.
 2. **프로젝트 실행**  
  - 'src/main/resources' 경로에 application-db, application-mail, application-port 파일을 추가.
  - Spring Tool Suite에서 프로젝트를 실행.
